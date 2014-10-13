@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coach.dao.CourseDao">
+  <resultMap id="BaseCourseResult" type="com.coach.model.Course">
+       <id column="id" jdbcType="BIGINT" property="id" />
+       <result column="name" jdbcType="VARCHAR" property="name" />
+       <result column="orgId" jdbcType="INTEGER" property="organizationId" />
+       <result column="orgName" jdbcType="VARCHAR" property="organizationName" />
+       <result column="endTime" jdbcType="TIMESTAMP" property="endTime" />
+       <result column="status" jdbcType="INTEGER" property="cooachCourseStatus" /> 
+       <result column="createTime" jdbcType="TIMESTAMP" property="cooachCourseTime" /> 
+  </resultMap>
+   
+   <resultMap id="DetailCourseResult" type="com.coach.model.Course">
+       <id column="id" jdbcType="BIGINT" property="id" />
+       <result column="name" jdbcType="VARCHAR" property="name" />
+       <result column="address" jdbcType="VARCHAR" property="address" /> 
+       <result column="groundId" jdbcType="INTEGER" property="groundId" />
+       <result column="groundName" jdbcType="VARCHAR" property="groundName" />
+       <result column="startTime" jdbcType="TIMESTAMP" property="startTime" />
+       <result column="endTime" jdbcType="TIMESTAMP" property="endTime" />
+       <result column="recycleDay" jdbcType="VARCHAR" property="recycleDay" /> 
+       <result column="courseHour" jdbcType="TIMESTAMP" property="courseHour" /> 
+       <result column="lessonHour" jdbcType="TIMESTAMP" property="lessonHour" /> 
+       <result column="remarks" jdbcType="VARCHAR" property="remarks" /> 
+  </resultMap>
+  
+  <resultMap id="PersonalCourseResult" type="com.coach.response.PersonalCourseResponse">
+       <id column="id" jdbcType="BIGINT" property="courseId" />
+       <result column="groundName" jdbcType="VARCHAR" property="groundName" />
+       <result column="memberName" jdbcType="VARCHAR" property="memberName" />
+       <result column="memberNum" jdbcType="BIGINT" property="memberNum" />
+  </resultMap>
+  
+  <select id="getChiefCourse" parameterType="Map" resultMap="BaseCourseResult">
+	 select * from (
+		select o.id orgId, o.name orgName, c.id, c.name, c.endTime from coach ch inner join coach_course cc on ch.id = cc.coachId and ch.id = #{coachId} and cc.status = #{acceptedStatus}
+		inner join course c on cc.courseId = c.id and c.type = #{orgType} and c.status = #{courseStatus}
+		inner join organization o on c.organizationId = o.id
+		inner join organization_coach oc on o.id = oc.organizationId and oc.coachId = ch.id and oc.status in <foreach collection="bindStatus" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>  
+		) a
+		where
+		(SELECT count(*) FROM (select o.id orgId, o.name orgName, c.id, c.name from coach ch inner join coach_course cc on ch.id = cc.coachId and ch.id = #{coachId} and cc.status =#{acceptedStatus}
+		   inner join course c on cc.courseId = c.id and c.type = #{orgType} and c.status = #{courseStatus}
+		   inner join organization o on c.organizationId = o.id
+		   inner join organization_coach oc on o.id = oc.organizationId and oc.coachId = ch.id and oc.status in <foreach collection="bindStatus" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>  
+		) b 
+		WHERE b.orgId = a.orgId AND <![CDATA[b.id > a.id) < #{maxNum} ]]>
+	union all
+	select * from (
+		select -1 orgId, '个人' orgName, c.id, c.name, c.endTime 
+		from coach ch inner join coach_course cc on ch.id = cc.coachId and ch.id = #{coachId} and cc.status = #{acceptedStatus}
+		inner join course c on cc.courseId = c.id and c.type = #{personalType} and c.status = #{courseStatus}
+		order by c.endTime limit #{maxNum})c
+  </select>
+  
+  <select id="getOrgCourse" parameterType="Map" resultMap="BaseCourseResult">
+		select o.id orgId, o.name orgName, c.id, c.name, c.endTime 
+		from coach ch inner join coach_course cc on ch.id = cc.coachId and ch.id = #{coachId} and cc.status = #{acceptedStatus}
+		inner join course c on cc.courseId = c.id and c.type = #{orgType} and c.status = #{courseStatus}
+		inner join organization o on c.organizationId = o.id
+		inner join organization_coach oc on o.id = oc.organizationId and oc.coachId = ch.id and oc.status in <foreach collection="bindStatus" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>  
+		WHERE o.id = #{orgId}
+		order by c.endTime desc
+		limit #{pageNumber}, #{pageSize}
+  </select>
+  
+  <select id="getPersonalCourse" parameterType="Map" resultMap="PersonalCourseResult">
+		select c.id, c.groundName, 
+		(select m.name from course_member cm INNER JOIN member m on cm.memberId = m.id where cm.courseId = c.id and cm.status != #{deletedStatus} limit 1)memberName,
+		(select count(distinct cm.memberId) from course_member cm where cm.courseId = c.id and cm.status != #{deletedStatus})memberNum
+		from coach ch inner join coach_course cc on ch.id = cc.coachId and ch.id = #{coachId} and cc.status = #{acceptedStatus}
+		inner join course c on cc.courseId = c.id and c.type = #{personalType} and c.status = #{courseStatus}
+		order by c.endTime desc
+  </select>
+  
+   <select id="checkNewCourse" parameterType="Map" resultType="Long">
+       select c.id from coach ch inner join coach_course cc on ch.id = cc.coachId and ch.id = #{coachId} and cc.status = #{draftStatus}
+		inner join course c on cc.courseId = c.id and c.type = #{orgType} and c.status = #{courseStatus}
+		inner join organization o on c.organizationId = o.id
+		inner join organization_coach oc on o.id = oc.organizationId and oc.coachId = ch.id 
+		      and oc.status in <foreach collection="bindStatus" index="index" item="item" open="(" separator="," close=")">#{item}</foreach> 
+		limit 1
+   </select>
+   
+   <select id="getNewCourse" parameterType="Map" resultMap="BaseCourseResult">
+       select o.id orgId, o.name orgName, c.id, c.name, cc.createTime, cc.status from coach ch inner join coach_course cc on ch.id = cc.coachId and ch.id = #{coachId}
+		inner join course c on cc.courseId = c.id and c.type = #{orgType} and c.status = #{courseStatus}
+		inner join organization o on c.organizationId = o.id
+		inner join organization_coach oc on o.id = oc.organizationId and oc.coachId = ch.id 
+		      and oc.status in <foreach collection="bindStatus" index="index" item="item" open="(" separator="," close=")">#{item}</foreach> 
+		limit #{pageNumber}, #{pageSize}
+   </select>
+   
+   <select id="getCourseDetail" parameterType="Map" resultMap="DetailCourseResult">
+       SELECT c.id, c.name, c.address, c.description, c.type, c.groundId, c.groundName, c.startTime, c.endTime, c.recycleDay, c.courseHour, c.lessonHour, c.remarks
+       from course c inner join coach_course cc on c.id = cc.courseId where c.id = #{courseId} and cc.coachId = #{coachId}
+   </select>
+   
+   <select id="checkCourse" parameterType="Map" resultType="Long">
+       SELECT c.id
+       from course c inner join coach_course cc on c.id = cc.courseId where c.id = #{courseId} and cc.coachId = #{coachId}
+   </select>
+   
+   <select id="getUnassignedCourse" parameterType="Map" resultMap="BaseCourseResult">
+	 select aa.id, aa.name from 
+		(select c.id, c.name, c.courseHour, sum(IFNULL(s.hours, 0)) lessonHour from 
+		coach_course cc inner join course c on cc.courseId = c.id and c.type = #{personalType} and c.status = #{courseStatus} and cc.status = #{acceptedStatus}
+		left outer join lesson s on c.id = s.courseId and s.status = #{lessonActiveStatus}
+		where cc.coachId = #{coachId} group by c.id) aa
+	where aa.courseHour - aa.lessonHour > 0.1
+	order by aa.id desc
+  </select>
+   
+   <update id="deleteCourse" parameterType="Map">
+       update course set status = #{status} where id = #{courseId}
+   </update>
+   
+   <insert id="insertCourse" useGeneratedKeys="true" keyProperty="id" parameterType="com.coach.model.Course">
+		INSERT INTO course(name, organizationId, address, description, type, groundId, groundName, startTime, endTime, recycleDay, courseHour, lessonHour, lessonNum, code, expiryDate, status, remarks, createTime) 
+		VALUE (#{name}, #{organizationId}, #{address}, #{description}, #{type}, #{groundId}, #{groundName}, #{startTime}, #{endTime}, #{recycleDay}, #{courseHour}, #{lessonHour}, #{lessonNum}, #{code}, #{expiryDate}, #{status}, #{remarks}, now()) 
+  </insert>
+</mapper>

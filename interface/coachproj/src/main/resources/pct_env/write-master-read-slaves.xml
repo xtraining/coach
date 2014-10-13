@@ -1,0 +1,257 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:jms="http://www.springframework.org/schema/jms" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd 
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+	http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang.xsd
+	http://www.springframework.org/schema/jms http://www.springframework.org/schema/jms/spring-jms.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd"
+	default-autowire="byName">
+	
+	<context:annotation-config></context:annotation-config>
+	
+	<!-- Master数据源 -->
+	<bean id="masterDataSourceOne" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+		<property name="driverClass" value="com.mysql.jdbc.Driver" />
+		<property name="jdbcUrl">
+			<value>jdbc:mysql://rdsu3umr2u3umr2.mysql.rds.aliyuncs.com:3306/coach_db_test?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true&amp;failOverReadOnly=false&amp;zeroDateTimeBehavior=convertToNull</value>
+		</property>
+		<property name="user" value="wenda_test01" />
+		<property name="password" value="abcd_1234" />
+		<property name="initialPoolSize" value="2" />
+		<property name="minPoolSize" value="2" />
+		<property name="maxPoolSize" value="10" />
+		<property name="acquireIncrement" value="5" />
+		<property name="maxIdleTime" value="60" />
+		<property name="maxStatements" value="0" />
+	</bean>
+
+	<!-- Slave数据源 -->
+	<bean id="slaveDataSourceOne" class="com.mchange.v2.c3p0.ComboPooledDataSource"	destroy-method="close">
+		<property name="driverClass" value="com.mysql.jdbc.Driver" />
+		<property name="jdbcUrl">
+			<value>jdbc:mysql://rdsu3umr2u3umr2.mysql.rds.aliyuncs.com:3306/coach_db_test?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true&amp;failOverReadOnly=false&amp;zeroDateTimeBehavior=convertToNull</value>
+		</property>
+		<property name="user" value="wenda_test01" />
+		<property name="password" value="abcd_1234" />
+		<property name="initialPoolSize" value="2" />
+		<property name="minPoolSize" value="2" />
+		<property name="maxPoolSize" value="10" />
+		<property name="acquireIncrement" value="5" />
+		<property name="maxIdleTime" value="60" />
+		<property name="maxStatements" value="0" />
+	</bean>
+
+	<!-- 配置Routing4DB 数据源 -->
+	<bean id="routing4DBDataSource" class="com.google.code.routing4db.datasource.Routing4DBDataSource">
+		<property name="targetDataSources">
+			<map>
+			    <entry key="masterDataSourceOne" value-ref="masterDataSourceOne" />
+				<entry key="slaveDataSourceOne" value-ref="slaveDataSourceOne" />
+			</map>
+		</property>
+		<property name="defaultTargetDataSource" ref="masterDataSourceOne" />
+	</bean>
+
+	<!-- Mybatis SessionFactory配置 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="configLocation" value="classpath:mybatis-config.xml" />
+		<property name="dataSource" ref="routing4DBDataSource" />
+	</bean>
+	
+	<!-- 事务配置 -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="routing4DBDataSource" />
+	</bean>
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+
+	<!-- 配置路由策略 -->
+	<bean id="masterSlaveStrategy" class="com.google.code.routing4db.strategy.impl.MasterSlaveStrategy">
+		<property name="readMethodPatterns">
+			<list>
+				<!-- <value>get*</value>
+				<value>find*</value>
+				<value>load*</value>
+				<value>search*</value> -->
+				<value>slaveMethod*</value><!-- 目前所有的方法都走master db -->
+			</list>
+		</property>
+		<!-- Master数据源 -->
+		<property name="masterDataSourceKey" value="masterDataSourceOne"></property>
+
+		<!-- Slaves数据源 从0开始，以此编号 -->
+		<property name="dataSourceKeyMap">
+			<map>
+				<entry key="0" value="slaveDataSourceOne"></entry>
+			</map>
+		</property>
+
+		<!-- 指定某些接口的方法不执行路由，若接口所有方法都执行路由，则无需配置该属性 -->
+		<property name="excludeMethodPatterns">
+			<list>
+				<value>excludeMethodPatterns*</value>
+				<value>*exclude*</value>
+			</list>
+		</property>
+
+	</bean>
+
+	<!-- 传统myabtis配置 -->
+	<!-- <bean id="userDaoTarget" class="com.coach.dao.UserDaoImpl"></bean>
+	<bean id="userDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.coach.dao.UserDao"></property>
+		<property name="targetObject" ref="userDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean> -->
+	<bean id="accessLogDaoTarget" class="com.coach.dao.AccessLogDaoImpl"></bean>
+	<bean id="accessLogDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.coach.dao.AccessLogDao"></property>
+		<property name="targetObject" ref="accessLogDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean>
+	
+	<bean id="accessPrivilegeDaoTarget" class="com.coach.dao.AccessPrivilegeDaoImpl"></bean>
+	<bean id="accessPrivilegeDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.coach.dao.AccessPrivilegeDao"></property>
+		<property name="targetObject" ref="accessPrivilegeDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean>
+	
+	<bean id="clientAppkeyDaoTarget" class="com.coach.dao.ClientAppkeyDaoImpl"></bean>
+	<bean id="clientAppkeyDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.coach.dao.ClientAppkeyDao"></property>
+		<property name="targetObject" ref="clientAppkeyDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean>
+	
+	<bean id="coachDaoTarget" class="com.coach.dao.CoachDaoImpl"></bean>
+	<bean id="coachDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.coach.dao.CoachDao"></property>
+		<property name="targetObject" ref="coachDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean>
+	<bean id="sessionDaoTarget" class="com.coach.dao.SysSessionDaoImpl"></bean>
+	<bean id="sessionDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.coach.dao.SysSessionDao"></property>
+		<property name="targetObject" ref="sessionDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean>
+	
+	<bean id="smsHistoryDaoTarget" class="com.coach.dao.SmsHistoryDaoImpl"></bean>
+	<bean id="smsHistoryDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.coach.dao.SmsHistoryDao"></property>
+		<property name="targetObject" ref="smsHistoryDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean>
+	
+	<bean id="appVersionDaoTarget" class="com.coach.dao.AppVersionDaoImpl"></bean>
+	<bean id="appVersionDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.coach.dao.AppVersionDao"></property>
+		<property name="targetObject" ref="appVersionDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean>
+	
+	<bean id="coachExpandDaoTarget" class="com.coach.dao.CoachExpandDaoImpl"></bean>
+	<bean id="coachExpandDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.coach.dao.CoachExpandDao"></property>
+		<property name="targetObject" ref="coachExpandDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean>
+	
+	<bean id="areaDaoTarget" class="com.coach.dao.AreaDaoImpl"></bean>
+	<bean id="areaDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.coach.dao.AreaDao"></property>
+		<property name="targetObject" ref="areaDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean>
+	
+	<bean id="courseDaoTarget" class="com.coach.dao.CourseDaoImpl"></bean>
+	<bean id="courseDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.coach.dao.CourseDao"></property>
+		<property name="targetObject" ref="courseDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean>
+	
+	<bean id="lessonDaoTarget" class="com.coach.dao.LessonDaoImpl"></bean>
+	<bean id="lessonDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.coach.dao.LessonDao"></property>
+		<property name="targetObject" ref="lessonDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean>
+	
+	<bean id="memberDaoTarget" class="com.coach.dao.MemberDaoImpl"></bean>
+	<bean id="memberDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.coach.dao.MemberDao"></property>
+		<property name="targetObject" ref="memberDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean>
+	
+	<bean id="lessonMemberDaoTarget" class="com.coach.dao.LessonMemberDaoImpl"></bean>
+	<bean id="lessonMemberDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.coach.dao.LessonMemberDao"></property>
+		<property name="targetObject" ref="lessonMemberDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean>
+	
+	<bean id="courseMemberDaoTarget" class="com.coach.dao.CourseMemberDaoImpl"></bean>
+	<bean id="courseMemberDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.coach.dao.CourseMemberDao"></property>
+		<property name="targetObject" ref="courseMemberDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean>
+	
+    <bean id="coachCourseDaoTarget" class="com.coach.dao.CoachCourseDaoImpl"></bean>
+	<bean id="coachCourseDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.coach.dao.CoachCourseDao"></property>
+		<property name="targetObject" ref="coachCourseDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean> 
+	
+	<bean id="memberNewsDaoTarget" class="com.coach.dao.MemberNewsDaoImpl"></bean>
+	<bean id="memberNewsDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.coach.dao.MemberNewsDao"></property>
+		<property name="targetObject" ref="memberNewsDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean> 
+	
+	<bean id="newsHistoryDaoTarget" class="com.coach.dao.NewsHistoryDaoImpl"></bean>
+	<bean id="newsHistoryDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.coach.dao.NewsHistoryDao"></property>
+		<property name="targetObject" ref="newsHistoryDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean> 
+	
+	<bean id="coachRejectCourseDaoTarget" class="com.coach.dao.CoachRejectCourseDaoImpl"></bean>
+	<bean id="coachRejectCourseDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.coach.dao.CoachRejectCourseDao"></property>
+		<property name="targetObject" ref="coachRejectCourseDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean> 
+</beans>

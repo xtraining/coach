@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coach.model.Lesson">
+  
+   <resultMap id="BaseLessonResult" type="com.coach.model.Lesson">
+  	   <id column="id" jdbcType="BIGINT" property="id" />
+       <result column="name" jdbcType="VARCHAR" property="name" />
+       <result column="startTime" jdbcType="TIMESTAMP" property="startTime" />
+       <result column="endTime" jdbcType="TIMESTAMP" property="endTime" />
+       <result column="hours" jdbcType="FLOAT" property="hours" />
+       <result column="type" jdbcType="INTEGER" property="type" />
+       <result column="groundId" jdbcType="INTEGER" property="groundId" />
+       <result column="groundName" jdbcType="VARCHAR" property="groundName" />
+  </resultMap>
+  
+  <resultMap id="LessonDetailResult" type="com.coach.model.Lesson">
+  	   <id column="id" jdbcType="BIGINT" property="id" />
+       <result column="name" jdbcType="VARCHAR" property="name" />
+       <result column="startTime" jdbcType="TIMESTAMP" property="startTime" />
+       <result column="endTime" jdbcType="TIMESTAMP" property="endTime" />
+       <result column="hours" jdbcType="FLOAT" property="hours" />
+       <result column="type" jdbcType="INTEGER" property="type" />
+       <result column="memberNum" jdbcType="INTEGER" property="memberNum" />
+       <result column="alertSwitch" jdbcType="INTEGER" property="alertSwitch" />
+       <result column="description" jdbcType="VARCHAR" property="description" />
+       <result column="groundId" jdbcType="INTEGER" property="groundId" />
+       <result column="groundName" jdbcType="VARCHAR" property="groundName" />
+  </resultMap>
+  
+  <select id="getLessonInRange" parameterType="Map" resultMap="BaseLessonResult">
+    select * from (
+    	select s.id, s.name, s.startTime, s.endTime, s.hours, s.groundId, s.groundName,
+		CASE WHEN s.checkFlag = #{checkFlag} THEN 0
+		WHEN c.type = 0 THEN 1
+		WHEN c.type = 1 THEN 2
+		END type
+		from course c INNER JOIN coach_course cc on c.id  = cc.courseId and c.status = 0
+		INNER JOIN lesson s on c.id = s.courseId and s.status = 0 
+		where cc.coachId = #{coachId} and s.startTime &gt;= #{startDate} and s.endTime &lt; #{endDate}
+	union ALL
+		select s.id, s.name, s.startTime, s.endTime, s.hours, 4 type
+		from lesson s where s.courseId  = #{coachId} and s.status = 0 and s.startTime &gt;= #{startDate} and s.endTime &lt; #{endDate}
+	)aa order by aa.startTime asc
+  </select>
+  
+  <select id="getLessonDetail" parameterType="Map" resultMap="LessonDetailResult">
+    	select s.id, s.name, s.startTime, s.endTime, s.hours, s.description, s.alertSwitch, s.type, 
+    	(select count(distinct lm.memberId) from lesson_member lm where lm.lessonId = #{lessonId} and status != 2)memberNum,
+    	s.groundId, s.groundName, s.address
+		from course c INNER JOIN coach_course cc on c.id  = cc.courseId
+		INNER JOIN lesson s on c.id = s.courseId
+		where cc.coachId = #{coachId} and s.id = #{lessonId}
+  </select>
+  
+  <select id="getDetailRecentInRange" parameterType="Map" resultMap="LessonDetailResult">
+    	select s.id, s.name, s.startTime, s.endTime, s.hours, s.description, s.alertSwitch, s.type, 
+    	s.groundId, s.groundName, s.address
+		from course c INNER JOIN coach_course cc on c.id  = cc.courseId and c.status = 0
+		INNER JOIN lesson s on c.id = s.courseId and s.status = 0
+		where cc.coachId = #{coachId} and s.startTime &gt;= #{startDate} and s.endTime &lt; #{endDate}
+  </select>
+  
+  <select id="getNewsFlag" parameterType="Integer" resultType="Map">
+	select c.avatarUrl,
+	case when c.type = 0 then 0 
+	else (select count(cc.id) from coach_course cc where cc.status = 0 and cc.id = #{coachId})end courseNewsFlag,
+	case when c.type = 0 then 0
+	else (select count(*) from coach_news_history hh, member_news n where n.createTime >= hh.lastViewTime and  
+	n.coachId = #{coachId} and hh.coachId = #{coachId})end memberNewsFlag
+	from coach c
+	where c.id = #{coachId}
+  </select>
+  
+  <select id="getTotalLessonNum" parameterType="Map" resultType="Map">
+    select DATE_FORMAT(s.startTime,'%Y-%m') monthStr, c.type, sum(s.hours)num
+	FROM
+	coach ch INNER JOIN coach_course cc on ch.id = cc.coachId
+	INNER JOIN course c on cc.courseId = c.id and c.status = #{courseActiveStatus}
+	INNER JOIN lesson s on s.courseId = c.id and s.status = #{lessonActiveStatus}
+	where s.checkFlag = #{lessonCheckedFlag} and s.startTime >= #{startDate} and ch.id = #{coachId}
+	GROUP BY c.type, monthStr
+  </select>
+    
+  <select id="getPercent" parameterType="Map" resultType="Double">
+    select 
+		(select count(aa.id) from (select ch.id, sum(s.hours)num FROM
+                           coach ch INNER JOIN coach_course cc on ch.id = cc.coachId
+                           INNER JOIN course c on cc.courseId = c.id and c.status = #{courseActiveStatus}
+                           INNER JOIN lesson s on s.courseId = c.id and s.status = #{lessonActiveStatus}
+                           where s.checkFlag = #{lessonCheckedFlag} and s.startTime >= #{startDate}
+                           GROUP BY ch.id)aa 
+ 	where aa.num >= #{percent})/(select count(cch.id) from coach cch where cch.status != 1)  
+  </select>
+  
+  <select id="getCheckLesson" parameterType="Map" resultMap="BaseLessonResult">
+    select s.id, s.name, DATE_FORMAT(s.startTime,'%Y-%m-%d %T') date, s.hours, s.startTime 
+	from coach_course cc INNER JOIN course c on cc.courseId = c.id and cc.status = #{acceptedStatus} and c.status = #{courseActiveStatus}
+	INNER JOIN lesson s on s.courseId = c.id and s.status = #{lessonActiveStatus}
+	where cc.coachId = #{coachId} and s.startTime >= #{startDate} and s.checkFlag = #{lessonCheckedFlag}
+	order by date desc  
+	limit #{pageNumber}, #{pageSize}
+  </select>
+  
+  <select id="getLessonFrom" parameterType="Map" resultMap="BaseLessonResult">
+    select s.id, s.name, s.hours, s.startTime, s.endTime 
+	from coach_course cc INNER JOIN course c on cc.courseId = c.id and cc.status = #{acceptedStatus} and c.status = #{courseActiveStatus}
+	INNER JOIN lesson s on s.courseId = c.id and s.status = #{lessonActiveStatus}
+	where cc.coachId = #{coachId} and s.startTime >= #{startDate} 
+  </select>
+  
+  <insert id="insertLesson" useGeneratedKeys="true" keyProperty="id" parameterType="com.coach.model.Lesson">
+	INSERT INTO lesson(courseId, startTime, endTime, createTime, type, name, address, description, organizationId, hours, alertSwitch, longitude, latitude, groundId, groundName) 
+	VALUE (#{courseId}, #{startTime}, #{endTime}, now(), #{type}, #{name}, #{address}, #{description}, #{organizationId}, #{hours}, #{alertSwitch}, #{longitude}, #{latitude}, #{groundId}, #{groundName})
+  </insert>
+  
+  <update id="changeCheckFlag" parameterType="Long">
+	update lesson set checkFlag = 1 where id = #{lessonId}
+  </update>
+  
+  <update id="deleteLesson" parameterType="Map">
+	update lesson set status = #{status} where courseId = #{courseId}
+  </update>
+  
+  <update id="updateLessonStatus" parameterType="Map">
+	update lesson set status = #{status} where id = #{lessonId}
+  </update>
+  
+</mapper>

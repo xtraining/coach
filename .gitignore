@@ -1,0 +1,6 @@
+*.class
+**/classes/*
+*.log
+**/logs/*
+*.log4j
+**/target/*
