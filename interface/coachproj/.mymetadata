@@ -4,7 +4,7 @@
   name="CoachProj"
   id="myeclipse.1409192914433"
   context-root="/coach"
-  j2ee-spec="6.0"
+  j2ee-spec="1.7"
   archive="CoachProj.war">
   <attributes>
     <attribute name="webrootdir" value="src/main/webapp" />
