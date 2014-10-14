@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:jms="http://www.springframework.org/schema/jms" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd 
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+	http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang.xsd
+	http://www.springframework.org/schema/jms http://www.springframework.org/schema/jms/spring-jms.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd"
+	default-autowire="byName">
+	
+	<context:annotation-config></context:annotation-config>
+	
+	<!-- 读取资源文件 -->
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="classpath:jdbc.properties" />
+	</bean>
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName">
+			<value>${driverClassName}</value>
+		</property>
+		<property name="password">
+			<value>${password}</value>
+		</property>
+		<property name="username">
+			<value>${username}</value>
+		</property>
+		<property name="url">
+			<value>${url}</value>
+		</property>
+	</bean>
+	
+	<!-- Master数据源 -->
+	<bean id="masterDataSourceOne" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+		<property name="driverClass" value="${driverClassName}" />
+		<property name="jdbcUrl">
+			<value>${url}</value>
+		</property>
+		<property name="user" value="${username}" />
+		<property name="password" value="${password}" />
+		<property name="initialPoolSize" value="1" />
+		<property name="minPoolSize" value="1" />
+		<property name="maxPoolSize" value="5" />
+		<property name="acquireIncrement" value="5" />
+		<property name="maxIdleTime" value="60" />
+		<property name="maxStatements" value="0" />
+	</bean>
+
+	<!-- Slave数据源 -->
+	<bean id="slaveDataSourceOne" class="com.mchange.v2.c3p0.ComboPooledDataSource"	destroy-method="close">
+		<property name="driverClass" value="${driverClassName}" />
+		<property name="jdbcUrl">
+			<value>${url}</value>
+		</property>
+		<property name="user" value="${username}" />
+		<property name="password" value="${password}" />
+		<property name="initialPoolSize" value="2" />
+		<property name="minPoolSize" value="2" />
+		<property name="maxPoolSize" value="10" />
+		<property name="acquireIncrement" value="5" />
+		<property name="maxIdleTime" value="60" />
+		<property name="maxStatements" value="0" />
+	</bean>
+
+	<!-- 配置Routing4DB 数据源 -->
+	<bean id="routing4DBDataSource" class="com.google.code.routing4db.datasource.Routing4DBDataSource">
+		<property name="targetDataSources">
+			<map>
+			    <entry key="masterDataSourceOne" value-ref="masterDataSourceOne" />
+				<entry key="slaveDataSourceOne" value-ref="slaveDataSourceOne" />
+			</map>
+		</property>
+		<property name="defaultTargetDataSource" ref="masterDataSourceOne" />
+	</bean>
+
+	<!-- Mybatis SessionFactory配置 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="configLocation" value="classpath:mybatis.xml" />
+		<property name="dataSource" ref="routing4DBDataSource" />
+		<property name="mapperLocations">
+			<list>
+			<!-- 自动匹配Mapper映射文件  -->
+				<value>classpath:com/zhiqin/coach/admin/entity/*-mapper.xml</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 事务配置 -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="routing4DBDataSource" />
+	</bean>
+	
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+	<!-- 配置路由策略 -->
+	<bean id="masterSlaveStrategy" class="com.google.code.routing4db.strategy.impl.MasterSlaveStrategy">
+		<property name="readMethodPatterns">
+			<list>
+				<!-- <value>get*</value>
+				<value>find*</value>
+				<value>load*</value>
+				<value>search*</value> -->
+				<value>slaveMethod*</value><!-- 目前所有的方法都走master db -->
+			</list>
+		</property>
+		<!-- Master数据源 -->
+		<property name="masterDataSourceKey" value="masterDataSourceOne"></property>
+
+		<!-- Slaves数据源 从0开始，以此编号 -->
+		<property name="dataSourceKeyMap">
+			<map>
+				<entry key="0" value="slaveDataSourceOne"></entry>
+			</map>
+		</property>
+
+		<!-- 指定某些接口的方法不执行路由，若接口所有方法都执行路由，则无需配置该属性 -->
+		<property name="excludeMethodPatterns">
+			<list>
+				<value>excludeMethodPatterns*</value>
+				<value>*exclude*</value>
+			</list>
+		</property>
+
+	</bean>
+
+	<!-- 传统myabtis配置 -->
+	<bean id="logDaoTarget" class="com.zhiqin.coach.admin.dao.impl.LogDaoImpl"></bean>
+	<bean id="logDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.zhiqin.coach.admin.dao.LogDao"></property>
+		<property name="targetObject" ref="logDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean>
+</beans>

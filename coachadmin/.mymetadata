@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="coachadmin"
+  id="myeclipse.1413186778615"
+  context-root="/coachadmin"
+  j2ee-spec="1.7"
+  archive="coachadmin.war">
+  <attributes>
+    <attribute name="webrootdir" value="src/main/webapp" />
+  </attributes>
+</project-module>
+

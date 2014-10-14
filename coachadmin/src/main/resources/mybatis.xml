@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+	<!-- 给实体Bean一个别名-->
+		<typeAlias type="com.zhiqin.coach.admin.entity.User" alias="User" />
+		<typeAlias type="com.zhiqin.coach.admin.entity.UserLoginList" alias="UserLoginList" />
+		<typeAlias type="com.zhiqin.coach.admin.entity.Resources" alias="Resources"/>
+		<typeAlias type="com.zhiqin.coach.admin.entity.Roles" alias="Roles"/>
+		<typeAlias type="com.zhiqin.coach.admin.entity.ResourceRoles" alias="ResourceRoles"/>
+		<typeAlias type="com.zhiqin.coach.admin.entity.UserRoles" alias="UserRoles"/>
+		<typeAlias type="com.zhiqin.coach.admin.entity.ServerInfo" alias="ServerInfo"/>
+		
+		<typeAlias type="com.zhiqin.coach.admin.entity.Log" alias="Log"/>
+	</typeAliases>
+</configuration>
