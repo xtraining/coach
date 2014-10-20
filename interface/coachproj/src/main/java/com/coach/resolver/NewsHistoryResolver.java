@@ -23,7 +23,7 @@ public class NewsHistoryResolver extends BaseResolver implements INewsHistoryRes
 	@Resource private CoachCourseDao coachCourseDao;
 	@Override
 	@Transactional
-	public void updateHistory(NEWS_TYPE type, Integer coachId) {
+	public void updateHistory(NEWS_TYPE type, Long coachId) {
 		newsHistoryDao.delete(type, coachId);
 		CoachNewsHistory h = new CoachNewsHistory();
 		h.setCoachId(coachId);

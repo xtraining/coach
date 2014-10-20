@@ -25,7 +25,7 @@ public class MemberNewsDaoImpl extends SqlSessionDaoSupport implements MemberNew
 	}
 
 	@Override
-	public List<MemberNewsResponse> getNews(Integer coachId) {
+	public List<MemberNewsResponse> getNews(Long coachId) {
 		try{
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("coachId", coachId);

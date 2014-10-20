@@ -44,7 +44,7 @@ public class MemberDaoImpl extends SqlSessionDaoSupport implements MemberDao{
 	}
 
 	@Override
-	public List<Member> getMemberByCoachId(Integer coachId) {
+	public List<Member> getMemberByCoachId(Long coachId) {
 		try{
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("cmActiveStatus", COURSE_MEMBER_STATUS.ACTIVE.getValue());
@@ -59,7 +59,7 @@ public class MemberDaoImpl extends SqlSessionDaoSupport implements MemberDao{
 	}
 
 	@Override
-	public List<Member> getMemberByCoachIdAndKeyword(Integer coachId, String keyword) {
+	public List<Member> getMemberByCoachIdAndKeyword(Long coachId, String keyword) {
 		try{
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("cmActiveStatus", COURSE_MEMBER_STATUS.ACTIVE.getValue());
@@ -75,7 +75,7 @@ public class MemberDaoImpl extends SqlSessionDaoSupport implements MemberDao{
 	}
 
 	@Override
-	public List<Member> getMemberByCoachId(Integer coachId,
+	public List<Member> getMemberByCoachId(Long coachId,
 			Long courseId) {
 		try{
 			Map<String, Object> map = new HashMap<String, Object>();
@@ -92,7 +92,7 @@ public class MemberDaoImpl extends SqlSessionDaoSupport implements MemberDao{
 	}
 
 	@Override
-	public List<Member> getMemberWithAttendHistory(Integer coachId, Long courseId, Long memberId) {
+	public List<Member> getMemberWithAttendHistory(Long coachId, Long courseId, Long memberId) {
 		try{
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("cmActiveStatus", COURSE_MEMBER_STATUS.ACTIVE.getValue());

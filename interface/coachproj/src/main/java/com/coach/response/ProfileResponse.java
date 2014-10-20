@@ -14,7 +14,7 @@ import com.coach.utils.Config;
 @XmlRootElement(name = "profileResponse")
 public class ProfileResponse implements Serializable{
 	@XmlElement
-	private Integer coachId;
+	private Long coachId;
 	@XmlElement
 	private String name;
 	@XmlElement
@@ -29,10 +29,10 @@ public class ProfileResponse implements Serializable{
 	private String weixinId;
 	@XmlElement 
 	private String description = "";
-	public Integer getCoachId() {
+	public Long getCoachId() {
 		return coachId;
 	}
-	public void setCoachId(Integer coachId) {
+	public void setCoachId(Long coachId) {
 		this.coachId = coachId;
 	}
 	public String getName() {

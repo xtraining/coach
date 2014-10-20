@@ -7,9 +7,7 @@ import com.coach.common.Constants.ID_TYPE;
 import com.coach.model.Coach;
 import com.coach.utils.DateUtils;
 
-public class UpdateProfileDetailRequest extends BaseRequest{
-	@NotNull
-	private Integer coachId;
+public class UpdateProfileDetailRequest extends CoachBaseRequest{
 	private String name;
 	private Integer gender;
 	private String idNumber;
@@ -54,12 +52,6 @@ public class UpdateProfileDetailRequest extends BaseRequest{
 	public void setBirthday(String birthday) {
 		this.birthday = birthday;
 	}
-	public Integer getCoachId() {
-		return coachId;
-	}
-	public void setCoachId(Integer coachId) {
-		this.coachId = coachId;
-	}
 	public String getAreaCode() {
 		return areaCode;
 	}
@@ -69,7 +61,7 @@ public class UpdateProfileDetailRequest extends BaseRequest{
 	public Coach toCoach() {
 		Coach c = new Coach();
 		c.setAreaCode(areaCode);
-		c.setId(coachId);
+		c.setId(getCoachId());
 		c.setBirthday(DateUtils.yyyyMMddToDate(birthday));
 		c.setEmail(email);
 		c.setIdType(idType);

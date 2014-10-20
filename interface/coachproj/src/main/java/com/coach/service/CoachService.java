@@ -29,7 +29,7 @@ import com.coach.request.UnbindThirdPartyRequest;
 import com.coach.request.UpdateBindOrgStatusRequest;
 import com.coach.request.UpdateProfileDetailRequest;
 import com.coach.request.UploadAvatarRequest;
-import com.coach.resolver.CoachResolver;
+import com.coach.resolver.ICoachResolver;
 import com.coach.resolver.ILessonResolver;
 import com.coach.resolver.SmsResolver;
 import com.coach.resolver.SysSessionResolver;
@@ -47,7 +47,7 @@ import com.rop.response.BusinessServiceErrorResponse;
 
 @ServiceMethodBean
 public class CoachService extends SimpleBaseService{
-	@Autowired private CoachResolver coachResolver;
+	@Resource private ICoachResolver coachResolver;
 	@Autowired private SysSessionResolver sessionResolver;
 	@Autowired private SmsResolver smsResolver;
 	@Resource private ILessonResolver lessonResolver;
@@ -68,9 +68,9 @@ public class CoachService extends SimpleBaseService{
 	@ServiceMethod(method = "coach.getSignUpVcode", version = "1.0", needInSession = NeedInSessionType.NO, httpAction = HttpAction.POST)
     public Object getSignUpVcode(GetVcodeRequest request) {
 		//check whether the phone number already exists or not.
-		Integer coachId = coachResolver.checkByPhoneNumber(request.getPhoneNumber());
+		Long tuserId = coachResolver.checkByPhoneNumber(request.getPhoneNumber());
 		SimpleResponse r = new SimpleResponse();
-		if(coachId != null && coachId > 0){
+		if(tuserId != null && tuserId > 0){
 			r.setFlag(1);
 			r.setMsg("该手机号码已注册");
 			return r;
@@ -93,8 +93,8 @@ public class CoachService extends SimpleBaseService{
 	@ServiceMethod(method = "coach.signUp",version = "1.0",needInSession = NeedInSessionType.NO, httpAction = HttpAction.POST)
     public Object signUp(SignUpRequest request) {
 		//check whether the phone number already exists or not.
-		Integer coachId = coachResolver.checkByPhoneNumber(request.getPhoneNumber());
-		if(coachId != null && coachId > 0){
+		Long tuserId = coachResolver.checkByPhoneNumber(request.getPhoneNumber());
+		if(tuserId != null && tuserId > 0){
 			SignInResponse response = new SignInResponse();
 			response.setFlag(1);
 			response.setMsg("该手机号码已注册");
@@ -112,7 +112,7 @@ public class CoachService extends SimpleBaseService{
 	@ServiceMethod(method = "coach.signIn",version = "1.0", needInSession = NeedInSessionType.NO, httpAction = HttpAction.POST)
     public Object signIn(SignInRequest request) {	
 		SignInResponse response = new SignInResponse();
-		Integer coachId = coachResolver.getIdByCredentials(request.getPhoneNumber(), request.getPassword());	
+		Long coachId = coachResolver.getIdByCredentials(request.getPhoneNumber(), request.getPassword());	
 		if(coachId == null || coachId == 0){
 			response.setFlag(1);
 			response.setMsg("用户名或密码错误");
@@ -150,7 +150,7 @@ public class CoachService extends SimpleBaseService{
         			request.getRopRequestContext().getMethod(), "NOT_SUPPORTED_THIRD_PARTY_TYPE",
         			request.getRopRequestContext().getLocale(), request.getType());
 		}
-		Integer coachId = coachResolver.getByThirdPartyId(request.getThirdPartyId(), request.getType());	
+		Long coachId = coachResolver.getByThirdPartyId(request.getThirdPartyId(), request.getType());	
 		if(coachId == null || coachId == 0){//如果用户是第一次第三方登陆，需要补全用户资料
 			SimpleResponse response = new SimpleResponse();
 			response.setFlag(1);
@@ -171,7 +171,7 @@ public class CoachService extends SimpleBaseService{
         			request.getRopRequestContext().getMethod(), "NOT_SUPPORTED_THIRD_PARTY_TYPE",
         			request.getRopRequestContext().getLocale(), request.getType());
 		}
-		Integer coachId = coachResolver.getByThirdPartyId(request.getThirdPartyId(), request.getType());	
+		Long coachId = coachResolver.getByThirdPartyId(request.getThirdPartyId(), request.getType());	
 		if(coachId != null && coachId > 0){//只是作为防御性检查，实际是不可能进入这个分支
 			SimpleResponse response = new SimpleResponse();
 			response.setFlag(1);
@@ -179,8 +179,8 @@ public class CoachService extends SimpleBaseService{
 			return response;
 		}
 		//check whether the phone number already exists or not.
-		coachId = coachResolver.checkByPhoneNumber(request.getPhoneNumber());
-		if(coachId != null && coachId > 0){
+		Long tuserId = coachResolver.checkByPhoneNumber(request.getPhoneNumber());
+		if(tuserId != null && tuserId > 0){
 			SignInResponse response = new SignInResponse();
 			response.setFlag(1);
 			response.setMsg("该手机号码已注册");
@@ -197,9 +197,9 @@ public class CoachService extends SimpleBaseService{
 	
 	@ServiceMethod(method = "coach.getResetPwdVcode",version = "1.0",needInSession = NeedInSessionType.NO, httpAction = HttpAction.POST)
     public Object getResetPwdVcode(GetVcodeRequest request) {
-		Integer coachId = coachResolver.checkByPhoneNumber(request.getPhoneNumber());
+		Long tuserId = coachResolver.checkByPhoneNumber(request.getPhoneNumber());
 		SimpleResponse r = new SimpleResponse();
-		if(coachId == null || coachId == 0){
+		if(tuserId == null || tuserId == 0){
 			r.setFlag(1);
 			r.setMsg("该手机号码还未注册");
 			return r;
@@ -227,8 +227,8 @@ public class CoachService extends SimpleBaseService{
 			return response;
 		}
 		//check whether the phone number already exists or not.
-		Integer coachId = coachResolver.checkByPhoneNumber(request.getPhoneNumber());
-		if(coachId == null || coachId == 0){
+		Long tuserId = coachResolver.checkByPhoneNumber(request.getPhoneNumber());
+		if(tuserId == null || tuserId == 0){
 			SignInResponse response = new SignInResponse();
 			response.setFlag(1);
 			response.setMsg("该手机号码还未注册");
@@ -240,6 +240,7 @@ public class CoachService extends SimpleBaseService{
 		}
 		coachResolver.resetPassword(request.getPhoneNumber(), request.getPassword());	
 		Coach c = new Coach();
+		Long coachId = coachResolver.getCoachIdByPhoneNumber(request.getPhoneNumber());
 		c.setId(coachId);
 		response = sessionResolver.setupSignInSuccessResponse(request, c);
 		return response;

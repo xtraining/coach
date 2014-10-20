@@ -11,7 +11,7 @@ public interface NewsHistoryDao {
 
 	public int insert(CoachNewsHistory h);
 
-	public void delete(NEWS_TYPE type, Integer coachId);
+	public void delete(NEWS_TYPE type, Long coachId);
 	
 
 }

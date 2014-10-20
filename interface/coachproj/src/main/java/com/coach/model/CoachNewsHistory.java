@@ -12,7 +12,7 @@ public class CoachNewsHistory extends AbstractBaseModel implements
 	// Fields
 
 	private Long id;
-	private Integer coachId;
+	private Long coachId;
 	private Integer type;
 	private Timestamp lastViewTime;
 	public Long getId() {
@@ -21,10 +21,10 @@ public class CoachNewsHistory extends AbstractBaseModel implements
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Integer getCoachId() {
+	public Long getCoachId() {
 		return coachId;
 	}
-	public void setCoachId(Integer coachId) {
+	public void setCoachId(Long coachId) {
 		this.coachId = coachId;
 	}
 	public Integer getType() {

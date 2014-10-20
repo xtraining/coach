@@ -11,26 +11,26 @@ import com.coach.response.PersonalCourseResponse;
 
 public interface CourseDao {
 
-	List<Course> getChiefCourse(Integer coachId, int maxNum);
+	List<Course> getChiefCourse(Long coachId, int maxNum);
 
-	Long checkNewCourse(Integer coachId);
+	Long checkNewCourse(Long coachId);
 
-	List<Course> getNewCourse(Integer coachId, Integer pageNumber,
+	List<Course> getNewCourse(Long coachId, Integer pageNumber,
 			Integer pageSize);
 
 	void insert(Course c);
 
-	Course getCourseDetail(Integer coachId, Long courseId);
+	Course getCourseDetail(Long coachId, Long courseId);
 
 	List<Course> getOrgCourse(GetOrgCourseRequest request);
 
-	List<PersonalCourseResponse> getPersonalCourseList(Integer coachId);
+	List<PersonalCourseResponse> getPersonalCourseList(Long coachId);
 
-	Long checkCourse(Integer coachId, Long courseId);
+	Long checkCourse(Long coachId, Long courseId);
 
-	void deleteCourse(Integer coachId, Long courseId);
+	void deleteCourse(Long coachId, Long courseId);
 
-	List<Course> getUnassignedCourse(Integer coachId);
+	List<Course> getUnassignedCourse(Long coachId);
 	
 
 }

@@ -14,100 +14,49 @@ import com.coach.utils.DateUtils;
  * Coach entity. @author MyEclipse Persistence Tools
  */
 
-public class Coach extends AbstractBaseModel implements java.io.Serializable {
+public class Coach extends Tuser implements java.io.Serializable {
 
 	// Fields
 
-	private Integer id;
-	private String phoneNumber;
-	private String password;
-	private Integer registerType;
-	private String qqId;
-	private String weixinId;
-	private String weiboId;
+	private Long id;
 	private String avatarUrl;
 	private Integer graphicLock;
-	private String name;
-	private Integer gender;
-	private String idNumber;
-	private Date birthday;
-	private String email;
 	private Timestamp createTime;
-	private Timestamp certificateTime;
 	private Timestamp lastAccessTime;
-	private Integer status;
 	private Timestamp lockTime;
 	private Integer type;
-	private String code;
-	private String qqUsername;
-	private String weixinUsername;
-	private String weiboUsername;
-	private Integer idType;
 	private Integer areaId;
 	private String areaName;
 	private String areaCode;
 	private String description;
-
+	private Long tuserId;
+	private Integer registerType;
+	private String qqId;
+	private String weixinId;
+	private String weiboId;
+	private String qqUsername;
+	private String weixinUsername;
+	private String weiboUsername;
 	/** default constructor */
 	public Coach() {
 	}
 
 	// Property accessors
 
-	public Integer getId() {
+	public Long getTuserId() {
+		return tuserId;
+	}
+
+	public void setTuserId(Long tuserId) {
+		this.tuserId = tuserId;
+	}
+
+	public Long getId() {
 		return this.id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getPhoneNumber() {
-		return this.phoneNumber;
-	}
-
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
-	}
-
-	public String getPassword() {
-		return this.password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public Integer getRegisterType() {
-		return this.registerType;
-	}
-
-	public void setRegisterType(Integer registerType) {
-		this.registerType = registerType;
-	}
-
-	public String getQqId() {
-		return this.qqId;
-	}
-
-	public void setQqId(String qqId) {
-		this.qqId = qqId;
-	}
-
-	public String getWeixinId() {
-		return this.weixinId;
-	}
-
-	public void setWeixinId(String weixinId) {
-		this.weixinId = weixinId;
-	}
-
-	public String getWeiboId() {
-		return this.weiboId;
-	}
-
-	public void setWeiboId(String weiboId) {
-		this.weiboId = weiboId;
 	}
 
 	public String getAvatarUrl() {
@@ -126,60 +75,12 @@ public class Coach extends AbstractBaseModel implements java.io.Serializable {
 		this.graphicLock = graphicLock;
 	}
 
-	public String getName() {
-		return this.name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public Integer getGender() {
-		return this.gender;
-	}
-
-	public void setGender(Integer gender) {
-		this.gender = gender;
-	}
-
-	public String getIdNumber() {
-		return this.idNumber;
-	}
-
-	public void setIdNumber(String idNumber) {
-		this.idNumber = idNumber;
-	}
-
-	public Date getBirthday() {
-		return this.birthday;
-	}
-
-	public void setBirthday(Date birthday) {
-		this.birthday = birthday;
-	}
-
-	public String getEmail() {
-		return this.email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
 	public Timestamp getCreateTime() {
 		return this.createTime;
 	}
 
 	public void setCreateTime(Timestamp createTime) {
 		this.createTime = createTime;
-	}
-
-	public Timestamp getCertificateTime() {
-		return this.certificateTime;
-	}
-
-	public void setCertificateTime(Timestamp certificateTime) {
-		this.certificateTime = certificateTime;
 	}
 
 	public String getDescription() {
@@ -198,14 +99,6 @@ public class Coach extends AbstractBaseModel implements java.io.Serializable {
 		this.lastAccessTime = lastAccessTime;
 	}
 
-	public Integer getStatus() {
-		return this.status;
-	}
-
-	public void setStatus(Integer status) {
-		this.status = status;
-	}
-
 	public Timestamp getLockTime() {
 		return this.lockTime;
 	}
@@ -222,45 +115,6 @@ public class Coach extends AbstractBaseModel implements java.io.Serializable {
 		this.type = type;
 	}
 
-	public String getCode() {
-		return this.code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	public String getQqUsername() {
-		return qqUsername;
-	}
-
-	public void setQqUsername(String qqUsername) {
-		this.qqUsername = qqUsername;
-	}
-
-	public String getWeixinUsername() {
-		return weixinUsername;
-	}
-
-	public void setWeixinUsername(String weixinUsername) {
-		this.weixinUsername = weixinUsername;
-	}
-
-	public String getWeiboUsername() {
-		return weiboUsername;
-	}
-
-	public void setWeiboUsername(String weiboUsername) {
-		this.weiboUsername = weiboUsername;
-	}
-
-	public Integer getIdType() {
-		return idType;
-	}
-
-	public void setIdType(Integer idType) {
-		this.idType = idType;
-	}
 
 	public Integer getAreaId() {
 		return areaId;
@@ -285,7 +139,62 @@ public class Coach extends AbstractBaseModel implements java.io.Serializable {
 	public void setAreaCode(String areaCode) {
 		this.areaCode = areaCode;
 	}
+	public Integer getRegisterType() {
+		return registerType;
+	}
 
+	public void setRegisterType(Integer registerType) {
+		this.registerType = registerType;
+	}
+
+	public String getQqId() {
+		return qqId;
+	}
+
+	public void setQqId(String qqId) {
+		this.qqId = qqId;
+	}
+
+	public String getWeixinId() {
+		return weixinId;
+	}
+
+	public void setWeixinId(String weixinId) {
+		this.weixinId = weixinId;
+	}
+
+	public String getWeiboId() {
+		return weiboId;
+	}
+
+	public void setWeiboId(String weiboId) {
+		this.weiboId = weiboId;
+	}
+	
+	public String getQqUsername() {
+		return qqUsername;
+	}
+
+	public void setQqUsername(String qqUsername) {
+		this.qqUsername = qqUsername;
+	}
+
+	public String getWeixinUsername() {
+		return weixinUsername;
+	}
+
+	public void setWeixinUsername(String weixinUsername) {
+		this.weixinUsername = weixinUsername;
+	}
+
+	public String getWeiboUsername() {
+		return weiboUsername;
+	}
+
+	public void setWeiboUsername(String weiboUsername) {
+		this.weiboUsername = weiboUsername;
+	}
+	
 	public ProfileResponse toProfileResponse() {
 		ProfileResponse r = new ProfileResponse();
 		r.setCoachId(getId());
@@ -321,11 +230,11 @@ public class Coach extends AbstractBaseModel implements java.io.Serializable {
 		} else {
 			r.setAvatarUrl("");
 		}
-		r.setBirthday(DateUtils.dateToyyyyMMdd(birthday));
+		r.setBirthday(DateUtils.dateToyyyyMMdd(getBirthday()));
 		r.setEmail(getEmail());
-		r.setGender(gender);
-		r.setIdNumber(idNumber);
-		r.setIdType(idType);
+		r.setGender(getGender());
+		r.setIdNumber(getIdNumber());
+		r.setIdType(getIdType());
 		r.setName(getName());
 		r.setPhoneNumber(getPhoneNumber());
 		r.setDescription(description);

@@ -17,7 +17,7 @@ public class NewsHistoryDaoImpl extends SqlSessionDaoSupport implements NewsHist
 		return this.getSqlSession().insert("insertNewsHistory", h);
 	}
 	@Override
-	public void delete(NEWS_TYPE type, Integer coachId) {
+	public void delete(NEWS_TYPE type, Long coachId) {
 		try{
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("coachId", coachId);

@@ -85,7 +85,9 @@ public class Constants {
 		COACH_ONE_WEEK_LESSON("coach_oneweek_lesson_"), 
 		COACH_RECENT_LESSON("coach_recent_lesson_"),
 		COACH_LESSON("coach_lesson_"),
-		COACH_STUDENT("coach_student_"), COACH_COURSE_MEMBER("coach_course_student_");
+		COACH_STUDENT("coach_student_"), 
+		COACH_COURSE_MEMBER("coach_course_student_"),
+		AREA("area_");
 		private String value;
 		private ONE_DAY_CACHE_KEY(String value) {
 			this.value = value;
@@ -98,7 +100,7 @@ public class Constants {
 	public enum ONE_HOUR_CACHE_KEY {
 		CHIEF_COURSE("chief_course_"),
 		COACH_LESSON_MEMBER("coach_lesson_member_"), 
-		COACH_LESSON_MEMBER_LIST("coach_lesson_member_list"),
+		COACH_LESSON_MEMBER_LIST("coach_lesson_member_list_"),
 		COACH_CHECK_LESSON("coach_check_lesson_");
 		private String value;
 		private ONE_HOUR_CACHE_KEY(String value) {

@@ -10,7 +10,7 @@ public class CoachExpand extends AbstractBaseModel implements
 	// Fields
 
 	private Long id;
-	private Integer coachId;
+	private Long coachId;
 	private String uuid;
 	private Integer osType;
 	private String baiduUserId;
@@ -25,29 +25,6 @@ public class CoachExpand extends AbstractBaseModel implements
 	public CoachExpand() {
 	}
 
-	/** minimal constructor */
-	public CoachExpand(Integer coachId, Integer osType, Integer appVersionId,
-			Integer status, String osVersion) {
-		this.coachId = coachId;
-		this.osType = osType;
-		this.appVersionId = appVersionId;
-		this.status = status;
-		this.osVersion = osVersion;
-	}
-
-	/** full constructor */
-	public CoachExpand(Integer coachId, String uuid, Integer osType,
-			String baiduUserId, String baiduChannelId, Integer appVersionId,
-			Integer status, String osVersion) {
-		this.coachId = coachId;
-		this.uuid = uuid;
-		this.osType = osType;
-		this.baiduUserId = baiduUserId;
-		this.baiduChannelId = baiduChannelId;
-		this.appVersionId = appVersionId;
-		this.status = status;
-		this.osVersion = osVersion;
-	}
 
 	// Property accessors
 
@@ -59,11 +36,11 @@ public class CoachExpand extends AbstractBaseModel implements
 		this.id = id;
 	}
 
-	public Integer getCoachId() {
+	public Long getCoachId() {
 		return this.coachId;
 	}
 
-	public void setCoachId(Integer coachId) {
+	public void setCoachId(Long coachId) {
 		this.coachId = coachId;
 	}
 

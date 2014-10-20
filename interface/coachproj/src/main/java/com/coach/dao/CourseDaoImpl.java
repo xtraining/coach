@@ -24,7 +24,7 @@ public class CourseDaoImpl extends SqlSessionDaoSupport implements CourseDao{
 			.getLogger(CourseDaoImpl.class);
 
 	@Override
-	public List<Course> getChiefCourse(Integer coachId, int maxNum) {
+	public List<Course> getChiefCourse(Long coachId, int maxNum) {
 		try{
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("coachId", coachId);
@@ -42,7 +42,7 @@ public class CourseDaoImpl extends SqlSessionDaoSupport implements CourseDao{
 	}
 
 	@Override
-	public Long checkNewCourse(Integer coachId) {
+	public Long checkNewCourse(Long coachId) {
 		try{
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("coachId", coachId);
@@ -58,7 +58,7 @@ public class CourseDaoImpl extends SqlSessionDaoSupport implements CourseDao{
 	}
 
 	@Override
-	public List<Course> getNewCourse(Integer coachId,
+	public List<Course> getNewCourse(Long coachId,
 			Integer pageNumber, Integer pageSize) {
 		try{
 			Map<String, Object> map = new HashMap<String, Object>();
@@ -86,7 +86,7 @@ public class CourseDaoImpl extends SqlSessionDaoSupport implements CourseDao{
 	}
 
 	@Override
-	public Course getCourseDetail(Integer coachId, Long courseId) {
+	public Course getCourseDetail(Long coachId, Long courseId) {
 		try{
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("coachId", coachId);
@@ -121,7 +121,7 @@ public class CourseDaoImpl extends SqlSessionDaoSupport implements CourseDao{
 	}
 
 	@Override
-	public List<PersonalCourseResponse> getPersonalCourseList(Integer coachId) {
+	public List<PersonalCourseResponse> getPersonalCourseList(Long coachId) {
 		try{
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("coachId", coachId);
@@ -137,7 +137,7 @@ public class CourseDaoImpl extends SqlSessionDaoSupport implements CourseDao{
 	}
 
 	@Override
-	public Long checkCourse(Integer coachId, Long courseId) {
+	public Long checkCourse(Long coachId, Long courseId) {
 		try{
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("coachId", coachId);
@@ -150,7 +150,7 @@ public class CourseDaoImpl extends SqlSessionDaoSupport implements CourseDao{
 	}
 
 	@Override
-	public void deleteCourse(Integer coachId, Long courseId) {
+	public void deleteCourse(Long coachId, Long courseId) {
 		try{
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("coachId", coachId);
@@ -165,7 +165,7 @@ public class CourseDaoImpl extends SqlSessionDaoSupport implements CourseDao{
 	}
 
 	@Override
-	public List<Course> getUnassignedCourse(Integer coachId) {
+	public List<Course> getUnassignedCourse(Long coachId) {
 		try{
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("coachId", coachId);

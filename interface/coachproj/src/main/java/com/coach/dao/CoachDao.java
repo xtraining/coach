@@ -11,32 +11,32 @@ import com.coach.response.ProfileResponse;
 
 public interface CoachDao {
 
-	public Integer getIdByCredentials(String phoneNumber, String password);
-
-	public Integer getByPhoneNumber(String phoneNumber);
+	public Long getIdByCredentials(String phoneNumber, String password);
 
 	public void save(Coach c);
 
-	public Integer getByThirdPartyId(String thirdPartyId, Integer type);
+	public Long getByThirdPartyId(String thirdPartyId, Integer type);
 
 	public void resetPassword(String phoneNumber, String password);
 
-	public Coach getBasicById(Integer coachId);
+	public Coach getBasicById(Long coachId);
 
 	public void updateProfile(Coach c);
 
-	public Coach getDetailById(Integer coachId);
+	public Coach getDetailById(Long coachId);
 
 	public void updateProfileDetail(Coach c);
 
-	public int updateLastAccessTime(Integer coachId);
+	public int updateLastAccessTime(Long coachId);
 
-	public void unbindThirdParty(int type, Integer id);
+	public void unbindThirdParty(int type, Long id);
 
-	public void updateAvatar(Integer id, String fileNameInQiniu);
+	public void updateAvatar(Long id, String fileNameInQiniu);
 
-	public List<BindOrgResponse> getBindOrg(Integer coachId);
+	public List<BindOrgResponse> getBindOrg(Long coachId);
 
-	public void updateBindOrgStatus(Integer coachId, Integer orgId);
+	public void updateBindOrgStatus(Long coachId, Integer orgId);
+
+	public Long getCoachIdByPhoneNumber(String phoneNumber);
 
 }

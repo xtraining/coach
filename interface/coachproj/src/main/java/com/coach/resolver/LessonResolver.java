@@ -36,7 +36,12 @@ import com.coach.request.AddPersonalRequest;
 import com.coach.request.CheckLessonMemberRequest;
 import com.coach.request.GetCheckLessonRequest;
 import com.coach.request.GetRecentLessonRequest;
-import com.coach.response.DayLessonResponse;
+import com.coach.resolver.cacheaction.CacheAction;
+import com.coach.resolver.cacheaction.CoachRecentLessonCacheAction;
+import com.coach.resolver.cacheaction.LessonDetailCacheAction;
+import com.coach.resolver.cacheaction.LessonMemberCacheAction;
+import com.coach.resolver.cacheaction.LessonMemberListCacheAction;
+import com.coach.resolver.cacheaction.OneWeekLessonCacheAction;
 import com.coach.response.LessonDetailResponse;
 import com.coach.response.LessonMemberResponse;
 import com.coach.response.LessonResponse;
@@ -56,16 +61,15 @@ public class LessonResolver extends BaseResolver implements ILessonResolver{
 	@Resource private CoachCourseDao coachCourseDao;
 	@SuppressWarnings("unchecked")
 	@Override
-	public WeekLessonResponse getOneWeekLesson(Integer coachId, String requestDate) {
+	public WeekLessonResponse getOneWeekLesson(Long coachId, String requestDate) {
 		Date date = DateUtils.yyyyMMddToDate(requestDate);
 		if(date == null){
 			date = new Date();
 		}
 		Date startDate = DateUtils.getFirstDayOfWeek(date);
 		Date endDate = DateUtils.addDay(startDate, 8);
-		String cacheKey = ONE_DAY_CACHE_KEY.COACH_ONE_WEEK_LESSON.getValue() + coachId + "_" + DateUtils.dateToyyyyMMdd(startDate)+ "_" + DateUtils.dateToyyyyMMdd(endDate);
-		CacheObject cachObject = cache.get(CACHE_REGION.ONE_DAY.getValue(), cacheKey);
-		List<LessonResponse> lessonResponseList = (List<LessonResponse>) cachObject.getValue();
+		CacheAction<List<LessonResponse>> cacheAction = new OneWeekLessonCacheAction(coachId, startDate, endDate);
+		List<LessonResponse> lessonResponseList = cacheAction.getValue();
 		if(lessonResponseList == null){
 			List<Lesson> lessonList = lessonDao.getLessonInRange(coachId, startDate, endDate);
 			lessonResponseList = new ArrayList<LessonResponse>();
@@ -73,7 +77,7 @@ public class LessonResolver extends BaseResolver implements ILessonResolver{
 				LessonResponse r =  lesson.toResponse();
 				lessonResponseList.add(r);
 			}
-			cache.set(CACHE_REGION.ONE_DAY.getValue(), cacheKey, lessonResponseList);
+			cacheAction.setValue(lessonResponseList);
 		}
 		WeekLessonResponse response = new WeekLessonResponse();
 		response.setLessonList(lessonResponseList);
@@ -103,16 +107,15 @@ public class LessonResolver extends BaseResolver implements ILessonResolver{
 		return response;
 	}
 	@Override
-	public LessonDetailResponse getLessonDetail(Integer coachId, Long lessonId) {
-		String cacheKey = ONE_DAY_CACHE_KEY.COACH_LESSON.getValue() + coachId + "_" + lessonId;
-		CacheObject cachObject = cache.get(CACHE_REGION.ONE_DAY.getValue(), cacheKey);
-		LessonDetailResponse response = (LessonDetailResponse)cachObject.getValue();
+	public LessonDetailResponse getLessonDetail(Long coachId, Long lessonId) {
+		CacheAction<LessonDetailResponse> cacheAction = new LessonDetailCacheAction(coachId, lessonId);
+		LessonDetailResponse response = cacheAction.getValue();
 		if(response != null){
 			return response;
 		} else {
 			Lesson lesson = lessonDao.getLessonDetail(coachId, lessonId);
 			response = lesson.toDetailResponse();
-			cache.set(CACHE_REGION.ONE_DAY.getValue(), cacheKey, response);
+			cacheAction.setValue(response);
 			return response;
 		}
 	}
@@ -125,9 +128,8 @@ public class LessonResolver extends BaseResolver implements ILessonResolver{
 			startDate = new Date();
 		}
 		int days = request.getDays() >= 10 ? 10 : request.getDays();
-		String cacheKey = ONE_DAY_CACHE_KEY.COACH_RECENT_LESSON.getValue() + request.getCoachId() + "_" + DateUtils.dateToyyyyMMdd(startDate) + "_" + days;
-		CacheObject cachObject = cache.get(CACHE_REGION.ONE_DAY.getValue(), cacheKey);
-		List<LessonDetailResponse> response = (List<LessonDetailResponse>)cachObject.getValue();
+		CacheAction<List<LessonDetailResponse>> cacheAction = new CoachRecentLessonCacheAction(request.getCoachId(), startDate, days);
+		List<LessonDetailResponse> response = cacheAction.getValue();
 		if(response != null){
 			return response;
 		} else {
@@ -138,18 +140,16 @@ public class LessonResolver extends BaseResolver implements ILessonResolver{
 				LessonDetailResponse r = lesson.toDetailResponse();
 				response.add(r);
 			}
-			cache.set(CACHE_REGION.ONE_DAY.getValue(), cacheKey, response);
+			cacheAction.setValue(response);
 			return response;
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
-	public List<MemberResponse> getLessonMemberList(Integer coachId,
+	public List<MemberResponse> getLessonMemberList(Long coachId,
 			Long lessonId) {
-		String cacheKey = ONE_HOUR_CACHE_KEY.COACH_LESSON_MEMBER_LIST.getValue() + "_" + coachId + "_" + lessonId;
-		CacheObject cachObject = cache.get(CACHE_REGION.ONE_HOUR.getValue(), cacheKey);
-		List<MemberResponse> response = (List<MemberResponse>)cachObject.getValue();
+		CacheAction<List<MemberResponse>> cacheAction = new LessonMemberListCacheAction(coachId, lessonId);
+		List<MemberResponse> response = cacheAction.getValue();
 		if(response != null){
 			return response;
 		} else {
@@ -159,16 +159,15 @@ public class LessonResolver extends BaseResolver implements ILessonResolver{
 				MemberResponse r = m.toResponse();
 				response.add(r);
 			}
-			cache.set(CACHE_REGION.ONE_HOUR.getValue(), cacheKey, response);
+			cacheAction.setValue(response);
 			return response;
 		}
 	}
 	
 	@Override
-	public LessonMemberResponse getLessonMember(Integer coachId, Long lessonId) {
-		String cacheKey = ONE_HOUR_CACHE_KEY.COACH_LESSON_MEMBER.getValue() + "_" + coachId + "_" + lessonId;
-		CacheObject cachObject = cache.get(CACHE_REGION.ONE_HOUR.getValue(), cacheKey);
-		LessonMemberResponse response = (LessonMemberResponse)cachObject.getValue();
+	public LessonMemberResponse getLessonMember(Long coachId, Long lessonId) {
+		CacheAction<LessonMemberResponse> cacheAction = new LessonMemberCacheAction(coachId, lessonId);
+		LessonMemberResponse response = cacheAction.getValue();
 		if(response != null){
 			return response;
 		} else {
@@ -195,7 +194,7 @@ public class LessonResolver extends BaseResolver implements ILessonResolver{
 			response.setTotalNum(list.size());
 			response.setMemberList(mList);
 			response.setLessonId(lessonId);
-			cache.set(CACHE_REGION.ONE_HOUR.getValue(), cacheKey, response);
+			cacheAction.setValue(response);
 			return response;
 		}
 	}
@@ -213,33 +212,35 @@ public class LessonResolver extends BaseResolver implements ILessonResolver{
 			lessonMemberDao.updateStatus(request.getLessonId(), absentMemberIds, LESSON_MEMBER_STATUS.MISS);
 		}
 		lessonDao.changeCheckFlag(request.getLessonId());
-		String cacheKey = ONE_HOUR_CACHE_KEY.COACH_LESSON_MEMBER.getValue() + "_" + request.getCoachId() + "_" + request.getLessonId();
-		cache.evict(CACHE_REGION.ONE_HOUR.getValue(), cacheKey);
+		CacheAction<LessonMemberResponse> cacheAction = new LessonMemberCacheAction(request.getCoachId(), request.getLessonId());
+		cacheAction.clear();
 	}
 	
 	@Override
+	@Transactional
 	public void addPersonal(AddPersonalRequest request) {
 		Lesson lesson = request.toLesson();
 		lessonDao.insert(lesson);
 		Date startDate = DateUtils.getFirstDayOfWeek(DateUtils.yyyyMMddHHmmssToTimestamp(request.getStartTime()));
 		Date endDate = DateUtils.addDay(startDate, 8);
-		String cacheKey = ONE_DAY_CACHE_KEY.COACH_ONE_WEEK_LESSON.getValue() + request.getCoachId() + "_" + DateUtils.dateToyyyyMMdd(startDate)+ "_" + DateUtils.dateToyyyyMMdd(endDate);
-		cache.evict(CACHE_REGION.ONE_DAY.getValue(), cacheKey);
+		CacheAction<List<LessonResponse>> cacheAction = new OneWeekLessonCacheAction(request.getCoachId(), startDate, endDate);
+		cacheAction.clear();
 	}
 	
 	@Override
+	@Transactional
 	public void addLesson(AddLessonRequest request) {
 		Lesson lesson = request.toLesson();
 		lessonDao.insert(lesson);
 		Date startDate = DateUtils.getFirstDayOfWeek(DateUtils.yyyyMMddHHmmssToTimestamp(request.getStartTime()));
 		Date endDate = DateUtils.addDay(startDate, 8);
-		String cacheKey = ONE_DAY_CACHE_KEY.COACH_ONE_WEEK_LESSON.getValue() + request.getCoachId() + "_" + DateUtils.dateToyyyyMMdd(startDate)+ "_" + DateUtils.dateToyyyyMMdd(endDate);
-		cache.evict(CACHE_REGION.ONE_DAY.getValue(), cacheKey);
+		CacheAction<List<LessonResponse>> cacheAction = new OneWeekLessonCacheAction(request.getCoachId(), startDate, endDate);
+		cacheAction.clear();
 		
 	}
 	@SuppressWarnings("rawtypes")
 	@Override
-	public TotalLessonResponse getTotalLesson(Integer coachId) {
+	public TotalLessonResponse getTotalLesson(Long coachId) {
 		Date startDate = DateUtils.getFirstDayOfMonth(new Date(), -3);
 		TotalLessonResponse response = new TotalLessonResponse();
 		Map<String, MonthLessonResponse> map = new HashMap<String, MonthLessonResponse>();

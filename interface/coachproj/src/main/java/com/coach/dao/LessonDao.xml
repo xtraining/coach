@@ -89,7 +89,7 @@
                            INNER JOIN lesson s on s.courseId = c.id and s.status = #{lessonActiveStatus}
                            where s.checkFlag = #{lessonCheckedFlag} and s.startTime >= #{startDate}
                            GROUP BY ch.id)aa 
- 	where aa.num >= #{percent})/(select count(cch.id) from coach cch where cch.status != 1)  
+ 	where aa.num >= #{percent})/(select count(cch.id) from coach cch inner join tuser t on cch.tuserId = t.id where t.status != 1)  
   </select>
   
   <select id="getCheckLesson" parameterType="Map" resultMap="BaseLessonResult">

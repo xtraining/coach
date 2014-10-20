@@ -13,7 +13,7 @@ public class OrganizationCoach extends AbstractBaseModel implements
 
 	private Long id;
 	private Integer organizationId;
-	private Integer coachId;
+	private Long coachId;
 	private Integer status;
 	private Timestamp createTime;
 	private Timestamp updateTime;
@@ -43,11 +43,11 @@ public class OrganizationCoach extends AbstractBaseModel implements
 		this.organizationId = organizationId;
 	}
 
-	public Integer getCoachId() {
+	public Long getCoachId() {
 		return this.coachId;
 	}
 
-	public void setCoachId(Integer coachId) {
+	public void setCoachId(Long coachId) {
 		this.coachId = coachId;
 	}
 

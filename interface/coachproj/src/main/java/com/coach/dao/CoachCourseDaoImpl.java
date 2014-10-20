@@ -8,9 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.coach.common.Constants.COACH_COURSE_STATUS;
-import com.coach.common.Constants.COURSE_STATUS;
 import com.coach.model.CoachCourse;
-import com.coach.model.User;
 
 public class CoachCourseDaoImpl extends SqlSessionDaoSupport implements CoachCourseDao{
 	private static final Logger log = LoggerFactory
@@ -29,7 +27,7 @@ public class CoachCourseDaoImpl extends SqlSessionDaoSupport implements CoachCou
 	}
 
 	@Override
-	public void updateStatus(Integer coachId, Long courseId,
+	public void updateStatus(Long coachId, Long courseId,
 			COACH_COURSE_STATUS status) {
 		try{
 			Map<String, Object> map = new HashMap<String, Object>();

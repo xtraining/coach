@@ -10,7 +10,7 @@ public class SignInResponse {
 	@XmlElement
 	private String sessionId;
 	@XmlElement
-	private Integer coachId;
+	private Long coachId;
 	public Integer getFlag() {
 		return flag;
 	}
@@ -29,10 +29,10 @@ public class SignInResponse {
 	public void setSessionId(String sessionId) {
 		this.sessionId = sessionId;
 	}
-	public Integer getCoachId() {
+	public Long getCoachId() {
 		return coachId;
 	}
-	public void setCoachId(Integer coachId) {
+	public void setCoachId(Long coachId) {
 		this.coachId = coachId;
 	}
 	

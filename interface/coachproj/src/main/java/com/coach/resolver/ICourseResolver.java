@@ -18,15 +18,15 @@ import com.coach.response.PersonalCourseResponse;
 import com.coach.response.SearchMemberResponse;
 @Service
 public interface ICourseResolver {
-	public ChiefCourseResponse getChiefCourse(Integer coachId);
+	public ChiefCourseResponse getChiefCourse(Long coachId);
 
-	public int checkNewCourse(Integer coachId);
+	public int checkNewCourse(Long coachId);
 
-	public List<CourseResponse> getNewCourse(Integer coachId, Integer pageNumber, Integer pageSize);
+	public List<CourseResponse> getNewCourse(Long coachId, Integer pageNumber, Integer pageSize);
 
 	public ConflictLessonResponse addCourese(AddCourseRequest request, String[] phoneNumberArr, String[] memberNameArr) ;
 
-	public CourseDetailResponse getCourseDetail(Integer coachId, Long courseId);
+	public CourseDetailResponse getCourseDetail(Long coachId, Long courseId);
 
 	public void updateCourese(UpdateCourseRequest request,
 			String[] memberIdArr, String[] phoneNumberArr,
@@ -34,23 +34,23 @@ public interface ICourseResolver {
 
 	public List<CourseResponse> getOrgCourse(GetOrgCourseRequest request);
 
-	public List<PersonalCourseResponse> getPersonalCourseList(Integer coachId);
+	public List<PersonalCourseResponse> getPersonalCourseList(Long coachId);
 
-	public Long checkCourse(Integer coachId, Long courseId);
+	public Long checkCourse(Long coachId, Long courseId);
 
-	public List<CourseMemberResponse> getCourseMember(Integer coachId);
+	public List<CourseMemberResponse> getCourseMember(Long coachId);
 
-	public List<SearchMemberResponse> searchMember(Integer coachId,
+	public List<SearchMemberResponse> searchMember(Long coachId,
 			String keyword);
 
-	public List<MemberResponse> getCourseMember(Integer coachId, Long courseId);
+	public List<MemberResponse> getCourseMember(Long coachId, Long courseId);
 
-	public void deleteCourse(Integer coachId, Long courseId);
+	public void deleteCourse(Long coachId, Long courseId);
 
-	public void updateCoachCourseStatus(Integer coachId, Long courseId,
+	public void updateCoachCourseStatus(Long coachId, Long courseId,
 			Integer status);
 
-	public CourseDetailResponse getRejectCourseDetail(Integer coachId,
+	public CourseDetailResponse getRejectCourseDetail(Long coachId,
 			Long courseId);
 
 	public List<CourseResponse> getUnassignedCourse(CoachBaseRequest request);

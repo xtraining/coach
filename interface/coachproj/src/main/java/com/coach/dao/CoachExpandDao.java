@@ -9,7 +9,7 @@ public interface CoachExpandDao {
 
 	void save(CoachExpand ex);
 
-	void deleteBaiduBinding(Integer coachId, String baiduUserId,
+	void deleteBaiduBinding(Long coachId, String baiduUserId,
 			String baiduChannelId);
 	
 

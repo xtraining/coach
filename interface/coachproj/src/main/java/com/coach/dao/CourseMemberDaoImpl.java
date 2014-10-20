@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.coach.model.CourseMember;
-import com.coach.model.User;
 
 public class CourseMemberDaoImpl extends SqlSessionDaoSupport implements CourseMemberDao{
 	private static final Logger log = LoggerFactory

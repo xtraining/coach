@@ -33,7 +33,7 @@ public class CoachRejectCourse extends AbstractBaseModel implements java.io.Seri
 	private Float  lessonHour;
 	private Integer lessonNum;
 	private Long courseId;
-	private Integer coachId;
+	private Long coachId;
 	public Long getId() {
 		return id;
 	}
@@ -124,10 +124,10 @@ public class CoachRejectCourse extends AbstractBaseModel implements java.io.Seri
 	public void setCourseId(Long courseId) {
 		this.courseId = courseId;
 	}
-	public Integer getCoachId() {
+	public Long getCoachId() {
 		return coachId;
 	}
-	public void setCoachId(Integer coachId) {
+	public void setCoachId(Long coachId) {
 		this.coachId = coachId;
 	}
 	public CourseDetailResponse toDetailResponse() {

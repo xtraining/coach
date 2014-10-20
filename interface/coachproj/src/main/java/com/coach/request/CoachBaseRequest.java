@@ -6,13 +6,13 @@ import com.rop.AbstractRopRequest;
 
 public class CoachBaseRequest extends BaseRequest{
 	@NotNull
-    private Integer coachId;
+    private Long coachId;
 
-	public Integer getCoachId() {
+	public Long getCoachId() {
 		return coachId;
 	}
 
-	public void setCoachId(Integer coachId) {
+	public void setCoachId(Long coachId) {
 		this.coachId = coachId;
 	}
 

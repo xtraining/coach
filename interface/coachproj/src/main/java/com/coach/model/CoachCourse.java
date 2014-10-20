@@ -10,7 +10,7 @@ public class CoachCourse extends AbstractBaseModel implements
 	// Fields
 
 	private Long id;
-	private Integer coachId;
+	private Long coachId;
 	private Long courseId;
 	private Integer status;
 	
@@ -23,11 +23,11 @@ public class CoachCourse extends AbstractBaseModel implements
 		this.id = id;
 	}
 
-	public Integer getCoachId() {
+	public Long getCoachId() {
 		return this.coachId;
 	}
 
-	public void setCoachId(Integer coachId) {
+	public void setCoachId(Long coachId) {
 		this.coachId = coachId;
 	}
 

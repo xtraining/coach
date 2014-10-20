@@ -16,14 +16,14 @@ public interface MemberDao {
 
 	public List<Member> getMemberByCourseId(Long courseId);
 
-	public List<Member> getMemberByCoachId(Integer coachId);
+	public List<Member> getMemberByCoachId(Long coachId);
 
-	public List<Member> getMemberByCoachIdAndKeyword(Integer coachId, String keyword);
+	public List<Member> getMemberByCoachIdAndKeyword(Long coachId, String keyword);
 
-	public List<Member> getMemberByCoachId(Integer coachId,
+	public List<Member> getMemberByCoachId(Long coachId,
 			Long courseId);
 
-	public List<Member> getMemberWithAttendHistory(Integer coachId, Long courseId, Long memberId);
+	public List<Member> getMemberWithAttendHistory(Long coachId, Long courseId, Long memberId);
 
 	public void updateMember(Member m);
 

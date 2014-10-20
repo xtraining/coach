@@ -26,5 +26,6 @@
     <mapper resource="com/coach/dao/MemberNewsDao.xml" />
     <mapper resource="com/coach/dao/LessonDao.xml" />
     <mapper resource="com/coach/dao/LessonMemberDao.xml" />
+    <mapper resource="com/coach/dao/TuserDao.xml" />
   </mappers>
 </configuration>

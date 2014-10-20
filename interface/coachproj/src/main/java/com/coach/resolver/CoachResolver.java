@@ -8,18 +8,15 @@ import java.util.Random;
 
 import javax.annotation.Resource;
 
-import net.oschina.j2cache.CacheObject;
-
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.coach.common.Config;
 import com.coach.common.Constants;
-import com.coach.common.Constants.CACHE_REGION;
 import com.coach.common.Constants.COACH_STATUS;
 import com.coach.common.Constants.COACH_TYPE;
 import com.coach.common.Constants.IMAGE_TYPE;
-import com.coach.common.Constants.ONE_DAY_CACHE_KEY;
 import com.coach.common.Constants.ORG_COACH_DISPLAY_STATUS;
 import com.coach.common.Constants.ORG_COACH_STATUS;
 import com.coach.common.Constants.RECEIVER_TYPE;
@@ -30,9 +27,11 @@ import com.coach.dao.ClientAppkeyDao;
 import com.coach.dao.CoachDao;
 import com.coach.dao.CoachExpandDao;
 import com.coach.dao.SmsHistoryDao;
+import com.coach.dao.TuserDao;
 import com.coach.model.Coach;
 import com.coach.model.CoachExpand;
 import com.coach.model.SmsHistory;
+import com.coach.model.Tuser;
 import com.coach.request.BindBaiduPushMessageRequest;
 import com.coach.request.BindThirdPartyRequest;
 import com.coach.request.SignOutRequest;
@@ -40,20 +39,23 @@ import com.coach.request.SignUpRequest;
 import com.coach.request.ThirdSignUpRequest;
 import com.coach.request.UpdateProfileDetailRequest;
 import com.coach.request.UploadAvatarRequest;
+import com.coach.resolver.cacheaction.CacheAction;
+import com.coach.resolver.cacheaction.CoachProfileCacheAction;
+import com.coach.resolver.cacheaction.CoachProfileDetailCacheAction;
 import com.coach.response.BindOrgResponse;
 import com.coach.response.ProfileDetailResponse;
 import com.coach.response.ProfileResponse;
 import com.coach.response.UploadImageResponse;
 import com.coach.utils.QiniuUtils;
-import com.rop.utils.RopUtils;
 @Service
-public class CoachResolver extends BaseResolver{
+public class CoachResolver extends BaseResolver implements ICoachResolver{
 	@Resource private CoachDao coachDao;
+	@Resource private TuserDao tuserDao;
 	@Resource private SmsHistoryDao smsHistoryDao;
 	@Resource private CoachExpandDao coachExpandDao;
 	@Resource private ClientAppkeyDao clientAppkeyDao;
 	@Resource private AppVersionDao appVersionDao;
-	public Integer getIdByCredentials(String phoneNumber, String password) {
+	public Long getIdByCredentials(String phoneNumber, String password) {
 		return coachDao.getIdByCredentials(phoneNumber, password);
 	}
 
@@ -105,15 +107,19 @@ public class CoachResolver extends BaseResolver{
 		
 	}
 
+	@Transactional
 	public Coach signUp(SignUpRequest request) {
+		Tuser u = new Tuser();
+		u.setPhoneNumber(request.getPhoneNumber());
+		u.setPassword(request.getPassword());
+		u.setStatus(COACH_STATUS.ACTIVE.getValue());
+		tuserDao.save(u);
+		
 		Coach c = new Coach();
 		c.setType(COACH_TYPE.PUBLIC.getValue());
-		c.setStatus(COACH_STATUS.ACTIVE.getValue());
 		c.setRegisterType(REGISTER_TYPE.PHONE.getValue());
-		c.setPassword(request.getPassword());
-		c.setPhoneNumber(request.getPhoneNumber());
 		c.setGraphicLock(0);
-		c.setCode(StringUtils.replace(RopUtils.getUUID(), "-", ""));
+		c.setTuserId(u.getId());
 		coachDao.save(c);
 		return c;
 	}
@@ -124,23 +130,22 @@ public class CoachResolver extends BaseResolver{
 		
 	}
 
-	public ProfileResponse getProfile(Integer coachId) {
-		CacheObject cachObject = cache.get(CACHE_REGION.ONE_DAY.getValue(), ONE_DAY_CACHE_KEY.COACH_PROFILE.getValue() + coachId);
-		ProfileResponse response = (ProfileResponse) cachObject.getValue();
+	public ProfileResponse getProfile(Long coachId) {
+		CacheAction<ProfileResponse> cachAction = new CoachProfileCacheAction(coachId);
+		ProfileResponse response = cachAction.getValue();
 		if(response != null){
 			return response;
 		} else {
 			Coach c = coachDao.getBasicById(coachId);
 			response = c.toProfileResponse();
-			cache.set(CACHE_REGION.ONE_DAY.getValue(), ONE_DAY_CACHE_KEY.COACH_PROFILE.getValue() + coachId, response);
+			cachAction.setValue(response);
 			return response;
-			
 		}
 	}
 
-	public Integer checkByPhoneNumber(String phoneNumber) {
-		Integer coachId = coachDao.getByPhoneNumber(phoneNumber);
-		return coachId;
+	public Long checkByPhoneNumber(String phoneNumber) {
+		Long tuserId = tuserDao.getByPhoneNumber(phoneNumber);
+		return tuserId;
 	}
 
 	public boolean checkExceedSmsNum(SMS_TYPE type, String phoneNumber) {
@@ -159,16 +164,20 @@ public class CoachResolver extends BaseResolver{
 	}
 	
 
-	public Integer getByThirdPartyId(String thirdPartyId, Integer type) {
+	public Long getByThirdPartyId(String thirdPartyId, Integer type) {
 		return coachDao.getByThirdPartyId(thirdPartyId, type);
 	}
 
+	@Transactional
 	public Coach thirdSignUp(ThirdSignUpRequest request) {
+		Tuser u = new Tuser();
+		u.setPhoneNumber(request.getPhoneNumber());
+		u.setPassword(request.getPassword());
+		u.setStatus(COACH_STATUS.ACTIVE.getValue());
+		tuserDao.save(u);
+		
 		Coach c = new Coach();
-		c.setPhoneNumber(request.getPhoneNumber());
-		c.setPassword(request.getPassword());
 		c.setType(COACH_TYPE.PUBLIC.getValue());
-		c.setStatus(COACH_STATUS.ACTIVE.getValue());
 		if(request.getType() == REGISTER_TYPE.QQ.getValue()){
 			c.setQqId(request.getThirdPartyId());
 		} else if(request.getType() == REGISTER_TYPE.WEIBO.getValue()){
@@ -179,6 +188,7 @@ public class CoachResolver extends BaseResolver{
 		c.setName(request.getThirdPartyNickname());
 		c.setRegisterType(request.getType());
 		c.setGraphicLock(0);
+		c.setTuserId(u.getId());
 		coachDao.save(c);
 		return c;
 	}
@@ -200,38 +210,42 @@ public class CoachResolver extends BaseResolver{
 	public ProfileResponse bindThirdParty(BindThirdPartyRequest request, Coach c) {
 		if(request.getType() == REGISTER_TYPE.QQ.getValue()){
 			c.setQqId(request.getThirdPartyId());
+			c.setQqUsername(request.getThirdPartyNickname());
 		} else if(request.getType() == REGISTER_TYPE.WEIBO.getValue()){
 			c.setWeiboId(request.getThirdPartyId());
+			c.setWeiboUsername(request.getThirdPartyNickname());
 		} else if(request.getType() == REGISTER_TYPE.WEIXIN.getValue()){
 			c.setWeixinId(request.getThirdPartyId());
+			c.setWeixinUsername(request.getThirdPartyNickname());
 		}
 		if(StringUtils.isBlank(c.getAvatarUrl())){
 			c.setAvatarUrl(request.getAvatarUrl());
 		}
-		if(StringUtils.isBlank(c.getName())){
-			c.setName(request.getThirdPartyNickname());
-		}
+//		if(StringUtils.isBlank(c.getName())){
+//			c.setName(request.getThirdPartyNickname());
+//		}
 		if(c.getGender() == null){
 			c.setGender(request.getGender());
 		}
 		coachDao.updateProfile(c);
-		cache.evict(CACHE_REGION.ONE_DAY.getValue(), ONE_DAY_CACHE_KEY.COACH_PROFILE.getValue() + c.getId());
+		CacheAction<ProfileResponse> cacheAction = new CoachProfileCacheAction(c.getId());
+		cacheAction.clear();
 		return getProfile(c.getId());
 	}
 
-	public Coach getBasicById(Integer coachId) {
+	public Coach getBasicById(Long coachId) {
 		return coachDao.getBasicById(coachId);
 	}
 
-	public ProfileDetailResponse getProfileDetail(Integer coachId) {
-		CacheObject cachObject = cache.get(CACHE_REGION.ONE_DAY.getValue(), ONE_DAY_CACHE_KEY.COACH_PROFILE_DETAIL.getValue() + coachId);
-		ProfileDetailResponse r = (ProfileDetailResponse)cachObject.getValue();
+	public ProfileDetailResponse getProfileDetail(Long coachId) {
+		CacheAction<ProfileDetailResponse> cacheAction = new CoachProfileDetailCacheAction(coachId);
+		ProfileDetailResponse r = cacheAction.getValue();
 		if(r != null){
 			return r;
 		} else {
 			Coach c = coachDao.getDetailById(coachId);
 			r = c.toProfileDetailResponse();
-			cache.get(CACHE_REGION.ONE_DAY.getValue(), ONE_DAY_CACHE_KEY.COACH_PROFILE_DETAIL.getValue() + coachId);
+			cacheAction.setValue(r);
 			return r;
 		}
 	}
@@ -239,17 +253,20 @@ public class CoachResolver extends BaseResolver{
 	public void updateProfileDetail(UpdateProfileDetailRequest request) {
 		Coach c = request.toCoach();
 		coachDao.updateProfileDetail(c);	
-		cache.evict(CACHE_REGION.ONE_DAY.getValue(), ONE_DAY_CACHE_KEY.COACH_PROFILE.getValue() + c.getId());
-		cache.evict(CACHE_REGION.ONE_DAY.getValue(), ONE_DAY_CACHE_KEY.COACH_PROFILE_DETAIL.getValue() + c.getId());
+		CacheAction<ProfileResponse> cacheAction = new CoachProfileCacheAction(c.getId());
+		cacheAction.clear();
+		CacheAction<ProfileDetailResponse> cacheAction1 = new CoachProfileDetailCacheAction(c.getId());
+		cacheAction1.clear();
 	}
 
-	public int updateLastAccessTime(Integer coachId) {
+	public int updateLastAccessTime(Long coachId) {
 		return coachDao.updateLastAccessTime(coachId);
 	}
 
 	public ProfileResponse unbindThirdParty(int type, Coach c) {
 		coachDao.unbindThirdParty(type, c.getId());
-		cache.evict(CACHE_REGION.ONE_DAY.getValue(), ONE_DAY_CACHE_KEY.COACH_PROFILE.getValue() + c.getId());
+		CacheAction<ProfileResponse> cacheAction = new CoachProfileCacheAction(c.getId());
+		cacheAction.clear();
 		return getProfile(c.getId());
 	}
 
@@ -272,11 +289,12 @@ public class CoachResolver extends BaseResolver{
 			response.setUptoken(uptoken);
 			response.setKeys(fileNameList);
 		}
-		cache.evict(CACHE_REGION.ONE_DAY.getValue(), ONE_DAY_CACHE_KEY.COACH_PROFILE.getValue() + c.getId());
+		CacheAction<ProfileResponse> cacheAction = new CoachProfileCacheAction(c.getId());
+		cacheAction.clear();
 		return response;
 	}
 
-	public List<BindOrgResponse> getBindOrg(Integer coachId) {
+	public List<BindOrgResponse> getBindOrg(Long coachId) {
 		List<BindOrgResponse> list = coachDao.getBindOrg(coachId);
 		for(BindOrgResponse r : list){
 			if(r.getStatus()== ORG_COACH_STATUS.COACH_NONE.getValue()){
@@ -294,7 +312,11 @@ public class CoachResolver extends BaseResolver{
 		return list;
 	}
 	
-	public void updateBindOrgStatus(Integer coachId, Integer orgId) {
+	public void updateBindOrgStatus(Long coachId, Integer orgId) {
 		coachDao.updateBindOrgStatus(coachId, orgId);
+	}
+
+	public Long getCoachIdByPhoneNumber(String phoneNumber) {
+		return coachDao.getCoachIdByPhoneNumber(phoneNumber);
 	}
 }

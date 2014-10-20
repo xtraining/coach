@@ -7,8 +7,8 @@ import com.coach.model.CoachRejectCourse;
 public interface CoachRejectCourseDao {
 	
 
-	public void saveRejectCourse(Integer coachId, Long courseId);
+	public void saveRejectCourse(Long coachId, Long courseId);
 
-	public CoachRejectCourse getRejectCourseDetail(Integer coachId, Long courseId);
+	public CoachRejectCourse getRejectCourseDetail(Long coachId, Long courseId);
 
 }

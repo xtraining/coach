@@ -11,13 +11,12 @@ import org.slf4j.LoggerFactory;
 import com.coach.common.Constants.COACH_STATUS;
 import com.coach.model.Coach;
 import com.coach.response.BindOrgResponse;
-import com.coach.response.ProfileResponse;
 
 public class CoachDaoImpl extends SqlSessionDaoSupport implements CoachDao{
 	private static final Logger log = LoggerFactory
 			.getLogger(CoachDaoImpl.class);
 	@Override
-	public Integer getIdByCredentials(String phoneNumber, String password) {
+	public Long getIdByCredentials(String phoneNumber, String password) {
 		try{
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("phoneNumber", phoneNumber);
@@ -29,18 +28,6 @@ public class CoachDaoImpl extends SqlSessionDaoSupport implements CoachDao{
 		}
 	}
 
-	@Override
-	public Integer getByPhoneNumber(String phoneNumber) {
-		try{
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("phoneNumber", phoneNumber);
-			map.put("status", COACH_STATUS.DELETED.getValue());
-			return  this.getSqlSession().selectOne("getByPhoneNumber", map);
-		} catch(RuntimeException e){
-			log.error("getByPhoneNumber", e);
-			throw e;
-		}
-	}
 
 	@Override
 	public void save(Coach c) {
@@ -54,7 +41,7 @@ public class CoachDaoImpl extends SqlSessionDaoSupport implements CoachDao{
 	}
 
 	@Override
-	public Integer getByThirdPartyId(String thirdPartyId, Integer type) {
+	public Long getByThirdPartyId(String thirdPartyId, Integer type) {
 		try{
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("thirdPartyId", thirdPartyId);
@@ -82,7 +69,7 @@ public class CoachDaoImpl extends SqlSessionDaoSupport implements CoachDao{
 	}
 
 	@Override
-	public Coach getBasicById(Integer coachId) {
+	public Coach getBasicById(Long coachId) {
 		try{
 			return this.getSqlSession().selectOne("getBasicById", coachId);
 		} catch(RuntimeException e){
@@ -103,7 +90,7 @@ public class CoachDaoImpl extends SqlSessionDaoSupport implements CoachDao{
 	}
 
 	@Override
-	public Coach getDetailById(Integer coachId) {
+	public Coach getDetailById(Long coachId) {
 		try{
 			return this.getSqlSession().selectOne("getDetailById", coachId);
 		} catch(RuntimeException e){
@@ -124,7 +111,7 @@ public class CoachDaoImpl extends SqlSessionDaoSupport implements CoachDao{
 	}
 
 	@Override
-	public int updateLastAccessTime(Integer coachId) {
+	public int updateLastAccessTime(Long coachId) {
 		try{
 			return this.getSqlSession().update("updateLastAccessTime", coachId);
 		} catch(RuntimeException e){
@@ -134,7 +121,7 @@ public class CoachDaoImpl extends SqlSessionDaoSupport implements CoachDao{
 	}
 
 	@Override
-	public void unbindThirdParty(int type, Integer coachId) {
+	public void unbindThirdParty(int type, Long coachId) {
 		try{
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("coachId", coachId);
@@ -148,7 +135,7 @@ public class CoachDaoImpl extends SqlSessionDaoSupport implements CoachDao{
 	}
 
 	@Override
-	public void updateAvatar(Integer coachId, String fileNameInQiniu) {
+	public void updateAvatar(Long coachId, String fileNameInQiniu) {
 		try{
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("coachId", coachId);
@@ -162,7 +149,7 @@ public class CoachDaoImpl extends SqlSessionDaoSupport implements CoachDao{
 	}
 
 	@Override
-	public List<BindOrgResponse> getBindOrg(Integer coachId) {
+	public List<BindOrgResponse> getBindOrg(Long coachId) {
 		try{
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("coachId", coachId);
@@ -174,7 +161,7 @@ public class CoachDaoImpl extends SqlSessionDaoSupport implements CoachDao{
 	}
 
 	@Override
-	public void updateBindOrgStatus(Integer coachId, Integer orgId) {
+	public void updateBindOrgStatus(Long coachId, Integer orgId) {
 		try{
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("coachId", coachId);
@@ -184,5 +171,18 @@ public class CoachDaoImpl extends SqlSessionDaoSupport implements CoachDao{
 			throw e;
 		}
 		
+	}
+
+	@Override
+	public Long getCoachIdByPhoneNumber(String phoneNumber) {
+		try{
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("phoneNumber", phoneNumber);
+			map.put("status", COACH_STATUS.DELETED.getValue());
+			return  this.getSqlSession().selectOne("getCoachIdByPhoneNumber", map);
+		} catch(RuntimeException e){
+			log.error("getByPhoneNumber", e);
+			throw e;
+		}
 	}
 }

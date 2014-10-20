@@ -32,7 +32,7 @@ public class LessonDaoImpl extends SqlSessionDaoSupport implements LessonDao{
 	}
 
 	@Override
-	public List<Lesson> getLessonInRange(Integer coachId, Date startDate,
+	public List<Lesson> getLessonInRange(Long coachId, Date startDate,
 			Date endDate) {
 		try{
 			Map<String, Object> map = new HashMap<String, Object>();
@@ -48,7 +48,7 @@ public class LessonDaoImpl extends SqlSessionDaoSupport implements LessonDao{
 	}
 
 	@Override
-	public Map<String, Object> getNewsFlag(Integer coachId) {
+	public Map<String, Object> getNewsFlag(Long coachId) {
 		try{
 			return this.getSqlSession().selectOne("getNewsFlag", coachId);
 		} catch(Throwable e){
@@ -58,7 +58,7 @@ public class LessonDaoImpl extends SqlSessionDaoSupport implements LessonDao{
 	}
 
 	@Override
-	public Lesson getLessonDetail(Integer coachId, Long lessonId) {
+	public Lesson getLessonDetail(Long coachId, Long lessonId) {
 		try{
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("coachId", coachId);
@@ -71,7 +71,7 @@ public class LessonDaoImpl extends SqlSessionDaoSupport implements LessonDao{
 	}
 
 	@Override
-	public List<Lesson> getDetailRecentInRange(Integer coachId, Date startDate,
+	public List<Lesson> getDetailRecentInRange(Long coachId, Date startDate,
 			Date endDate) {
 		try{
 			Map<String, Object> map = new HashMap<String, Object>();
@@ -96,7 +96,7 @@ public class LessonDaoImpl extends SqlSessionDaoSupport implements LessonDao{
 	}
 
 	@Override
-	public List<Map> getTotalLessonNum(Integer coachId, Date startDate) {
+	public List<Map> getTotalLessonNum(Long coachId, Date startDate) {
 		try{
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("coachId", coachId);
@@ -148,7 +148,7 @@ public class LessonDaoImpl extends SqlSessionDaoSupport implements LessonDao{
 	}
 
 	@Override
-	public List<Lesson> getLessonFrom(Integer coachId, Timestamp startTime) {
+	public List<Lesson> getLessonFrom(Long coachId, Timestamp startTime) {
 		try{
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("coachId", coachId);
@@ -164,7 +164,7 @@ public class LessonDaoImpl extends SqlSessionDaoSupport implements LessonDao{
 	}
 
 	@Override
-	public void deleteLesson(Integer coachId, Long courseId) {
+	public void deleteLesson(Long coachId, Long courseId) {
 		try{
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("coachId", coachId);

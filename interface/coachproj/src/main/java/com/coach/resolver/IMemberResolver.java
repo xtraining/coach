@@ -10,10 +10,10 @@ import com.coach.response.MemberDetailResponse;
 import com.coach.response.MemberNewsResponse;
 @Service
 public interface IMemberResolver{
-	public List<MemberDetailResponse> getMember(Integer coachId,
+	public List<MemberDetailResponse> getMember(Long coachId,
 			Long courseId);
-	public MemberDetailResponse getMemberDetail(Integer coachId, Long courseId, Long memberId);
-	public List<MemberNewsResponse> getMemberNews(Integer coachId);
+	public MemberDetailResponse getMemberDetail(Long coachId, Long courseId, Long memberId);
+	public List<MemberNewsResponse> getMemberNews(Long coachId);
 	public void updateMember(UpdateMemberDetailRequest request);
 	public void updateMemberStatus(UpdateMemberStatusRequest request);
 }

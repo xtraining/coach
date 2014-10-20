@@ -19,14 +19,14 @@ import com.coach.response.WeekLessonResponse;
 @Service
 public interface ILessonResolver {
 
-	WeekLessonResponse getOneWeekLesson(Integer coachId, String date);
+	WeekLessonResponse getOneWeekLesson(Long coachId, String date);
 
-	LessonDetailResponse getLessonDetail(Integer coachId, Long lessonId);
+	LessonDetailResponse getLessonDetail(Long coachId, Long lessonId);
 
 	List<LessonDetailResponse> getRecentLessonDetail(
 			GetRecentLessonRequest request);
 
-	LessonMemberResponse getLessonMember(Integer coachId, Long lessonId);
+	LessonMemberResponse getLessonMember(Long coachId, Long lessonId);
 
 	void saveCheckMember(CheckLessonMemberRequest request);
 
@@ -34,11 +34,11 @@ public interface ILessonResolver {
 
 	void addLesson(AddLessonRequest request);
 
-	TotalLessonResponse getTotalLesson(Integer coachId);
+	TotalLessonResponse getTotalLesson(Long coachId);
 
 	List<LessonResponse> getCheckLesson(GetCheckLessonRequest request, Date startDate);
 
-	List<MemberResponse> getLessonMemberList(Integer coachId, Long lessonId);
+	List<MemberResponse> getLessonMemberList(Long coachId, Long lessonId);
 
 	void deleteLesson(Long lessonId);
 

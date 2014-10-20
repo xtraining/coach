@@ -16,27 +16,27 @@ public interface LessonDao {
 
 	public int insert(Lesson lesson);
 
-	public List<Lesson> getLessonInRange(Integer coachId, Date startDate,
+	public List<Lesson> getLessonInRange(Long coachId, Date startDate,
 			Date endDate);
 
-	public Map<String, Object> getNewsFlag(Integer coachId);
+	public Map<String, Object> getNewsFlag(Long coachId);
 
-	public Lesson getLessonDetail(Integer coachId, Long lessonId);
+	public Lesson getLessonDetail(Long coachId, Long lessonId);
 
-	public List<Lesson> getDetailRecentInRange(Integer coachId, Date startDate,
+	public List<Lesson> getDetailRecentInRange(Long coachId, Date startDate,
 			Date endDate);
 
 	public void changeCheckFlag(Long lessonId);
 
-	public List<Map> getTotalLessonNum(Integer coachId, Date startDate);
+	public List<Map> getTotalLessonNum(Long coachId, Date startDate);
 
 	public Double getPercent(Integer percent, Date startDate) ;
 
 	public List<Lesson> getCheckLesson(GetCheckLessonRequest request, Date startDate);
 
-	public List<Lesson> getLessonFrom(Integer coachId, Timestamp startTime);
+	public List<Lesson> getLessonFrom(Long coachId, Timestamp startTime);
 
-	public void deleteLesson(Integer coachId, Long courseId);
+	public void deleteLesson(Long coachId, Long courseId);
 
 	public void updateLessonStatus(Long lessonId, LESSON_STATUS deleted);
 

@@ -1,4 +1,5 @@
 package com.coach.response;
+import java.io.Serializable;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -7,9 +8,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "profileResponse")
-public class ProfileDetailResponse {
+public class ProfileDetailResponse implements Serializable{
 	@XmlElement
-	private Integer coachId;
+	private Long coachId;
 	@XmlElement
 	private String name;
 	@XmlElement
@@ -92,10 +93,10 @@ public class ProfileDetailResponse {
 	public void setBirthday(String birthday) {
 		this.birthday = birthday;
 	}
-	public Integer getCoachId() {
+	public Long getCoachId() {
 		return coachId;
 	}
-	public void setCoachId(Integer coachId) {
+	public void setCoachId(Long coachId) {
 		this.coachId = coachId;
 	}
 	public String getAreaCode() {

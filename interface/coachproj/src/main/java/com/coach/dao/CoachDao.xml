@@ -9,7 +9,7 @@
   </resultMap>
 
   <resultMap id="CoachBasicResult" type="com.coach.model.Coach">
-       <id column="id" jdbcType="INTEGER" property="id" />
+       <id column="id" jdbcType="BIGINT" property="id" />
        <result column="name" jdbcType="VARCHAR" property="name" />
        <result column="gender" jdbcType="INTEGER" property="gender" />
        <result column="avatarUrl" jdbcType="VARCHAR" property="avatarUrl" />
@@ -20,7 +20,7 @@
   </resultMap>
   
   <resultMap id="CoachDetailResult" type="com.coach.model.Coach">
-       <id column="id" jdbcType="INTEGER" property="id" />
+       <id column="id" jdbcType="BIGINT" property="id" />
        <result column="name" jdbcType="VARCHAR" property="name" />
        <result column="gender" jdbcType="INTEGER" property="gender" />
        <result column="avatarUrl" jdbcType="VARCHAR" property="avatarUrl" />
@@ -34,16 +34,19 @@
        <result column="description" jdbcType="VARCHAR" property="description" />
   </resultMap>
   
-  <select id="getIdByCredentials" parameterType="java.util.Map" resultType="Integer">
-    select id from coach where phoneNumber = #{phoneNumber} and password = #{password}
+  <select id="getIdByCredentials" parameterType="java.util.Map" resultType="Long">
+    select c.id from coach c inner join tuser t on c.tuserId = t.id where t.phoneNumber = #{phoneNumber} and t.password = #{password}
   </select>
   
-  <select id="getByPhoneNumber" parameterType="java.util.Map" resultType="Integer">
-    select id from coach where phoneNumber = #{phoneNumber} and status != #{status} 
+  <select id="getCoachIdByPhoneNumber" parameterType="Map" resultType="Long">
+    select c.id from coach c inner join tuser t on c.tuserId = t.id  
+    where t.phoneNumber = #{phoneNumber} and t.status != #{status} 
   </select>
   
   <select id="getBasicById" parameterType="String" resultMap="CoachBasicResult">
-    select id, name, gender, avatarUrl, qqId, weiboId, weixinId, description from coach where id=#{coachId}
+    select c.id, t.name, t.gender, c.avatarUrl, c.qqId, c.weiboId, c.weixinId, c.description 
+    from coach c inner join tuser t on c.tuserId = t.id  
+    where c.id=#{coachId}
   </select>
   
   <select id="getBindOrg" parameterType="Map" resultMap="BindOrgResponse">
@@ -52,27 +55,28 @@
 	from organization o inner join organization_coach oc on o.id = oc.organizationid 
 	where 
 	oc.coachName = (select c.name from coach c where c.id = #{coachId}) 
-	and oc.idType = (select c.idType from coach c where c.id = #{coachId})
-	and oc.idNumber = (select c.idNumber from coach c where c.id = #{coachId})
+	and oc.idType = (select t.idType from coach c inner join tuser t on c.tuserId = t.id where c.id = #{coachId})
+	and oc.idNumber = (select t.idNumber from coach c inner join tuser t on c.tuserId = t.id where c.id = #{coachId})
 	and oc.status not in (6, 7, 8)
   </select>
   
   <select id="getDetailById" parameterType="String" resultMap="CoachDetailResult">
-    select c.id, c.name, c.gender, c.description, c.avatarUrl, idNumber, idType, c.phoneNumber, c.email, c.birthday, c.areaCode, (select a.fullName from area a where a.code = c.areaCode)areaName 
-    from coach c where c.id=#{coachId}
+    select c.id, t.name, t.gender, c.description, c.avatarUrl, t.idNumber, t.idType, t.phoneNumber, t.email, t.birthday, c.areaCode, 
+    (select a.fullName from area a where a.code = c.areaCode)areaName 
+    from coach c inner join tuser t on c.tuserId = t.id where c.id=#{coachId}
   </select>
   
-  <select id="getByThirdPartyId" parameterType="java.util.Map" resultType="Integer">
-    select id from coach where status != #{status} 
+  <select id="getByThirdPartyId" parameterType="java.util.Map" resultType="Long">
+    select c.id from coach c inner join tuser t on c.tuserId = t.id where t.status != #{status} 
     <choose>  
         <when test="thirdPartyType == 1">  
-            and qqId = #{thirdPartyId}
+            and c.qqId = #{thirdPartyId}
         </when>  
         <when test="thirdPartyType == 2">  
-            and weiboId = #{thirdPartyId} 
+            and c.weiboId = #{thirdPartyId} 
         </when>
         <when test="thirdPartyType == 3">  
-            and weixinId = #{thirdPartyId}
+            and c.weixinId = #{thirdPartyId}
         </when>    
         <otherwise>  
             and 1 = 0
@@ -81,22 +85,26 @@
   </select>
   
   <insert id="insertCoach" useGeneratedKeys="true" keyProperty="id" parameterType="com.coach.model.Coach">
-	 insert into coach(phoneNumber, password, registerType, qqId, weixinId, weiboId, qqUsername, weixinUsername, weiboUsername, avatarUrl, graphicLock, name, gender, idNumber, idType, birthday, email, createTime, certificateTime, lastAccessTime, status, lockTime, type, code) 
-		value (#{phoneNumber}, #{password}, #{registerType}, #{qqId}, #{weixinId}, #{weiboId}, #{qqUsername}, #{weixinUsername}, #{weiboUsername}, #{avatarUrl}, #{graphicLock}, #{name}, #{gender}, #{idNumber}, #{idType}, #{birthday}, #{email}, now(), #{certificateTime}, now(), #{status}, #{lockTime}, #{type}, #{code})
+	 insert into coach(registerType, qqId, weixinId, weiboId, qqUsername, weixinUsername, weiboUsername, avatarUrl, graphicLock,  createTime, lastAccessTime, type, tuserId) 
+		value (#{registerType}, #{qqId}, #{weixinId}, #{weiboId}, #{qqUsername}, #{weixinUsername}, #{weiboUsername}, #{avatarUrl}, #{graphicLock}, now(), now(), #{type}, #{tuserId})
   </insert>
   
   	<update id="resetPassword" parameterType="Map">
-	    update coach set password = #{password} where phoneNumber = #{phoneNumber}
+	    update tuser t set t.password = #{password} where t.phoneNumber = #{phoneNumber}
 	</update>
 	
     <update id="updateProfile" parameterType="com.coach.model.Coach">
-	    update coach set name = #{name}, avatarUrl = #{avatarUrl}, gender = #{gender}, qqId = #{qqId}, weiboId = #{weiboId}, weixinId = #{weixinId}
-	    where id = #{id}  
+	    update coach c inner join tuser t on c.tuserId = t.id set t.name = #{name}, c.avatarUrl = #{avatarUrl}, t.gender = #{gender}, 
+	    c.qqId = #{qqId}, c.weiboId = #{weiboId}, c.weixinId = #{weixinId} 
+	    <if test="weiboUsername != null">, c.weiboUsername = #{weiboUsername}</if>
+	    <if test="weixinUsername != null">, c.weixinUsername=#{weixinUsername}</if>
+	    <if test="qqUsername != null">, c.qqUsername=#{qqUsername}</if>
+	    where c.id = #{id}  
 	</update>
 	
 	<update id="updateProfileDetail" parameterType="com.coach.model.Coach">
-	    update coach set name = #{name}, gender = #{gender}, email = #{email}, idType = #{idType}, idNumber = #{idNumber}, birthday = #{birthday}, areaCode = #{areaCode}
-	    where id = #{id}  
+	    update coach c inner join tuser t on c.tuserId = t.id set t.name = #{name}, t.gender = #{gender}, t.email = #{email}, t.idType = #{idType}, t.idNumber = #{idNumber}, t.birthday = #{birthday}, c.areaCode = #{areaCode}
+	    where c.id = #{id}  
 	</update>
 	
 	<update id="updateLastAccessTime" parameterType="Integer">
@@ -110,7 +118,7 @@
 	</update>
 	
 	<update id="unbindThirdParty" parameterType="Map">
-	    update coach 
+	    update coach  
 		<choose>   
             <when test="type==1">   
                    set qqId = null, qqUsername = null  
@@ -122,7 +130,7 @@
                    set weixinId = null, weixinUsername = null  
             </when>    
             <otherwise>   
-            abc
+            	   set 1 = 2
             </otherwise>   
         </choose>   
  		where id = #{coachId}

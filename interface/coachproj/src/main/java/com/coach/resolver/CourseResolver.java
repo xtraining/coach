@@ -2,7 +2,6 @@ package com.coach.resolver;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -12,18 +11,13 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import net.oschina.j2cache.CacheObject;
-
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.coach.common.Constants.CACHE_REGION;
 import com.coach.common.Constants.COACH_COURSE_STATUS;
 import com.coach.common.Constants.COURSE_FLAG;
 import com.coach.common.Constants.COURSE_MEMBER_STATUS;
-import com.coach.common.Constants.ONE_DAY_CACHE_KEY;
-import com.coach.common.Constants.ONE_HOUR_CACHE_KEY;
 import com.coach.dao.CoachCourseDao;
 import com.coach.dao.CoachRejectCourseDao;
 import com.coach.dao.CourseDao;
@@ -42,6 +36,11 @@ import com.coach.request.AddCourseRequest;
 import com.coach.request.CoachBaseRequest;
 import com.coach.request.GetOrgCourseRequest;
 import com.coach.request.UpdateCourseRequest;
+import com.coach.resolver.cacheaction.CacheAction;
+import com.coach.resolver.cacheaction.ChiefCourseCacheAction;
+import com.coach.resolver.cacheaction.ClearCacheAction;
+import com.coach.resolver.cacheaction.CourseDetailCacheAction;
+import com.coach.resolver.cacheaction.CourseMemberCacheAction;
 import com.coach.response.ChiefCourseResponse;
 import com.coach.response.ConflictLessonResponse;
 import com.coach.response.CourseDetailResponse;
@@ -62,9 +61,9 @@ public class CourseResolver extends BaseResolver implements ICourseResolver{
 	@Resource private CoachCourseDao coachCourseDao;
 	@Resource private CoachRejectCourseDao coachRejectCourseDao;
 	
-	public ChiefCourseResponse getChiefCourse(Integer coachId) {
-		CacheObject cachObject = cache.get(CACHE_REGION.ONE_HOUR.getValue(), ONE_HOUR_CACHE_KEY.CHIEF_COURSE.getValue() + coachId);
-		ChiefCourseResponse response = (ChiefCourseResponse) cachObject.getValue();
+	public ChiefCourseResponse getChiefCourse(Long coachId) {
+		CacheAction<ChiefCourseResponse> cachAction = new ChiefCourseCacheAction(coachId);
+		ChiefCourseResponse response = cachAction.getValue();
 		if(response != null){
 			return response;
 		} else {
@@ -86,7 +85,7 @@ public class CourseResolver extends BaseResolver implements ICourseResolver{
 		        listValue.add(map.get(key));  
 		    }  
 		    response.setOrgCoureResponseList(listValue);
-		    cache.set(CACHE_REGION.ONE_HOUR.getValue(), ONE_HOUR_CACHE_KEY.CHIEF_COURSE.getValue() + coachId, response);
+		    cachAction.setValue(response);
 			return response;
 		}
 	}
@@ -103,7 +102,7 @@ public class CourseResolver extends BaseResolver implements ICourseResolver{
 	}
 
 
-	public int checkNewCourse(Integer coachId) {
+	public int checkNewCourse(Long coachId) {
 		Long result = courseDao.checkNewCourse(coachId);
 		if(result != null && result > 0){
 			return 1;
@@ -111,7 +110,7 @@ public class CourseResolver extends BaseResolver implements ICourseResolver{
 		return 0;
 	}
 
-	public List<CourseResponse> getNewCourse(Integer coachId, Integer pageNumber, Integer pageSize) {
+	public List<CourseResponse> getNewCourse(Long coachId, Integer pageNumber, Integer pageSize) {
 		List<Course> list = courseDao.getNewCourse(coachId, pageNumber, pageSize);
 		List<CourseResponse> r = new ArrayList<CourseResponse>();
 		for(Course c : list){
@@ -153,10 +152,7 @@ public class CourseResolver extends BaseResolver implements ICourseResolver{
 		coachCourseDao.save(cc);
 		
 		createLessonAndMember(phoneNumberArr, memberNameArr, c);
-		cache.evictPrefix(CACHE_REGION.ONE_DAY.getValue(), Arrays.asList(
-				new String[]{ONE_DAY_CACHE_KEY.COACH_ONE_WEEK_LESSON.getValue() +  request.getCoachId(),
-						ONE_DAY_CACHE_KEY.COACH_RECENT_LESSON.getValue() + request.getCoachId(),
-						ONE_DAY_CACHE_KEY.COACH_STUDENT.getValue() + request.getCoachId()}));
+		ClearCacheAction.clearAddCourseCache(request.getCoachId());
 		return new ConflictLessonResponse();
 	}
 
@@ -209,10 +205,9 @@ public class CourseResolver extends BaseResolver implements ICourseResolver{
 	}
 
 	@Override
-	public CourseDetailResponse getCourseDetail(Integer coachId, Long courseId) {
-		String key = ONE_DAY_CACHE_KEY.COACH_COURSE.getValue() + coachId + "_" + courseId;
-		CacheObject cachObject = cache.get(CACHE_REGION.ONE_DAY.getValue(), key);
-		CourseDetailResponse response = (CourseDetailResponse) cachObject.getValue();
+	public CourseDetailResponse getCourseDetail(Long coachId, Long courseId) {
+		CacheAction<CourseDetailResponse> cachAction = new CourseDetailCacheAction(coachId, courseId);
+		CourseDetailResponse response = cachAction.getValue();
 		if(response != null){
 			return response;
 		} else {
@@ -225,35 +220,30 @@ public class CourseResolver extends BaseResolver implements ICourseResolver{
 //			for(Member m : list){
 //				response.getMemberList().add(m.toResponse());
 //			}
-			cache.set(CACHE_REGION.ONE_DAY.getValue(), key, response);
+			cachAction.setValue(response);
 			return response;
 		}
 	}
 
 
 	@Override
-	public List<PersonalCourseResponse> getPersonalCourseList(Integer coachId) {
+	public List<PersonalCourseResponse> getPersonalCourseList(Long coachId) {
 		List<PersonalCourseResponse> response = courseDao.getPersonalCourseList(coachId);
 		return response;
 	}
 
 
 	@Override
-	public Long checkCourse(Integer coachId, Long courseId) {
+	public Long checkCourse(Long coachId, Long courseId) {
 		Long id = courseDao.checkCourse(coachId, courseId);
 		return id;
 	}
 
-
-
-
 	@Override
-	@SuppressWarnings("unchecked")
-	public List<CourseMemberResponse> getCourseMember(Integer coachId) {
+	public List<CourseMemberResponse> getCourseMember(Long coachId) {
 		Map<Long, CourseMemberResponse> map = new HashMap<Long, CourseMemberResponse>();
-		String cacheKey = ONE_DAY_CACHE_KEY.COACH_STUDENT.getValue() + coachId;
-		CacheObject cachObject = cache.get(CACHE_REGION.ONE_DAY.getValue(), cacheKey);
-		List<CourseMemberResponse> listValue = (List<CourseMemberResponse>) cachObject.getValue();
+		CacheAction<List<CourseMemberResponse>> cacheAction = new CourseMemberCacheAction(coachId);
+		List<CourseMemberResponse> listValue = cacheAction.getValue();
 		if(listValue != null){
 			return listValue;
 		} else {
@@ -286,13 +276,13 @@ public class CourseResolver extends BaseResolver implements ICourseResolver{
 					}
 				}
 			});
-			cache.set(CACHE_REGION.ONE_DAY.getValue(), cacheKey, listValue);
+			cacheAction.setValue(listValue);
 		}
 		return listValue;
 	}
 
 	@Override
-	public List<SearchMemberResponse> searchMember(Integer coachId,
+	public List<SearchMemberResponse> searchMember(Long coachId,
 			String keyword) {
 		if(StringUtils.isBlank(keyword)){
 			return new ArrayList<SearchMemberResponse>();
@@ -308,7 +298,7 @@ public class CourseResolver extends BaseResolver implements ICourseResolver{
 
 
 	@Override
-	public List<MemberResponse> getCourseMember(Integer coachId, Long courseId) {
+	public List<MemberResponse> getCourseMember(Long coachId, Long courseId) {
 		List<MemberResponse> response = new ArrayList<MemberResponse>();
 		List<Member> list = memberDao.getMemberByCourseId(courseId);
 		for(Member m : list){
@@ -320,7 +310,7 @@ public class CourseResolver extends BaseResolver implements ICourseResolver{
 
 	@Override
 	@Transactional
-	public void deleteCourse(Integer coachId, Long courseId) {
+	public void deleteCourse(Long coachId, Long courseId) {
 		courseDao.deleteCourse(coachId, courseId);
 		lessonDao.deleteLesson(coachId, courseId);
 	}
@@ -328,7 +318,7 @@ public class CourseResolver extends BaseResolver implements ICourseResolver{
 
 	@Override
 	@Transactional
-	public void updateCoachCourseStatus(Integer coachId, Long courseId,
+	public void updateCoachCourseStatus(Long coachId, Long courseId,
 			Integer status) {
 		if(status == COACH_COURSE_STATUS.ACCEPTED.getValue()){
 			coachCourseDao.updateStatus(coachId, courseId, COACH_COURSE_STATUS.ACCEPTED);
@@ -341,11 +331,10 @@ public class CourseResolver extends BaseResolver implements ICourseResolver{
 
 
 	@Override
-	public CourseDetailResponse getRejectCourseDetail(Integer coachId,
+	public CourseDetailResponse getRejectCourseDetail(Long coachId,
 			Long courseId) {
-		String key = ONE_DAY_CACHE_KEY.COACH_COURSE.getValue() + coachId + "_" + courseId;
-		CacheObject cachObject = cache.get(CACHE_REGION.ONE_DAY.getValue(), key);
-		CourseDetailResponse response = (CourseDetailResponse) cachObject.getValue();
+		CacheAction<CourseDetailResponse> cacheAction = new CourseDetailCacheAction(coachId, courseId);
+		CourseDetailResponse response = cacheAction.getValue();
 		if(response != null){
 			return response;
 		} else {
@@ -358,7 +347,7 @@ public class CourseResolver extends BaseResolver implements ICourseResolver{
 //			for(Member m : list){
 //				response.getMemberList().add(m.toResponse());
 //			}
-			cache.set(CACHE_REGION.ONE_DAY.getValue(), key, response);
+			cacheAction.setValue(response);
 			return response;
 		}
 	}

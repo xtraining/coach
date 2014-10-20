@@ -25,7 +25,7 @@ public class MemberResolver extends BaseResolver implements IMemberResolver{
 	@Resource private MemberDao memberDao;
 	@Resource private MemberNewsDao memberNewsDao;
 	@SuppressWarnings("unchecked")
-	public List<MemberDetailResponse> getMember(Integer coachId,
+	public List<MemberDetailResponse> getMember(Long coachId,
 			Long courseId) {
 //		String cacheKey = ONE_DAY_CACHE_KEY.COACH_COURSE_MEMBER.getValue() + coachId + "_" + courseId;
 //		CacheObject cachObject = cache.get(CACHE_REGION.ONE_DAY.getValue(), cacheKey);
@@ -44,7 +44,7 @@ public class MemberResolver extends BaseResolver implements IMemberResolver{
 		return response;
 	}
 	
-	public MemberDetailResponse getMemberDetail(Integer coachId, Long courseId, Long memberId) {
+	public MemberDetailResponse getMemberDetail(Long coachId, Long courseId, Long memberId) {
 		List<Member> memberList = memberDao.getMemberWithAttendHistory(coachId, courseId, memberId);
 		MemberDetailResponse r = null;
 		List<String> attendHistory = new ArrayList<String>();
@@ -58,7 +58,7 @@ public class MemberResolver extends BaseResolver implements IMemberResolver{
 		return r;
 	}
 	
-	public List<MemberNewsResponse> getMemberNews(Integer coachId) {
+	public List<MemberNewsResponse> getMemberNews(Long coachId) {
 		List<MemberNewsResponse> response = memberNewsDao.getNews(coachId);
 		return response;
 	}

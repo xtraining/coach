@@ -253,5 +253,13 @@
 		<property name="targetInterface" value="com.coach.dao.CoachRejectCourseDao"></property>
 		<property name="targetObject" ref="coachRejectCourseDaoTarget"></property>
 		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
-	</bean> 
+	</bean>
+	
+    <bean id="tuserDaoTarget" class="com.coach.dao.TuserDaoImpl"></bean>
+	<bean id="tuserDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.coach.dao.TuserDao"></property>
+		<property name="targetObject" ref="tuserDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean>  
 </beans>

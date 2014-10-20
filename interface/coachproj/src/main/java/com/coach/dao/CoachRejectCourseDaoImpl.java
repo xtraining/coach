@@ -14,7 +14,7 @@ public class CoachRejectCourseDaoImpl extends SqlSessionDaoSupport implements Co
 			.getLogger(CoachRejectCourseDaoImpl.class);
 
 	@Override
-	public void saveRejectCourse(Integer coachId, Long courseId) {
+	public void saveRejectCourse(Long coachId, Long courseId) {
 		try{
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("coachId", coachId);
@@ -28,7 +28,7 @@ public class CoachRejectCourseDaoImpl extends SqlSessionDaoSupport implements Co
 	}
 
 	@Override
-	public CoachRejectCourse getRejectCourseDetail(Integer coachId, Long courseId) {
+	public CoachRejectCourse getRejectCourseDetail(Long coachId, Long courseId) {
 		try{
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("coachId", coachId);

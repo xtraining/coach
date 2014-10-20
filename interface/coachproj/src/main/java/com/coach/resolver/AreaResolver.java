@@ -1,6 +1,5 @@
 package com.coach.resolver;
 
-import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -14,9 +13,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.coach.common.Constants.CACHE_REGION;
-import com.coach.common.Constants.ONE_DAY_CACHE_KEY;
-import com.coach.common.Constants.ONE_HOUR_CACHE_KEY;
 import com.coach.dao.AreaDao;
+import com.coach.resolver.cacheaction.AreaCacheAction;
+import com.coach.resolver.cacheaction.CacheAction;
 import com.coach.response.AreaResponse;
 
 @Service
@@ -26,8 +25,8 @@ public class AreaResolver extends BaseResolver{
 	@Resource private AreaDao areaDao;
 	
 	public AreaResponse getSubareaByCode(String areaCode) {
-		CacheObject cachObject = cache.get(CACHE_REGION.ONE_DAY.getValue(), areaCode);
-		AreaResponse r = (AreaResponse) cachObject.getValue();
+		CacheAction<AreaResponse> cacheAction = new AreaCacheAction(areaCode);
+		AreaResponse r = cacheAction.getValue();
     	if(r != null){
     		return r;
     	} else {
@@ -40,12 +39,13 @@ public class AreaResolver extends BaseResolver{
 			}
 			r.setAreaCode(areaCode);
 			r.setSubareaList(list);
-			cache.set(CACHE_REGION.ONE_DAY.getValue(), areaCode, r);
+			cacheAction.setValue(r);
 			return r;
     	}
 	}
 
 	public void clearCache(String prefix) {
+		CacheChannel cache = CacheChannel.getInstance();
 		cache.evictPrefix(CACHE_REGION.DEFAULT.getValue(), prefix);
 		cache.evictPrefix(CACHE_REGION.ONE_DAY.getValue(), prefix);
 		cache.evictPrefix(CACHE_REGION.ONE_HOUR.getValue(), prefix);

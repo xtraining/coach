@@ -43,7 +43,7 @@ public class QiniuUtils {
         return uptoken;
 	}
 
-	public static String generateCoachImageName(Integer coachId, String extFileName) {
+	public static String generateCoachImageName(Long coachId, String extFileName) {
 		String suffix = DateUtils.dateToyyyyMMddHHmissWithSeparator(new Timestamp(new Date().getTime()));
 		String fileName = Constants.COACH_AVATAR_PREFIX + "_" + coachId + "_" + suffix + "." + extFileName;
 		return fileName;

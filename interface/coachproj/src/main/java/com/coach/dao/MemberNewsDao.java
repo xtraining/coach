@@ -12,7 +12,7 @@ public interface MemberNewsDao {
 
 	public int insert(MemberNews news);
 
-	public List<MemberNewsResponse> getNews(Integer coachId);
+	public List<MemberNewsResponse> getNews(Long coachId);
 	
 
 }

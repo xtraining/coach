@@ -4,9 +4,7 @@ import javax.validation.constraints.NotNull;
 
 import com.rop.AbstractRopRequest;
 
-public class GetOrgCourseRequest extends BaseRequest{
-	@NotNull
-    private Integer coachId;
+public class GetOrgCourseRequest extends CoachBaseRequest{
 	@NotNull
     private Integer orgId;
 	@NotNull
@@ -21,13 +19,6 @@ public class GetOrgCourseRequest extends BaseRequest{
 		this.orgId = orgId;
 	}
 
-	public Integer getCoachId() {
-		return coachId;
-	}
-
-	public void setCoachId(Integer coachId) {
-		this.coachId = coachId;
-	}
 
 	public Integer getPageNumber() {
 		return pageNumber;
