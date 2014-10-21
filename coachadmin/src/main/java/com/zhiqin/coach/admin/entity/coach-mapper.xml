@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="coach">
+	<resultMap id="CoachDTO" type="com.zhiqin.coach.admin.dto.CoachDTO">
+		<id column="id" jdbcType="BIGINT" property="coachId" />
+		<result column="name" jdbcType="VARCHAR" property="coachName" />
+		<result column="phoneNumber" jdbcType="VARCHAR" property="phoneNumber" />
+		<result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+	</resultMap>
+
+	<select id="getTotalNum" parameterType="SearchOrgDTO" resultType="Long">
+		select count(*) from coach c inner join tuser t on c.tuserId = t.id
+		where 1 = 1
+		<if test="coachId != null">
+			and c.id = ${coachId}
+		</if>
+		<if test="coachName != null and coachName != ''">
+			and t.name like '%${coachName}%'
+		</if>
+		<if test="phoneNumber != null and phoneNumber != ''">
+			and t.phoneNumber like '%${phoneNumber}%'
+		</if>
+		<if test="type != null">
+			and c.type = ${type}
+		</if>
+	</select>
+
+	<select id="getCoachList" parameterType="Map" resultMap="CoachDTO" >
+		select c.id, t.name, t.phoneNumber, c.createTime from coach c inner join tuser t on c.tuserId = t.id
+		where 1 = 1
+		<if test="coach.coachId != null">
+			and c.id = ${coach.coachId}
+		</if>
+		<if test="coach.coachName != null and coach.coachName != ''">
+			and t.name like '%${coach.coachName}%'
+		</if>
+		<if test="coach.phoneNumber != null and coach.phoneNumber != ''">
+			and t.phoneNumber like '%${coach.phoneNumber}%'
+		</if>
+		<if test="coach.type != null">
+			and c.type = ${coach.type}
+		</if>
+		limit ${p.pageNum - 1}, ${p.numPerPage}
+	</select>
+
+</mapper>

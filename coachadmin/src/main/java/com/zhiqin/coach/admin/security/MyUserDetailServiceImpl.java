@@ -1,11 +1,11 @@
 package com.zhiqin.coach.admin.security;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -14,8 +14,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.zhiqin.coach.admin.dao.ResourcesDao;
-import com.zhiqin.coach.admin.dao.UserDao;
 import com.zhiqin.coach.admin.entity.Resources;
 
 /**
@@ -37,14 +35,13 @@ import com.zhiqin.coach.admin.entity.Resources;
 @Service
 public class MyUserDetailServiceImpl implements UserDetailsService {
 	
-	@Autowired
-	private UserDao userDao;
-	@Autowired
-	private ResourcesDao resourcesDao ;
 	// 登录验证
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		//取得用户的权限
-		com.zhiqin.coach.admin.entity.User users = userDao.querySingleUser(username);
+		//TODO: userDao.querySingleUser(username);
+		com.zhiqin.coach.admin.entity.User users = new com.zhiqin.coach.admin.entity.User();
+		users.setUserName("123");
+		users.setUserPassword("456");
 		if  (users==null)  
             throw new UsernameNotFoundException(username+" not exist!");  
 		Collection<GrantedAuthority> grantedAuths = obtionGrantedAuthorities(users);
@@ -63,7 +60,8 @@ public class MyUserDetailServiceImpl implements UserDetailsService {
 
 	// 取得用户的权限
 	private Set<GrantedAuthority> obtionGrantedAuthorities(com.zhiqin.coach.admin.entity.User user) {
-		List<Resources> resources = resourcesDao.getUserResources(String.valueOf(user.getUserId()));
+		//TODO: resourcesDao.getUserResources(String.valueOf(user.getUserId()));
+		List<Resources> resources = new ArrayList<Resources>();
 		Set<GrantedAuthority> authSet = new HashSet<GrantedAuthority>();
 		for (Resources res : resources) {
 			// TODO:ZZQ 用户可以访问的资源名称（或者说用户所拥有的权限） 注意：必须"ROLE_"开头

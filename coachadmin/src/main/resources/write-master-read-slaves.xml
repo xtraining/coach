@@ -131,12 +131,19 @@
 
 	</bean>
 
-	<!-- 传统myabtis配置 -->
-	<bean id="logDaoTarget" class="com.zhiqin.coach.admin.dao.impl.LogDaoImpl"></bean>
-	<bean id="logDao"
+	<bean id="coachDaoTarget" class="com.zhiqin.coach.admin.dao.impl.CoachDaoImpl"></bean>
+	<bean id="coachDao"
 		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
-		<property name="targetInterface" value="com.zhiqin.coach.admin.dao.LogDao"></property>
-		<property name="targetObject" ref="logDaoTarget"></property>
+		<property name="targetInterface" value="com.zhiqin.coach.admin.dao.CoachDao"></property>
+		<property name="targetObject" ref="coachDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean>
+	
+	<bean id="orgDaoTarget" class="com.zhiqin.coach.admin.dao.impl.OrgDaoImpl"></bean>
+	<bean id="orgDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.zhiqin.coach.admin.dao.OrgDao"></property>
+		<property name="targetObject" ref="orgDaoTarget"></property>
 		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
 	</bean>
 </beans>

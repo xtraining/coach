@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org">
+	<resultMap id="OrgDTO" type="com.zhiqin.coach.admin.dto.OrgDTO">
+		<id column="id" jdbcType="BIGINT" property="orgId" />
+		<result column="name" jdbcType="VARCHAR" property="orgName" />
+		<result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+	</resultMap>
+
+	<select id="getTotalNum" parameterType="SearchOrgDTO" resultType="Long">
+		select count(*) from organization g
+		where 1 = 1
+		<if test="orgId != null">
+			and g.id = ${orgId}
+		</if>
+		<if test="orgName != null and orgName != ''">
+			and g.name like '%${orgName}%'
+		</if>
+	</select>
+
+	<select id="getOrgList" parameterType="Map" resultMap="OrgDTO" >
+		select g.id, g.name, g.createTime from organization g
+		where 1 = 1
+		<if test="org.orgId != null">
+			and g.id = ${org.orgId}
+		</if>
+		<if test="org.orgName != null and org.orgName != ''">
+			and g.name like '%${org.orgName}%'
+		</if>
+		limit ${p.pageNum - 1}, ${p.numPerPage}
+	</select>
+	
+	<insert id="insertOrg">
+		insert into organization (name, address, description, createTime)
+		value (${name}, ${address}, ${description}, now())
+	</insert>
+
+</mapper>

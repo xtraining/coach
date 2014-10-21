@@ -21,6 +21,10 @@
 <!--[if lte IE 9]>
 <script src="<%=path %>/static_resource/js/speedup.js" type="text/javascript"></script>
 <![endif]-->
+<style type="text/css">
+	#header{height:85px}
+	#leftside, #container, #splitBar, #splitBarProxy{top:90px}
+</style>
 
 
 <script src="<%=path %>/static_resource/js/jquery-1.7.2.js" type="text/javascript"></script>
@@ -97,7 +101,13 @@ $(function(){
 				</ul>				
 			</div>
 
-			<!-- navMenu -->
+			<div id="navMenu">
+				<ul>
+					<li class="selected"><a href="sidebar_1.html"><span>教练宝</span></a></li>
+					<li><a href="sidebar_2.html"><span>智勤云校</span></a></li>
+					<li><a href="sidebar_1.html"><span>教练宝C端</span></a></li>
+				</ul>
+			</div>
 			
 		</div>
 
@@ -116,7 +126,14 @@ $(function(){
 					</div>
 					<div class="accordionContent">
 						<ul class="tree treeFolder" id="menuInforInSession">							
-								
+						</ul>
+						<ul class="tree treeFolder">
+							<li><a href="tabsPage.html" target="navTab">菜单</a>
+								<ul>
+									<li><a href="../coach/org/list.htm" target="navTab" rel="机构管理" title="机构管理">机构管理</a></li>
+									<li><a href="../coach/coach/list.htm" target="navTab" rel="教练管理" title="教练管理">教练管理</a></li>
+								</ul>
+							</li>
 						</ul>
 					</div>				
 				</div>

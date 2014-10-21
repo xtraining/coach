@@ -49,7 +49,7 @@ function login() {
 	}
 	$.ajax({
 		  type: "POST",
-		  url: "background/loginCheck.htm",
+		  url: "login/loginCheck.htm",
 		  data: "username="+username+"&password="+password+"&valificationCode="+valificationCode, 
 		  dataType: "json",
 		  success: function(data, textStatus){ 
@@ -70,7 +70,7 @@ function login() {
 					break;
 				case "success":
 					tip="正在登录，请稍候...";
-					var	indexUrl="background/index.htm";
+					var	indexUrl="login/index.htm";
 					var appPath ="/"+location.pathname.split("/")[1] +"/";
 					window.location.href =appPath + indexUrl;
 					break;

@@ -8,14 +8,12 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.stereotype.Service;
 
-import com.zhiqin.coach.admin.dao.ResourcesDao;
 import com.zhiqin.coach.admin.entity.Resources;
 
 /**
@@ -27,8 +25,6 @@ import com.zhiqin.coach.admin.entity.Resources;
  * */
 @Service
 public class MySecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
-	@Autowired
-	private ResourcesDao resourcesDao;
 	private static Map<String, Collection<ConfigAttribute>> resourceMap = null;
 
 	public Collection<ConfigAttribute> getAllConfigAttributes() {
@@ -49,7 +45,8 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
 	private void loadResourceDefine() {
 		if (resourceMap == null) {
 			resourceMap = new HashMap<String, Collection<ConfigAttribute>>();
-			List<Resources> resources = this.resourcesDao.findAll();
+			//TODO:this.resourcesDao.findAll();
+			List<Resources> resources = new ArrayList<Resources>();
 			for (Resources resource : resources) {
 				Collection<ConfigAttribute> configAttributes = new ArrayList<ConfigAttribute>();
 				// TODO:ZZQ 通过资源名称来表示具体的权限 注意：必须"ROLE_"开头

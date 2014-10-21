@@ -14,7 +14,7 @@
 	<http pattern="/denied.jsp" security="none" />
 	<http pattern="/login/login.htm" security="none" />
 	<http pattern="/login/loginCheck.htm" security="none" />
-
+	<http pattern="/coach/coach/*.htm" security="none" />
 	<!--/ 开启支持方法注解的权限控制： @PreAuthorize：该注解用来确定一个方法是否应该被执行。该注解后面跟着的是一个表达式，如果表达式的值为真，则该方法会被执行。如 
 		@PreAuthorize("hasRole('ROLE_USER')")就说明只有当前用户具有角色 ROLE_USER的时候才会执行。 @PostAuthorize：该注解用来在方法执行完之后进行访问控制检查。 
 		@PostFilter：该注解用来对方法的返回结果进行过滤。从返回的集合中过滤掉表达式值为假的元素。如@PostFilter("hasPermission(filterObject, 

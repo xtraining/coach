@@ -5,13 +5,13 @@
 	<typeAliases>
 	<!-- 给实体Bean一个别名-->
 		<typeAlias type="com.zhiqin.coach.admin.entity.User" alias="User" />
-		<typeAlias type="com.zhiqin.coach.admin.entity.UserLoginList" alias="UserLoginList" />
 		<typeAlias type="com.zhiqin.coach.admin.entity.Resources" alias="Resources"/>
 		<typeAlias type="com.zhiqin.coach.admin.entity.Roles" alias="Roles"/>
 		<typeAlias type="com.zhiqin.coach.admin.entity.ResourceRoles" alias="ResourceRoles"/>
 		<typeAlias type="com.zhiqin.coach.admin.entity.UserRoles" alias="UserRoles"/>
-		<typeAlias type="com.zhiqin.coach.admin.entity.ServerInfo" alias="ServerInfo"/>
 		
-		<typeAlias type="com.zhiqin.coach.admin.entity.Log" alias="Log"/>
+		
+		<typeAlias type="com.zhiqin.coach.admin.dto.SearchCoachDTO" alias="SearchCoachDTO"/>
+		<typeAlias type="com.zhiqin.coach.admin.dto.SearchOrgDTO" alias="SearchOrgDTO"/>
 	</typeAliases>
 </configuration>
