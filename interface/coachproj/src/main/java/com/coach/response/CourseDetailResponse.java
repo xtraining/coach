@@ -26,6 +26,8 @@ public class CourseDetailResponse extends CourseResponse {
 	@XmlElement
 	private Float lessonHour;
 	@XmlElement
+	private Long memberNum;
+	@XmlElement
 	private List<MemberResponse> memberList = new ArrayList<MemberResponse>();
 	@XmlElement
 	private String remarks;
@@ -82,6 +84,12 @@ public class CourseDetailResponse extends CourseResponse {
 	}
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
+	}
+	public Long getMemberNum() {
+		return memberNum;
+	}
+	public void setMemberNum(Long memberNum) {
+		this.memberNum = memberNum;
 	}
 
 }

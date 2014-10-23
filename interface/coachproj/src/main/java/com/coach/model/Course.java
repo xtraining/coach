@@ -40,6 +40,7 @@ public class Course extends AbstractBaseModel implements java.io.Serializable {
 	private Timestamp createTime;
 	private Integer groundId;
 	private Integer status;
+	private Long memberNum;
 	private List<Lesson> lessonList = new ArrayList<Lesson>();
 	private Integer flag;
 	
@@ -228,6 +229,14 @@ public class Course extends AbstractBaseModel implements java.io.Serializable {
 		this.remarks = remarks;
 	}
 
+	public Long getMemberNum() {
+		return memberNum;
+	}
+
+	public void setMemberNum(Long memberNum) {
+		this.memberNum = memberNum;
+	}
+
 	public OrgCourseResponse getOrgCoureseResponse() {
 		OrgCourseResponse r = new OrgCourseResponse();
 		r.setOrgId(getOrganizationId());
@@ -258,6 +267,7 @@ public class Course extends AbstractBaseModel implements java.io.Serializable {
 		c.setRecycleDay(recycleDay);
 		c.setRemarks(remarks);
 		c.setStartTime(DateUtils.dateToyyyyMMddHHmiss(startTime));
+		c.setMemberNum(memberNum);
 		return c;
 	}
 

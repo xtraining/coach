@@ -92,6 +92,7 @@ public class CourseDaoImpl extends SqlSessionDaoSupport implements CourseDao{
 			map.put("coachId", coachId);
 			map.put("courseId", courseId);
 			map.put("status", COACH_COURSE_STATUS.ACCEPTED.getValue());
+			map.put("cmstatus", COURSE_MEMBER_STATUS.DELETED.getValue());
 			return this.getSqlSession().selectOne("getCourseDetail", map);
 		} catch (RuntimeException re) {
 			log.error("getCourseDetail", re);

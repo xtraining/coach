@@ -23,6 +23,7 @@
        <result column="courseHour" jdbcType="TIMESTAMP" property="courseHour" /> 
        <result column="lessonHour" jdbcType="TIMESTAMP" property="lessonHour" /> 
        <result column="remarks" jdbcType="VARCHAR" property="remarks" /> 
+       <result column="memberNum" jdbcType="BIGINT" property="memberNum" /> 
   </resultMap>
   
   <resultMap id="PersonalCourseResult" type="com.coach.response.PersonalCourseResponse">
@@ -93,7 +94,8 @@
    </select>
    
    <select id="getCourseDetail" parameterType="Map" resultMap="DetailCourseResult">
-       SELECT c.id, c.name, c.address, c.description, c.type, c.groundId, c.groundName, c.startTime, c.endTime, c.recycleDay, c.courseHour, c.lessonHour, c.remarks
+       SELECT c.id, c.name, c.address, c.description, c.type, c.groundId, c.groundName, c.startTime, c.endTime, c.recycleDay, c.courseHour, c.lessonHour, c.remarks,
+       (select count(cm.id) from course_member cm where cm.courseId = #{courseId} and cm.status != #{cmstatus})memberNum
        from course c inner join coach_course cc on c.id = cc.courseId where c.id = #{courseId} and cc.coachId = #{coachId}
    </select>
    
