@@ -17,9 +17,11 @@ public class OrgDTO {
 	private String orgName;
 	public String phoneNumber;
 	public String description;
-	public String contactPerson;
+	public String contact;
 	public String address;
 	public Integer type;
+	public String code;
+	public String level;
 	public Timestamp createTime;
 	public Long getOrgId() {
 		return orgId;
@@ -57,17 +59,29 @@ public class OrgDTO {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public String getContactPerson() {
-		return contactPerson;
-	}
-	public void setContactPerson(String contactPerson) {
-		this.contactPerson = contactPerson;
-	}
 	public String getAddress() {
 		return address;
 	}
 	public void setAddress(String address) {
 		this.address = address;
+	}
+	public String getContact() {
+		return contact;
+	}
+	public void setContact(String contact) {
+		this.contact = contact;
+	}
+	public String getCode() {
+		return code;
+	}
+	public void setCode(String code) {
+		this.code = code;
+	}
+	public String getLevel() {
+		return level;
+	}
+	public void setLevel(String level) {
+		this.level = level;
 	}
 	
 }

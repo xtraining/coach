@@ -3,6 +3,8 @@ package com.zhiqin.coach.admin.controller.coach;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,12 +13,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.zhiqin.coach.admin.controller.BaseController;
+import com.zhiqin.coach.admin.dto.CoachDTO;
 import com.zhiqin.coach.admin.dto.OrgDTO;
 import com.zhiqin.coach.admin.dto.PageInfoDTO;
+import com.zhiqin.coach.admin.dto.ResponseDTO;
 import com.zhiqin.coach.admin.dto.SearchOrgDTO;
-import com.zhiqin.coach.admin.entity.UserRoles;
 import com.zhiqin.coach.admin.service.OrgService;
 import com.zhiqin.coach.admin.util.JsonBinder;
+import com.zhiqin.coach.admin.util.JsonUtils;
 
 /**
  * 
@@ -52,23 +56,86 @@ public class OrgController extends BaseController{
 
 	@ResponseBody
 	@RequestMapping("create")
-	public String create(OrgDTO org){
+	public String create(OrgDTO org, HttpServletRequest request){
+		Long orgId = orgService.getOrgIdByName(org.getOrgName());
+		if(orgId != null && orgId > 0){
+			return "input";
+		}
 		orgService.create(org);
 		return "success";
 	}
-	/**
-	 * 保存用户分配角色
-	 * @return
-	 */
+	
+	@RequestMapping("detail")
+	public String detail(Model model, Long orgId){
+		OrgDTO org = orgService.getOrgById(orgId);
+		model.addAttribute("editObj", org);
+		return "/coach/org-detail";
+	}
+	
 	@ResponseBody
-	@RequestMapping("allocation")
-	public String allocation(Model model,UserRoles userRoles){
-		String errorCode = "1000";
-		try {
-		} catch (Exception e) {
-			e.printStackTrace();
-			errorCode="1001";
+	@RequestMapping("update")
+	public String update(OrgDTO org, HttpServletRequest request){
+		Long orgId = orgService.getOrgIdByName(org.getOrgName());
+		if(orgId != null && orgId > 0 && orgId.longValue() != org.getOrgId().longValue()){
+			return "input";
 		}
-		return errorCode;
+		orgService.update(org);
+		return "success";
+	}
+
+	@RequestMapping("delete")
+	public String delete(Long orgId, HttpServletResponse response){
+		orgService.deleteById(orgId);
+		ResponseDTO success = new ResponseDTO();
+		success.setStatusCode("200");
+		success.setMessage("删除成功");
+		success.setNavTabId("机构管理");
+		JsonUtils.write(response, JsonBinder.buildNormalBinder().toJson(success));
+		return null;
+	}
+	
+	@RequestMapping("coachList")
+	public String coachList(Model model, Long orgId, PageInfoDTO pageInfo){
+		List<CoachDTO> list = orgService.getCoachByOrgId(orgId, pageInfo);
+		model.addAttribute("responseList", list);
+		model.addAttribute("orgId", orgId);
+		return "/coach/org-coach-list";
+	}
+	
+	@RequestMapping("addCoach")
+	public String addCoach(Model model, Long orgId){
+		model.addAttribute("orgId", orgId);
+		return "/coach/org-coach-add";
+	}
+	
+	@ResponseBody
+	@RequestMapping("createCoach")
+	public String createCoach(CoachDTO coach, HttpServletRequest request){
+		Long oldOrgCoachId = orgService.getOrgCoachByIdNumberAndType(coach);
+		if(oldOrgCoachId != null && oldOrgCoachId > 0){
+			return "input";
+		}
+		orgService.createCoach(coach);
+		return "success";
+	}
+	 
+	
+	@RequestMapping("coachDetail")
+	public String coachDetail(Model model, Long orgCoachId, Long orgId){
+		CoachDTO coach = orgService.getOrgCoachById(orgCoachId);
+		coach.setOrgId(orgId);
+		model.addAttribute("editObj", coach);
+		return "/coach/org-coach-detail";
+	}
+	
+	@ResponseBody
+	@RequestMapping("updateCoach")
+	public String updateCoach(CoachDTO coach, HttpServletRequest request){
+		Long oldOrgCoachId = orgService.getOrgCoachByIdNumberAndType(coach);
+		if(oldOrgCoachId != null && oldOrgCoachId > 0 && oldOrgCoachId.longValue() != coach.getOrgCoachId().longValue()){
+			return "input";
+		}
+		orgService.updateCoach(coach);
+		return "success";
 	}
 }

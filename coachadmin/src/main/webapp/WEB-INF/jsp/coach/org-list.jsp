@@ -9,7 +9,7 @@
 </form>
 
 <div class="pageHeader">
-	<form  name="objForm" id="objForm" rel="pagerForm" onsubmit="return navTabSearch(this);" action="${ctx}/coach/org/list.htm" method="post">
+	<form  name="orgListForm" id="orgListForm" rel="pagerForm" onsubmit="return navTabSearch(this);" action="${ctx}/coach/org/list.htm" method="post">
 	<div class="searchBar">
 		<table class="searchContent">
 			<tr>
@@ -65,11 +65,13 @@
 					${item.orgId}
 				</td>
 				<td>
-					<a href="${ctx}/coach/org/detail.htm?uid=${item.orgId}" target="navTab" title="修改机构" style="color:#00F;">${item.orgName}</a>
+					<a href="${ctx}/coach/org/detail.htm?orgId=${item.orgId}" target="navTab" title="修改机构" style="color:#00F;">${item.orgName}</a>
 				</td>
 				<td>${item.createTime}</td>
 				<td>
-					<a href="${ctx}/coach/org/delete.htm?uid=${item.orgId}" target="navTab" title="删除教练" style="color:#00F;">删除</a>					  
+					<a href="${ctx}/coach/org/delete.htm?orgId=${item.orgId}" target="ajaxTodo" title="确定要删除该机构吗？" style="color:#00F;">删除</a>	
+					&nbsp;&nbsp;	
+					<a href="${ctx}/coach/org/coachList.htm?orgId=${item.orgId}" target="navTab" title="机构教练" style="color:#00F;">机构教练</a>			  
 				  </td> 
 			</tr>
 			</c:forEach>

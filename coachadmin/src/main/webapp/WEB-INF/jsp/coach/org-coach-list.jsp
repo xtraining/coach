@@ -1,16 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@include file="../taglib.jsp" %>
     
-<form id="pagerForm" method="post" action="${ctx}/coach/coach/list.htm">
+<form id="pagerForm" method="post" action="${ctx}/coach/org/coachList.htm?orgId=${orgId}">
 	<input type="hidden" name="coachId" value="${searchDto.coachId}" />
 	<input type="hidden" name="coachName" value="${searchDto.coachName}" />
-	<input type="hidden" name="phoneNumber" value="${searchDto.phoneNumber}" />
 	<input type="hidden" name="pageNum" value="1" />
 	<input type="hidden" name="NumPerPage" value="20" />
 </form>
 
 <div class="pageHeader">
-	<form  name="objForm" id="objForm" rel="pagerForm" onsubmit="return navTabSearch(this);" action="${ctx}/coach/coach/list.htm" method="post">
+	<form  name="objForm" id="objForm" rel="pagerForm" onsubmit="return navTabSearch(this);" action="${ctx}/coach/org/coachList.htm?orgId=${orgId}" method="post">
 	<div class="searchBar">
 		<table class="searchContent">
 			<tr>
@@ -20,25 +19,6 @@
 				<td>
 					姓名：<input type="text" name="coachName" value="${searchDto.coachName}"/>
 				</td>
-				<td>
-					手机号：<input type="text" name="phoneNumber" value="${searchDto.phoneNumber}"/>
-				</td>
-				<td>
-				    <label>教练类型：</label>
-					<select name="type" class="combox">
-						<option value="">全部</option>	
-						<option value="0" <c:if test="${searchDto.type eq '0'}">selected</c:if>>公众</option>	
-						<option value="1" <c:if test="${searchDto.type eq '0'}">selected</c:if>>机构</option>		
-					</select>
-				</td>	
-				<!--td>
-					<select name="searchMemberDto.status" class="combox">
-						<option value="">会员状态</option>	
-						<option value="0" <s:if test="%{#request.searchMemberDto.statusr == 0}">selected</s:if>>正常</option>		
-						<option value="1" <s:if test="%{#request.searchMemberDto.status == 1}">selected</s:if>>删除</option>	
-						<option value="2" <s:if test="%{#request.searchMemberDto.status == 2}">selected</s:if>>锁定</option>	
-					</select>
-				</td-->
 				<td>&nbsp;</td>
 			</tr>
 		</table>		
@@ -53,7 +33,7 @@
 <div class="pageContent">
 	<div class="panelBar">
 		<ul class="toolBar">
-			<li><a class="add" href="modules/member!addFake.action" target="navTab" title="新增"><span>新增</span></a></li>
+			<li><a class="add" href="${ctx}/coach/org/addCoach.htm?orgId=${orgId}" target="navTab" title="新增教练" rel="机构教练"><span>新增教练</span></a></li>
 			<li class="line">line</li>
 		</ul>
 	</div>
@@ -63,8 +43,9 @@
 				<th width="3%" align="left"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
 				<th width="5%" align="left">教练ID</th>
 				<th align="left">教练姓名</th>
-				<th align="left">手机号</th>
-				<th width="15%" align="left">注册时间</th>
+				<th align="left">证据类型</th>
+				<th align="left">证据号码</th>
+				<th width="15%" align="left">创建时间</th>
 			 	<th width="15%" align="left">操作</th> 
 			</tr>
 		</thead>
@@ -78,14 +59,20 @@
 					${item.coachId}
 				</td>
 				<td>
-					<a href="${ctx}/coach/coach/detail.htm?uid=${item.coachId}" target="navTab" title="修改会员" style="color:#00F;">${item.coachName}</a>
+					<a href="${ctx}/coach/org/coachDetail.htm?orgCoachId=${item.orgCoachId}&orgId=${orgId}" target="navTab" title="修改教练" style="color:#00F;"  rel="机构教练">${item.coachName}</a>
 				</td>
 				<td>
-					${item.phoneNumber}
+				   <c:if test="${item.idType eq '0'}">
+					身份证
+				   </c:if>
+				   <c:if test="${item.idType eq '1'}">
+					护照
+				   </c:if>
 				</td>
+				<td>${item.idNumber}</td>
 				<td>${item.createTime}</td>
 				<td>
-					<a href="${ctx}/coach/coach/delete.htm?uid=${item.coachId}" target="navTab" title="删除教练" style="color:#00F;">删除</a>					  
+					<a href="${ctx}/coach/org/deleteCoach.htm?orgCoachId=${item.orgCoachId}" target="navTab" title="删除教练" style="color:#00F;">删除教练</a>					  
 				  </td> 
 			</tr>
 			</c:forEach>

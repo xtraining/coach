@@ -146,4 +146,12 @@
 		<property name="targetObject" ref="orgDaoTarget"></property>
 		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
 	</bean>
+	
+	<bean id="orgCoachDaoTarget" class="com.zhiqin.coach.admin.dao.impl.OrgCoachDaoImpl"></bean>
+	<bean id="orgCoachDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.zhiqin.coach.admin.dao.OrgCoachDao"></property>
+		<property name="targetObject" ref="orgCoachDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean>
 </beans>

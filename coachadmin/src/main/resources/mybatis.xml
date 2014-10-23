@@ -13,5 +13,7 @@
 		
 		<typeAlias type="com.zhiqin.coach.admin.dto.SearchCoachDTO" alias="SearchCoachDTO"/>
 		<typeAlias type="com.zhiqin.coach.admin.dto.SearchOrgDTO" alias="SearchOrgDTO"/>
+		<typeAlias type="com.zhiqin.coach.admin.dto.OrgDTO" alias="OrgDTO"/>
+		<typeAlias type="com.zhiqin.coach.admin.dto.CoachDTO" alias="CoachDTO"/>
 	</typeAliases>
 </configuration>

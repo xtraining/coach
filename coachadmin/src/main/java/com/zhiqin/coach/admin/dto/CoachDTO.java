@@ -13,11 +13,16 @@ import java.sql.Timestamp;
  */
 public class CoachDTO {
 
+	private Long orgId;
 	private Long coachId;
+	private Long orgCoachId;
 	private String coachName;
-	public String phoneNumber;
-	public Integer type;
-	public Timestamp createTime;
+	private String phoneNumber;
+	private Integer type;
+	private Integer status;
+	private Integer idType;
+	private String idNumber;
+	private Timestamp createTime;
 	public Long getCoachId() {
 		return coachId;
 	}
@@ -47,6 +52,36 @@ public class CoachDTO {
 	}
 	public void setType(Integer type) {
 		this.type = type;
+	}
+	public Integer getIdType() {
+		return idType;
+	}
+	public void setIdType(Integer idType) {
+		this.idType = idType;
+	}
+	public String getIdNumber() {
+		return idNumber;
+	}
+	public void setIdNumber(String idNumber) {
+		this.idNumber = idNumber;
+	}
+	public Long getOrgCoachId() {
+		return orgCoachId;
+	}
+	public void setOrgCoachId(Long orgCoachId) {
+		this.orgCoachId = orgCoachId;
+	}
+	public Long getOrgId() {
+		return orgId;
+	}
+	public void setOrgId(Long orgId) {
+		this.orgId = orgId;
+	}
+	public Integer getStatus() {
+		return status;
+	}
+	public void setStatus(Integer status) {
+		this.status = status;
 	}
 	
 }
