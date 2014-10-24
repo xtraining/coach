@@ -12,8 +12,8 @@ import com.coach.utils.HttpUtil;
 import com.rop.utils.RopUtils;
 
 public class CoachServiceTest extends TestCase {
-	public static final String SERVER_URL = "http://localhost:8080/coach/service";
-//	public static final String SERVER_URL = "http://114.215.145.26/coach/service";
+//	public static final String SERVER_URL = "http://localhost:8080/coach/service";
+	public static final String SERVER_URL = "http://114.215.145.26/coach/service";
 	public static final String APP_KEY = "iphone_user";
 	public static final String APP_SECRET = "LlnZA8cql4liN4CvjGL5GfwhCh7fwWGE";
 	public static final String VERSION = "V0.5.0.0";
@@ -52,21 +52,21 @@ public class CoachServiceTest extends TestCase {
         assertTrue(response.indexOf("code") <= 0);
 	}*/
 
-	/*@Test
+	@Test
 	public void testGetSignUpVcode() {
 		Map <String, String>map = new HashMap<String, String>();
     	map.put("appKey", APP_KEY); //第二个参数为AppKey
     	map.put("method", METHOD.GET_SIGN_UP_VCODE.getValue()); 
     	map.put("v", "1.0");
     	map.put("format", "json");
-    	map.put("phoneNumber", "13636426042");
+    	map.put("phoneNumber", "13382170135");
     	String sign = RopUtils.sign(map, APP_SECRET); //第二个参数为SecretKey, 有O2O系统分配
     	map.put("sign", sign);
     	String response = HttpUtil.postServer(SERVER_URL, map);
         System.out.println("response = " + response);
         assertNotNull(response);
         assertTrue(response.indexOf("code") <= 0);
-	}*/
+	}
 	
 	/*@Test
 	public void testSignUp() {
@@ -77,7 +77,7 @@ public class CoachServiceTest extends TestCase {
     	map.put("format", "json");
     	map.put("phoneNumber", "13636426042");
     	map.put("password", "123456");
-    	map.put("vcode", "042777");
+    	map.put("vcode", "109601");
     	String sign = RopUtils.sign(map, APP_SECRET); //第二个参数为SecretKey, 有O2O系统分配
     	map.put("sign", sign);
     	String response = HttpUtil.postServer(SERVER_URL, map);
@@ -280,17 +280,17 @@ public class CoachServiceTest extends TestCase {
         assertTrue(response.indexOf("code") <= 0);
 	}*/
 	
-	public void testUpdateProfileDetail() {
+	/*public void testUpdateProfileDetail() {
 		Map <String, String>map = new HashMap<String, String>();
     	map.put("appKey", APP_KEY); //第二个参数为AppKey
     	map.put("method", METHOD.UPDATE_PROFILE_DETAIL.getValue()); 
     	map.put("v", "1.0");
     	map.put("format", "json");
-    	map.put("sessionId", "7954FE41-3B84-4454-89DE-884D1BD59A9D");
-    	map.put("coachId", "17");
+    	map.put("sessionId", "111F0FED-5009-4CF6-B63A-0453D08F4212");
+    	map.put("coachId", "21");
     	map.put("areaCode", "110000");
     	map.put("gender", "1");
-    	map.put("name", "zzp");
+    	map.put("name", "张志鹏");
     	map.put("email", "a@a.com");
     	map.put("idType", "0");
     	map.put("idNumber", "642101");
@@ -301,7 +301,7 @@ public class CoachServiceTest extends TestCase {
         System.out.println("response = " + response);
         assertNotNull(response);
         assertTrue(response.indexOf("code") <= 0);
-	}
+	}*/
 	
 	/*public void testUploadAvatar() {
 		Map <String, String>map = new HashMap<String, String>();

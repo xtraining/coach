@@ -193,8 +193,8 @@ public class Lesson extends AbstractBaseModel implements java.io.Serializable {
 		LessonResponse r =  new LessonResponse();
 		r.setLessonId(id);
 		r.setName(getName());
-		r.setStartTime(DateUtils.dateToyyyyMMdd(getStartTime()));
-		r.setEndTime(DateUtils.dateToyyyyMMdd(getEndTime()));
+		r.setStartTime(DateUtils.dateToyyyyMMddHHmiss(getStartTime()));
+		r.setEndTime(DateUtils.dateToyyyyMMddHHmiss(getEndTime()));
 		r.setType(getType());
 		return r;
 	}

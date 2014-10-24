@@ -36,9 +36,11 @@ public class SmsResolver extends BaseResolver{
         		if(StringUtils.equals("1", Config.getProperty("sms_channel"))){
         			SMSUtil.send(msg.getPhoneNumber(), msg.getContent());
         			msg.setStatus(SMS_STATUS.SENT_SUCCESS.getValue());
+        			smsHistoryDao.updateStatus(msg);
         		} else if(StringUtils.equals("2", Config.getProperty("sms_channel"))){
         			SMS_STATUS status = SMSUtil2.send(msg.getPhoneNumber(), msg.getContent());
         			msg.setStatus(status.getValue());
+        			smsHistoryDao.updateStatus(msg);
         		}
 				smsHistoryDao.updateStatus(msg);
 			} catch (Throwable e) {

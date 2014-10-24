@@ -12,8 +12,8 @@ import com.coach.utils.HttpUtil;
 import com.rop.utils.RopUtils;
 
 public class CourseServiceTest extends TestCase {
-//	public static final String SERVER_URL = "http://114.215.145.26/coach/service";
-	public static final String SERVER_URL = "http://localhost:8080/coach/service";
+	public static final String SERVER_URL = "http://114.215.145.26/coach/service";
+//	public static final String SERVER_URL = "http://localhost:8080/coach/service";
 	public static final String APP_KEY = "iphone_user";
 	public static final String APP_SECRET = "LlnZA8cql4liN4CvjGL5GfwhCh7fwWGE";
 	public static final String VERSION = "V0.5.0.0";
@@ -69,20 +69,20 @@ public class CourseServiceTest extends TestCase {
         assertTrue(response.indexOf("code") <= 0);
 	}*/
 	
-	/*public void testAddCourse(){
+	public void testAddCourse(){
 		Map <String, String>map = new HashMap<String, String>();
     	map.put("appKey", APP_KEY); //第二个参数为AppKey
     	map.put("method", METHOD.ADD_COURSE.getValue()); 
     	map.put("v", "1.0");
     	map.put("format", "json");
-    	map.put("sessionId", "B3DC74E1-7603-4C9C-A201-3855D400CFB0");
-    	map.put("coachId", "13");
+    	map.put("sessionId", "111F0FED-5009-4CF6-B63A-0453D08F4212");
+    	map.put("coachId", "21");
     	map.put("name", "足球课程一");
     	map.put("groundName", "groundName");
     	map.put("type", "1");
     	map.put("address", "东大名路687号");
-    	map.put("startTime", "2014-10-22 14:00:00");
-    	map.put("recycleDay", "3");
+    	map.put("startTime", "2014-10-22 09:30:00");
+    	map.put("recycleDay", "1,2,6");
     	map.put("courseHour", "40");
     	map.put("lessonHour", "2");
     	map.put("phoneNumberList", "133||122");
@@ -93,7 +93,7 @@ public class CourseServiceTest extends TestCase {
         System.out.println("response = " + response);
         assertNotNull(response);
         assertTrue(response.indexOf("code") <= 0);
-	}*/
+	}
 	
 	public void testGetCourseDetail(){
 		Map <String, String>map = new HashMap<String, String>();

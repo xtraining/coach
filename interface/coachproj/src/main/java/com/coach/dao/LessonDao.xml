@@ -38,7 +38,7 @@
 		INNER JOIN lesson s on c.id = s.courseId and s.status = 0 
 		where cc.coachId = #{coachId} and s.startTime &gt;= #{startDate} and s.endTime &lt; #{endDate}
 	union ALL
-		select s.id, s.name, s.startTime, s.endTime, s.hours, 4 type
+		select s.id, s.name, s.startTime, s.endTime, s.hours, s.groundId, s.groundName, 4 type
 		from lesson s where s.courseId  = #{coachId} and s.status = 0 and s.startTime &gt;= #{startDate} and s.endTime &lt; #{endDate}
 	)aa order by aa.startTime asc
   </select>
