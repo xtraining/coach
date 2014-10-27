@@ -11,7 +11,7 @@ import com.coach.utils.DateUtils;
 public class OneWeekLessonCacheAction extends CacheAction<List<LessonResponse>>{
 	
 	public OneWeekLessonCacheAction(Long coachId, Date startDate, Date endDate){
-		this.region = CACHE_REGION.ONE_HOUR;
+		this.region = CACHE_REGION.ONE_DAY;
 		this.key = ONE_DAY_CACHE_KEY.COACH_ONE_WEEK_LESSON.getValue() + coachId + "_" + DateUtils.dateToyyyyMMdd(startDate)+ "_" + DateUtils.dateToyyyyMMdd(endDate);
 	}
 	

@@ -66,4 +66,22 @@ public class OrgCoachDaoImpl extends BaseDaoImpl implements OrgCoachDao
 			throw e;
 		}
 	}
+	@Override
+	public Long getTotalNum(Long orgId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public List<CoachDTO> getBindCoachById(Long orgId) {
+		try{
+			Map map = new HashMap();
+			map.put("orgId", orgId);
+			return this.getSqlSession().selectList("orgCoach.getBindCoachById", map);
+		} catch(RuntimeException e){
+			log.error("getBindCoachById", e);
+			throw e;
+		}
+	}
 }

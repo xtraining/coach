@@ -71,7 +71,9 @@
 				<td>
 					<a href="${ctx}/coach/org/delete.htm?orgId=${item.orgId}" target="ajaxTodo" title="确定要删除该机构吗？" style="color:#00F;">删除</a>	
 					&nbsp;&nbsp;	
-					<a href="${ctx}/coach/org/coachList.htm?orgId=${item.orgId}" target="navTab" title="机构教练" style="color:#00F;">机构教练</a>			  
+					<a href="${ctx}/coach/org/coachList.htm?orgId=${item.orgId}" target="navTab" title="机构教练" style="color:#00F;">机构教练</a>
+					&nbsp;&nbsp;	
+					<a href="${ctx}/coach/org/courseList.htm?orgId=${item.orgId}" target="navTab" title="机构课程" rel="机构课程" style="color:#00F;">机构课程</a>			  
 				  </td> 
 			</tr>
 			</c:forEach>

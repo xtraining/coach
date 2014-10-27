@@ -33,8 +33,8 @@
        <result column="memberNum" jdbcType="BIGINT" property="memberNum" />
   </resultMap>
   
-  <select id="getChiefCourse" parameterType="Map" resultMap="BaseCourseResult">
-	 select * from (
+  <sql id="getOrgChiefCourseSql">
+   	select * from (
 		select o.id orgId, o.name orgName, c.id, c.name, c.endTime from coach ch inner join coach_course cc on ch.id = cc.coachId and ch.id = #{coachId} and cc.status = #{acceptedStatus}
 		inner join course c on cc.courseId = c.id and c.type = #{orgType} and c.status = #{courseStatus}
 		inner join organization o on c.organizationId = o.id
@@ -47,12 +47,29 @@
 		   inner join organization_coach oc on o.id = oc.organizationId and oc.coachId = ch.id and oc.status in <foreach collection="bindStatus" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>  
 		) b 
 		WHERE b.orgId = a.orgId AND <![CDATA[b.id > a.id) < #{maxNum} ]]>
-	union all
-	select * from (
+  </sql>
+  
+  <sql id="getPersonalChiefCourseSql">
+ 	 select * from (
 		select -1 orgId, '个人' orgName, c.id, c.name, c.endTime 
 		from coach ch inner join coach_course cc on ch.id = cc.coachId and ch.id = #{coachId} and cc.status = #{acceptedStatus}
 		inner join course c on cc.courseId = c.id and c.type = #{personalType} and c.status = #{courseStatus}
 		order by c.endTime limit #{maxNum})c
+  </sql>
+  
+  <select id="getOrgChiefCourse" parameterType="Map" resultMap="BaseCourseResult">
+	<include refid="getOrgChiefCourseSql" />
+  </select>
+  
+  <select id="getPersonalChiefCourse" parameterType="Map" resultMap="BaseCourseResult">
+	<include refid="getPersonalChiefCourseSql" />
+  </select>
+  
+  
+  <select id="getChiefCourse" parameterType="Map" resultMap="BaseCourseResult"> 
+ 	 <include refid="getOrgChiefCourseSql" />
+ 	 union all
+ 	 <include refid="getPersonalChiefCourseSql" />
   </select>
   
   <select id="getOrgCourse" parameterType="Map" resultMap="BaseCourseResult">

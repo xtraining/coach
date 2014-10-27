@@ -1,23 +1,17 @@
-package com.coach.model;
+package com.zhiqin.coach.admin.dto;
 
 import java.sql.Timestamp;
-
-import com.coach.response.ConflictLessonResponse;
-import com.coach.response.LessonDetailResponse;
-import com.coach.response.LessonResponse;
-import com.coach.utils.DateUtils;
 
 /**
  * Period entity. @author MyEclipse Persistence Tools
  */
 
-public class Lesson extends AbstractBaseModel implements java.io.Serializable {
+public class LessonDTO {
 
 	// Fields
 
 	private Long id;
 	private Long courseId;
-	private Long coachId;
 	private Timestamp startTime;
 	private Timestamp endTime;
 	private Timestamp createTime;
@@ -26,7 +20,7 @@ public class Lesson extends AbstractBaseModel implements java.io.Serializable {
 	private String address;
 	private String description;
 	private Integer organizationId;
-	private Float hours;
+	private Double hours;
 	private Integer alertSwitch;
 	private Integer memberNum;
 	private Integer groundId;
@@ -46,7 +40,7 @@ public class Lesson extends AbstractBaseModel implements java.io.Serializable {
 
 
 	/** default constructor */
-	public Lesson() {
+	public LessonDTO() {
 	}
 
 
@@ -133,11 +127,11 @@ public class Lesson extends AbstractBaseModel implements java.io.Serializable {
 	}
 
 
-	public Float getHours() {
+	public Double getHours() {
 		return this.hours;
 	}
 
-	public void setHours(Float hours) {
+	public void setHours(Double hours) {
 		this.hours = hours;
 	}
 
@@ -188,53 +182,6 @@ public class Lesson extends AbstractBaseModel implements java.io.Serializable {
 
 	public void setLatitude(Double latitude) {
 		this.latitude = latitude;
-	}
-
-	public Long getCoachId() {
-		return coachId;
-	}
-
-
-	public void setCoachId(Long coachId) {
-		this.coachId = coachId;
-	}
-
-
-	public LessonResponse toResponse() {
-		LessonResponse r =  new LessonResponse();
-		r.setLessonId(id);
-		r.setName(getName());
-		r.setStartTime(DateUtils.dateToyyyyMMddHHmiss(getStartTime()));
-		r.setEndTime(DateUtils.dateToyyyyMMddHHmiss(getEndTime()));
-		r.setType(getType());
-		return r;
-	}
-
-	public LessonDetailResponse toDetailResponse() {
-		LessonDetailResponse r =  new LessonDetailResponse();
-		r.setLessonId(id);
-		r.setName(getName());
-		r.setStartTime(DateUtils.dateToyyyyMMddHHmiss(getStartTime()));
-		r.setEndTime(DateUtils.dateToyyyyMMddHHmiss(getEndTime()));
-		r.setType(getType());
-		r.setRemarks(getDescription());
-		r.setAlertSwitch(alertSwitch);
-		r.setMemberNum(memberNum);
-		r.setAddress(address);
-		r.setGroundId(groundId);
-		r.setGroundName(groundName);
-		r.setHours(hours);
-		return r;
-	}
-
-
-	public ConflictLessonResponse toConflictResponse() {
-		ConflictLessonResponse r = new ConflictLessonResponse();
-		r.setFlag(1);
-		r.setCourseName(getName());
-		r.setStartTime(DateUtils.dateToyyyyMMddHHmiss(getStartTime()));
-		r.setEndTime(DateUtils.dateToyyyyMMddHHmiss(getEndTime()));
-		return r;
 	}
 
 }

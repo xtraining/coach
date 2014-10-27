@@ -173,6 +173,7 @@ public class AddCourseRequest extends CoachBaseRequest{
 		lesson.setAlertSwitch(ALERT_SWITCH.OFF.getValue());
 		lesson.setGroundId(c.getGroundId());
 		lesson.setGroundName(c.getGroundName());
+		lesson.setCoachId(getCoachId());
 		c.getLessonList().add(lesson);
 	}
 	

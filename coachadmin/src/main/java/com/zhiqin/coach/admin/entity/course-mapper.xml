@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="course">
+	<resultMap id="CourseDTOResult" type="com.zhiqin.coach.admin.dto.CourseDTO">
+		<id column="id" jdbcType="BIGINT" property="courseId" />
+		<result column="remarks" jdbcType="VARCHAR" property="remarks" />
+		<result column="orgName" jdbcType="VARCHAR" property="orgName" />
+		<result column="address" jdbcType="VARCHAR" property="address" />
+		<result column="description" jdbcType="VARCHAR" property="description" />
+		<result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="startTime" jdbcType="TIMESTAMP" property="startTime" />
+		<result column="endTime" jdbcType="TIMESTAMP" property="endTime" />
+		<result column="expiryDate" jdbcType="DATE" property="expiryDate" />
+		<result column="courseHour" jdbcType="FLOAT" property="courseHour" />
+		<result column="lessonHour" jdbcType="FLOAT" property="lessonHour" />
+		<result column="coachCourseId" jdbcType="BIGINT" property="coachCourseId" />
+		<result column="coachCourseStatus" jdbcType="INTEGER" property="coachCourseStatus" />
+		<result column="coachId" jdbcType="BIGINT" property="coachId" />
+		<result column="coachName" jdbcType="VARCHAR" property="coachName" />
+	</resultMap>
+	
+	<select id="getTotalNum" parameterType="SearchCourseDTO" resultType="Long">
+		select count(*) from course c inner join organization g on c.organizationId = g.id 
+		where c.status != 1
+		<if test="orgId != null">
+			and g.id = ${orgId}
+		</if>
+		<if test="courseName != null and courseName != ''">
+			and c.name like '%${courseName}%'
+		</if>
+		<if test="courseId != null">
+			and c.id = ${courseId}
+		</if>
+	</select>
+
+	<select id="getCourseList" parameterType="Map" resultMap="CourseDTOResult" >
+		select c.id, g.name as orgName, c.name, c.startTime, c.endTime, c.createTime, c.expiryDate,
+		c.description, c.recycleDay, c.courseHour, c.lessonHour, c.address,
+		c.groundId, c.groundName, c.remarks, cc.id coachCourseId, cc.status coachCourseStatus,
+		oc.coachName, oc.coachId
+		from course c inner join organization g on c.organizationId = g.id 
+		left outer join coach_course cc on cc.courseId = c.id
+		left outer join organization_coach oc on cc.coachId = oc.coachId
+		where c.status != 1
+		<if test="searchDto.orgId != null">
+			and g.id = ${searchDto.orgId}
+		</if>
+		<if test="searchDto.courseName != null and searchDto.courseName != ''">
+			and c.name like '%${searchDto.courseName}%'
+		</if>
+		<if test="searchDto.courseId != null">
+			and c.id = #{searchDto.courseId}
+		</if>
+		limit ${p.pageNum - 1}, ${p.numPerPage}
+	</select>
+	
+	<insert id="insertCourse" useGeneratedKeys="true" keyProperty="courseId" parameterType="CourseDTO">
+		INSERT INTO course(name, organizationId, address, description, type, groundId, groundName, startTime, endTime, recycleDay, courseHour, lessonHour, lessonNum, code, expiryDate, status, remarks, createTime) 
+		VALUE (#{name}, #{orgId}, #{address}, #{description}, #{type}, #{groundId}, #{groundName}, #{startTime}, #{endTime}, #{recycleDay}, #{courseHour}, #{lessonHour}, #{lessonNum}, #{code}, #{expiryDate}, #{status}, #{remarks}, now()) 
+  	</insert>
+</mapper>

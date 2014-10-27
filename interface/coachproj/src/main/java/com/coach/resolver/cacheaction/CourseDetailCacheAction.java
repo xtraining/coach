@@ -8,7 +8,7 @@ import com.coach.response.CourseDetailResponse;
 public class CourseDetailCacheAction extends CacheAction<CourseDetailResponse>{
 	
 	public CourseDetailCacheAction(Long coachId, Long courseId){
-		this.region = CACHE_REGION.ONE_HOUR;
+		this.region = CACHE_REGION.ONE_DAY;
 		this.key = ONE_DAY_CACHE_KEY.COACH_COURSE.getValue() + coachId + "_" + courseId;
 	}
 	

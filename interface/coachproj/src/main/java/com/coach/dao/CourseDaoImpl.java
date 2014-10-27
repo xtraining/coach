@@ -26,14 +26,7 @@ public class CourseDaoImpl extends SqlSessionDaoSupport implements CourseDao{
 	@Override
 	public List<Course> getChiefCourse(Long coachId, int maxNum) {
 		try{
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("coachId", coachId);
-			map.put("maxNum", maxNum);
-			map.put("acceptedStatus", COACH_COURSE_STATUS.ACCEPTED.getValue());
-			map.put("courseStatus", COURSE_STATUS.ACTIVE.getValue());
-			map.put("bindStatus", Arrays.asList(ORG_COACH_STATUS.COACH_ACCEPTED.getValue(), ORG_COACH_STATUS.ORG_ACCEPTED.getValue()));
-			map.put("orgType", COURSE_TYPE.ORG.getValue());
-			map.put("personalType", COURSE_TYPE.PERSONAL.getValue());
+			Map<String, Object> map = buildParam(coachId, maxNum);
 			return this.getSqlSession().selectList("getChiefCourse", map);
 		} catch (RuntimeException re) {
 			log.error("getChiefCourse", re);
@@ -41,6 +34,40 @@ public class CourseDaoImpl extends SqlSessionDaoSupport implements CourseDao{
 		}
 	}
 
+	@Override
+	public List<Course> getOrgChiefCourse(Long coachId, int maxNum) {
+		try{
+			Map<String, Object> map = buildParam(coachId, maxNum);
+			return this.getSqlSession().selectList("getOrgChiefCourse", map);
+		} catch (RuntimeException re) {
+			log.error("getOrgChiefCourse", re);
+			throw re;
+		}
+	}
+	
+	@Override
+	public List<Course> getPersonalChiefCourse(Long coachId, int maxNum) {
+		try{
+			Map<String, Object> map = buildParam(coachId, maxNum);
+			return this.getSqlSession().selectList("getPersonalChiefCourse", map);
+		} catch (RuntimeException re) {
+			log.error("getPersonalChiefCourse", re);
+			throw re;
+		}
+	}
+	
+	private Map<String, Object> buildParam(Long coachId, int maxNum) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("coachId", coachId);
+		map.put("maxNum", maxNum);
+		map.put("acceptedStatus", COACH_COURSE_STATUS.ACCEPTED.getValue());
+		map.put("courseStatus", COURSE_STATUS.ACTIVE.getValue());
+		map.put("bindStatus", Arrays.asList(ORG_COACH_STATUS.COACH_ACCEPTED.getValue(), ORG_COACH_STATUS.ORG_ACCEPTED.getValue()));
+		map.put("orgType", COURSE_TYPE.ORG.getValue());
+		map.put("personalType", COURSE_TYPE.PERSONAL.getValue());
+		return map;
+	}
+	
 	@Override
 	public Long checkNewCourse(Long coachId) {
 		try{

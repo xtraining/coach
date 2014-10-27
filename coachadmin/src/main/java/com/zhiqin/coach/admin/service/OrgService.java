@@ -4,9 +4,10 @@ package com.zhiqin.coach.admin.service;
 import java.util.List;
 
 import com.zhiqin.coach.admin.dto.CoachDTO;
+import com.zhiqin.coach.admin.dto.CourseDTO;
 import com.zhiqin.coach.admin.dto.OrgDTO;
 import com.zhiqin.coach.admin.dto.PageInfoDTO;
-import com.zhiqin.coach.admin.dto.SearchCoachDTO;
+import com.zhiqin.coach.admin.dto.SearchCourseDTO;
 import com.zhiqin.coach.admin.dto.SearchOrgDTO;
 
 public interface OrgService{
@@ -34,4 +35,16 @@ public interface OrgService{
 	void createCoach(CoachDTO coach);
 
 	CoachDTO getOrgCoachById(Long orgCoachId);
+
+	List<CourseDTO> getCourseByOrgId(SearchCourseDTO searchDto, PageInfoDTO pageInfo);
+
+	Long getCoachTotalNum(Long orgId);
+
+	Long getCourseTotalNum(SearchCourseDTO searchDto);
+
+	void createCourse(CourseDTO course);
+
+	List<CoachDTO> getBindCoachListById(Long orgId);
+
+	void assignCourse(Long coachId, Long courseId);
 }

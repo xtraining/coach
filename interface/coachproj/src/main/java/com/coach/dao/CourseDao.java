@@ -12,6 +12,10 @@ import com.coach.response.PersonalCourseResponse;
 public interface CourseDao {
 
 	List<Course> getChiefCourse(Long coachId, int maxNum);
+	
+	List<Course> getOrgChiefCourse(Long coachId, int maxNum);
+	
+	List<Course> getPersonalChiefCourse(Long coachId, int maxNum);
 
 	Long checkNewCourse(Long coachId);
 

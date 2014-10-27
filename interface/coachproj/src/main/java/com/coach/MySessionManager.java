@@ -28,7 +28,7 @@ import com.rop.session.SessionManager;
 public class MySessionManager implements SessionManager{
     protected final Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired private SysSessionResolver sessionResolver;
-    private static final CacheChannel cache = CacheChannel.getInstance();
+    private final CacheChannel cache = CacheChannel.getInstance();
 
     @Override
     public void addSession(String sessionId, Session session) {

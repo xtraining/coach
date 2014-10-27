@@ -61,13 +61,20 @@ public class CourseResolver extends BaseResolver implements ICourseResolver{
 	@Resource private CoachCourseDao coachCourseDao;
 	@Resource private CoachRejectCourseDao coachRejectCourseDao;
 	
-	public ChiefCourseResponse getChiefCourse(Long coachId) {
-		CacheAction<ChiefCourseResponse> cachAction = new ChiefCourseCacheAction(coachId);
+	public ChiefCourseResponse getChiefCourse(Long coachId, Integer type) {
+		CacheAction<ChiefCourseResponse> cachAction = new ChiefCourseCacheAction(coachId, type);
 		ChiefCourseResponse response = cachAction.getValue();
 		if(response != null){
 			return response;
 		} else {
-			List<Course> list = courseDao.getChiefCourse(coachId, 3);
+			List<Course> list = null;
+			if(type == 1){
+				list = courseDao.getOrgChiefCourse(coachId, 3);
+			} else if(type == 2){
+				list = courseDao.getPersonalChiefCourse(coachId, 3);
+			} else {
+				list = courseDao.getChiefCourse(coachId, 3);
+			}
 			Map<Integer, OrgCourseResponse> map = new HashMap<Integer, OrgCourseResponse>();
 			for(Course c : list){
 				OrgCourseResponse orgC = map.get(c.getOrganizationId());

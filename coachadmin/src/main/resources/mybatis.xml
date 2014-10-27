@@ -12,8 +12,11 @@
 		
 		
 		<typeAlias type="com.zhiqin.coach.admin.dto.SearchCoachDTO" alias="SearchCoachDTO"/>
+		<typeAlias type="com.zhiqin.coach.admin.dto.SearchCourseDTO" alias="SearchCourseDTO"/>
 		<typeAlias type="com.zhiqin.coach.admin.dto.SearchOrgDTO" alias="SearchOrgDTO"/>
 		<typeAlias type="com.zhiqin.coach.admin.dto.OrgDTO" alias="OrgDTO"/>
 		<typeAlias type="com.zhiqin.coach.admin.dto.CoachDTO" alias="CoachDTO"/>
+		<typeAlias type="com.zhiqin.coach.admin.dto.CourseDTO" alias="CourseDTO"/>
+		<typeAlias type="com.zhiqin.coach.admin.dto.LessonDTO" alias="LessonDTO"/>
 	</typeAliases>
 </configuration>

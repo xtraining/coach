@@ -154,4 +154,20 @@
 		<property name="targetObject" ref="orgCoachDaoTarget"></property>
 		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
 	</bean>
+	
+	<bean id="courseDaoTarget" class="com.zhiqin.coach.admin.dao.impl.CourseDaoImpl"></bean>
+	<bean id="courseDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.zhiqin.coach.admin.dao.CourseDao"></property>
+		<property name="targetObject" ref="courseDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean>
+	
+	<bean id="lessonDaoTarget" class="com.zhiqin.coach.admin.dao.impl.LessonDaoImpl"></bean>
+	<bean id="lessonDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.zhiqin.coach.admin.dao.LessonDao"></property>
+		<property name="targetObject" ref="lessonDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean>
 </beans>

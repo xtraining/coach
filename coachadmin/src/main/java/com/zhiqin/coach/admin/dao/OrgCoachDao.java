@@ -19,4 +19,8 @@ public interface OrgCoachDao extends BaseDao{
 	CoachDTO getOrgCoachById(Long orgCoachId);
 	
 	List<CoachDTO> getCoachByOrgId(Long orgId, PageInfoDTO pageInfo);
+
+	Long getTotalNum(Long orgId);
+
+	List<CoachDTO> getBindCoachById(Long orgId);
 }

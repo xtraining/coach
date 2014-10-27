@@ -25,6 +25,5 @@ public class ChiefCourseResponse implements Serializable {
 	public void setOrgCoureResponseList(List<OrgCourseResponse> orgCoureResponseList) {
 		this.orgCoureResponseList = orgCoureResponseList;
 	}
-
 	
 }

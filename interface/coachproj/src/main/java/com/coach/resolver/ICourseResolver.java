@@ -18,7 +18,7 @@ import com.coach.response.PersonalCourseResponse;
 import com.coach.response.SearchMemberResponse;
 @Service
 public interface ICourseResolver {
-	public ChiefCourseResponse getChiefCourse(Long coachId);
+	public ChiefCourseResponse getChiefCourse(Long coachId, Integer type);
 
 	public int checkNewCourse(Long coachId);
 

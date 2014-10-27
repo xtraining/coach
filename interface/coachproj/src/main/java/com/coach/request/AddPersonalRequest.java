@@ -86,6 +86,7 @@ public class AddPersonalRequest extends CoachBaseRequest{
 		lesson.setHours((float)hours);
 		lesson.setType(LESSON_TYPE.LIFE.getValue());
 		lesson.setAlertSwitch(alertSwitch);
+		lesson.setCoachId(getCoachId());
 		return lesson;
 	}
 

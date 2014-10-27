@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="lesson">
+  <insert id="insertLesson" useGeneratedKeys="true" keyProperty="id" parameterType="LessonDTO">
+	INSERT INTO lesson(courseId, startTime, endTime, createTime, type, name, address, description, organizationId, hours, alertSwitch, longitude, latitude, groundId, groundName) 
+	VALUE (#{courseId}, #{startTime}, #{endTime}, now(), #{type}, #{name}, #{address}, #{description}, #{organizationId}, #{hours}, #{alertSwitch}, #{longitude}, #{latitude}, #{groundId}, #{groundName})
+  </insert>
+</mapper>

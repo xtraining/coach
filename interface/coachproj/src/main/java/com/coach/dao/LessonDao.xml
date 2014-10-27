@@ -38,8 +38,8 @@
 		INNER JOIN lesson s on c.id = s.courseId and s.status = 0 
 		where cc.coachId = #{coachId} and s.startTime &gt;= #{startDate} and s.endTime &lt; #{endDate}
 	union ALL
-		select s.id, s.name, s.startTime, s.endTime, s.hours, s.groundId, s.groundName, 4 type
-		from lesson s where s.courseId  = #{coachId} and s.status = 0 and s.startTime &gt;= #{startDate} and s.endTime &lt; #{endDate}
+		select s.id, s.name, s.startTime, s.endTime, s.hours, s.groundId, s.groundName, 3 type
+		from lesson s where s.coachId  = #{coachId} and s.courseId is null and s.status = 0 and s.startTime &gt;= #{startDate} and s.endTime &lt; #{endDate}
 	)aa order by aa.startTime asc
   </select>
   
@@ -109,8 +109,8 @@
   </select>
   
   <insert id="insertLesson" useGeneratedKeys="true" keyProperty="id" parameterType="com.coach.model.Lesson">
-	INSERT INTO lesson(courseId, startTime, endTime, createTime, type, name, address, description, organizationId, hours, alertSwitch, longitude, latitude, groundId, groundName) 
-	VALUE (#{courseId}, #{startTime}, #{endTime}, now(), #{type}, #{name}, #{address}, #{description}, #{organizationId}, #{hours}, #{alertSwitch}, #{longitude}, #{latitude}, #{groundId}, #{groundName})
+	INSERT INTO lesson(courseId, startTime, endTime, createTime, type, name, address, description, organizationId, hours, alertSwitch, longitude, latitude, groundId, groundName, coachId) 
+	VALUE (#{courseId}, #{startTime}, #{endTime}, now(), #{type}, #{name}, #{address}, #{description}, #{organizationId}, #{hours}, #{alertSwitch}, #{longitude}, #{latitude}, #{groundId}, #{groundName}, #{coachId})
   </insert>
   
   <update id="changeCheckFlag" parameterType="Long">

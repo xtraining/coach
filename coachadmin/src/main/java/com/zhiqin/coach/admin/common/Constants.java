@@ -217,4 +217,51 @@ public class Constants {
 			return this.value;
 		}
 	}
+	
+	public enum COURSE_STATUS {
+		ACTIVE(0), 
+		DELETED(1);
+		private int value;
+		private COURSE_STATUS(int value) {
+			this.value = value;
+		}
+		public int getValue(){
+			return this.value;
+		}
+	}
+	
+	public enum COURSE_TYPE {
+		ORG(0), 
+		PERSONAL(1);
+		private int value;
+		private COURSE_TYPE(int value) {
+			this.value = value;
+		}
+		public int getValue(){
+			return this.value;
+		}
+	}
+	
+	public enum LESSON_TYPE {
+		JOB(0), 
+		LIFE(1);
+		private int value;
+		private LESSON_TYPE(int value) {
+			this.value = value;
+		}
+		public int getValue(){
+			return this.value;
+		}
+	}
+	
+	public enum ALERT_SWITCH {
+		OFF(0), ON(1);
+		private int value;
+		private ALERT_SWITCH(int value) {
+			this.value = value;
+		}
+		public int getValue(){
+		return this.value;
+		}
+	}
 }

@@ -47,6 +47,7 @@ public class AddLessonRequest extends AddPersonalRequest{
 		lesson.setCourseId(getCourseId());
 		lesson.setGroundId(getGroundId());
 		lesson.setGroundName(getGroundName());
+		lesson.setCoachId(getCoachId());
 		return lesson;
 	}
 	

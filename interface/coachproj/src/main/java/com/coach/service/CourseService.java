@@ -9,6 +9,7 @@ import org.apache.commons.lang.StringUtils;
 import com.coach.common.Constants;
 import com.coach.request.AddCourseRequest;
 import com.coach.request.CoachBaseRequest;
+import com.coach.request.GetChiefCourseRequest;
 import com.coach.request.GetCourseDetailRequest;
 import com.coach.request.GetNewCourseRequest;
 import com.coach.request.GetOrgCourseRequest;
@@ -33,8 +34,9 @@ public class CourseService extends SimpleBaseService{
 	@Resource private ICourseResolver courseResolver;
 	
 	@ServiceMethod(method = "course.getChiefCourse", version = "1.0", needInSession = NeedInSessionType.YES)
-    public Object getChiefCourse(CoachBaseRequest request) {
-		ChiefCourseResponse r = courseResolver.getChiefCourse(request.getCoachId());
+    public Object getChiefCourse(GetChiefCourseRequest request) {
+		Integer type = request.getType();
+		ChiefCourseResponse r = courseResolver.getChiefCourse(request.getCoachId(), type == null ? 0 : type);
 		int result = courseResolver.checkNewCourse(request.getCoachId());
 		if(result > 0){
 			r.setHasNew(1);

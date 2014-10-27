@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.zhiqin.coach.admin.controller.BaseController;
 import com.zhiqin.coach.admin.dto.CoachDTO;
+import com.zhiqin.coach.admin.dto.CourseDTO;
 import com.zhiqin.coach.admin.dto.OrgDTO;
 import com.zhiqin.coach.admin.dto.PageInfoDTO;
 import com.zhiqin.coach.admin.dto.ResponseDTO;
+import com.zhiqin.coach.admin.dto.SearchCourseDTO;
 import com.zhiqin.coach.admin.dto.SearchOrgDTO;
 import com.zhiqin.coach.admin.service.OrgService;
 import com.zhiqin.coach.admin.util.JsonBinder;
@@ -96,8 +98,10 @@ public class OrgController extends BaseController{
 	
 	@RequestMapping("coachList")
 	public String coachList(Model model, Long orgId, PageInfoDTO pageInfo){
+		Long totalNum = orgService.getCoachTotalNum(orgId);
 		List<CoachDTO> list = orgService.getCoachByOrgId(orgId, pageInfo);
 		model.addAttribute("responseList", list);
+		model.addAttribute("totalCount", totalNum+"");
 		model.addAttribute("orgId", orgId);
 		return "/coach/org-coach-list";
 	}
@@ -136,6 +140,44 @@ public class OrgController extends BaseController{
 			return "input";
 		}
 		orgService.updateCoach(coach);
+		return "success";
+	}
+	
+	@RequestMapping("courseList")
+	public String courseList(Model model, SearchCourseDTO searchDto, PageInfoDTO pageInfo){
+		Long totalNum = orgService.getCourseTotalNum(searchDto);
+		List<CourseDTO> list = orgService.getCourseByOrgId(searchDto, pageInfo);
+		model.addAttribute("responseList", list);
+		model.addAttribute("totalCount", totalNum+"");
+		model.addAttribute("searchDto", searchDto);
+		return "/coach/org-course-list";
+	}
+	
+	@RequestMapping("addCourse")
+	public String addCourse(Model model, Long orgId){
+		model.addAttribute("orgId", orgId);
+		return "/coach/org-course-add";
+	}
+	
+	@ResponseBody
+	@RequestMapping("createCourse")
+	public String createCourse(CourseDTO course, HttpServletRequest request){
+		orgService.createCourse(course);
+		return "success";
+	}
+	
+	@RequestMapping("assignCourse")
+	public String assignCourse(Model model, Long orgId, Long courseId){
+		List<CoachDTO> list = orgService.getBindCoachListById(orgId);
+		model.addAttribute("responseList", list);
+		model.addAttribute("courseId", courseId);
+		return "/coach/org-course-assign-coach";
+	}
+	
+	@ResponseBody
+	@RequestMapping("saveAssign")
+	public String saveAssign(Model model, Long courseId, Long coachId){
+		orgService.assignCourse(coachId, courseId);
 		return "success";
 	}
 }

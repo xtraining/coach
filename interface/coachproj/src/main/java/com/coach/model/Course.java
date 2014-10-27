@@ -240,6 +240,11 @@ public class Course extends AbstractBaseModel implements java.io.Serializable {
 	public OrgCourseResponse getOrgCoureseResponse() {
 		OrgCourseResponse r = new OrgCourseResponse();
 		r.setOrgId(getOrganizationId());
+		if(r.getOrgId() != null && r.getOrgId() > 0){
+			r.setType(1);// org course
+		} else {
+			r.setType(2); // personal course
+		}
 		r.setOrgName(getOrganizationName());
 		return r;
 	}

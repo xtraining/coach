@@ -6,9 +6,9 @@ import com.coach.response.ChiefCourseResponse;
 
 public class ChiefCourseCacheAction extends CacheAction<ChiefCourseResponse>{
 	
-	public ChiefCourseCacheAction(Long coachId){
+	public ChiefCourseCacheAction(Long coachId, Integer type){
 		this.region = CACHE_REGION.ONE_HOUR;
-		this.key = ONE_HOUR_CACHE_KEY.CHIEF_COURSE.getValue() + coachId;
+		this.key = ONE_HOUR_CACHE_KEY.CHIEF_COURSE.getValue() + coachId + "_" + type;
 	}
 	
 	@Override
