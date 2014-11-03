@@ -1,50 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="orgCoach">
-	<resultMap id="CoachDTOResult" type="com.zhiqin.coach.admin.dto.CoachDTO">
-		<id column="id" jdbcType="BIGINT" property="orgCoachId" />
-		<result column="coachName" jdbcType="VARCHAR" property="coachName" />
-		<result column="idType" jdbcType="INTEGER" property="idType" />
-		<result column="idNumber" jdbcType="VARCHAR" property="idNumber" />
-		<result column="coachId" jdbcType="BIGINT" property="coachId" />
-		<result column="status" jdbcType="INTEGER" property="status" />
+<mapper namespace="coachCourse">
+
+	<resultMap id="CourseDTO" type="com.zhiqin.coach.admin.dto.CourseDTO">
+		<id column="id" jdbcType="BIGINT" property="courseId" />
+		<result column="remarks" jdbcType="VARCHAR" property="remarks" />
+		<result column="orgName" jdbcType="VARCHAR" property="orgName" />
+		<result column="address" jdbcType="VARCHAR" property="address" />
+		<result column="description" jdbcType="VARCHAR" property="description" />
 		<result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="startTime" jdbcType="TIMESTAMP" property="startTime" />
+		<result column="endTime" jdbcType="TIMESTAMP" property="endTime" />
+		<result column="expiryDate" jdbcType="DATE" property="expiryDate" />
+		<result column="courseHour" jdbcType="FLOAT" property="courseHour" />
+		<result column="lessonHour" jdbcType="FLOAT" property="lessonHour" />
+		<result column="type" jdbcType="INTEGER" property="type" />
+		<result column="orgId" jdbcType="BIGINT" property="orgId" />
+		<result column="orgName" jdbcType="VARCHAR" property="orgName" />
+		<result column="coachCourseId" jdbcType="BIGINT" property="coachCourseId" />
+		<result column="coachCourseStatus" jdbcType="INTEGER" property="coachCourseStatus" />
 	</resultMap>
+
+	<select id="getAcceptedCoachByCourseId" parameterType="Map" resultType="Long">
+		select coachId from coach_course where courseId = ${courseId} and status = 1
+	</select>
 	
-	<select id="getCoachByOrgId" parameterType="Long" resultMap="CoachDTOResult" >
-		select g.id, g.coachId, g.coachName, g.createTime, g.idType, g.idNumber, g.status
-		from organization_coach g where g.status != -1 and g.organizationId = #{orgId}
+	<sql id = "getCourseCondition">
+		from coach_course cc inner join course c on cc.courseId = c.id and c.status != 1 and cc.status != 3
+		left outer join organization g on g.id = c.organizationId 
+		where cc.coachId = #{searchDto.coachId}
+		<if test="searchDto.courseId != null">
+			and c.id = #{searchDto.coachId}
+		</if>
+		<if test="searchDto.courseName != null and searchDto.courseName != ''">
+			and c.courseName like '%#{searchDto.courseName}%'
+		</if>
+	</sql>
+	
+	<select id="getCourseTotalNum" parameterType="Map" resultType="Long">
+		select count(cc.id) 
+		<include refid="getCourseCondition" />
+	</select>
+	
+	<select id="getCourseList" parameterType="Map" resultMap="CourseDTO">
+		select c.id, c.name, c.startTime, c.endTime, c.createTime, c.expiryDate, c.type,
+		c.description, c.remarks, c.recycleDay, c.courseHour, c.lessonHour, c.address,
+		c.groundId, c.groundName, c.remarks, cc.id coachCourseId, cc.status coachCourseStatus,
+		g.id orgId, g.name orgName
+		<include refid="getCourseCondition" />
 		limit ${p.pageNum - 1}, ${p.numPerPage}
 	</select>
-
-	<select id="getOrgCoachByIdNumberAndType" parameterType="CoachDTO" resultType="Long" >
-		select g.id
-		from organization_coach g
-		where g.organizationId = #{orgId} and g.idType = #{idType} and g.idNumber = #{idNumber} and g.status != -1
-	</select>
 	
-	
-	<select id="getOrgCoachById" parameterType="Long" resultMap="CoachDTOResult">
-		select g.id, g.coachName, g.coachId, g.idType, g.idNumber, g.status
-		from organization_coach g
-		where g.id = #{orgCoachId}
-	</select>
-	
-	<select id="getBindCoachById" parameterType="Map" resultMap="CoachDTOResult">
-		select g.id, g.coachName, g.coachId
-		from organization_coach g
-		where g.id = #{orgCoachId} and g.coachId is not null and g.status != -1
-	</select>
-	
-	<insert id="createCoach" parameterType="CoachDTO">
-		insert into organization_coach (organizationId, coachName, idType, idNumber, createTime, updateTime, status)
-		value (#{orgId}, #{coachName}, #{idType}, #{idNumber}, now(), now(), 0)
+	<insert id="insert" parameterType="Map">
+		insert into coach_course (coachId, courseId, flag, status, createTime, updateTime)
+		value (#{coachId}, #{courseId}, 0, 0, now(), now())
 	</insert>
-	
-	<update id="updateCoach" parameterType="CoachDTO">
-		update organization_coach set coachName = #{coachName}, idType = #{idType}, idNumber = #{idNumber}, updateTime = now()
-		where id = #{orgCoachId}
-	</update>
 
+	<update id="deleteByCourseId" parameterType="Map">
+		update coach_course set status = 3 where courseId = #{courseId}
+	</update>
+	
 </mapper>

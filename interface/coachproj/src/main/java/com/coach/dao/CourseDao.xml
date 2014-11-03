@@ -130,6 +130,14 @@
 	where aa.courseHour - aa.lessonHour > 0.1
 	order by aa.id desc
   </select>
+  
+  <select id="getCourseNum" parameterType="Map" resultType="Map">
+		select ifnull(o.id, -1) orgId, count(*)courseNum
+		from coach ch inner join coach_course cc on ch.id = cc.coachId and ch.id = #{coachId} and cc.status = #{acceptedStatus}
+		inner join course c on cc.courseId = c.id and c.status = #{courseStatus}
+		left outer join organization o on c.organizationId = o.id
+		group by o.id
+  </select>
    
    <update id="deleteCourse" parameterType="Map">
        update course set status = #{status} where id = #{courseId}

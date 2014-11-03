@@ -232,6 +232,9 @@ public class LessonResolver extends BaseResolver implements ILessonResolver{
 	public void addLesson(AddLessonRequest request) {
 		Lesson lesson = request.toLesson();
 		lessonDao.insert(lesson);
+		
+		lessonMemberDao.insertLessonMember(request.getCourseId(), lesson.getId());
+		
 		Date startDate = DateUtils.getFirstDayOfWeek(DateUtils.yyyyMMddHHmmssToTimestamp(request.getStartTime()));
 		Date endDate = DateUtils.addDay(startDate, 8);
 		CacheAction<List<LessonResponse>> cacheAction = new OneWeekLessonCacheAction(request.getCoachId(), startDate, endDate);

@@ -9,6 +9,7 @@ import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.coach.common.Constants;
 import com.coach.common.Constants.COACH_COURSE_STATUS;
 import com.coach.common.Constants.COURSE_MEMBER_STATUS;
 import com.coach.common.Constants.COURSE_STATUS;
@@ -139,7 +140,7 @@ public class CourseDaoImpl extends SqlSessionDaoSupport implements CourseDao{
 			map.put("orgType", COURSE_TYPE.ORG.getValue());
 			int pageNumber = request.getPageNumber();
 			int pageSize = request.getPageSize();
-			map.put("pageNumber", (pageNumber-1) * pageSize + 5); //5 是默认显示的偏移量
+			map.put("pageNumber", (pageNumber-1) * pageSize + Constants.COURSE_OFFSET); //5 是默认显示的偏移量
 			map.put("pageSize", pageSize);
 			return this.getSqlSession().selectList("getOrgCourse", map);
 		} catch (RuntimeException re) {
@@ -204,6 +205,20 @@ public class CourseDaoImpl extends SqlSessionDaoSupport implements CourseDao{
 			return this.getSqlSession().selectList("getUnassignedCourse", map);
 		} catch (RuntimeException re) {
 			log.error("getUnassignedCourse", re);
+			throw re;
+		}
+	}
+
+	@Override
+	public List<Map<String, Object>> getCourseNum(Long coachId) {
+		try{
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("coachId", coachId);
+			map.put("acceptedStatus", COACH_COURSE_STATUS.ACCEPTED.getValue());
+			map.put("courseStatus", COURSE_STATUS.ACTIVE.getValue());
+			return this.getSqlSession().selectList("getCourseNum", map);
+		} catch (RuntimeException re) {
+			log.error("getCourseNum", re);
 			throw re;
 		}
 	}

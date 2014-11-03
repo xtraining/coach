@@ -17,6 +17,8 @@ public class OrgCourseResponse implements Serializable {
 	@XmlElement
 	private Integer type;
 	@XmlElement
+	private Integer courseNum = 0;
+	@XmlElement
 	private List<CourseResponse> courseResponseList = new ArrayList<CourseResponse>();
 	public Integer getOrgId() {
 		return orgId;
@@ -41,6 +43,12 @@ public class OrgCourseResponse implements Serializable {
 	}
 	public void setType(Integer type) {
 		this.type = type;
+	}
+	public Integer getCourseNum() {
+		return courseNum;
+	}
+	public void setCourseNum(Integer courseNum) {
+		this.courseNum = courseNum;
 	}
 	
 }

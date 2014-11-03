@@ -9,8 +9,9 @@ import org.slf4j.LoggerFactory;
 import com.zhiqin.coach.admin.dao.OrgCoachDao;
 import com.zhiqin.coach.admin.dto.CoachDTO;
 import com.zhiqin.coach.admin.dto.PageInfoDTO;
+import com.zhiqin.coach.admin.dto.SearchOrgDTO;
 
-
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class OrgCoachDaoImpl extends BaseDaoImpl implements OrgCoachDao
 {
 	private static final Logger log = LoggerFactory
@@ -53,7 +54,6 @@ public class OrgCoachDaoImpl extends BaseDaoImpl implements OrgCoachDao
 		}
 	}
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public List<CoachDTO> getCoachByOrgId(Long orgId, PageInfoDTO pageInfo) {
 		try{
@@ -68,11 +68,16 @@ public class OrgCoachDaoImpl extends BaseDaoImpl implements OrgCoachDao
 	}
 	@Override
 	public Long getTotalNum(Long orgId) {
-		// TODO Auto-generated method stub
-		return null;
+		try{
+			Map map = new HashMap();
+			map.put("orgId", orgId);
+			return this.getSqlSession().selectOne("orgCoach.getTotalNum", map);
+		} catch(RuntimeException e){
+			log.error("getTotalNum", e);
+			throw e;
+		}
 	}
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public List<CoachDTO> getBindCoachById(Long orgId) {
 		try{
@@ -84,4 +89,46 @@ public class OrgCoachDaoImpl extends BaseDaoImpl implements OrgCoachDao
 			throw e;
 		}
 	}
+	
+	@Override
+	public Long getUnbindCoachTotalNum(SearchOrgDTO searchDto) {
+		try{
+			Map map = new HashMap();
+			map.put("searchDto", searchDto);
+			return this.getSqlSession().selectOne("orgCoach.getUnbindCoachTotalNum", map);
+		} catch(RuntimeException e){
+			log.error("getUnbindCoachTotalNum", e);
+			throw e;
+		}
+	}
+
+	@Override
+	public List<CoachDTO> getUnbindCoachList(SearchOrgDTO searchDto,
+			PageInfoDTO pageInfo) {
+		try{
+			Map map = new HashMap();
+			map.put("searchDto", searchDto);
+			map.put("p", pageInfo);
+			return this.getSqlSession().selectList("orgCoach.getUnbindCoachList", map);
+		} catch(RuntimeException e){
+			log.error("getUnbindCoachList", e);
+			throw e;
+		}
+	}
+	
+	@Override
+	public void updateBindStatus(Long coachId, Long orgCoachId, Integer status) {
+		try{
+			Map map = new HashMap();
+			map.put("coachId", coachId);
+			map.put("orgCoachId", orgCoachId);
+			map.put("status", status);
+			this.getSqlSession().update("orgCoach.updateBindStatus", map);
+		} catch(RuntimeException e){
+			log.error("updateBindStatus", e);
+			throw e;
+		}
+		
+	}
+
 }

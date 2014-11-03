@@ -14,6 +14,7 @@ public class SearchCourseDTO {
 	private Long courseId;
 	private String courseName;
 	private Long orgId;
+	private Long coachId;
 	public Long getCourseId() {
 		return courseId;
 	}
@@ -31,6 +32,12 @@ public class SearchCourseDTO {
 	}
 	public void setOrgId(Long orgId) {
 		this.orgId = orgId;
+	}
+	public Long getCoachId() {
+		return coachId;
+	}
+	public void setCoachId(Long coachId) {
+		this.coachId = coachId;
 	}
 	
 }

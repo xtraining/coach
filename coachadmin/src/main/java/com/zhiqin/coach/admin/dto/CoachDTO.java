@@ -23,6 +23,8 @@ public class CoachDTO {
 	private Integer idType;
 	private String idNumber;
 	private Timestamp createTime;
+	private String orgName;
+	private Long bindCoachId;
 	public Long getCoachId() {
 		return coachId;
 	}
@@ -82,6 +84,18 @@ public class CoachDTO {
 	}
 	public void setStatus(Integer status) {
 		this.status = status;
+	}
+	public String getOrgName() {
+		return orgName;
+	}
+	public void setOrgName(String orgName) {
+		this.orgName = orgName;
+	}
+	public Long getBindCoachId() {
+		return bindCoachId;
+	}
+	public void setBindCoachId(Long bindCoachId) {
+		this.bindCoachId = bindCoachId;
 	}
 	
 }

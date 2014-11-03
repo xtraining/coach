@@ -264,4 +264,18 @@ public class Constants {
 		return this.value;
 		}
 	}
+	
+	public enum ORG_COACH_STATUS {
+		NONE(0), 
+		COACH_NONE(1), COACH_ACCEPTED(2), COACH_REJECTED(3), 
+		ORG_NONE(4), ORG_ACCEPTED(5), ORG_REJECTED(6), 
+		COACH_UNBIND(7), ORG_UBIND(8), DELETED(-1);
+		private int value;
+		private ORG_COACH_STATUS(int value) {
+			this.value = value;
+		}
+		public int getValue(){
+			return this.value;
+		}
+	}
 }

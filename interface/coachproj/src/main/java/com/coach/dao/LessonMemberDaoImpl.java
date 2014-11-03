@@ -9,6 +9,7 @@ import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.coach.common.Constants.COURSE_MEMBER_STATUS;
 import com.coach.common.Constants.LESSON_MEMBER_STATUS;
 import com.coach.model.LessonMember;
 import com.coach.model.Member;
@@ -50,6 +51,21 @@ public class LessonMemberDaoImpl extends SqlSessionDaoSupport implements LessonM
 			this.getSqlSession().update("updateLessonMemberStatus", map);
 		} catch(RuntimeException e){
 			log.error("updateStatus", e);
+			throw e;
+		}
+		
+	}
+
+	@Override
+	public void insertLessonMember(Long courseId, Long lessonId) {
+		try{
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("lessonId", lessonId);
+			map.put("courseId", courseId);
+			map.put("status", COURSE_MEMBER_STATUS.ACTIVE.getValue());
+			this.getSqlSession().insert("insertLessonMember", map);
+		} catch(RuntimeException e){
+			log.error("insertLessonMemeber", e);
 			throw e;
 		}
 		

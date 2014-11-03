@@ -120,6 +120,48 @@ public class AddCourseRequest extends CoachBaseRequest{
 		this.type = type;
 	}
 	
+	/*public Course toCourse() {
+		Course c = new Course();
+		c.setAddress(address);
+		c.setCode(StringUtils.replace(RopUtils.getUUID(), "-", ""));
+		c.setCourseHour(courseHour);
+		c.setRemarks(remarks);
+		c.setGroundName(groundName);
+		c.setLessonHour(lessonHour);
+		c.setCourseHour(courseHour);
+		c.setName(name);
+		c.setStatus(COURSE_STATUS.ACTIVE.getValue());
+		c.setType(COURSE_TYPE.PERSONAL.getValue());
+		c.setStartTime(DateUtils.yyyyMMddHHmmssToTimestamp(startTime));
+		c.setLessonNum((int)Math.ceil(courseHour/lessonHour));
+		if(StringUtils.isNotBlank(recycleDay)){
+			c.setRecycleDay(recycleDay);
+			Calendar cal = Calendar.getInstance();
+	        cal.setTimeInMillis(c.getStartTime().getTime());
+	        int today = cal.get(Calendar.DAY_OF_WEEK) - 1;
+	        float assignedHour = 0f;
+			while((courseHour - assignedHour) >= 0.01 ){
+				if(recycleDay.indexOf(today+"") >= 0){
+					if(assignedHour < 0.01){
+						float hours = courseHour > lessonHour ? lessonHour : courseHour;
+						buildLesson(c, hours, c.getStartTime());
+						assignedHour += hours;
+					} else {
+						float hours = (courseHour-assignedHour) > lessonHour ? lessonHour : (courseHour-assignedHour);
+						buildLesson(c, hours, new Timestamp(cal.getTimeInMillis()));
+						assignedHour += hours;
+					}
+				}
+				cal.add(Calendar.DAY_OF_MONTH, 1); //加一天
+				today = cal.get(Calendar.DAY_OF_WEEK) - 1;
+				if(today == 0)today = 7; //convert Sunday to 7
+			}
+			Lesson lastLesson = c.getLessonList().get(c.getLessonList().size() - 1);
+			c.setEndTime(lastLesson.getEndTime());
+		}
+		return c;
+	}*/
+	
 	public Course toCourse() {
 		Course c = new Course();
 		c.setAddress(address);
@@ -177,12 +219,12 @@ public class AddCourseRequest extends CoachBaseRequest{
 		c.getLessonList().add(lesson);
 	}
 	
-	/*public static void main(String[] args) {
+	public static void main(String[] args) {
 		AddCourseRequest a = new AddCourseRequest();
 		a.setLessonHour(1.5f);
 		a.setCourseHour(200f);
-		a.setRecycleDay("4, 7");
-		a.setStartTime("2014-09-11 08:00:00");
+		a.setRecycleDay("6");
+		a.setStartTime("2014-10-30 08:00:00");
 		Course c = a.toCourse();
 		System.out.println(c.getLessonNum());
 		for(Lesson lesson : c.getLessonList()){
@@ -193,6 +235,6 @@ public class AddCourseRequest extends CoachBaseRequest{
 					 + " hours: " + lesson.getHours() + " day : " + day);
 		}
 		System.out.println(c);
-	}*/
+	}
 	
 }

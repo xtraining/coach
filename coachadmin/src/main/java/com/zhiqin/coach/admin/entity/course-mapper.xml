@@ -40,8 +40,8 @@
 		c.groundId, c.groundName, c.remarks, cc.id coachCourseId, cc.status coachCourseStatus,
 		oc.coachName, oc.coachId
 		from course c inner join organization g on c.organizationId = g.id 
-		left outer join coach_course cc on cc.courseId = c.id
-		left outer join organization_coach oc on cc.coachId = oc.coachId
+		left outer join coach_course cc on cc.courseId = c.id and cc.status != 3
+		left outer join organization_coach oc on cc.coachId = oc.coachId and oc.organizationId = g.id
 		where c.status != 1
 		<if test="searchDto.orgId != null">
 			and g.id = ${searchDto.orgId}
@@ -59,4 +59,8 @@
 		INSERT INTO course(name, organizationId, address, description, type, groundId, groundName, startTime, endTime, recycleDay, courseHour, lessonHour, lessonNum, code, expiryDate, status, remarks, createTime) 
 		VALUE (#{name}, #{orgId}, #{address}, #{description}, #{type}, #{groundId}, #{groundName}, #{startTime}, #{endTime}, #{recycleDay}, #{courseHour}, #{lessonHour}, #{lessonNum}, #{code}, #{expiryDate}, #{status}, #{remarks}, now()) 
   	</insert>
+  	
+  	<update id="deleteById" parameterType="Map">
+  		update course set status = 1 where id = #{courseId}
+  	</update>
 </mapper>

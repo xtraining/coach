@@ -19,4 +19,6 @@ public interface CourseDao extends BaseDao{
 
 	void insert(CourseDTO c);
 
+	void deleteById(Long courseId);
+
 }

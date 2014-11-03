@@ -144,7 +144,10 @@ public class OrgController extends BaseController{
 	}
 	
 	@RequestMapping("courseList")
-	public String courseList(Model model, SearchCourseDTO searchDto, PageInfoDTO pageInfo){
+	public String courseList(Model model, SearchCourseDTO searchDto, Long orgId, PageInfoDTO pageInfo){
+		if(orgId != null){
+			searchDto.setOrgId(orgId);
+		}
 		Long totalNum = orgService.getCourseTotalNum(searchDto);
 		List<CourseDTO> list = orgService.getCourseByOrgId(searchDto, pageInfo);
 		model.addAttribute("responseList", list);
@@ -177,7 +180,36 @@ public class OrgController extends BaseController{
 	@ResponseBody
 	@RequestMapping("saveAssign")
 	public String saveAssign(Model model, Long courseId, Long coachId){
+		if(coachId == null || coachId == 0){
+			return "input";
+		}
+//		List<Long> coachIdList = orgService.getAcceptedCoachByCourseId(courseId);
+//		if(coachIdList != null && coachIdList.size() > 0){
+//			return "input1";
+//		}
 		orgService.assignCourse(coachId, courseId);
 		return "success";
+	}
+	
+	@RequestMapping("deleteCourse")
+	public String deleteCourse(Long courseId, HttpServletResponse response){
+		orgService.deleteCourseById(courseId);
+		ResponseDTO success = new ResponseDTO();
+		success.setStatusCode("200");
+		success.setMessage("删除成功");
+		success.setNavTabId("机构课程");
+		JsonUtils.write(response, JsonBinder.buildNormalBinder().toJson(success));
+		return null;
+	}
+	
+	@RequestMapping("updateBindStatus")
+	public String updateBindStatus(Long coachId, Long orgCoachId, Integer status, HttpServletResponse response){
+		orgService.updateBindStatus(coachId, orgCoachId, status);
+		ResponseDTO success = new ResponseDTO();
+		success.setStatusCode("200");
+		success.setMessage("绑定成功");
+		success.setNavTabId("机构教练");
+		JsonUtils.write(response, JsonBinder.buildNormalBinder().toJson(success));
+		return null;
 	}
 }

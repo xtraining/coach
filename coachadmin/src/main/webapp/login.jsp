@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>虎扑问吧后台管理系统</title>
+<title>智勤教育后台管理系统</title>
 <link href="static_resource/themes/css/login.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="static_resource/js/jquery-1.7.2.js"></script>
 <script type="text/javascript" src="static_resource/js/jquery.form.min.js"></script>

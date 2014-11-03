@@ -42,6 +42,7 @@ public class CourseDTO {
 	private String endTimeStr;
 	private String expiryDateStr;
 	private Integer lessonNum;
+	private Long coachId;
 	private String coachName;
 	private List<LessonDTO> lessonList = new ArrayList<LessonDTO>();
 	public Long getCourseId() {
@@ -211,6 +212,12 @@ public class CourseDTO {
 	}
 	public void setCoachName(String coachName) {
 		this.coachName = coachName;
+	}
+	public Long getCoachId() {
+		return coachId;
+	}
+	public void setCoachId(Long coachId) {
+		this.coachId = coachId;
 	}
 	
 }

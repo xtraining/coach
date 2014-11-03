@@ -14,11 +14,11 @@ import com.zhiqin.coach.admin.dto.SearchCoachDTO;
 import com.zhiqin.coach.admin.dto.SearchCourseDTO;
 
 
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class CourseDaoImpl extends BaseDaoImpl implements CourseDao
 {
 	private static final Logger log = LoggerFactory
 			.getLogger(CourseDaoImpl.class);
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public List<CourseDTO> getByOrgId(SearchCourseDTO searchDto, PageInfoDTO pageInfo) {
 		try{
@@ -48,6 +48,18 @@ public class CourseDaoImpl extends BaseDaoImpl implements CourseDao
 			log.error("insert", e);
 			throw e;
 		}
+	}
+	@Override
+	public void deleteById(Long courseId) {
+		try{
+			Map map = new HashMap();
+			map.put("courseId", courseId);
+			this.getSqlSession().update("course.deleteById", map);
+		} catch(RuntimeException e){
+			log.error("deleteById", e);
+			throw e;
+		}
+		
 	}
 		
 }

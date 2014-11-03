@@ -14,6 +14,7 @@ import com.zhiqin.coach.admin.common.Constants.ALERT_SWITCH;
 import com.zhiqin.coach.admin.common.Constants.COURSE_STATUS;
 import com.zhiqin.coach.admin.common.Constants.COURSE_TYPE;
 import com.zhiqin.coach.admin.common.Constants.LESSON_TYPE;
+import com.zhiqin.coach.admin.common.Constants.ORG_COACH_STATUS;
 import com.zhiqin.coach.admin.dao.CoachCourseDao;
 import com.zhiqin.coach.admin.dao.CourseDao;
 import com.zhiqin.coach.admin.dao.LessonDao;
@@ -127,7 +128,7 @@ public class OrgServiceImpl implements OrgService {
 	public void createCourse(CourseDTO c) {
 		c.setCode(StringUtils.replace(RopUtils.getUUID(), "-", ""));
 		c.setStatus(COURSE_STATUS.ACTIVE.getValue());
-		c.setType(COURSE_TYPE.PERSONAL.getValue());
+		c.setType(COURSE_TYPE.ORG.getValue());
 		c.setStartTime(DateUtils.yyyyMMddHHmmToTimestamp(c.getStartTimeStr()));
 		c.setLessonNum((int)Math.ceil(c.getCourseHour()/c.getLessonHour()));
 		c.setExpiryDate(DateUtils.yyyyMMddToDate(c.getExpiryDateStr()));
@@ -186,8 +187,31 @@ public class OrgServiceImpl implements OrgService {
 	}
 
 	@Override
+	@Transactional
 	public void assignCourse(Long coachId, Long courseId) {
+		coachCourseDao.deleteByCourseId(courseId);
 		coachCourseDao.insert(coachId, courseId);
 	}
+
+	@Override
+	public List<Long> getAcceptedCoachByCourseId(Long courseId) {
+		List<Long> list = coachCourseDao.getAcceptedCoachByCourseId(courseId);
+		return list;
+	}
+
+	@Override
+	@Transactional
+	public void deleteCourseById(Long courseId) {
+		courseDao.deleteById(courseId);
+		coachCourseDao.deleteByCourseId(courseId);
+		
+	}
+
+	@Override
+	@Transactional
+	public void updateBindStatus(Long coachId, Long orgCoachId, Integer status) {
+		orgCoachDao.updateBindStatus(coachId, orgCoachId, status);
+	}
+
 
 }

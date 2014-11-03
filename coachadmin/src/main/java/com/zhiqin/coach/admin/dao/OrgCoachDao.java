@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.zhiqin.coach.admin.dto.CoachDTO;
 import com.zhiqin.coach.admin.dto.PageInfoDTO;
+import com.zhiqin.coach.admin.dto.SearchOrgDTO;
 
 
 public interface OrgCoachDao extends BaseDao{
@@ -23,4 +24,13 @@ public interface OrgCoachDao extends BaseDao{
 	Long getTotalNum(Long orgId);
 
 	List<CoachDTO> getBindCoachById(Long orgId);
+	
+	Long getUnbindCoachTotalNum(SearchOrgDTO searchDto);
+
+	List<CoachDTO> getUnbindCoachList(SearchOrgDTO searchDto,
+			PageInfoDTO pageInfo);
+	
+	void updateBindStatus(Long coachId, Long orgCoachId, Integer status);
+
+	
 }

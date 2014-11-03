@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@include file="../taglib.jsp" %>
 <script type="text/javascript">
 function save(){
 	var $form = $($("#assignCoachForm"));
@@ -13,13 +14,16 @@ function save(){
 			success: function(data){	
 				switch(data){
 						case "\"success\"":	
-							navTabAjaxDone({"statusCode":"200", "message":"创建成功。", "navTabId":"机构课程", "forwardUrl":"", "callbackType":"closeCurrent", "rel":""});	
+							dialogAjaxDone({"statusCode":"200", "message":"创建成功。", "navTabId":"机构课程", "forwardUrl":"", "callbackType":"closeCurrent", "rel":""});	
 							break;
 						case "\"input\"":	
-							navTabAjaxDone({"statusCode":"300", "message":"请选择教练。", "navTabId":"机构课程", "forwardUrl":"", "callbackType":"", "rel":""});							
+							dialogAjaxDone({"statusCode":"300", "message":"请选择教练。", "navTabId":"机构课程", "forwardUrl":"", "callbackType":"", "rel":""});							
 							break;	
+						case "\"input1\"":	
+							dialogAjaxDone({"statusCode":"300", "message":"该课程已被教练接受，不能重新分派。", "navTabId":"机构课程", "forwardUrl":"", "callbackType":"", "rel":""});							
+							break;
 						default:
-							navTabAjaxDone({"statusCode":"300", "message":"分派失败，请重试。", "navTabId":"机构管理", "forwardUrl":"", "callbackType":"closeCurrent", "rel":""});							
+							dialogAjaxDone({"statusCode":"300", "message":"分派失败，请重试。", "navTabId":"机构管理", "forwardUrl":"", "callbackType":"closeCurrent", "rel":""});							
 							break;	
 					}
 			}

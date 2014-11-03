@@ -7,7 +7,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>虎扑问吧后台管理系统</title>
+<title>智勤教育后台管理系统</title>
 <link rel="icon" href="favicon.ico" type="image/x-icon" /> 
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /> 
 <link href="<%=path %>/static_resource/themes/default/style.css" rel="stylesheet" type="text/css" media="screen"/>
@@ -132,6 +132,7 @@ $(function(){
 								<ul>
 									<li><a href="../coach/org/list.htm" target="navTab" rel="机构管理" title="机构管理">机构管理</a></li>
 									<li><a href="../coach/coach/list.htm" target="navTab" rel="教练管理" title="教练管理">教练管理</a></li>
+									<li><a href="../coach/coach/unbindCoachList.htm" target="navTab" rel="待绑定教练管理" title="待绑定教练管理">待绑定教练管理</a></li>
 								</ul>
 							</li>
 						</ul>
@@ -170,7 +171,7 @@ $(function(){
 
 	</div>
 
-	<div id="footer">Copyright &copy; 2010 旅游关爱</div>
+	<div id="footer">Copyright &copy; 2014智勤教育</div>
 
 </body>
 </html>

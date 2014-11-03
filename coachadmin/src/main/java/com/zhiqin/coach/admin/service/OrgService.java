@@ -47,4 +47,10 @@ public interface OrgService{
 	List<CoachDTO> getBindCoachListById(Long orgId);
 
 	void assignCourse(Long coachId, Long courseId);
+
+	List<Long> getAcceptedCoachByCourseId(Long courseId);
+
+	void deleteCourseById(Long courseId);
+
+	void updateBindStatus(Long coachId, Long orgCoachId, Integer status);
 }

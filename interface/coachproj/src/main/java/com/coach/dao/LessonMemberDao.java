@@ -16,4 +16,6 @@ public interface LessonMemberDao {
 
 	public void updateStatus(Long lessonId, String[] memberIds, LESSON_MEMBER_STATUS check);
 
+	public void insertLessonMember(Long courseId, Long id);
+
 }

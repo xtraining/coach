@@ -34,4 +34,9 @@
     </foreach>  
   </update>
   
+   <insert id="insertLessonMember" parameterType="Map">
+    insert into lesson_member (memberId, lessonId, status)   
+    select cm.memberId, #{lessonId}, #{status} from course_member cm where cm.courseId = #{courseId} and cm.status in (0, 2)
+  </insert>
+  
 </mapper>

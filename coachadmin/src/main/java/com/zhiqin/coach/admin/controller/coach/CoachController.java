@@ -8,15 +8,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.zhiqin.coach.admin.controller.BaseController;
 import com.zhiqin.coach.admin.dto.CoachDTO;
+import com.zhiqin.coach.admin.dto.CourseDTO;
 import com.zhiqin.coach.admin.dto.PageInfoDTO;
 import com.zhiqin.coach.admin.dto.SearchCoachDTO;
-import com.zhiqin.coach.admin.entity.Roles;
-import com.zhiqin.coach.admin.entity.User;
-import com.zhiqin.coach.admin.entity.UserRoles;
+import com.zhiqin.coach.admin.dto.SearchCourseDTO;
+import com.zhiqin.coach.admin.dto.SearchOrgDTO;
 import com.zhiqin.coach.admin.service.CoachService;
 
 /**
@@ -45,20 +44,28 @@ public class CoachController extends BaseController{
 		model.addAttribute("currentNum", pageInfo.getPageNum() == null ? 1 : pageInfo.getPageNum());
 		return "/coach/coach-list";
 	}
-
-	/**
-	 * 保存用户分配角色
-	 * @return
-	 */
-	@ResponseBody
-	@RequestMapping("allocation")
-	public String allocation(Model model,UserRoles userRoles){
-		String errorCode = "1000";
-		try {
-		} catch (Exception e) {
-			e.printStackTrace();
-			errorCode="1001";
+	
+	@RequestMapping("courseList")
+	public String courseList(Model model, @ModelAttribute("searchDto")SearchCourseDTO searchDto, Long coachId, PageInfoDTO pageInfo) {
+		if(coachId != null && coachId > 0){
+			searchDto.setCoachId(coachId);
 		}
-		return errorCode;
+		Long totalNum = coachService.getCourseTotalNum(searchDto);
+		List<CourseDTO> list = coachService.getCourseList(searchDto, pageInfo);
+		model.addAttribute("responseList", list); 
+		model.addAttribute("totalCount", totalNum+"");
+		model.addAttribute("currentNum", pageInfo.getPageNum() == null ? 1 : pageInfo.getPageNum());
+		return "/coach/coach-course-list";
 	}
+	
+	@RequestMapping("unbindCoachList")
+	public String unbindCoachList(Model model, @ModelAttribute("searchDto")SearchOrgDTO searchDto, Long coachId, PageInfoDTO pageInfo) {
+		Long totalNum = coachService.getUnbindCoachTotalNum(searchDto);
+		List<CoachDTO> list = coachService.getUnbindCoachList(searchDto, pageInfo);
+		model.addAttribute("responseList", list); 
+		model.addAttribute("totalCount", totalNum+"");
+		model.addAttribute("currentNum", pageInfo.getPageNum() == null ? 1 : pageInfo.getPageNum());
+		return "/coach/coach-unbind-list";
+	}
+
 }

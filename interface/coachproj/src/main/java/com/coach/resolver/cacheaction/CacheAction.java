@@ -5,6 +5,7 @@ import net.oschina.j2cache.CacheChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.coach.common.Constants;
 import com.coach.common.Constants.CACHE_REGION;
 import com.coach.utils.Config;
 
@@ -18,7 +19,7 @@ public abstract class CacheAction<T> {
 	
 	@SuppressWarnings("unchecked")
 	public T getValue(){
-		if("1".equals(Config.getProperty("read_from_cache_switch"))) {
+		if("1".equals(Config.getProperty(Constants.READ_FROM_CACHE_SWITCH))) {
 			log.info("load from cache region : " + region + " key : " + key);
 			return (T)cache.get(region.getValue(), key).getValue();
 		} else {
@@ -28,8 +29,10 @@ public abstract class CacheAction<T> {
 	}
 	
 	public void setValue(T value) {
-		cache.set(region.getValue(), key, value);
-		clearRelativeCache();
+		if("1".equals(Config.getProperty(Constants.READ_FROM_CACHE_SWITCH))) {
+			cache.set(region.getValue(), key, value);
+			clearRelativeCache();
+		}
 	}
 	
 	public void clear() {

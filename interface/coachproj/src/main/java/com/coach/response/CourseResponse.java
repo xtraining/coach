@@ -23,6 +23,8 @@ public class CourseResponse implements Serializable {
 	private String createTime;
 	@XmlElement
 	private String endTime;
+	@XmlElement
+	private Integer unassigned = 0;
 	public Long getCourseId() {
 		return courseId;
 	}
@@ -64,6 +66,12 @@ public class CourseResponse implements Serializable {
 	}
 	public void setEndTime(String endTime) {
 		this.endTime = endTime;
+	}
+	public Integer getUnassigned() {
+		return unassigned;
+	}
+	public void setUnassigned(Integer unassigned) {
+		this.unassigned = unassigned;
 	}
 
 	

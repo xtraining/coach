@@ -54,7 +54,7 @@
 	o.id orgId, o.name orgName, oc.status
 	from organization o inner join organization_coach oc on o.id = oc.organizationid 
 	where 
-	oc.coachName = (select c.name from coach c where c.id = #{coachId}) 
+	oc.coachName = (select u.name from coach c inner join tuser u on c.tuserId = u.id  where c.id = #{coachId}) 
 	and oc.idType = (select t.idType from coach c inner join tuser t on c.tuserId = t.id where c.id = #{coachId})
 	and oc.idNumber = (select t.idNumber from coach c inner join tuser t on c.tuserId = t.id where c.id = #{coachId})
 	and oc.status not in (6, 7, 8)

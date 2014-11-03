@@ -1,6 +1,7 @@
 package com.coach.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.coach.model.Course;
 import com.coach.request.GetOrgCourseRequest;
@@ -35,6 +36,8 @@ public interface CourseDao {
 	void deleteCourse(Long coachId, Long courseId);
 
 	List<Course> getUnassignedCourse(Long coachId);
+
+	List<Map<String, Object>> getCourseNum(Long coachId);
 	
 
 }

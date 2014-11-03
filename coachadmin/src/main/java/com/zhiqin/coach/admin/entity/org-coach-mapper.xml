@@ -7,14 +7,27 @@
 		<result column="coachName" jdbcType="VARCHAR" property="coachName" />
 		<result column="idType" jdbcType="INTEGER" property="idType" />
 		<result column="idNumber" jdbcType="VARCHAR" property="idNumber" />
+		<result column="phoneNumber" jdbcType="VARCHAR" property="phoneNumber" />
 		<result column="coachId" jdbcType="BIGINT" property="coachId" />
 		<result column="status" jdbcType="INTEGER" property="status" />
 		<result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="bindCoachId" jdbcType="BIGINT" property="bindCoachId" />
 	</resultMap>
 	
-	<select id="getCoachByOrgId" parameterType="Long" resultMap="CoachDTOResult" >
-		select g.id, g.coachId, g.coachName, g.createTime, g.idType, g.idNumber, g.status
+	<sql id="getOrgCoachCondition">
 		from organization_coach g where g.status != -1 and g.organizationId = #{orgId}
+	</sql>
+	
+	<select id="getTotalNum" parameterType="Map" resultType="Long" >
+		select count(g.id)
+		<include refid="getOrgCoachCondition"/>
+	</select>
+	
+	<select id="getCoachByOrgId" parameterType="Map" resultMap="CoachDTOResult" >
+		select g.id, g.coachId, g.coachName, g.createTime, g.idType, g.idNumber, g.status,
+		(select c.id from coach c inner join tuser u on c.tuserId = u.id and u.status != 1
+		 where g.coachName = u.name and g.idType = u.idType and g.idNumber = u.idNumber)bindCoachId
+		<include refid="getOrgCoachCondition"/>
 		limit ${p.pageNum - 1}, ${p.numPerPage}
 	</select>
 
@@ -34,7 +47,32 @@
 	<select id="getBindCoachById" parameterType="Map" resultMap="CoachDTOResult">
 		select g.id, g.coachName, g.coachId
 		from organization_coach g
-		where g.id = #{orgCoachId} and g.coachId is not null and g.status != -1
+		where g.organizationId = #{orgId} and g.coachId is not null and g.status != -1
+	</select>
+	
+	<sql id = "getUnbindCoachCondition">
+		from organization_coach cc, coach c, tuser u, organization g
+		where cc.idType = u.idType and cc.idNumber = u.idNumber and cc.coachName = u.name
+		and c.tuserId = u.id and cc.status != -1 and u.status != 1 and cc.organizationId = g.id and g.status != 1
+		and cc.coachId is null
+		<if test="searchDto.orgId != null">
+			and cc.organizationId = #{searchDto.orgId}
+		</if>
+		<if test="searchDto.orgName != null and searchDto.orgName != ''">
+			and g.name like '%#{searchDto.orgName}%'
+		</if>
+	</sql>
+	
+	<select id="getUnbindCoachTotalNum" parameterType="Map" resultType="Long">
+		select count(c.id) 
+		<include refid="getUnbindCoachCondition" />
+	</select>
+	
+	<select id="getUnbindCoachList" parameterType="Map" resultMap="CoachDTOResult">
+		select cc.id, c.id coachId, u.name coachName, u.idType, u.idNumber, c.createTime, u.phoneNumber,
+		g.id orgId, g.name orgName
+		<include refid="getUnbindCoachCondition" />
+		limit ${p.pageNum - 1}, ${p.numPerPage}
 	</select>
 	
 	<insert id="createCoach" parameterType="CoachDTO">
@@ -46,5 +84,12 @@
 		update organization_coach set coachName = #{coachName}, idType = #{idType}, idNumber = #{idNumber}, updateTime = now()
 		where id = #{orgCoachId}
 	</update>
+	
+	<update id="updateBindStatus" parameterType="Map">
+		update organization_coach set status = #{status}, coachId = #{coachId}
+		where id = #{orgCoachId}
+	</update>
+	
+	
 
 </mapper>

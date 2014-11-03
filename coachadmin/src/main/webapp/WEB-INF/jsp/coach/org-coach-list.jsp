@@ -72,7 +72,50 @@
 				<td>${item.idNumber}</td>
 				<td>${item.createTime}</td>
 				<td>
-					<a href="${ctx}/coach/org/deleteCoach.htm?orgCoachId=${item.orgCoachId}" target="navTab" title="删除教练" style="color:#00F;">删除教练</a>					  
+					<a href="${ctx}/coach/org/deleteCoach.htm?orgCoachId=${item.orgCoachId}" target="ajaxTodo" title="你确定要删除改教练吗？" style="color:#00F;">删除教练</a>	
+					&nbsp;&nbsp;
+					<c:choose>
+					    <c:when test="${item.coachId == null && item.bindCoachId != null && item.bindCoachId > 0}">
+							<c:choose> 
+		  						<c:when test="${item.status == 0 || item.status == null}"> 
+		  						   <a href="${ctx}/coach/org/updateBindStatus.htm?orgCoachId=${item.orgCoachId}&coachId=${item.bindCoachId}&status=1" target="ajaxTodo" style="color:#00F;">
+		  						            邀请
+		  						   </a>
+		  						</c:when>  
+		  						<c:when test="${item.status == 1}"> 
+		  							<a href="${ctx}/coach/org/updateBindStatus.htm?orgCoachId=${item.orgCoachId}&coachId=${item.bindCoachId}&status=1" target="ajaxTodo" style="color:#00F;">
+		  						          已邀请
+		  						   	</a>
+		  						</c:when>  
+		  						<c:when test="${item.status == 3}"> 
+		  						             教练拒绝
+		  						</c:when> 
+		  						<c:when test="${item.status == 4}"> 
+		  						   	<a href="${ctx}/coach/org/updateBindStatus.htm?orgCoachId=${item.orgCoachId}&coachId=${item.bindCoachId}&status=5" target="ajaxTodo" style="color:#00F;">
+		  						          接受
+		  						   	</a>
+		  						</c:when> 
+		  						<c:when test="${item.status == 6}"> 
+		  						  	  机构拒绝
+		  						</c:when> 
+		  						<c:when test="${item.status == 7}"> 
+		  						   	教练解 绑
+		  						</c:when> 
+		  						<c:when test="${item.status == 8}"> 
+		  						   	 机构解绑
+		  						</c:when>
+		  						<c:otherwise>
+		  							已绑定
+		  						</c:otherwise>
+		  					</c:choose>
+		  				</c:when>
+		  				<c:when test="${item.coachId != null && item.coachId > 0}">
+		  					已绑定
+		  				</c:when>
+		  				<c:otherwise>
+		  				</c:otherwise>
+					</c:choose>	
+								  
 				  </td> 
 			</tr>
 			</c:forEach>

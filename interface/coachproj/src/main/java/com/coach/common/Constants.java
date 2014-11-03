@@ -12,6 +12,9 @@ public class Constants {
 	public static final String MAX_SMS_SIGN_UP_NUM = "max_sms_sign_up_num";
 	public static final String MAX_SMS_RESET_PASSWORD_NUM = "max_sms_reset_password_num";
 	public static final String COACH_AVATAR_PREFIX = "coach_avatar";
+	public static final String READ_FROM_CACHE_SWITCH = "read_from_cache_switch";
+	public static final int COURSE_OFFSET = 5;
+	
 	
 	public enum METHOD {
 		GET_SUBAREA("common.getSubarea"), 
@@ -294,7 +297,7 @@ public class Constants {
 		NONE(0), 
 		COACH_NONE(1), COACH_ACCEPTED(2), COACH_REJECTED(3), 
 		ORG_NONE(4), ORG_ACCEPTED(5), ORG_REJECTED(6), 
-		COACH_UNBIND(7), ORG_UBIND(8);
+		COACH_UNBIND(7), ORG_UBIND(8), DELETED(-1);
 		private int value;
 		private ORG_COACH_STATUS(int value) {
 			this.value = value;

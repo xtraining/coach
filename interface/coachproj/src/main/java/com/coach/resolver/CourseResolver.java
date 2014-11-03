@@ -15,6 +15,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.coach.common.Constants;
 import com.coach.common.Constants.COACH_COURSE_STATUS;
 import com.coach.common.Constants.COURSE_FLAG;
 import com.coach.common.Constants.COURSE_MEMBER_STATUS;
@@ -68,13 +69,14 @@ public class CourseResolver extends BaseResolver implements ICourseResolver{
 			return response;
 		} else {
 			List<Course> list = null;
-			if(type == 1){
-				list = courseDao.getOrgChiefCourse(coachId, 3);
-			} else if(type == 2){
-				list = courseDao.getPersonalChiefCourse(coachId, 3);
+			if(type == 0){
+				list = courseDao.getOrgChiefCourse(coachId, Constants.COURSE_OFFSET);
+			} else if(type == 1){
+				list = courseDao.getPersonalChiefCourse(coachId, Constants.COURSE_OFFSET);
 			} else {
-				list = courseDao.getChiefCourse(coachId, 3);
+				list = courseDao.getChiefCourse(coachId, Constants.COURSE_OFFSET);
 			}
+			List<Map<String, Object>> courseNumberList = courseDao.getCourseNum(coachId);
 			Map<Integer, OrgCourseResponse> map = new HashMap<Integer, OrgCourseResponse>();
 			for(Course c : list){
 				OrgCourseResponse orgC = map.get(c.getOrganizationId());
@@ -88,8 +90,16 @@ public class CourseResolver extends BaseResolver implements ICourseResolver{
 			List<OrgCourseResponse> listValue = new ArrayList<OrgCourseResponse>();
 			Iterator<Integer> it = map.keySet().iterator();  
 		    while (it.hasNext()) {  
-		        Integer key = it.next();  
-		        listValue.add(map.get(key));  
+		        Integer key = it.next(); 
+		        OrgCourseResponse cur = map.get(key);
+		        for(Map<String, Object> courseNumberMap : courseNumberList){
+		        	Long orgId = (Long) courseNumberMap.get("orgId");
+		        	if(orgId.intValue() == key.intValue()){
+		        		cur.setCourseNum(((Long) courseNumberMap.get("courseNum")).intValue());
+		        		break;
+		        	}
+		        }
+		        listValue.add(cur);  
 		    }  
 		    response.setOrgCoureResponseList(listValue);
 		    cachAction.setValue(response);
@@ -158,12 +168,35 @@ public class CourseResolver extends BaseResolver implements ICourseResolver{
 		cc.setStatus(COACH_COURSE_STATUS.ACCEPTED.getValue());
 		coachCourseDao.save(cc);
 		
-		createLessonAndMember(phoneNumberArr, memberNameArr, c);
+		// 私教课程创建时，只创建课程，不创建课时
+		//createLessonAndMember(phoneNumberArr, memberNameArr, c);
+		createCourseMember(phoneNumberArr, memberNameArr, c);
 		ClearCacheAction.clearAddCourseCache(request.getCoachId());
 		return new ConflictLessonResponse();
 	}
+	
+	private void createCourseMember(String[] phoneNumberArr,
+			String[] memberNameArr, Course c) {
+		List<CourseMember> cmList = new ArrayList<CourseMember>();
+		for(int i = 0; i < phoneNumberArr.length; i++){
+			Member m = new Member();
+			m.setPhoneNumber(phoneNumberArr[i]);
+			m.setName(memberNameArr[i]);
+			m.setCode(StringUtils.replace(RopUtils.getUUID(), "-", ""));
+			memberDao.save(m);
+			
+			CourseMember cm = new CourseMember();
+			cm.setCourseId(c.getId());
+			cm.setMemberId(m.getId());
+			cm.setStatus(COURSE_MEMBER_STATUS.ACTIVE.getValue());
+			cmList.add(cm);
+		}
+		if(cmList.size() >0){
+			courseMemberDao.save(cmList);
+		}
+	}
 
-	private void createLessonAndMember(String[] phoneNumberArr,
+	/*private void createLessonAndMember(String[] phoneNumberArr,
 			String[] memberNameArr, Course c) {
 		for(Lesson lesson : c.getLessonList()){
 			lesson.setCourseId(c.getId());
@@ -200,7 +233,7 @@ public class CourseResolver extends BaseResolver implements ICourseResolver{
 		if(c.getLessonList() != null && c.getLessonList().size() > 0 && lmList.size() >0){
 			lessonMemberDao.save(lmList);
 		}
-	}
+	}*/
 	
 	@Override
 	public void updateCourese(UpdateCourseRequest request,
