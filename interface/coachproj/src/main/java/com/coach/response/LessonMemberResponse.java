@@ -22,6 +22,8 @@ public class LessonMemberResponse extends LessonResponse implements Serializable
 	@XmlElement
 	private String startTime;
 	@XmlElement
+	private String lessonName;
+	@XmlElement
 	private List <MemberResponse> memberList;
 	public Integer getTotalNum() {
 		return totalNum;
@@ -64,6 +66,12 @@ public class LessonMemberResponse extends LessonResponse implements Serializable
 	}
 	public void setStartTime(String startTime) {
 		this.startTime = startTime;
+	}
+	public String getLessonName() {
+		return lessonName;
+	}
+	public void setLessonName(String lessonName) {
+		this.lessonName = lessonName;
 	}
 
 	

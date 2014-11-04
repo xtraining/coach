@@ -32,6 +32,7 @@ public class Member extends AbstractBaseModel implements java.io.Serializable {
 	private String description;
 	private String groundName;
 	private Timestamp startTime;
+	private String lessonName;
 	public Long getId() {
 		return this.id;
 	}
@@ -170,6 +171,14 @@ public class Member extends AbstractBaseModel implements java.io.Serializable {
 
 	public Timestamp getStartTime() {
 		return startTime;
+	}
+
+	public String getLessonName() {
+		return lessonName;
+	}
+
+	public void setLessonName(String lessonName) {
+		this.lessonName = lessonName;
 	}
 
 	public void setStartTime(Timestamp startTime) {

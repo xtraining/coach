@@ -12,8 +12,8 @@ import com.coach.utils.HttpUtil;
 import com.rop.utils.RopUtils;
 
 public class LessonServiceTest extends TestCase {
-	public static final String SERVER_URL = "http://localhost:8080/coach/service";
-//	public static final String SERVER_URL = "http://114.215.145.26/coach/service";
+//	public static final String SERVER_URL = "http://localhost:8080/coach/service";
+	public static final String SERVER_URL = "http://114.215.145.26/coach/service";
 	public static final String APP_KEY = "iphone_user";
 	public static final String APP_SECRET = "LlnZA8cql4liN4CvjGL5GfwhCh7fwWGE";
 	public static final String VERSION = "V0.5.0.0";
@@ -53,15 +53,15 @@ public class LessonServiceTest extends TestCase {
         assertTrue(response.indexOf("code") <= 0);
 	}*/
 	
-	/*public void testGetRecentLesson(){
+	public void testGetRecentLesson(){
 		Map <String, String>map = new HashMap<String, String>();
     	map.put("appKey", APP_KEY); //第二个参数为AppKey
     	map.put("method", METHOD.GET_RECENT_LESSON.getValue()); 
     	map.put("v", "1.0");
     	map.put("format", "json");
-    	map.put("sessionId", "CD47C554-2ADF-4713-851A-5FF928C14A39");
-    	map.put("coachId", "7");
-    	map.put("startDate", "2014-02-26");
+    	map.put("sessionId", "111F0FED-5009-4CF6-B63A-0453D08F4212");
+    	map.put("coachId", "22");
+    	map.put("startDate", "2014-11-11");
     	map.put("days", "5");
     	String sign = RopUtils.sign(map, APP_SECRET); //第二个参数为SecretKey, 有O2O系统分配
     	map.put("sign", sign);
@@ -69,7 +69,7 @@ public class LessonServiceTest extends TestCase {
         System.out.println("response = " + response);
         assertNotNull(response);
         assertTrue(response.indexOf("code") <= 0);
-	}*/
+	}
 	
 /*	public void testGetLessonMemberList(){
 		Map <String, String>map = new HashMap<String, String>();
@@ -89,15 +89,15 @@ public class LessonServiceTest extends TestCase {
 	}*/
 	
 	
-	/*public void testGetLessonMember(){
+	public void testGetLessonMember(){
 		Map <String, String>map = new HashMap<String, String>();
     	map.put("appKey", APP_KEY); //第二个参数为AppKey
     	map.put("method", METHOD.GET_LESSON_MEMBER.getValue()); 
     	map.put("v", "1.0");
     	map.put("format", "json");
-    	map.put("sessionId", "CD47C554-2ADF-4713-851A-5FF928C14A39");
-    	map.put("coachId", "7");
-    	map.put("lessonId", "271");
+    	map.put("sessionId", "111F0FED-5009-4CF6-B63A-0453D08F4212");
+    	map.put("coachId", "24");
+    	map.put("lessonId", "1131");
     	String sign = RopUtils.sign(map, APP_SECRET); //第二个参数为SecretKey, 有O2O系统分配
     	map.put("sign", sign);
     	String response = HttpUtil.postServer(SERVER_URL, map);
@@ -105,7 +105,7 @@ public class LessonServiceTest extends TestCase {
         assertNotNull(response);
         assertTrue(response.indexOf("code") <= 0);
 	}
-	*/
+	
 /*	public void testAddPersonal(){
 		Map <String, String>map = new HashMap<String, String>();
     	map.put("appKey", APP_KEY); //第二个参数为AppKey
@@ -130,7 +130,7 @@ public class LessonServiceTest extends TestCase {
         assertTrue(response.indexOf("code") <= 0);
 	}*/
 	
-	public void testAddLesson(){
+	/*public void testAddLesson(){
 		Map <String, String>map = new HashMap<String, String>();
     	map.put("appKey", APP_KEY); //第二个参数为AppKey
     	map.put("method", METHOD.ADD_LESSON.getValue()); 
@@ -154,7 +154,7 @@ public class LessonServiceTest extends TestCase {
         System.out.println("response = " + response);
         assertNotNull(response);
         assertTrue(response.indexOf("code") <= 0);
-	}
+	}*/
 	
 	/*public void testCheckMember(){
 		Map <String, String>map = new HashMap<String, String>();

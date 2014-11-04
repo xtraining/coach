@@ -25,6 +25,7 @@
        <result column="description" jdbcType="VARCHAR" property="description" />
        <result column="groundId" jdbcType="INTEGER" property="groundId" />
        <result column="groundName" jdbcType="VARCHAR" property="groundName" />
+       <result column="orgName" jdbcType="VARCHAR" property="orgName" />
   </resultMap>
   
   <select id="getLessonInRange" parameterType="Map" resultMap="BaseLessonResult">
@@ -46,18 +47,29 @@
   <select id="getLessonDetail" parameterType="Map" resultMap="LessonDetailResult">
     	select s.id, s.name, s.startTime, s.endTime, s.hours, s.description, s.alertSwitch, s.type, 
     	(select count(distinct lm.memberId) from lesson_member lm where lm.lessonId = #{lessonId} and status != 2)memberNum,
-    	s.groundId, s.groundName, s.address
+    	s.groundId, s.groundName, s.address, g.name orgName
 		from course c INNER JOIN coach_course cc on c.id  = cc.courseId
 		INNER JOIN lesson s on c.id = s.courseId
+		left outer join organization g on c.organizationId = g.id
 		where cc.coachId = #{coachId} and s.id = #{lessonId}
   </select>
   
   <select id="getDetailRecentInRange" parameterType="Map" resultMap="LessonDetailResult">
-    	select s.id, s.name, s.startTime, s.endTime, s.hours, s.description, s.alertSwitch, s.type, 
-    	s.groundId, s.groundName, s.address
+   select * from (
+    	select s.id, s.name, s.startTime, s.endTime, s.hours, s.description, s.alertSwitch, s.groundId, s.groundName, s.address,
+    	CASE WHEN c.type = 0 THEN 1
+		WHEN c.type = 1 THEN 2
+		END type
 		from course c INNER JOIN coach_course cc on c.id  = cc.courseId and c.status = 0
 		INNER JOIN lesson s on c.id = s.courseId and s.status = 0
 		where cc.coachId = #{coachId} and s.startTime &gt;= #{startDate} and s.endTime &lt; #{endDate}
+		
+		UNION ALL
+		
+		select s.id, s.name, s.startTime, s.endTime, s.hours, s.description, s.alertSwitch, s.groundId, s.groundName, s.address,
+		3 type
+		from lesson s where s.coachId  = #{coachId} and s.courseId is null and s.status = 0 and s.startTime &gt;= #{startDate} and s.endTime &lt; #{endDate}
+	)aa order by aa.startTime asc
   </select>
   
   <select id="getNewsFlag" parameterType="Integer" resultType="Map">

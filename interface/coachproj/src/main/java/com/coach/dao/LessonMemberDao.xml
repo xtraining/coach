@@ -9,13 +9,14 @@
        <result column="status" jdbcType="INTEGER" property="status" />
        <result column="startTime" jdbcType="TIMESTAMP" property="startTime" />
        <result column="groundName" jdbcType="VARCHAR" property="groundName" />
+       <result column="lessonName" jdbcType="VARCHAR" property="lessonName" />
   </resultMap>
 
   <select id="getLessonMember" parameterType="Long" resultMap="BaseMemberResult">
-    select m.id, m.name, m.phoneNumber, cm.status, s.groundName, s.startTime 
-    from lesson s left outer join lesson_member cm on s.id = cm.lessonId
-    inner join member m on cm.memberId = m.id
-    where cm.status != #{deletedStatus} and cm.lessonId = #{lessonId}
+    select m.id, m.name, m.phoneNumber, cm.status, s.groundName, s.startTime, s.name lessonName
+    from lesson s left outer join lesson_member cm on s.id = cm.lessonId and cm.status != #{deletedStatus}
+    left outer join member m on cm.memberId = m.id
+    where s.id = #{lessonId}
   </select>
   
   

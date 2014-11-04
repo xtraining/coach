@@ -33,6 +33,7 @@ public class Lesson extends AbstractBaseModel implements java.io.Serializable {
 	private String groundName;
 	private Double longitude;
 	private Double latitude;
+	private String orgName;
 	// Constructors
 
 	public Integer getAlertSwitch() {
@@ -79,6 +80,16 @@ public class Lesson extends AbstractBaseModel implements java.io.Serializable {
 	public Timestamp getStartTime() {
 		return this.startTime;
 	}
+
+	public String getOrgName() {
+		return orgName;
+	}
+
+
+	public void setOrgName(String orgName) {
+		this.orgName = orgName;
+	}
+
 
 	public void setStartTime(Timestamp startTime) {
 		this.startTime = startTime;
@@ -217,6 +228,7 @@ public class Lesson extends AbstractBaseModel implements java.io.Serializable {
 		r.setStartTime(DateUtils.dateToyyyyMMddHHmiss(getStartTime()));
 		r.setEndTime(DateUtils.dateToyyyyMMddHHmiss(getEndTime()));
 		r.setType(getType());
+		r.setOrgName(getOrgName());
 		r.setRemarks(getDescription());
 		r.setAlertSwitch(alertSwitch);
 		r.setMemberNum(memberNum);

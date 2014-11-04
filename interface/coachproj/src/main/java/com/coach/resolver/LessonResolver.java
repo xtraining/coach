@@ -119,7 +119,6 @@ public class LessonResolver extends BaseResolver implements ILessonResolver{
 			return response;
 		}
 	}
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<LessonDetailResponse> getRecentLessonDetail(
 			GetRecentLessonRequest request) {
@@ -176,22 +175,33 @@ public class LessonResolver extends BaseResolver implements ILessonResolver{
 			List<MemberResponse> mList = new ArrayList<MemberResponse>();
 			int attendNum = 0;
 			int absentNum = 0;
+			boolean hasMember = false;
 			for(Member m :list){
 				if(mList.size() == 0){
+					response.setLessonName(m.getLessonName());
 					response.setGroundName(m.getGroundName());
 					response.setStartTime(DateUtils.dateToyyyyMMddHHmiss(m.getStartTime()));
 				}
 				MemberResponse r = m.toResponse();
 				mList.add(r);
-				if(m.getStatus() == 0){
-					absentNum++;
-				}else {
-					attendNum++;
+				if(r.getMemberId() != null && r.getMemberId() > 0){
+					hasMember = true;
+					if(m.getStatus() == 0){
+						absentNum++;
+					}else {
+						attendNum++;
+					}
 				}
 			}
-			response.setAbsentNum(absentNum);
-			response.setAttendNum(attendNum);
-			response.setTotalNum(list.size());
+			if(hasMember){
+				response.setAbsentNum(absentNum);
+				response.setAttendNum(attendNum);
+				response.setTotalNum(list.size());
+			} else {
+				response.setAbsentNum(0);
+				response.setAttendNum(0);
+				response.setTotalNum(0);
+			}
 			response.setMemberList(mList);
 			response.setLessonId(lessonId);
 			cacheAction.setValue(response);

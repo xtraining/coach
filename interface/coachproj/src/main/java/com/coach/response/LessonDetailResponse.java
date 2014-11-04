@@ -23,6 +23,8 @@ public class LessonDetailResponse extends LessonResponse implements Serializable
 	private String address;
 	@XmlElement
 	private Float hours;
+	@XmlElement
+	private String orgName;
 	public String getGroundName() {
 		return groundName;
 	}
@@ -64,6 +66,12 @@ public class LessonDetailResponse extends LessonResponse implements Serializable
 	}
 	public void setHours(Float hours) {
 		this.hours = hours;
+	}
+	public String getOrgName() {
+		return orgName;
+	}
+	public void setOrgName(String orgName) {
+		this.orgName = orgName;
 	}
 
 	
