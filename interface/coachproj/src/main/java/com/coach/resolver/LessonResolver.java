@@ -234,6 +234,7 @@ public class LessonResolver extends BaseResolver implements ILessonResolver{
 		Date startDate = DateUtils.getFirstDayOfWeek(DateUtils.yyyyMMddHHmmssToTimestamp(request.getStartTime()));
 		Date endDate = DateUtils.addDay(startDate, 8);
 		CacheAction<List<LessonResponse>> cacheAction = new OneWeekLessonCacheAction(request.getCoachId(), startDate, endDate);
+		return;
 		cacheAction.clear();
 	}
 	

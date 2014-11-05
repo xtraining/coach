@@ -48,11 +48,16 @@ public class MemberResolver extends BaseResolver implements IMemberResolver{
 		List<Member> memberList = memberDao.getMemberWithAttendHistory(coachId, courseId, memberId);
 		MemberDetailResponse r = null;
 		List<String> attendHistory = new ArrayList<String>();
-		for(Member m : memberList){
-			if(r == null){
-				r = m.toMemberDetailResponse();
+		if(memberList != null && memberList.size() > 0){
+			for(Member m : memberList){
+				if(r == null){
+					r = m.toMemberDetailResponse();
+				}
+				attendHistory.add(DateUtils.dateToyyyyMMdd(m.getDate()));
 			}
-			attendHistory.add(DateUtils.dateToyyyyMMdd(m.getDate()));
+		} else {
+			Member m = memberDao.getMemberByCourseIdAndMemberId(courseId, memberId);
+			r = m.toMemberDetailResponse();
 		}
 		r.setAttendHistory(attendHistory);
 		return r;

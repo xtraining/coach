@@ -29,5 +29,7 @@ public interface MemberDao {
 
 	public void updateMemberStatus(Long memberId, Long courseId, Integer status);
 
+	public Member getMemberByCourseIdAndMemberId(Long courseId, Long memberId);
+
 
 }

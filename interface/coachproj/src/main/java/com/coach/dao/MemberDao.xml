@@ -17,7 +17,7 @@
        <result column="status" jdbcType="INTEGER" property="status" />
        <result column="attendNum" jdbcType="INTEGER" property="attendNum" />
        <result column="lessonNum" jdbcType="INTEGER" property="courseTotalNum" />
-        <result column="courseType" jdbcType="INTEGER" property="courseType" />
+       <result column="courseType" jdbcType="INTEGER" property="courseType" />
        <result column="date" jdbcType="TIMESTAMP" property="date" />
   </resultMap>
 
@@ -28,7 +28,7 @@
   
   <select id="getMemberByCoachId" parameterType="Map" resultMap="DetailMemberResult">
     select c.id courseId, c.name courseName, c.type courseType, 
-	(select count(distinct cm.memberId) from course_member cm where c.id = cm.courseId and cm.status = #{cmActiveStatus}) memberNum, 
+	(select count(distinct cm.memberId) from course_member cm where c.id = cm.courseId and cm.status != #{cmDeletedStatus}) memberNum, 
 	c.createTime date
 	from 
 	coach ch INNER JOIN coach_course cc on ch.id = cc.coachId
@@ -62,7 +62,7 @@
   </select>
   
   <select id="getMemberWithAttendHistory" parameterType="Map" resultMap="DetailMemberResult">
-    select m.id, m.name, m.phoneNumber, s.startTime date, m.gender, cm.status
+    select m.id, m.name, m.phoneNumber, s.startTime date, ifnull(m.gender, 2)gender, cm.status, c.name courseName
 	from 
 	coach_course cc INNER JOIN course c on cc.courseId = c.id
 	INNER JOIN course_member cm on c.id = cm.courseId 
@@ -71,6 +71,14 @@
 	INNER JOIN lesson_member lm on lm.lessonId = s.id
 	where cc.coachId = #{coachId} and c.id = #{courseId} and m.id = #{memberId} and lm.status = #{attendStatus} and lm.memberId = #{memberId}
 	order by s.startTime asc
+  </select>
+  
+  <select id="getMemberByCourseIdAndMemberId" parameterType="Map" resultMap="DetailMemberResult">
+    select m.id, m.name, m.phoneNumber, null date, ifnull(m.gender, 2)gender, cm.status, c.name courseName
+	from 
+	course c INNER JOIN course_member cm on c.id = cm.courseId 
+	INNER JOIN member m on cm.memberId = m.id
+	where c.id = #{courseId} and m.id = #{memberId} 
   </select>
   
   <insert id="insertMember" useGeneratedKeys="true" keyProperty="id" parameterType="com.coach.model.Member">

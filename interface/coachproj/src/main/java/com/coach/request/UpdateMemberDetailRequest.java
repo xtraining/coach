@@ -48,6 +48,7 @@ public class UpdateMemberDetailRequest extends CoachBaseRequest{
 		m.setId(getMemberId());
 		m.setName(getMemberName());
 		m.setPhoneNumber(getPhoneNumber());
+		m.setGender(getGender());
 		return m;
 	}
 

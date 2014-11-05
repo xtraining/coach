@@ -203,6 +203,7 @@ public class Member extends AbstractBaseModel implements java.io.Serializable {
 		r.setStatus(status);
 		r.setTotalNum(courseTotalNum);
 		r.setGender(gender);
+		r.setCourseName(courseName);
 		return r;
 	}
 

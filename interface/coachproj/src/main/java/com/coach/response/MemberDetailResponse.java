@@ -16,6 +16,8 @@ public class MemberDetailResponse extends MemberResponse implements Serializable
 	@XmlElement
 	private Integer gender;
 	@XmlElement
+	private String courseName;
+	@XmlElement
 	private List<String> attendHistory;
 	public Integer getAttendNum() {
 		return attendNum;
@@ -40,6 +42,12 @@ public class MemberDetailResponse extends MemberResponse implements Serializable
 	}
 	public void setGender(Integer gender) {
 		this.gender = gender;
+	}
+	public String getCourseName() {
+		return courseName;
+	}
+	public void setCourseName(String courseName) {
+		this.courseName = courseName;
 	}
 	
 }
