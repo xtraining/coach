@@ -315,6 +315,7 @@ public class LessonResolver extends BaseResolver implements ILessonResolver{
 				response.setWording(sys.getValue());
 			}
 		}*/
+		response.setWording("您获得了封神级称号！");
 		return response;
 	}
 	private List<String> getLatest4Month() {

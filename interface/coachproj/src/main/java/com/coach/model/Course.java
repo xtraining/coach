@@ -272,7 +272,9 @@ public class Course extends AbstractBaseModel implements java.io.Serializable {
 		c.setRecycleDay(recycleDay);
 		c.setRemarks(remarks);
 		c.setStartTime(DateUtils.dateToyyyyMMddHHmiss(startTime));
+		c.setEndTime(DateUtils.dateToyyyyMMddHHmiss(endTime));
 		c.setMemberNum(memberNum);
+		c.setExpiryDate(DateUtils.dateToyyyyMMdd(expiryDate));
 		return c;
 	}
 

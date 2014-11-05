@@ -31,6 +31,8 @@ public class CourseDetailResponse extends CourseResponse {
 	private List<MemberResponse> memberList = new ArrayList<MemberResponse>();
 	@XmlElement
 	private String remarks;
+	@XmlElement
+	private String expiryDate;
 	public String getGroundName() {
 		return groundName;
 	}
@@ -90,6 +92,12 @@ public class CourseDetailResponse extends CourseResponse {
 	}
 	public void setMemberNum(Long memberNum) {
 		this.memberNum = memberNum;
+	}
+	public String getExpiryDate() {
+		return expiryDate;
+	}
+	public void setExpiryDate(String expiryDate) {
+		this.expiryDate = expiryDate;
 	}
 
 }
