@@ -9,6 +9,7 @@
        <result column="endTime" jdbcType="TIMESTAMP" property="endTime" />
        <result column="status" jdbcType="INTEGER" property="cooachCourseStatus" /> 
        <result column="createTime" jdbcType="TIMESTAMP" property="cooachCourseTime" /> 
+       <result column="unassigned" jdbcType="INTEGER" property="unassigned" /> 
   </resultMap>
    
    <resultMap id="DetailCourseResult" type="com.coach.model.Course">
@@ -36,7 +37,8 @@
   
   <sql id="getOrgChiefCourseSql">
    	select * from (
-		select o.id orgId, o.name orgName, c.id, c.name, c.endTime from coach ch inner join coach_course cc on ch.id = cc.coachId and ch.id = #{coachId} and cc.status = #{acceptedStatus}
+		select o.id orgId, o.name orgName, c.id, c.name, c.endTime, 0 as unassigned
+		from coach ch inner join coach_course cc on ch.id = cc.coachId and ch.id = #{coachId} and cc.status = #{acceptedStatus}
 		inner join course c on cc.courseId = c.id and c.type = #{orgType} and c.status = #{courseStatus}
 		inner join organization o on c.organizationId = o.id
 		inner join organization_coach oc on o.id = oc.organizationId and oc.coachId = ch.id and oc.status in <foreach collection="bindStatus" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>  
@@ -52,7 +54,9 @@
   
   <sql id="getPersonalChiefCourseSql">
  	 select * from (
-		select -1 orgId, '个人' orgName, c.id, c.name, c.endTime 
+		select -1 orgId, '个人' orgName, c.id, c.name, c.endTime, 
+		CASE WHEN c.courseHour - ifnull((select sum(s.hours) lessonHour from lesson s where s.courseId = c.id and s.status = #{lessonActiveStatus}), 0) > 0.1 THEN 1 
+		ELSE 0 END unassigned
 		from coach ch inner join coach_course cc on ch.id = cc.coachId and ch.id = #{coachId} and cc.status = #{acceptedStatus}
 		inner join course c on cc.courseId = c.id and c.type = #{personalType} and c.status = #{courseStatus}
 		order by c.endTime limit #{maxNum})c
@@ -82,6 +86,15 @@
 		WHERE o.id = #{orgId}
 		order by c.endTime desc
 		limit #{pageNumber}, #{pageSize}
+  </select>
+  
+  <select id="getMorePersonalCourse" parameterType="Map" resultMap="BaseCourseResult">
+		select -1 orgId, '个人' orgName, c.id, c.name, c.endTime, 
+		CASE WHEN c.courseHour - ifnull((select sum(s.hours) lessonHour from lesson s where s.courseId = c.id and s.status = #{lessonActiveStatus}), 0) > 0.1 THEN 1 
+		ELSE 0 END unassigned
+		from coach ch inner join coach_course cc on ch.id = cc.coachId and ch.id = #{coachId} and cc.status = #{acceptedStatus}
+		inner join course c on cc.courseId = c.id and c.type = #{personalType} and c.status = #{courseStatus}
+		order by c.endTime limit #{pageNumber}, #{pageSize}
   </select>
   
   <select id="getPersonalCourse" parameterType="Map" resultMap="PersonalCourseResult">
@@ -134,11 +147,10 @@
   </select>
   
   <select id="getCourseNum" parameterType="Map" resultType="Map">
-		select ifnull(o.id, -1) orgId, count(*)courseNum
+		select c.type, count(*)courseNum
 		from coach ch inner join coach_course cc on ch.id = cc.coachId and ch.id = #{coachId} and cc.status = #{acceptedStatus}
 		inner join course c on cc.courseId = c.id and c.status = #{courseStatus}
-		left outer join organization o on c.organizationId = o.id
-		group by o.id
+		group by c.type
   </select>
    
    <update id="deleteCourse" parameterType="Map">

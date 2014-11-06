@@ -93,8 +93,8 @@ public class CourseResolver extends BaseResolver implements ICourseResolver{
 		        Integer key = it.next(); 
 		        OrgCourseResponse cur = map.get(key);
 		        for(Map<String, Object> courseNumberMap : courseNumberList){
-		        	Long orgId = (Long) courseNumberMap.get("orgId");
-		        	if(orgId.intValue() == key.intValue()){
+		        	Integer courseType = (Integer) courseNumberMap.get("type");
+		        	if(cur.getType() == courseType.intValue()){
 		        		cur.setCourseNum(((Long) courseNumberMap.get("courseNum")).intValue());
 		        		break;
 		        	}
@@ -117,6 +117,17 @@ public class CourseResolver extends BaseResolver implements ICourseResolver{
 		}
 		return response;
 	}
+	
+	@Override
+	public List<CourseResponse> getPersonalCourse(GetOrgCourseRequest request) {
+		List<Course> list = courseDao.getPersonalCourse(request);
+		List<CourseResponse> response = new ArrayList<CourseResponse>();
+		for(Course c : list){
+			response.add(c.toCourseResonse());
+		}
+		return response;
+	}
+
 
 
 	public int checkNewCourse(Long coachId) {
@@ -256,10 +267,8 @@ public class CourseResolver extends BaseResolver implements ICourseResolver{
 				return new CourseDetailResponse();
 			}
 			response = c.toDetailResponse();
-//			List<Member> list = memberDao.getMemberByCourseId(courseId);
-//			for(Member m : list){
-//				response.getMemberList().add(m.toResponse());
-//			}
+			List<MemberResponse> list = getCourseMember(coachId, courseId);
+			response.setMemberList(list);
 			cachAction.setValue(response);
 			return response;
 		}

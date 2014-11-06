@@ -38,6 +38,8 @@ public interface CourseDao {
 	List<Course> getUnassignedCourse(Long coachId);
 
 	List<Map<String, Object>> getCourseNum(Long coachId);
+
+	List<Course> getPersonalCourse(GetOrgCourseRequest request);
 	
 
 }

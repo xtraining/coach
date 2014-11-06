@@ -53,7 +53,7 @@ public class LessonServiceTest extends TestCase {
         assertTrue(response.indexOf("code") <= 0);
 	}*/
 	
-	public void testGetRecentLesson(){
+	/*public void testGetRecentLesson(){
 		Map <String, String>map = new HashMap<String, String>();
     	map.put("appKey", APP_KEY); //第二个参数为AppKey
     	map.put("method", METHOD.GET_RECENT_LESSON.getValue()); 
@@ -69,7 +69,7 @@ public class LessonServiceTest extends TestCase {
         System.out.println("response = " + response);
         assertNotNull(response);
         assertTrue(response.indexOf("code") <= 0);
-	}
+	}*/
 	
 /*	public void testGetLessonMemberList(){
 		Map <String, String>map = new HashMap<String, String>();
@@ -89,7 +89,7 @@ public class LessonServiceTest extends TestCase {
 	}*/
 	
 	
-	public void testGetLessonMember(){
+/*	public void testGetLessonMember(){
 		Map <String, String>map = new HashMap<String, String>();
     	map.put("appKey", APP_KEY); //第二个参数为AppKey
     	map.put("method", METHOD.GET_LESSON_MEMBER.getValue()); 
@@ -104,7 +104,7 @@ public class LessonServiceTest extends TestCase {
         System.out.println("response = " + response);
         assertNotNull(response);
         assertTrue(response.indexOf("code") <= 0);
-	}
+	}*/
 	
 /*	public void testAddPersonal(){
 		Map <String, String>map = new HashMap<String, String>();
@@ -174,23 +174,23 @@ public class LessonServiceTest extends TestCase {
         assertTrue(response.indexOf("code") <= 0);
 	}*/
 	
-	/*public void testGetCheckLesson(){
+	public void testGetCheckLesson(){
 		Map <String, String>map = new HashMap<String, String>();
     	map.put("appKey", APP_KEY); //第二个参数为AppKey
     	map.put("method", METHOD.GET_CHECK_LESSON.getValue()); 
     	map.put("v", "1.0");
     	map.put("format", "json");
-    	map.put("sessionId", "CD47C554-2ADF-4713-851A-5FF928C14A39");
+    	map.put("sessionId", "111F0FED-5009-4CF6-B63A-0453D08F4212");
     	map.put("pageNumber", 1+"");
     	map.put("pageSize", 10+"");
-    	map.put("coachId", "7");
+    	map.put("coachId", "22");
     	String sign = RopUtils.sign(map, APP_SECRET); //第二个参数为SecretKey, 有O2O系统分配
     	map.put("sign", sign);
     	String response = HttpUtil.postServer(SERVER_URL, map);
         System.out.println("response = " + response);
         assertNotNull(response);
         assertTrue(response.indexOf("code") <= 0);
-	}*/
+	}
 	
 /*	public void testDeleteLesson(){
 		Map <String, String>map = new HashMap<String, String>();

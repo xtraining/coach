@@ -109,7 +109,7 @@
 	from coach_course cc INNER JOIN course c on cc.courseId = c.id and cc.status = #{acceptedStatus} and c.status = #{courseActiveStatus}
 	INNER JOIN lesson s on s.courseId = c.id and s.status = #{lessonActiveStatus}
 	where cc.coachId = #{coachId} and s.startTime >= #{startDate} and s.checkFlag = #{lessonCheckedFlag}
-	order by date desc  
+	order by s.startTime desc  
 	limit #{pageNumber}, #{pageSize}
   </select>
   

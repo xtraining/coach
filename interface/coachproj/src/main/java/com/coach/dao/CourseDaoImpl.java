@@ -66,6 +66,7 @@ public class CourseDaoImpl extends SqlSessionDaoSupport implements CourseDao{
 		map.put("bindStatus", Arrays.asList(ORG_COACH_STATUS.COACH_ACCEPTED.getValue(), ORG_COACH_STATUS.ORG_ACCEPTED.getValue()));
 		map.put("orgType", COURSE_TYPE.ORG.getValue());
 		map.put("personalType", COURSE_TYPE.PERSONAL.getValue());
+		map.put("lessonActiveStatus", LESSON_STATUS.ACTIVE.getValue());
 		return map;
 	}
 	
@@ -145,6 +146,26 @@ public class CourseDaoImpl extends SqlSessionDaoSupport implements CourseDao{
 			return this.getSqlSession().selectList("getOrgCourse", map);
 		} catch (RuntimeException re) {
 			log.error("getOrgCourse", re);
+			throw re;
+		}
+	}
+	
+	@Override
+	public List<Course> getPersonalCourse(GetOrgCourseRequest request) {
+		try{
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("coachId", request.getCoachId());
+			map.put("acceptedStatus", COACH_COURSE_STATUS.ACCEPTED.getValue());
+			map.put("courseStatus", COURSE_STATUS.ACTIVE.getValue());
+			map.put("personalType", COURSE_TYPE.PERSONAL.getValue());
+			map.put("lessonActiveStatus", LESSON_STATUS.ACTIVE.getValue());
+			int pageNumber = request.getPageNumber();
+			int pageSize = request.getPageSize();
+			map.put("pageNumber", (pageNumber-1) * pageSize + Constants.COURSE_OFFSET); //5 是默认显示的偏移量
+			map.put("pageSize", pageSize);
+			return this.getSqlSession().selectList("getMorePersonalCourse", map);
+		} catch (RuntimeException re) {
+			log.error("getMorePersonalCourse", re);
 			throw re;
 		}
 	}

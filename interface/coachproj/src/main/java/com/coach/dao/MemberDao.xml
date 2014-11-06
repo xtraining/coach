@@ -23,7 +23,7 @@
 
   <select id="getMemberByCourseId" parameterType="Map" resultMap="BaseMemberResult">
     select m.id, m.name, m.phoneNumber from course_member cm inner join member m on cm.memberId = m.id
-    where cm.status = #{status} and cm.courseId = #{courseId}
+    where cm.status != #{status} and cm.courseId = #{courseId}
   </select>
   
   <select id="getMemberByCoachId" parameterType="Map" resultMap="DetailMemberResult">
@@ -38,14 +38,14 @@
   
   <select id="getMemberByCoachIdAndKeyword" parameterType="Map" resultMap="DetailMemberResult">
     select m.id, m.name, m.phoneNumber, c.id courseId, c.name courseName, cm.status, c.type courseType, 
-    (select count(distinct cm.memberId) from course_member cm where c.id = cm.courseId and cm.status = #{cmActiveStatus}) memberNum, 
+    (select count(distinct cm.memberId) from course_member cm where c.id = cm.courseId and cm.status != #{cmDeletedStatus}) memberNum, 
 	(select count(s.id) from lesson s INNER JOIN lesson_member lm on s.id = lm.lessonId 
 	 where s.courseId = c.id and lm.status = #{attendStatus} and lm.memberId = m.id) attendNum, 
 	lessonNum, c.createTime date
 	from 
 	coach ch INNER JOIN coach_course cc on ch.id = cc.coachId
 	INNER JOIN course c on cc.courseId = c.id and c.status = #{courseActiveStatus}
-	INNER JOIN course_member cm on c.id = cm.courseId and cm.status = #{cmActiveStatus}
+	INNER JOIN course_member cm on c.id = cm.courseId and cm.status != #{cmDeletedStatus}
 	INNER JOIN member m on cm.memberId = m.id
 	where ch.id = #{coachId} and (lower(m.name) like #{keyword} or m.phoneNumber like #{keyword})
   </select>
@@ -69,7 +69,8 @@
 	INNER JOIN member m on cm.memberId = m.id
 	INNER JOIN lesson s on s.courseId = c.id
 	INNER JOIN lesson_member lm on lm.lessonId = s.id
-	where cc.coachId = #{coachId} and c.id = #{courseId} and m.id = #{memberId} and lm.status = #{attendStatus} and lm.memberId = #{memberId}
+	where cc.coachId = #{coachId} and c.id = #{courseId} and m.id = #{memberId} and lm.status = #{attendStatus} 
+	and lm.memberId = #{memberId}
 	order by s.startTime asc
   </select>
   

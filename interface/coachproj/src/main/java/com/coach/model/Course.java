@@ -41,6 +41,9 @@ public class Course extends AbstractBaseModel implements java.io.Serializable {
 	private Integer groundId;
 	private Integer status;
 	private Long memberNum;
+	private Double longitude;
+	private Double latitude;
+	private Integer unassigned;
 	private List<Lesson> lessonList = new ArrayList<Lesson>();
 	private Integer flag;
 	
@@ -60,6 +63,22 @@ public class Course extends AbstractBaseModel implements java.io.Serializable {
 	}
 	public Long getId() {
 		return this.id;
+	}
+
+	public Double getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(Double longitude) {
+		this.longitude = longitude;
+	}
+
+	public Double getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(Double latitude) {
+		this.latitude = latitude;
 	}
 
 	public Integer getStatus() {
@@ -256,11 +275,15 @@ public class Course extends AbstractBaseModel implements java.io.Serializable {
 		c.setStatus(cooachCourseStatus);
 		c.setCreateTime(DateUtils.dateToyyyyMMddHHmiss(cooachCourseTime));
 		c.setEndTime(DateUtils.dateToyyyyMMddHHmiss(endTime));
+		c.setUnassigned(unassigned);
 		return c;
 	}
 	public CourseDetailResponse toDetailResponse() {
 		CourseDetailResponse c = new CourseDetailResponse();
 		c.setCourseId(id);
+		c.setType(type);
+		c.setLatitude(latitude);
+		c.setLongitude(longitude);
 		c.setCourseName(name);
 		c.setStatus(cooachCourseStatus);
 		c.setCreateTime(DateUtils.dateToyyyyMMddHHmiss(cooachCourseTime));

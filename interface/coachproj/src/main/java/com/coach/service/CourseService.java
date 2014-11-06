@@ -52,7 +52,12 @@ public class CourseService extends SimpleBaseService{
 		if(request.getPageSize() == null || request.getPageSize() <= 0 || request.getPageSize() > 100){
 			request.setPageSize(Constants.DEFAULT_PAGE_SIZE);
 		}
-		List<CourseResponse> r = courseResolver.getOrgCourse(request);
+		List<CourseResponse> r = null;
+		if(request.getOrgId() == -1){
+			r = courseResolver.getPersonalCourse(request);
+		} else {
+			r = courseResolver.getOrgCourse(request);
+		}
 		return r;
 	}
 	

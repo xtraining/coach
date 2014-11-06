@@ -55,4 +55,6 @@ public interface ICourseResolver {
 
 	public List<CourseResponse> getUnassignedCourse(CoachBaseRequest request);
 
+	public List<CourseResponse> getPersonalCourse(GetOrgCourseRequest request);
+
 }

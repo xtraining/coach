@@ -37,8 +37,27 @@ public class AddCourseRequest extends CoachBaseRequest{
 	private String phoneNumberList;
 	@NotNull
 	private String memberNameList;
+	private Double longitude;
+	private Double latitude;
 	private String remarks;
 	private Integer alterSwitch;
+	
+	public Double getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(Double longitude) {
+		this.longitude = longitude;
+	}
+
+	public Double getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(Double latitude) {
+		this.latitude = latitude;
+	}
+
 	public Integer getAlterSwitch() {
 		return this.alterSwitch;
 	}
