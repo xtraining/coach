@@ -236,6 +236,9 @@ public class Lesson extends AbstractBaseModel implements java.io.Serializable {
 		r.setGroundId(groundId);
 		r.setGroundName(groundName);
 		r.setHours(hours);
+		r.setLatitude(latitude);
+		r.setLongitude(longitude);
+		r.setDescription(description);
 		return r;
 	}
 

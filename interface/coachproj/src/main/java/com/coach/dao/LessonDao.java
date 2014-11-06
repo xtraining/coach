@@ -40,5 +40,7 @@ public interface LessonDao {
 
 	public void updateLessonStatus(Long lessonId, LESSON_STATUS deleted);
 
+	public Lesson getLifeDetail(Long coachId, Long lessonId);
+
 
 }

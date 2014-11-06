@@ -65,7 +65,7 @@ public class LessonDaoImpl extends SqlSessionDaoSupport implements LessonDao{
 			map.put("lessonId", lessonId);
 			return this.getSqlSession().selectOne("getLessonDetail", map);
 		} catch(Throwable e){
-			log.error("getNewsFlag", e);
+			log.error("getLessonDetail", e);
 			throw new RuntimeException(e);
 		}
 	}
@@ -191,5 +191,18 @@ public class LessonDaoImpl extends SqlSessionDaoSupport implements LessonDao{
 		}
 		
 		
+	}
+
+	@Override
+	public Lesson getLifeDetail(Long coachId, Long lessonId) {
+		try{
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("coachId", coachId);
+			map.put("lessonId", lessonId);
+			return this.getSqlSession().selectOne("getLifeDetail", map);
+		} catch(Throwable e){
+			log.error("getLifeDetail", e);
+			throw new RuntimeException(e);
+		}
 	}
 }

@@ -107,15 +107,22 @@ public class LessonResolver extends BaseResolver implements ILessonResolver{
 		return response;
 	}
 	@Override
-	public LessonDetailResponse getLessonDetail(Long coachId, Long lessonId) {
+	public LessonDetailResponse getLessonDetail(Integer type, Long coachId, Long lessonId) {
 		CacheAction<LessonDetailResponse> cacheAction = new LessonDetailCacheAction(coachId, lessonId);
 		LessonDetailResponse response = cacheAction.getValue();
 		if(response != null){
 			return response;
 		} else {
-			Lesson lesson = lessonDao.getLessonDetail(coachId, lessonId);
-			response = lesson.toDetailResponse();
-			cacheAction.setValue(response);
+			Lesson lesson = null;
+			if(type == null || type == 0){
+				lesson = lessonDao.getLessonDetail(coachId, lessonId);
+			} else {
+				lesson = lessonDao.getLifeDetail(coachId, lessonId);
+			}
+			if(lesson != null){
+				response = lesson.toDetailResponse();
+				cacheAction.setValue(response);
+			}
 			return response;
 		}
 	}

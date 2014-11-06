@@ -22,6 +22,12 @@ public class LessonDetailResponse extends LessonResponse implements Serializable
 	@XmlElement
 	private String address;
 	@XmlElement
+	private String description;
+	@XmlElement
+	private Double latitude;
+	@XmlElement
+	private Double longitude;
+	@XmlElement
 	private Float hours;
 	@XmlElement
 	private String orgName;
@@ -72,6 +78,24 @@ public class LessonDetailResponse extends LessonResponse implements Serializable
 	}
 	public void setOrgName(String orgName) {
 		this.orgName = orgName;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public Double getLatitude() {
+		return latitude;
+	}
+	public void setLatitude(Double latitude) {
+		this.latitude = latitude;
+	}
+	public Double getLongitude() {
+		return longitude;
+	}
+	public void setLongitude(Double longitude) {
+		this.longitude = longitude;
 	}
 
 	

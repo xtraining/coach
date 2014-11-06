@@ -21,7 +21,7 @@ public interface ILessonResolver {
 
 	WeekLessonResponse getOneWeekLesson(Long coachId, String date);
 
-	LessonDetailResponse getLessonDetail(Long coachId, Long lessonId);
+	LessonDetailResponse getLessonDetail(Integer type, Long coachId, Long lessonId);
 
 	List<LessonDetailResponse> getRecentLessonDetail(
 			GetRecentLessonRequest request);

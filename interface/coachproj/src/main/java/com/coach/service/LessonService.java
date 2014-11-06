@@ -39,7 +39,7 @@ public class LessonService extends SimpleBaseService{
 	
 	@ServiceMethod(method = "lesson.getLessonDetail", version = "1.0", needInSession = NeedInSessionType.YES)
     public Object getLessonDetail(GetLessonDetailRequest request) {
-		LessonDetailResponse r = lessonResolver.getLessonDetail(request.getCoachId(), request.getLessonId());
+		LessonDetailResponse r = lessonResolver.getLessonDetail(request.getType(), request.getCoachId(), request.getLessonId());
 		return r;
 	}
 	
