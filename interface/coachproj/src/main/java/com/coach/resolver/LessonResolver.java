@@ -336,6 +336,7 @@ public class LessonResolver extends BaseResolver implements ILessonResolver{
 			lr.setLessonId(s.getId());
 			lr.setName(s.getName());
 			lr.setHours(s.getHours());
+			lr.setType(s.getType());
 			lr.setStartTime(DateUtils.dateToyyyyMMddHHmiss(s.getStartTime()));
 			response.add(lr);
 		}
