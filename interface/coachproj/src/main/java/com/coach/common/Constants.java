@@ -63,6 +63,8 @@ public class Constants {
 		GET_CHECK_LESSON("lesson.getCheckLesson"), 
 		GET_LESSON_MEMBER_LIST("lesson.getLessonMemberList"), 
 		DELETE_LESSON("lesson.deleteLesson"), 
+		UPDATE_LESSON("lesson.updateLesson"), 
+		UPDATE_LIFE("lesson.updateLife"),
 		
 		STUDENT_SEARCH_MEMBER("student.searchMember"),
 		STUDENT_GET_COURSE_LIST("student.getCourseList"),

@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
-import javax.xml.bind.annotation.XmlElement;
 
 import com.coach.common.Constants;
 import com.coach.request.AddLessonRequest;
@@ -14,6 +13,8 @@ import com.coach.request.GetCheckLessonRequest;
 import com.coach.request.GetLessonDetailRequest;
 import com.coach.request.GetOneWeekLessonRequest;
 import com.coach.request.GetRecentLessonRequest;
+import com.coach.request.UpdateLessonRequest;
+import com.coach.request.UpdateLifeRequest;
 import com.coach.resolver.ICourseResolver;
 import com.coach.resolver.ILessonResolver;
 import com.coach.response.LessonDetailResponse;
@@ -81,9 +82,21 @@ public class LessonService extends SimpleBaseService{
 		}
 	}
 	
+	@ServiceMethod(method = "lesson.updateLesson", version = "1.0", needInSession = NeedInSessionType.YES)
+    public Object updateLesson(UpdateLessonRequest request) {
+		lessonResolver.updateLesson(request);
+		return new SimpleResponse();
+	}
+	
 	@ServiceMethod(method = "lesson.addPersonal", version = "1.0", needInSession = NeedInSessionType.YES)
     public Object addPersonal(AddPersonalRequest request) {
 		lessonResolver.addPersonal(request);
+		return new SimpleResponse();
+	}
+	
+	@ServiceMethod(method = "lesson.updateLife", version = "1.0", needInSession = NeedInSessionType.YES)
+    public Object updateLife(UpdateLifeRequest request) {
+		lessonResolver.updateLife(request);
 		return new SimpleResponse();
 	}
 	

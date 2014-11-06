@@ -8,6 +8,8 @@ import java.util.Map;
 import com.coach.common.Constants.LESSON_STATUS;
 import com.coach.model.Lesson;
 import com.coach.request.GetCheckLessonRequest;
+import com.coach.request.UpdateLessonRequest;
+import com.coach.request.UpdateLifeRequest;
 
 
 
@@ -41,6 +43,12 @@ public interface LessonDao {
 	public void updateLessonStatus(Long lessonId, LESSON_STATUS deleted);
 
 	public Lesson getLifeDetail(Long coachId, Long lessonId);
+
+	public void updateLesson(UpdateLessonRequest request, Date startTime,
+			Date endTime);
+
+	public void updateLife(UpdateLifeRequest request, Date startTime,
+			Date endTime);
 
 
 }

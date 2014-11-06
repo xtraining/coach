@@ -10,6 +10,8 @@ import com.coach.request.AddPersonalRequest;
 import com.coach.request.CheckLessonMemberRequest;
 import com.coach.request.GetCheckLessonRequest;
 import com.coach.request.GetRecentLessonRequest;
+import com.coach.request.UpdateLessonRequest;
+import com.coach.request.UpdateLifeRequest;
 import com.coach.response.LessonDetailResponse;
 import com.coach.response.LessonMemberResponse;
 import com.coach.response.LessonResponse;
@@ -41,5 +43,9 @@ public interface ILessonResolver {
 	List<MemberResponse> getLessonMemberList(Long coachId, Long lessonId);
 
 	void deleteLesson(Long lessonId);
+
+	void updateLesson(UpdateLessonRequest request);
+
+	void updateLife(UpdateLifeRequest request);
 
 }

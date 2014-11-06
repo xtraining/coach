@@ -16,6 +16,8 @@ import com.coach.common.Constants.LESSON_CHECK_FLAG;
 import com.coach.common.Constants.LESSON_STATUS;
 import com.coach.model.Lesson;
 import com.coach.request.GetCheckLessonRequest;
+import com.coach.request.UpdateLessonRequest;
+import com.coach.request.UpdateLifeRequest;
 
 public class LessonDaoImpl extends SqlSessionDaoSupport implements LessonDao{
 	private static final Logger log = LoggerFactory
@@ -204,5 +206,47 @@ public class LessonDaoImpl extends SqlSessionDaoSupport implements LessonDao{
 			log.error("getLifeDetail", e);
 			throw new RuntimeException(e);
 		}
+	}
+
+	@Override
+	public void updateLesson(UpdateLessonRequest request, Date startTime,
+			Date endTime) {
+		try{
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("coachId", request.getCoachId());
+			map.put("lessonId", request.getLessonId());
+			map.put("startTime", startTime);
+			map.put("endTime", endTime);
+			map.put("description", request.getRemarks());
+			map.put("alertSwitch", request.getAlertSwitch());
+			this.getSqlSession().update("updateLesson", map);
+		} catch(Throwable e){
+			log.error("updateLesson", e);
+			throw new RuntimeException(e);
+		}
+		
+	}
+
+	@Override
+	public void updateLife(UpdateLifeRequest request, Date startTime,
+			Date endTime) {
+		try{
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("coachId", request.getCoachId());
+			map.put("lessonId", request.getLessonId());
+			map.put("startTime", startTime);
+			map.put("endTime", endTime);
+			map.put("description", request.getRemarks());
+			map.put("alertSwitch", request.getAlertSwitch());
+			map.put("longitude", request.getLongitude());
+			map.put("latitude", request.getLatitude());
+			map.put("address", request.getAddress());
+			map.put("name", request.getName());
+			this.getSqlSession().update("updateLesson", map);
+		} catch(Throwable e){
+			log.error("updateLesson", e);
+			throw new RuntimeException(e);
+		}
+		
 	}
 }

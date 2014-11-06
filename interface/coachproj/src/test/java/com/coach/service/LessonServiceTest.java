@@ -12,8 +12,8 @@ import com.coach.utils.HttpUtil;
 import com.rop.utils.RopUtils;
 
 public class LessonServiceTest extends TestCase {
-//	public static final String SERVER_URL = "http://localhost:8080/coach/service";
-	public static final String SERVER_URL = "http://114.215.145.26/coach/service";
+	public static final String SERVER_URL = "http://localhost:8080/coach/service";
+//	public static final String SERVER_URL = "http://114.215.145.26/coach/service";
 	public static final String APP_KEY = "iphone_user";
 	public static final String APP_SECRET = "LlnZA8cql4liN4CvjGL5GfwhCh7fwWGE";
 	public static final String VERSION = "V0.5.0.0";
@@ -209,4 +209,50 @@ public class LessonServiceTest extends TestCase {
         assertNotNull(response);
         assertTrue(response.indexOf("code") <= 0);
 	}*/
+	
+	public void testUpdateLife(){
+		Map <String, String>map = new HashMap<String, String>();
+    	map.put("appKey", APP_KEY); //第二个参数为AppKey
+    	map.put("method", METHOD.UPDATE_LIFE.getValue()); 
+    	map.put("v", "1.0");
+    	map.put("format", "json");
+    	map.put("sessionId", "111F0FED-5009-4CF6-B63A-0453D08F4212");
+    	map.put("coachId", "7");
+    	map.put("lessonId", "400");
+    	map.put("remarks", "remarks");
+    	map.put("startTime", "2009-01-01 13:39:33");
+    	map.put("endTime", "2009-01-01 15:39:33");
+    	map.put("alterSwitch", "1");
+    	map.put("name", "name");
+    	map.put("latitude", "34");
+    	map.put("longitude", "121");
+    	map.put("address", "address");
+    	String sign = RopUtils.sign(map, APP_SECRET); //第二个参数为SecretKey, 有O2O系统分配
+    	map.put("sign", sign);
+    	String response = HttpUtil.postServer(SERVER_URL, map);
+        System.out.println("response = " + response);
+        assertNotNull(response);
+        assertTrue(response.indexOf("code") <= 0);
+	}
+	
+	public void testUpdateLesson(){
+		Map <String, String>map = new HashMap<String, String>();
+    	map.put("appKey", APP_KEY); //第二个参数为AppKey
+    	map.put("method", METHOD.UPDATE_LESSON.getValue()); 
+    	map.put("v", "1.0");
+    	map.put("format", "json");
+    	map.put("sessionId", "111F0FED-5009-4CF6-B63A-0453D08F4212");
+    	map.put("coachId", "7");
+    	map.put("lessonId", "400");
+    	map.put("remarks", "remarks");
+    	map.put("startTime", "2009-01-01 13:39:33");
+    	map.put("endTime", "2009-01-01 15:39:33");
+    	map.put("alterSwitch", "1");
+    	String sign = RopUtils.sign(map, APP_SECRET); //第二个参数为SecretKey, 有O2O系统分配
+    	map.put("sign", sign);
+    	String response = HttpUtil.postServer(SERVER_URL, map);
+        System.out.println("response = " + response);
+        assertNotNull(response);
+        assertTrue(response.indexOf("code") <= 0);
+	}
 }

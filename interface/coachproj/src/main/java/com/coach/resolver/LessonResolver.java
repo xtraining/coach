@@ -36,6 +36,8 @@ import com.coach.request.AddPersonalRequest;
 import com.coach.request.CheckLessonMemberRequest;
 import com.coach.request.GetCheckLessonRequest;
 import com.coach.request.GetRecentLessonRequest;
+import com.coach.request.UpdateLessonRequest;
+import com.coach.request.UpdateLifeRequest;
 import com.coach.resolver.cacheaction.CacheAction;
 import com.coach.resolver.cacheaction.CoachRecentLessonCacheAction;
 import com.coach.resolver.cacheaction.LessonDetailCacheAction;
@@ -403,6 +405,20 @@ public class LessonResolver extends BaseResolver implements ILessonResolver{
 	@Override
 	public void deleteLesson(Long lessonId) {
 		lessonDao.updateLessonStatus(lessonId, LESSON_STATUS.DELETED);
+		
+	}
+	@Override
+	public void updateLesson(UpdateLessonRequest request) {
+		Date startTime = DateUtils.yyyyMMddHHmmssToTimestamp(request.getStartTime());
+		Date endTime = DateUtils.yyyyMMddHHmmssToTimestamp(request.getEndTime());
+		lessonDao.updateLesson(request, startTime, endTime);
+		
+	}
+	@Override
+	public void updateLife(UpdateLifeRequest request) {
+		Date startTime = DateUtils.yyyyMMddHHmmssToTimestamp(request.getStartTime());
+		Date endTime = DateUtils.yyyyMMddHHmmssToTimestamp(request.getEndTime());
+		lessonDao.updateLife(request, startTime, endTime);
 		
 	}
 
