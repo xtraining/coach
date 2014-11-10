@@ -59,7 +59,9 @@ public interface ICoachResolver {
 
 	public List<BindOrgResponse> getBindOrg(Long coachId) ;
 	
-	public void updateBindOrgStatus(Long coachId, Integer orgId) ;
+	public void updateBindOrgStatus(Coach c, Integer orgId) ;
 
 	public Long getCoachIdByPhoneNumber(String phoneNumber);
+
+	public Coach getDetailById(Long coachId);
 }

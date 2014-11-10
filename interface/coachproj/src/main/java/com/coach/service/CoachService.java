@@ -380,13 +380,13 @@ public class CoachService extends SimpleBaseService{
 	
 	@ServiceMethod(method = "coach.updateBindOrgStatus",version = "1.0", needInSession = NeedInSessionType.YES, httpAction=HttpAction.POST)
     public Object updateBindOrgStatus(UpdateBindOrgStatusRequest request) {	
-		Coach c = coachResolver.getBasicById(request.getCoachId());
+		Coach c = coachResolver.getDetailById(request.getCoachId());
 		if(c == null){
 			return new BusinessServiceErrorResponse(
         			request.getRopRequestContext().getMethod(), "COACH_ID_NOT_EXIST",
         			request.getRopRequestContext().getLocale());
 		}
-		coachResolver.updateBindOrgStatus(request.getCoachId(), request.getOrgId());
+		coachResolver.updateBindOrgStatus(c, request.getOrgId());
 		List<BindOrgResponse> list = coachResolver.getBindOrg(c.getId());
 		return list;
 	}

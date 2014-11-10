@@ -103,7 +103,8 @@
 	</update>
 	
 	<update id="updateProfileDetail" parameterType="com.coach.model.Coach">
-	    update coach c inner join tuser t on c.tuserId = t.id set t.name = #{name}, t.gender = #{gender}, t.email = #{email}, t.idType = #{idType}, t.idNumber = #{idNumber}, t.birthday = #{birthday}, c.areaCode = #{areaCode}
+	    update coach c inner join tuser t on c.tuserId = t.id set t.name = #{name}, t.gender = #{gender}, t.email = #{email}, t.idType = #{idType}, 
+	    t.idNumber = #{idNumber}, t.birthday = #{birthday}, c.areaCode = #{areaCode}, description = #{description}
 	    where c.id = #{id}  
 	</update>
 	
@@ -137,9 +138,10 @@
 	</update>
 	
 	<update id="updateBindOrgStatus" parameterType="Map">
-	    update organization_coach oc set oc.status = 1 
+	    update organization_coach oc set oc.status = #{status}, oc.coachId = #{coachObj.id}
 		where 
 		oc.organizationId = #{orgId} 
-		and oc.coachId = #{coachId}
+		and oc.idType = #{coachObj.idType}
+		and oc.idNumber = #{coachObj.idNumber}
 	 </update>
 </mapper>

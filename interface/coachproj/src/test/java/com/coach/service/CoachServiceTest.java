@@ -327,25 +327,7 @@ public class CoachServiceTest extends TestCase {
     	map.put("v", "1.0");
     	map.put("format", "json");
     	map.put("sessionId", "CD47C554-2ADF-4713-851A-5FF928C14A39");
-    	map.put("coachId", "7");
-    	String sign = RopUtils.sign(map, APP_SECRET); //第二个参数为SecretKey, 有O2O系统分配
-    	map.put("sign", sign);
-    	String response = HttpUtil.postServer(SERVER_URL, map);
-        System.out.println("response = " + response);
-        assertNotNull(response);
-        assertTrue(response.indexOf("code") <= 0);
-	}
-	*/
-	
-	/*public void testgetBindOrg() {
-		Map <String, String>map = new HashMap<String, String>();
-    	map.put("appKey", APP_KEY); //第二个参数为AppKey
-    	map.put("method", METHOD.UPDATE_BIND_ORG_STATUS.getValue()); 
-    	map.put("v", "1.0");
-    	map.put("format", "json");
-    	map.put("sessionId", "CD47C554-2ADF-4713-851A-5FF928C14A39");
-    	map.put("coachId", "7");
-    	map.put("orgId", "1");
+    	map.put("coachId", "17");
     	String sign = RopUtils.sign(map, APP_SECRET); //第二个参数为SecretKey, 有O2O系统分配
     	map.put("sign", sign);
     	String response = HttpUtil.postServer(SERVER_URL, map);
@@ -353,6 +335,24 @@ public class CoachServiceTest extends TestCase {
         assertNotNull(response);
         assertTrue(response.indexOf("code") <= 0);
 	}*/
+	
+	
+	public void testUpdateBindOrg() {
+		Map <String, String>map = new HashMap<String, String>();
+    	map.put("appKey", APP_KEY); //第二个参数为AppKey
+    	map.put("method", METHOD.UPDATE_BIND_ORG_STATUS.getValue()); 
+    	map.put("v", "1.0");
+    	map.put("format", "json");
+    	map.put("sessionId", "111F0FED-5009-4CF6-B63A-0453D08F4212");
+    	map.put("coachId", "24");
+    	map.put("orgId", "10");
+    	String sign = RopUtils.sign(map, APP_SECRET); //第二个参数为SecretKey, 有O2O系统分配
+    	map.put("sign", sign);
+    	String response = HttpUtil.postServer(SERVER_URL, map);
+        System.out.println("response = " + response);
+        assertNotNull(response);
+        assertTrue(response.indexOf("code") <= 0);
+	}
 	
 	public void testGetTotalLesson() {
 		Map <String, String>map = new HashMap<String, String>();

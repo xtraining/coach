@@ -132,6 +132,11 @@
 	where s.coachId = #{coachId} and s.startTime >= #{startDate} and s.status = #{lessonActiveStatus}
   </select>
   
+  <select id="getAssignedHour" parameterType="Map" resultType="Float">
+    select count(s.hours) from lesson s
+	where s.courseId = #{courseId} and s.status = #{lessonActiveStatus}
+  </select>
+  
   <insert id="insertLesson" useGeneratedKeys="true" keyProperty="id" parameterType="com.coach.model.Lesson">
 	INSERT INTO lesson(courseId, startTime, endTime, createTime, type, name, address, description, organizationId, hours, alertSwitch, longitude, latitude, groundId, groundName, coachId) 
 	VALUE (#{courseId}, #{startTime}, #{endTime}, now(), #{type}, #{name}, #{address}, #{description}, #{organizationId}, #{hours}, #{alertSwitch}, #{longitude}, #{latitude}, #{groundId}, #{groundName}, #{coachId})

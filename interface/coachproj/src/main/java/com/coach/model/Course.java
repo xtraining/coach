@@ -36,6 +36,7 @@ public class Course extends AbstractBaseModel implements java.io.Serializable {
 	private Float  courseHour;
 	private Float  lessonHour;
 	private Integer lessonNum;
+	private Integer scheduledLessonNum;
 	private String remarks;
 	private Timestamp createTime;
 	private Integer groundId;
@@ -44,7 +45,24 @@ public class Course extends AbstractBaseModel implements java.io.Serializable {
 	private Double longitude;
 	private Double latitude;
 	private Integer unassigned;
+	
+	public Integer getScheduledLessonNum() {
+		return scheduledLessonNum;
+	}
+
+	public void setScheduledLessonNum(Integer scheduledLessonNum) {
+		this.scheduledLessonNum = scheduledLessonNum;
+	}
+
+	public Integer getUnassigned() {
+		return unassigned;
+	}
+
+	public void setUnassigned(Integer unassigned) {
+		this.unassigned = unassigned;
+	}
 	private List<Lesson> lessonList = new ArrayList<Lesson>();
+	
 	private Integer flag;
 	
 	public Integer getFlag() {
@@ -298,6 +316,10 @@ public class Course extends AbstractBaseModel implements java.io.Serializable {
 		c.setEndTime(DateUtils.dateToyyyyMMddHHmiss(endTime));
 		c.setMemberNum(memberNum);
 		c.setExpiryDate(DateUtils.dateToyyyyMMdd(expiryDate));
+		c.setOrgId(organizationId);
+		c.setOrgName(organizationName);
+		c.setLessonNum(lessonNum);
+		c.setScheduledLessonNum(scheduledLessonNum);
 		return c;
 	}
 

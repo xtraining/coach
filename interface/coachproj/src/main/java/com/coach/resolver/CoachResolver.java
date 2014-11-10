@@ -302,7 +302,7 @@ public class CoachResolver extends BaseResolver implements ICoachResolver{
 			} else if(r.getStatus()== ORG_COACH_STATUS.COACH_ACCEPTED.getValue()){
 				r.setStatus(ORG_COACH_DISPLAY_STATUS.BINDED.getValue());
 			} else if(r.getStatus()== ORG_COACH_STATUS.ORG_NONE.getValue()){
-				r.setStatus(ORG_COACH_DISPLAY_STATUS.APPLY.getValue());
+				r.setStatus(ORG_COACH_DISPLAY_STATUS.APPLIED.getValue());
 			} else if(r.getStatus()== ORG_COACH_STATUS.ORG_ACCEPTED.getValue()){
 				r.setStatus(ORG_COACH_DISPLAY_STATUS.BINDED.getValue());
 			} else{
@@ -312,11 +312,16 @@ public class CoachResolver extends BaseResolver implements ICoachResolver{
 		return list;
 	}
 	
-	public void updateBindOrgStatus(Long coachId, Integer orgId) {
-		coachDao.updateBindOrgStatus(coachId, orgId);
+	public void updateBindOrgStatus(Coach c, Integer orgId) {
+		coachDao.updateBindOrgStatus(c, orgId);
 	}
 
 	public Long getCoachIdByPhoneNumber(String phoneNumber) {
 		return coachDao.getCoachIdByPhoneNumber(phoneNumber);
+	}
+
+	@Override
+	public Coach getDetailById(Long coachId) {
+		return coachDao.getDetailById(coachId);
 	}
 }

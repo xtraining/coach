@@ -28,10 +28,6 @@ public interface ICourseResolver {
 
 	public CourseDetailResponse getCourseDetail(Long coachId, Long courseId);
 
-	public void updateCourese(UpdateCourseRequest request,
-			String[] memberIdArr, String[] phoneNumberArr,
-			String[] memberNameArr);
-
 	public List<CourseResponse> getOrgCourse(GetOrgCourseRequest request);
 
 	public List<PersonalCourseResponse> getPersonalCourseList(Long coachId);
@@ -56,5 +52,10 @@ public interface ICourseResolver {
 	public List<CourseResponse> getUnassignedCourse(CoachBaseRequest request);
 
 	public List<CourseResponse> getPersonalCourse(GetOrgCourseRequest request);
+
+	public ConflictLessonResponse updateCourese(UpdateCourseRequest request,
+			String[] modifyMemberIdArr, String[] modifyPhoneNumberArr,
+			String[] modifyMemberNameArr, String[] newPhoneNumberArr,
+			String[] newMemberNameArr, String[] deletedMemberIdArr);
 
 }

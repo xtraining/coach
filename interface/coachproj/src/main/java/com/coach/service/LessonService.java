@@ -17,6 +17,7 @@ import com.coach.request.UpdateLessonRequest;
 import com.coach.request.UpdateLifeRequest;
 import com.coach.resolver.ICourseResolver;
 import com.coach.resolver.ILessonResolver;
+import com.coach.response.ConflictLessonResponse;
 import com.coach.response.LessonDetailResponse;
 import com.coach.response.LessonMemberResponse;
 import com.coach.response.LessonResponse;
@@ -72,8 +73,8 @@ public class LessonService extends SimpleBaseService{
     public Object addLesson(AddLessonRequest request) {
 		Long courseId = courseResolver.checkCourse(request.getCoachId(), request.getCourseId());
 		if(courseId != null && courseId > 0){
-			lessonResolver.addLesson(request);
-			return new SimpleResponse();
+			ConflictLessonResponse r = lessonResolver.addLesson(request);
+			return r;
 		} else {
 			SimpleResponse r = new SimpleResponse();
 			r.setFlag(1);
@@ -90,8 +91,8 @@ public class LessonService extends SimpleBaseService{
 	
 	@ServiceMethod(method = "lesson.addPersonal", version = "1.0", needInSession = NeedInSessionType.YES)
     public Object addPersonal(AddPersonalRequest request) {
-		lessonResolver.addPersonal(request);
-		return new SimpleResponse();
+		ConflictLessonResponse r = lessonResolver.addPersonal(request);
+		return r;
 	}
 	
 	@ServiceMethod(method = "lesson.updateLife", version = "1.0", needInSession = NeedInSessionType.YES)

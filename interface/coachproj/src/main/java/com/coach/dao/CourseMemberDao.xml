@@ -9,4 +9,13 @@
     </foreach>  
   </insert>
   
+   <insert id="deleteCourseMember" parameterType="Map">
+    update course_member set status = #{status} where courseId = #{courseId} and memberId in (
+    <foreach collection="deletedMemberIdArr" item="item" index="index" separator="," >  
+        #{item}
+    </foreach> 
+    ) 
+  </insert>
+  
+  
 </mapper>

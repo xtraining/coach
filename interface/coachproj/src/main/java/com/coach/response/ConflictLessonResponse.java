@@ -7,6 +7,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "conflictLessonResponse")
 public class ConflictLessonResponse {
 	@XmlElement
+	private Long id;
+	@XmlElement
 	private Integer flag = 0;
 	@XmlElement
 	private String startTime;
@@ -37,6 +39,12 @@ public class ConflictLessonResponse {
 	}
 	public void setCourseName(String courseName) {
 		this.courseName = courseName;
+	}
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 }

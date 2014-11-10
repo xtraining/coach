@@ -34,6 +34,10 @@ public class CourseDetailResponse extends CourseResponse {
 	@XmlElement
 	private Double latitude;
 	@XmlElement
+	private Integer lessonNum;
+	@XmlElement
+	private Integer scheduledLessonNum;
+	@XmlElement
 	private List<MemberResponse> memberList = new ArrayList<MemberResponse>();
 	@XmlElement
 	private String remarks;
@@ -122,6 +126,18 @@ public class CourseDetailResponse extends CourseResponse {
 	}
 	public void setLatitude(Double latitude) {
 		this.latitude = latitude;
+	}
+	public Integer getLessonNum() {
+		return lessonNum;
+	}
+	public void setLessonNum(Integer lessonNum) {
+		this.lessonNum = lessonNum;
+	}
+	public Integer getScheduledLessonNum() {
+		return scheduledLessonNum;
+	}
+	public void setScheduledLessonNum(Integer scheduledLessonNum) {
+		this.scheduledLessonNum = scheduledLessonNum;
 	}
 
 }

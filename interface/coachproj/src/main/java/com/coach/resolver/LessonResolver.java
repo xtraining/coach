@@ -1,5 +1,6 @@
 package com.coach.resolver;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -11,18 +12,13 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import net.oschina.j2cache.CacheObject;
-
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.coach.common.Constants.CACHE_REGION;
 import com.coach.common.Constants.COURSE_TYPE;
 import com.coach.common.Constants.LESSON_MEMBER_STATUS;
 import com.coach.common.Constants.LESSON_STATUS;
-import com.coach.common.Constants.ONE_DAY_CACHE_KEY;
-import com.coach.common.Constants.ONE_HOUR_CACHE_KEY;
 import com.coach.dao.CoachCourseDao;
 import com.coach.dao.CourseDao;
 import com.coach.dao.CourseMemberDao;
@@ -44,6 +40,7 @@ import com.coach.resolver.cacheaction.LessonDetailCacheAction;
 import com.coach.resolver.cacheaction.LessonMemberCacheAction;
 import com.coach.resolver.cacheaction.LessonMemberListCacheAction;
 import com.coach.resolver.cacheaction.OneWeekLessonCacheAction;
+import com.coach.response.ConflictLessonResponse;
 import com.coach.response.LessonDetailResponse;
 import com.coach.response.LessonMemberResponse;
 import com.coach.response.LessonResponse;
@@ -237,27 +234,67 @@ public class LessonResolver extends BaseResolver implements ILessonResolver{
 	
 	@Override
 	@Transactional
-	public void addPersonal(AddPersonalRequest request) {
-		Lesson lesson = request.toLesson();
-		lessonDao.insert(lesson);
+	public ConflictLessonResponse addPersonal(AddPersonalRequest request) {
+		Lesson newLesson = request.toLesson();
+		if(newLesson != null){
+			List<Lesson> lessonList = lessonDao.getLessonFrom(request.getCoachId(), newLesson.getStartTime());
+			Lesson conflictLess = null;
+				for(Lesson oldLesson : lessonList){
+					Timestamp newStart = newLesson.getStartTime();
+					Timestamp newEnd = newLesson.getEndTime();
+					Timestamp oldStart = oldLesson.getStartTime();
+					Timestamp oldEnd = oldLesson.getStartTime();
+					if((newStart.getTime() >= oldStart.getTime() && newStart.getTime() < oldEnd.getTime())
+							|| (newEnd.getTime() > oldStart.getTime() && newEnd.getTime() <= oldEnd.getTime())
+				            || (newStart.getTime() <= oldStart.getTime() && newEnd.getTime() >= oldEnd.getTime())){
+						conflictLess = oldLesson;
+						return conflictLess.toConflictResponse();
+					}
+			}
+		}
+		lessonDao.insert(newLesson);
 		Date startDate = DateUtils.getFirstDayOfWeek(DateUtils.yyyyMMddHHmmssToTimestamp(request.getStartTime()));
 		Date endDate = DateUtils.addDay(startDate, 8);
 		CacheAction<List<LessonResponse>> cacheAction = new OneWeekLessonCacheAction(request.getCoachId(), startDate, endDate);
 		cacheAction.clear();
+		
+		ConflictLessonResponse r = new ConflictLessonResponse();
+		r.setId(newLesson.getId());
+		return r;
 	}
 	
 	@Override
 	@Transactional
-	public void addLesson(AddLessonRequest request) {
-		Lesson lesson = request.toLesson();
-		lessonDao.insert(lesson);
+	public ConflictLessonResponse addLesson(AddLessonRequest request) {
+		Lesson newLesson = request.toLesson();
+		if(newLesson != null){
+			List<Lesson> lessonList = lessonDao.getLessonFrom(request.getCoachId(), newLesson.getStartTime());
+			Lesson conflictLess = null;
+				for(Lesson oldLesson : lessonList){
+					Timestamp newStart = newLesson.getStartTime();
+					Timestamp newEnd = newLesson.getEndTime();
+					Timestamp oldStart = oldLesson.getStartTime();
+					Timestamp oldEnd = oldLesson.getStartTime();
+					if((newStart.getTime() >= oldStart.getTime() && newStart.getTime() < oldEnd.getTime())
+							|| (newEnd.getTime() > oldStart.getTime() && newEnd.getTime() <= oldEnd.getTime())
+				            || (newStart.getTime() <= oldStart.getTime() && newEnd.getTime() >= oldEnd.getTime())){
+						conflictLess = oldLesson;
+						return conflictLess.toConflictResponse();
+					}
+			}
+		}
+		lessonDao.insert(newLesson);
 		
-		lessonMemberDao.insertLessonMember(request.getCourseId(), lesson.getId());
+		lessonMemberDao.insertLessonMember(request.getCourseId(), newLesson.getId());
 		
 		Date startDate = DateUtils.getFirstDayOfWeek(DateUtils.yyyyMMddHHmmssToTimestamp(request.getStartTime()));
 		Date endDate = DateUtils.addDay(startDate, 8);
 		CacheAction<List<LessonResponse>> cacheAction = new OneWeekLessonCacheAction(request.getCoachId(), startDate, endDate);
 		cacheAction.clear();
+		
+		ConflictLessonResponse r = new ConflictLessonResponse();
+		r.setId(newLesson.getId());
+		return r;
 		
 	}
 	@SuppressWarnings("rawtypes")
@@ -408,18 +445,50 @@ public class LessonResolver extends BaseResolver implements ILessonResolver{
 		
 	}
 	@Override
-	public void updateLesson(UpdateLessonRequest request) {
-		Date startTime = DateUtils.yyyyMMddHHmmssToTimestamp(request.getStartTime());
-		Date endTime = DateUtils.yyyyMMddHHmmssToTimestamp(request.getEndTime());
+	public ConflictLessonResponse updateLesson(UpdateLessonRequest request) {
+		Timestamp startTime = DateUtils.yyyyMMddHHmmssToTimestamp(request.getStartTime());
+		Timestamp endTime = DateUtils.yyyyMMddHHmmssToTimestamp(request.getEndTime());
+		List<Lesson> lessonList = lessonDao.getLessonFrom(request.getCoachId(), startTime);
+		Lesson conflictLess = null;
+		for(Lesson oldLesson : lessonList){
+			if(oldLesson.getId().longValue() != request.getLessonId().longValue()){
+				Timestamp newStart = startTime;
+				Timestamp newEnd = endTime;
+				Timestamp oldStart = oldLesson.getStartTime();
+				Timestamp oldEnd = oldLesson.getStartTime();
+				if((newStart.getTime() >= oldStart.getTime() && newStart.getTime() < oldEnd.getTime())
+						|| (newEnd.getTime() > oldStart.getTime() && newEnd.getTime() <= oldEnd.getTime())
+			            || (newStart.getTime() <= oldStart.getTime() && newEnd.getTime() >= oldEnd.getTime())){
+					conflictLess = oldLesson;
+					return conflictLess.toConflictResponse();
+				}
+			}
+		}
 		lessonDao.updateLesson(request, startTime, endTime);
-		
+		return new ConflictLessonResponse();
 	}
 	@Override
-	public void updateLife(UpdateLifeRequest request) {
-		Date startTime = DateUtils.yyyyMMddHHmmssToTimestamp(request.getStartTime());
-		Date endTime = DateUtils.yyyyMMddHHmmssToTimestamp(request.getEndTime());
+	public ConflictLessonResponse updateLife(UpdateLifeRequest request) {
+		Timestamp startTime = DateUtils.yyyyMMddHHmmssToTimestamp(request.getStartTime());
+		Timestamp endTime = DateUtils.yyyyMMddHHmmssToTimestamp(request.getEndTime());
+		Lesson conflictLess = null;
+		List<Lesson> lessonList = lessonDao.getLessonFrom(request.getCoachId(), startTime);
+		for(Lesson oldLesson : lessonList){
+			if(oldLesson.getId().longValue() != request.getLessonId().longValue()){
+				Timestamp newStart = startTime;
+				Timestamp newEnd = endTime;
+				Timestamp oldStart = oldLesson.getStartTime();
+				Timestamp oldEnd = oldLesson.getStartTime();
+				if((newStart.getTime() >= oldStart.getTime() && newStart.getTime() < oldEnd.getTime())
+						|| (newEnd.getTime() > oldStart.getTime() && newEnd.getTime() <= oldEnd.getTime())
+			            || (newStart.getTime() <= oldStart.getTime() && newEnd.getTime() >= oldEnd.getTime())){
+					conflictLess = oldLesson;
+					return conflictLess.toConflictResponse();
+				}
+			}
+		}
 		lessonDao.updateLife(request, startTime, endTime);
-		
+		return new ConflictLessonResponse();
 	}
 
 	

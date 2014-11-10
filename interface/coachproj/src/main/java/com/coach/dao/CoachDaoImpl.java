@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.coach.common.Constants.COACH_STATUS;
+import com.coach.common.Constants.ORG_COACH_STATUS;
 import com.coach.model.Coach;
 import com.coach.response.BindOrgResponse;
 
@@ -161,10 +162,12 @@ public class CoachDaoImpl extends SqlSessionDaoSupport implements CoachDao{
 	}
 
 	@Override
-	public void updateBindOrgStatus(Long coachId, Integer orgId) {
+	public void updateBindOrgStatus(Coach c, Integer orgId) {
 		try{
 			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("coachId", coachId);
+			map.put("coachObj", c);
+			map.put("orgId", orgId);
+			map.put("status", ORG_COACH_STATUS.ORG_NONE.getValue());
 			this.getSqlSession().update("updateBindOrgStatus", map);
 		} catch(RuntimeException e){
 			log.error("updateBindOrgStatus", e);

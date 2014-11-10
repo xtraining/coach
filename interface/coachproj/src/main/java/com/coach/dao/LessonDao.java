@@ -25,8 +25,7 @@ public interface LessonDao {
 
 	public Lesson getLessonDetail(Long coachId, Long lessonId);
 
-	public List<Lesson> getDetailRecentInRange(Long coachId, Date startDate,
-			Date endDate);
+	public List<Lesson> getDetailRecentInRange(Long coachId, Date startDate, Date endDate);
 
 	public void changeCheckFlag(Long lessonId);
 
@@ -44,11 +43,13 @@ public interface LessonDao {
 
 	public Lesson getLifeDetail(Long coachId, Long lessonId);
 
-	public void updateLesson(UpdateLessonRequest request, Date startTime,
-			Date endTime);
+	public void updateLesson(UpdateLessonRequest request, Timestamp startTime,
+			Timestamp endTime);
 
-	public void updateLife(UpdateLifeRequest request, Date startTime,
-			Date endTime);
+	public void updateLife(UpdateLifeRequest request, Timestamp startTime,
+			Timestamp endTime);
+
+	public float getAssignedHour(Long courseId);
 
 
 }

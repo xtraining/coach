@@ -122,6 +122,7 @@ public class CourseDaoImpl extends SqlSessionDaoSupport implements CourseDao{
 			map.put("courseId", courseId);
 			map.put("status", COACH_COURSE_STATUS.ACCEPTED.getValue());
 			map.put("cmstatus", COURSE_MEMBER_STATUS.DELETED.getValue());
+			map.put("deletedLessonStatus", LESSON_STATUS.DELETED.getValue());
 			return this.getSqlSession().selectOne("getCourseDetail", map);
 		} catch (RuntimeException re) {
 			log.error("getCourseDetail", re);
@@ -242,6 +243,17 @@ public class CourseDaoImpl extends SqlSessionDaoSupport implements CourseDao{
 			log.error("getCourseNum", re);
 			throw re;
 		}
+	}
+
+	@Override
+	public void updateCourse(Course c) {
+		try{
+			this.getSqlSession().update("updateCourse", c);
+		} catch (RuntimeException re) {
+			log.error("updateCourse", re);
+			throw re;
+		}
+		
 	}
 
 }

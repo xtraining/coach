@@ -195,23 +195,26 @@ public class AddCourseRequest extends CoachBaseRequest{
 		c.setType(COURSE_TYPE.PERSONAL.getValue());
 		c.setStartTime(DateUtils.yyyyMMddHHmmssToTimestamp(startTime));
 		c.setLessonNum((int)Math.ceil(courseHour/lessonHour));
+		
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(c.getStartTime().getTime());
+		//添加第一天的课程
+		float assignedHour = 0f;
+		float hours = courseHour > lessonHour ? lessonHour : courseHour;
+		buildLesson(c, hours, c.getStartTime());
+		assignedHour += hours;
+		
 		if(StringUtils.isNotBlank(recycleDay)){
 			c.setRecycleDay(recycleDay);
-			Calendar cal = Calendar.getInstance();
-	        cal.setTimeInMillis(c.getStartTime().getTime());
-	        int today = cal.get(Calendar.DAY_OF_WEEK) - 1;
-	        float assignedHour = 0f;
+			cal.add(Calendar.DAY_OF_MONTH, 1); //加一天
+			int today = cal.get(Calendar.DAY_OF_WEEK) - 1;
+			today = cal.get(Calendar.DAY_OF_WEEK) - 1;
+			if(today == 0)today = 7; //convert Sunday to 7
 			while((courseHour - assignedHour) >= 0.01 ){
 				if(recycleDay.indexOf(today+"") >= 0){
-					if(assignedHour < 0.01){
-						float hours = courseHour > lessonHour ? lessonHour : courseHour;
-						buildLesson(c, hours, c.getStartTime());
-						assignedHour += hours;
-					} else {
-						float hours = (courseHour-assignedHour) > lessonHour ? lessonHour : (courseHour-assignedHour);
-						buildLesson(c, hours, new Timestamp(cal.getTimeInMillis()));
-						assignedHour += hours;
-					}
+					hours = (courseHour-assignedHour) > lessonHour ? lessonHour : (courseHour-assignedHour);
+					buildLesson(c, hours, new Timestamp(cal.getTimeInMillis()));
+					assignedHour += hours;
 				}
 				cal.add(Calendar.DAY_OF_MONTH, 1); //加一天
 				today = cal.get(Calendar.DAY_OF_WEEK) - 1;

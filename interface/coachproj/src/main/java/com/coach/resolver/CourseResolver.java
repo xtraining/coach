@@ -12,6 +12,8 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +25,7 @@ import com.coach.dao.CoachCourseDao;
 import com.coach.dao.CoachRejectCourseDao;
 import com.coach.dao.CourseDao;
 import com.coach.dao.CourseMemberDao;
+import com.coach.dao.CourseMemberDaoImpl;
 import com.coach.dao.LessonDao;
 import com.coach.dao.LessonMemberDao;
 import com.coach.dao.MemberDao;
@@ -54,6 +57,8 @@ import com.coach.response.SearchMemberResponse;
 import com.rop.utils.RopUtils;
 @Service
 public class CourseResolver extends BaseResolver implements ICourseResolver{
+	private static final Logger log = LoggerFactory
+			.getLogger(CourseResolver.class);
 	@Resource private CourseDao courseDao;
 	@Resource private LessonDao lessonDao;
 	@Resource private MemberDao memberDao;
@@ -179,14 +184,18 @@ public class CourseResolver extends BaseResolver implements ICourseResolver{
 		cc.setStatus(COACH_COURSE_STATUS.ACCEPTED.getValue());
 		coachCourseDao.save(cc);
 		
-		// 私教课程创建时，只创建课程，不创建课时
-		//createLessonAndMember(phoneNumberArr, memberNameArr, c);
-		createCourseMember(phoneNumberArr, memberNameArr, c);
+		if(StringUtils.isBlank(request.getRecycleDay())){
+			createFirstLessonAndMember(phoneNumberArr, memberNameArr, c);
+		} else{
+			createLessonAndMember(phoneNumberArr, memberNameArr, c);
+		}
 		ClearCacheAction.clearAddCourseCache(request.getCoachId());
-		return new ConflictLessonResponse();
+		ConflictLessonResponse r = new ConflictLessonResponse();
+		r.setId(c.getId());
+		return r;
 	}
 	
-	private void createCourseMember(String[] phoneNumberArr,
+	/*private void createCourseMember(String[] phoneNumberArr,
 			String[] memberNameArr, Course c) {
 		List<CourseMember> cmList = new ArrayList<CourseMember>();
 		for(int i = 0; i < phoneNumberArr.length; i++){
@@ -205,9 +214,48 @@ public class CourseResolver extends BaseResolver implements ICourseResolver{
 		if(cmList.size() >0){
 			courseMemberDao.save(cmList);
 		}
-	}
+	}*/
 
-	/*private void createLessonAndMember(String[] phoneNumberArr,
+	private void createFirstLessonAndMember(String[] phoneNumberArr,
+			String[] memberNameArr, Course c) {
+		Lesson firstLesson = null;
+		if(c.getLessonList() != null && c.getLessonList().size() > 0){
+			firstLesson = c.getLessonList().get(0);
+			firstLesson.setCourseId(c.getId());
+			lessonDao.insert(firstLesson);
+		}
+		List<CourseMember> cmList = new ArrayList<CourseMember>();
+		List<LessonMember> lmList = new ArrayList<LessonMember>();
+		for(int i = 0; i < phoneNumberArr.length; i++){
+			Member m = new Member();
+			m.setPhoneNumber(phoneNumberArr[i]);
+			m.setName(memberNameArr[i]);
+			m.setCode(StringUtils.replace(RopUtils.getUUID(), "-", ""));
+			memberDao.save(m);
+			
+			CourseMember cm = new CourseMember();
+			cm.setCourseId(c.getId());
+			cm.setMemberId(m.getId());
+			cm.setStatus(COURSE_MEMBER_STATUS.ACTIVE.getValue());
+			cmList.add(cm);
+			
+			if(firstLesson != null){
+				LessonMember lm = new LessonMember();
+				lm.setLessonId(firstLesson.getId());
+				lm.setMemberId(m.getId());
+				lm.setStatus(COURSE_MEMBER_STATUS.ACTIVE.getValue());
+				lmList.add(lm);
+			}
+		}
+		if(cmList.size() >0){
+			courseMemberDao.save(cmList);
+		}
+		if(c.getLessonList() != null && c.getLessonList().size() > 0 && lmList.size() >0){
+			lessonMemberDao.save(lmList);
+		}
+	}
+	
+	private void createLessonAndMember(String[] phoneNumberArr,
 			String[] memberNameArr, Course c) {
 		for(Lesson lesson : c.getLessonList()){
 			lesson.setCourseId(c.getId());
@@ -244,15 +292,85 @@ public class CourseResolver extends BaseResolver implements ICourseResolver{
 		if(c.getLessonList() != null && c.getLessonList().size() > 0 && lmList.size() >0){
 			lessonMemberDao.save(lmList);
 		}
-	}*/
+	}
 	
 	@Override
-	public void updateCourese(UpdateCourseRequest request,
-			String[] memberIdArr, String[] phoneNumberArr,
-			String[] memberNameArr) {
-		Course c = request.toCourse();
-//		courseDao.update(c);
+	@Transactional
+	public ConflictLessonResponse updateCourese(UpdateCourseRequest request,
+			String[] modifyMemberIdArr, String[] modifyPhoneNumberArr,
+			String[] modifyMemberNameArr, String[] newPhoneNumberArr,
+			String[] newMemberNameArr, String[] deletedMemberIdArr) {
+		float assignedHour = lessonDao.getAssignedHour(request.getCourseId());
+		Course c = request.toCourse(assignedHour);
+		if(c.getLessonList() != null && c.getLessonList().size() > 0){
+			List<Lesson> lessonList = lessonDao.getLessonFrom(request.getCoachId(), c.getStartTime());
+			List<Lesson>newLessonList = c.getLessonList();
+			Lesson conflictLess = null;
+			for(Lesson newLesson : newLessonList){
+				for(Lesson oldLesson : lessonList){
+					Timestamp newStart = newLesson.getStartTime();
+					Timestamp newEnd = newLesson.getEndTime();
+					Timestamp oldStart = oldLesson.getStartTime();
+					Timestamp oldEnd = oldLesson.getStartTime();
+					if((newStart.getTime() >= oldStart.getTime() && newStart.getTime() < oldEnd.getTime())
+							|| (newEnd.getTime() > oldStart.getTime() && newEnd.getTime() <= oldEnd.getTime())
+				            || (newStart.getTime() <= oldStart.getTime() && newEnd.getTime() >= oldEnd.getTime())){
+						conflictLess = oldLesson;
+						return conflictLess.toConflictResponse();
+					}
+				}
+			}
+		}
+		courseDao.updateCourse(c);
+		//modify
+		if(modifyMemberNameArr != null){
+			int modifyMemberNum = modifyMemberNameArr.length;
+			for(int i = 0; i < modifyMemberNum; i++){
+				try{
+					Member m = new Member();
+					m.setId(Long.valueOf(modifyMemberIdArr[i]));
+					m.setName(modifyMemberNameArr[i]);
+					m.setPhoneNumber(modifyPhoneNumberArr[i]);
+					memberDao.updateBasicMember(m);
+				}catch(Throwable ignore){
+					log.error("updateCourese", ignore);
+				}
+			}
+		}
 		
+		//new 
+		if(newMemberNameArr != null){
+			int newMemberNum = newMemberNameArr.length;
+			List<CourseMember> cmList = new ArrayList<CourseMember>();
+			for(int i = 0; i < newMemberNum; i++){
+				Member m = new Member();
+				m.setName(newMemberNameArr[i]);
+				m.setPhoneNumber(newPhoneNumberArr[i]);
+				m.setCode(StringUtils.replace(RopUtils.getUUID(), "-", ""));
+				memberDao.save(m);
+				
+				CourseMember cm = new CourseMember();
+				cm.setCourseId(request.getCourseId());
+				cm.setMemberId(m.getId());
+				cm.setStatus(COURSE_MEMBER_STATUS.ACTIVE.getValue());
+				cmList.add(cm);
+				
+			}
+			if(cmList.size() >0){
+				courseMemberDao.save(cmList);
+			}
+		}
+		// delete
+		if(deletedMemberIdArr != null && deletedMemberIdArr.length > 0){
+			try{
+				courseMemberDao.deleteMember(request.getCourseId(), deletedMemberIdArr);
+			}catch(Throwable ignore){
+				log.error("deleteMember", ignore);
+			}
+		}
+		
+		ClearCacheAction.clearAddCourseCache(request.getCoachId());
+		return new ConflictLessonResponse();
 	}
 
 	@Override
@@ -412,4 +530,6 @@ public class CourseResolver extends BaseResolver implements ICourseResolver{
 		}
 		return response;
 	}
+
+
 }

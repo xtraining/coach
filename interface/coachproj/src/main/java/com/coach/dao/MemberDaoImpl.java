@@ -146,4 +146,15 @@ public class MemberDaoImpl extends SqlSessionDaoSupport implements MemberDao{
 		}
 	}
 
+	@Override
+	public void updateBasicMember(Member m) {
+		try{
+			this.getSqlSession().update("updateBasicMember", m);
+		} catch(RuntimeException e){
+			log.error("updateBasicMember", e);
+			throw e;
+		}
+		
+	}
+
 }

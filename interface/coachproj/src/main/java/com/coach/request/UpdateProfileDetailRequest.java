@@ -16,6 +16,7 @@ public class UpdateProfileDetailRequest extends CoachBaseRequest{
 	private String email;
 	private String areaCode;
 	private String birthday;
+	private String description;
 	public String getName() {
 		return name;
 	}
@@ -58,6 +59,14 @@ public class UpdateProfileDetailRequest extends CoachBaseRequest{
 	public void setAreaCode(String areaCode) {
 		this.areaCode = areaCode;
 	}
+	
+	
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
 	public Coach toCoach() {
 		Coach c = new Coach();
 		c.setAreaCode(areaCode);
@@ -68,6 +77,7 @@ public class UpdateProfileDetailRequest extends CoachBaseRequest{
 		c.setIdNumber(idNumber);
 		c.setName(name);
 		c.setGender(gender);
+		c.setDescription(description);
 		return c;
 	}
 	

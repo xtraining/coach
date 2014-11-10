@@ -209,8 +209,8 @@ public class LessonDaoImpl extends SqlSessionDaoSupport implements LessonDao{
 	}
 
 	@Override
-	public void updateLesson(UpdateLessonRequest request, Date startTime,
-			Date endTime) {
+	public void updateLesson(UpdateLessonRequest request, Timestamp startTime,
+			Timestamp endTime) {
 		try{
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("coachId", request.getCoachId());
@@ -228,8 +228,8 @@ public class LessonDaoImpl extends SqlSessionDaoSupport implements LessonDao{
 	}
 
 	@Override
-	public void updateLife(UpdateLifeRequest request, Date startTime,
-			Date endTime) {
+	public void updateLife(UpdateLifeRequest request, Timestamp startTime,
+			Timestamp endTime) {
 		try{
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("coachId", request.getCoachId());
@@ -248,5 +248,18 @@ public class LessonDaoImpl extends SqlSessionDaoSupport implements LessonDao{
 			throw new RuntimeException(e);
 		}
 		
+	}
+
+	@Override
+	public float getAssignedHour(Long courseId) {
+		try{
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("courseId", courseId);
+			map.put("lessonActiveStatus", LESSON_STATUS.ACTIVE.getValue());
+			return this.getSqlSession().selectOne("getAssignedHour", map);
+		} catch(Throwable e){
+			log.error("getAssignedHour", e);
+			throw new RuntimeException(e);
+		}
 	}
 }

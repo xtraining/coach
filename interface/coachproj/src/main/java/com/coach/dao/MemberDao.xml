@@ -91,6 +91,11 @@
     update member set name = #{name}, phoneNumber = #{phoneNumber}, gender = #{gender} 
     where id = #{id}
   </update>
+  
+  <update id="updateBasicMember" parameterType="com.coach.model.Member">
+    update member set name = #{name}, phoneNumber = #{phoneNumber}
+    where id = #{id}
+  </update>
     
   <update id="updateMemberStatus" parameterType="Map">
     update course_member set status = #{status}

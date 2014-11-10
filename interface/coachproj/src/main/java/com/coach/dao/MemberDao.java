@@ -31,5 +31,7 @@ public interface MemberDao {
 
 	public Member getMemberByCourseIdAndMemberId(Long courseId, Long memberId);
 
+	public void updateBasicMember(Member m);
+
 
 }

@@ -40,6 +40,8 @@ public interface CourseDao {
 	List<Map<String, Object>> getCourseNum(Long coachId);
 
 	List<Course> getPersonalCourse(GetOrgCourseRequest request);
+
+	void updateCourse(Course c);
 	
 
 }

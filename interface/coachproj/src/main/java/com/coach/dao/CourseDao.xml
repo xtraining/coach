@@ -26,6 +26,10 @@
        <result column="remarks" jdbcType="VARCHAR" property="remarks" /> 
        <result column="memberNum" jdbcType="BIGINT" property="memberNum" /> 
        <result column="expiryDate" jdbcType="DATE" property="expiryDate" /> 
+       <result column="orgId" jdbcType="BIGINT" property="organizationId" />
+       <result column="orgName" jdbcType="VARCHAR" property="organizationName" />
+       <result column="lessonNum" jdbcType="INTEGER" property="lessonNum" />
+       <result column="scheduledLessonNum" jdbcType="INTEGER" property="scheduledLessonNum" />
   </resultMap>
   
   <resultMap id="PersonalCourseResult" type="com.coach.response.PersonalCourseResponse">
@@ -126,9 +130,12 @@
    
    <select id="getCourseDetail" parameterType="Map" resultMap="DetailCourseResult">
        SELECT c.id, c.name, c.address, c.description, c.type, c.groundId, c.groundName, c.startTime, c.endTime, 
-       c.recycleDay, c.courseHour, c.lessonHour, c.remarks, c.expiryDate,
+       c.recycleDay, c.courseHour, c.lessonHour, c.remarks, c.expiryDate, o.id orgId, o.name orgName,
+       c.lessonNum, (select count(s.id) from lesson s where s.courseId = c.id and s.status != #{deletedLessonStatus})scheduledLessonNum,
        (select count(cm.id) from course_member cm where cm.courseId = #{courseId} and cm.status != #{cmstatus})memberNum
-       from course c inner join coach_course cc on c.id = cc.courseId where c.id = #{courseId} and cc.coachId = #{coachId}
+       from course c inner join coach_course cc on c.id = cc.courseId 
+       left outer join organization o on o.id = c.organizationId
+       where c.id = #{courseId} and cc.coachId = #{coachId}
    </select>
    
    <select id="checkCourse" parameterType="Map" resultType="Long">
@@ -155,6 +162,14 @@
    
    <update id="deleteCourse" parameterType="Map">
        update course set status = #{status} where id = #{courseId}
+   </update>
+   
+   <update id="updateCourse" parameterType="com.coach.model.Course">
+       UPDATE course SET 
+  	   name = #{name}, address = #{address}, description = #{description}, groundName = #{groundName}, startTime = #{startTime}, endTime = #{endTime},
+  	   recycleDay = #{recycleDay}, courseHour = #{courseHour}, lessonHour = #{lessonHour}, lessonNum = #{lessonNum}, 
+  	   remarks = #{remarks}, longitude = #{longitude}, latitude = #{latitude} 
+       WHERE id = #{id};
    </update>
    
    <insert id="insertCourse" useGeneratedKeys="true" keyProperty="id" parameterType="com.coach.model.Course">

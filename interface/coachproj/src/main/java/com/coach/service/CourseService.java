@@ -98,17 +98,28 @@ public class CourseService extends SimpleBaseService{
         			request.getRopRequestContext().getMethod(), "COURSE_HOUR_LESS_THAN_LESSON_HOUR",
         			request.getRopRequestContext().getLocale());
 		}
-		String[]memberIdArr = StringUtils.split(request.getMemberNameList(), "||");
-		String[]phoneNumberArr = StringUtils.split(request.getPhoneNumberList(), "||");
-		String[]memberNameArr = StringUtils.split(request.getMemberNameList(), "||");
-		if(memberIdArr.length != phoneNumberArr.length || phoneNumberArr.length != memberNameArr.length
-				|| memberIdArr.length != memberNameArr.length){
-			return new BusinessServiceErrorResponse(
-        			request.getRopRequestContext().getMethod(), "MEMBER_NAME_PHONE_NUMBER_MEMBER_ID_NOT_MATCH",
-        			request.getRopRequestContext().getLocale());
+		String[]modifyMemberIdArr = StringUtils.split(request.getModifyMemberIdList(), "||");
+		String[]modifyPhoneNumberArr = StringUtils.split(request.getModifyPhoneNumberList(), "||");
+		String[]modifyMemberNameArr = StringUtils.split(request.getModifyMemberNameList(), "||");
+		if(modifyMemberIdArr != null && modifyMemberIdArr.length > 0){
+			if(modifyMemberIdArr.length != modifyPhoneNumberArr.length || modifyPhoneNumberArr.length != modifyMemberNameArr.length
+					|| modifyMemberIdArr.length != modifyMemberNameArr.length){
+				return new BusinessServiceErrorResponse(
+	        			request.getRopRequestContext().getMethod(), "MEMBER_NAME_PHONE_NUMBER_MEMBER_ID_NOT_MATCH",
+	        			request.getRopRequestContext().getLocale());
+			}
 		}
-		SimpleResponse r = new SimpleResponse();
-		courseResolver.updateCourese(request, memberIdArr, phoneNumberArr, memberNameArr);
+		String[]newMemberNameArr = StringUtils.split(request.getNewMemberNameList(), "||");
+		String[]newPhoneNumberArr = StringUtils.split(request.getNewPhoneNumberList(), "||");
+		if(newMemberNameArr != null && newMemberNameArr.length > 0){
+			if(newMemberNameArr.length != newPhoneNumberArr.length){
+				return new BusinessServiceErrorResponse(
+	        			request.getRopRequestContext().getMethod(), "MEMBER_NAME_PHONE_NUMBER_NOT_MATCH",
+	        			request.getRopRequestContext().getLocale());
+			}
+		}
+		String[]deletedMemberIdArr = StringUtils.split(request.getDeletedMemberIdList(), "||");
+		ConflictLessonResponse r = courseResolver.updateCourese(request, modifyMemberIdArr, modifyPhoneNumberArr, modifyMemberNameArr, newPhoneNumberArr, newMemberNameArr, deletedMemberIdArr);
 		return r;
 	}
 	

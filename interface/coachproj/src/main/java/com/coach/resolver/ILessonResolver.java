@@ -12,6 +12,7 @@ import com.coach.request.GetCheckLessonRequest;
 import com.coach.request.GetRecentLessonRequest;
 import com.coach.request.UpdateLessonRequest;
 import com.coach.request.UpdateLifeRequest;
+import com.coach.response.ConflictLessonResponse;
 import com.coach.response.LessonDetailResponse;
 import com.coach.response.LessonMemberResponse;
 import com.coach.response.LessonResponse;
@@ -32,9 +33,9 @@ public interface ILessonResolver {
 
 	void saveCheckMember(CheckLessonMemberRequest request);
 
-	void addPersonal(AddPersonalRequest request);
+	ConflictLessonResponse addPersonal(AddPersonalRequest request);
 
-	void addLesson(AddLessonRequest request);
+	ConflictLessonResponse addLesson(AddLessonRequest request);
 
 	TotalLessonResponse getTotalLesson(Long coachId);
 
@@ -44,8 +45,8 @@ public interface ILessonResolver {
 
 	void deleteLesson(Long lessonId);
 
-	void updateLesson(UpdateLessonRequest request);
+	ConflictLessonResponse updateLesson(UpdateLessonRequest request);
 
-	void updateLife(UpdateLifeRequest request);
+	ConflictLessonResponse updateLife(UpdateLifeRequest request);
 
 }
