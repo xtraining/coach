@@ -119,6 +119,7 @@ public class LessonDaoImpl extends SqlSessionDaoSupport implements LessonDao{
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("percent", percent);
 			map.put("startDate", startDate);
+			map.put("courseAcceptedStatus", COACH_COURSE_STATUS.ACCEPTED.getValue());
 			map.put("courseActiveStatus", COURSE_STATUS.ACTIVE.getValue());
 			map.put("lessonActiveStatus", LESSON_STATUS.ACTIVE.getValue());
 			map.put("lessonCheckedFlag", LESSON_CHECK_FLAG.CHECKED.getValue());

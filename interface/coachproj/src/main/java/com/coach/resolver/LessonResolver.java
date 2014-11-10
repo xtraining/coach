@@ -13,9 +13,12 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.coach.common.CoachWording;
+import com.coach.common.CoachWordingList;
 import com.coach.common.Constants.COURSE_TYPE;
 import com.coach.common.Constants.LESSON_MEMBER_STATUS;
 import com.coach.common.Constants.LESSON_STATUS;
@@ -58,7 +61,7 @@ public class LessonResolver extends BaseResolver implements ILessonResolver{
 	@Resource private CourseMemberDao courseMemberDao;
 	@Resource private LessonMemberDao lessonMemberDao;
 	@Resource private CoachCourseDao coachCourseDao;
-	@SuppressWarnings("unchecked")
+	@Autowired private CoachWordingList coachWordingList;
 	@Override
 	public WeekLessonResponse getOneWeekLesson(Long coachId, String requestDate) {
 		Date date = DateUtils.yyyyMMddToDate(requestDate);
@@ -318,9 +321,9 @@ public class LessonResolver extends BaseResolver implements ILessonResolver{
 				}
 				r.setMonth(month);
 				if(type.intValue() == COURSE_TYPE.ORG.getValue()){
-					r.setOrgHours(num.intValue());
+					r.setOrgHours(num);
 				} else {
-					r.setPersonalHours(num.intValue());
+					r.setPersonalHours(num);
 				}
 			}
 		}
@@ -338,7 +341,7 @@ public class LessonResolver extends BaseResolver implements ILessonResolver{
 			String key = it.next();  
 			MonthLessonResponse r = map.get(key);
 			monthLessonList.add(r);  
-			response.setTotalHours(response.getTotalHours() + r.getOrgHours() + r.getPersonalHours());
+			response.setTotalHours(response.getTotalHours() + r.getOrgHours().intValue() + r.getPersonalHours().intValue());
 		}  
 		Collections.sort(monthLessonList, new Comparator<MonthLessonResponse>() {
 			@Override
@@ -353,15 +356,15 @@ public class LessonResolver extends BaseResolver implements ILessonResolver{
 		
 		response.setMonthLessonList(monthLessonList);
 		Double percentValue = lessonDao.getPercent(response.getTotalHours(), startDate) * 100;
-		percentValue = percentValue < 1 ? 1 : percentValue;
-		response.setPercent(100 - percentValue.intValue()); 
-		/*List<SysParameter> list = systemParameterResolver.getByType(SYS_PARAMETER_TYPE.COACH_WORDING), "desc");
-		for(SysParameter sys : list){
-			if(percentValue > sys.getOrder()){
-				response.setWording(sys.getValue());
+		percentValue = percentValue > 100 ? 99 : percentValue;
+		response.setPercent(percentValue.intValue()); 
+		List<CoachWording> wordingList = coachWordingList.getWordingList();
+		for(CoachWording wording : wordingList){
+			if(percentValue >= wording.getMinValue() && percentValue < wording.getMaxValue()){
+				response.setWording(wording.getWording());
+				break;
 			}
-		}*/
-		response.setWording("您获得了封神级称号！");
+		}
 		return response;
 	}
 	private List<String> getLatest4Month() {

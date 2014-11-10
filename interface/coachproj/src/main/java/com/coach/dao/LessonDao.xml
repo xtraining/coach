@@ -103,13 +103,16 @@
     
   <select id="getPercent" parameterType="Map" resultType="Double">
     select 
-		(select count(aa.id) from (select ch.id, sum(s.hours)num FROM
-                           coach ch INNER JOIN coach_course cc on ch.id = cc.coachId
-                           INNER JOIN course c on cc.courseId = c.id and c.status = #{courseActiveStatus}
-                           INNER JOIN lesson s on s.courseId = c.id and s.status = #{lessonActiveStatus}
-                           where s.checkFlag = #{lessonCheckedFlag} and s.startTime >= #{startDate}
+		(select count(aa.id) from (select ch.id, ifnull(sum(s.hours), 0) num FROM
+                           coach ch inner join tuser tt on ch.tuserId = tt.id and tt.status != 1
+                           left JOIN coach_course cc on ch.id = cc.coachId and cc.status = #{courseAcceptedStatus}
+                           left JOIN course c on cc.courseId = c.id and c.status = #{courseActiveStatus}
+                           left JOIN lesson s on s.courseId = c.id and s.status = #{lessonActiveStatus} 
+                           and s.checkFlag = #{lessonCheckedFlag} and s.startTime >= #{startDate}
                            GROUP BY ch.id)aa 
- 	where aa.num >= #{percent})/(select count(cch.id) from coach cch inner join tuser t on cch.tuserId = t.id where t.status != 1)  
+ 	      where aa.num &lt; #{percent}) 
+ 	      / 
+ 	      (select count(cch.id) from coach cch inner join tuser t on cch.tuserId = t.id where t.status != 1)  
   </select>
   
   <select id="getCheckLesson" parameterType="Map" resultMap="BaseLessonResult">

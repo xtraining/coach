@@ -2,6 +2,7 @@ package com.coach.common;
 
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.Enumeration;
 import java.util.Properties;
 
 import org.apache.commons.logging.Log;
@@ -106,4 +107,5 @@ public class Config {
     public static void setPropertyValue(String key, String value) {
         prop.put(key, value);
     }
+    
 }

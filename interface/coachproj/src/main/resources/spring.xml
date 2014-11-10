@@ -20,7 +20,34 @@
         http://www.springframework.org/schema/cache 
         http://www.springframework.org/schema/cache/spring-cache.xsd">
 
-	<context:property-placeholder location="/WEB-INF/classes/base.properties" />
+	<context:property-placeholder location="/WEB-INF/classes/coach_wording.properties" />
+	
+	<bean id="coachWordingList" class="com.coach.common.CoachWordingList">
+		<property name="wordingList">
+			<list>
+				<bean class="com.coach.common.CoachWording">
+					<property name="minValue" value="0" />
+					<property name="maxValue" value="25" />
+					<property name="wording" value="${coach_wording_1}" />
+				</bean>
+				<bean class="com.coach.common.CoachWording">
+					<property name="minValue" value="25" />
+					<property name="maxValue" value="50" />
+					<property name="wording" value="${coach_wording_2}" />
+				</bean>
+				<bean class="com.coach.common.CoachWording">
+					<property name="minValue" value="50" />
+					<property name="maxValue" value="75" />
+					<property name="wording" value="${coach_wording_3}" />
+				</bean>
+				<bean class="com.coach.common.CoachWording">
+					<property name="minValue" value="75" />
+					<property name="maxValue" value="100" />
+					<property name="wording" value="${coach_wording_4}" />
+				</bean>
+			</list>
+		</property>
+	</bean>
 
 	<import resource="write-master-read-slaves.xml"/> 
 </beans>
