@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import com.coach.request.UploadCallbackRequest;
 import com.coach.response.CallbackSuccessResponse;
+import com.coach.utils.Config;
 import com.rop.annotation.IgnoreSignType;
 import com.rop.annotation.NeedInSessionType;
 import com.rop.annotation.ServiceMethod;
@@ -17,7 +18,7 @@ public class QiniuCallbackService extends SimpleBaseService{
 	@ServiceMethod(method = "qiniu.uploadCallback",version = "1.0",needInSession = NeedInSessionType.NO)
     public Object uploadCallback(UploadCallbackRequest request) { 
 		CallbackSuccessResponse r = new CallbackSuccessResponse();
-		r.setKey(request.getName());
+		r.setKey(Config.getProperty("QINIU_DOMAIN") + request.getName());
 		log.info("callback from qiniu:", request.toString());
 		return r;
 	}
