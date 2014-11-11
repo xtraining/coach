@@ -278,4 +278,16 @@ public class Constants {
 			return this.value;
 		}
 	}
+	
+	public enum TASK_STATUS {
+		DRAFT(0), 
+		INPROGRESS(1), SUCCESS(2), FAILURE(3);
+		private int value;
+		private TASK_STATUS(int value) {
+			this.value = value;
+		}
+		public int getValue(){
+			return this.value;
+		}
+	}
 }

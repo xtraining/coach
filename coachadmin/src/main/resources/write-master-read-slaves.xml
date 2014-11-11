@@ -16,7 +16,6 @@
 	
 	<context:annotation-config></context:annotation-config>
 	
-	<!-- 读取资源文件 -->
 	<bean
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="location" value="classpath:jdbc.properties" />
@@ -37,7 +36,6 @@
 		</property>
 	</bean>
 	
-	<!-- Master数据源 -->
 	<bean id="masterDataSourceOne" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
 		<property name="driverClass" value="${driverClassName}" />
 		<property name="jdbcUrl">
@@ -53,7 +51,6 @@
 		<property name="maxStatements" value="0" />
 	</bean>
 
-	<!-- Slave数据源 -->
 	<bean id="slaveDataSourceOne" class="com.mchange.v2.c3p0.ComboPooledDataSource"	destroy-method="close">
 		<property name="driverClass" value="${driverClassName}" />
 		<property name="jdbcUrl">
@@ -69,7 +66,6 @@
 		<property name="maxStatements" value="0" />
 	</bean>
 
-	<!-- 配置Routing4DB 数据源 -->
 	<bean id="routing4DBDataSource" class="com.google.code.routing4db.datasource.Routing4DBDataSource">
 		<property name="targetDataSources">
 			<map>
@@ -80,7 +76,6 @@
 		<property name="defaultTargetDataSource" ref="masterDataSourceOne" />
 	</bean>
 
-	<!-- Mybatis SessionFactory配置 -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="configLocation" value="classpath:mybatis.xml" />
 		<property name="dataSource" ref="routing4DBDataSource" />
@@ -92,7 +87,6 @@
 		</property>
 	</bean>
 	
-	<!-- 事务配置 -->
 	<bean id="transactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="routing4DBDataSource" />
@@ -100,7 +94,6 @@
 	
 	<tx:annotation-driven transaction-manager="transactionManager" />
 
-	<!-- 配置路由策略 -->
 	<bean id="masterSlaveStrategy" class="com.google.code.routing4db.strategy.impl.MasterSlaveStrategy">
 		<property name="readMethodPatterns">
 			<list>
@@ -108,20 +101,17 @@
 				<value>find*</value>
 				<value>load*</value>
 				<value>search*</value> -->
-				<value>slaveMethod*</value><!-- 目前所有的方法都走master db -->
+				<value>slaveMethod*</value>
 			</list>
 		</property>
-		<!-- Master数据源 -->
 		<property name="masterDataSourceKey" value="masterDataSourceOne"></property>
 
-		<!-- Slaves数据源 从0开始，以此编号 -->
 		<property name="dataSourceKeyMap">
 			<map>
 				<entry key="0" value="slaveDataSourceOne"></entry>
 			</map>
 		</property>
 
-		<!-- 指定某些接口的方法不执行路由，若接口所有方法都执行路由，则无需配置该属性 -->
 		<property name="excludeMethodPatterns">
 			<list>
 				<value>excludeMethodPatterns*</value>
@@ -176,6 +166,14 @@
 		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
 		<property name="targetInterface" value="com.zhiqin.coach.admin.dao.CoachCourseDao"></property>
 		<property name="targetObject" ref="coachCourseDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean>
+	
+	<bean id="taskDaoTarget" class="com.zhiqin.coach.admin.dao.impl.TaskDaoImpl"></bean>
+	<bean id="taskDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.zhiqin.coach.admin.dao.TaskDao"></property>
+		<property name="targetObject" ref="taskDaoTarget"></property>
 		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
 	</bean>
 </beans>

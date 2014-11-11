@@ -37,7 +37,7 @@
 		WHEN c.type = 0 THEN 1
 		WHEN c.type = 1 THEN 2
 		END type
-		from course c INNER JOIN coach_course cc on c.id  = cc.courseId and c.status = 0
+		from course c INNER JOIN coach_course cc on c.id  = cc.courseId and c.status = 0 and cc.status = 1
 		INNER JOIN lesson s on c.id = s.courseId and s.status = 0 
 		where cc.coachId = #{coachId} and s.startTime &gt;= #{startDate} and s.endTime &lt; #{endDate}
 	union ALL
@@ -68,7 +68,7 @@
     	CASE WHEN c.type = 0 THEN 1
 		WHEN c.type = 1 THEN 2
 		END type
-		from course c INNER JOIN coach_course cc on c.id  = cc.courseId and c.status = 0
+		from course c INNER JOIN coach_course cc on c.id  = cc.courseId and c.status = 0 and cc.status = 1
 		INNER JOIN lesson s on c.id = s.courseId and s.status = 0
 		where cc.coachId = #{coachId} and s.startTime &gt;= #{startDate} and s.endTime &lt; #{endDate}
 		

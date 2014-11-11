@@ -1,4 +1,4 @@
-package com.zhiqin.coach.admin.controller.coach;
+package com.zhiqin.coach.admin.controller.story;
 
 import java.util.List;
 
@@ -26,21 +26,21 @@ import com.zhiqin.coach.admin.service.CoachService;
  * @version 1.0v
  */
 @Controller
-@RequestMapping("/coach/coach/")
-public class CoachController extends BaseController{
+@RequestMapping("/story/story/")
+public class StoryController extends BaseController{
 	@Resource
 	private CoachService coachService;
+	
+	@RequestMapping("menu")
+	public String index() {
+		return "/story/story-menu";
+	}
+	
 	/**
 	 * @param model
 	 * 存放返回界面的model
 	 * @return
 	 */
-	
-	@RequestMapping("menu")
-	public String index() {
-		return "/coach/coach-menu";
-	}
-	
 	@RequestMapping("list")
 	public String list(Model model, @ModelAttribute("searchDto")SearchCoachDTO searchDto, PageInfoDTO pageInfo) {
 		Long totalNum = coachService.getTotalNum(searchDto);

@@ -3,7 +3,6 @@
 	"http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 	<typeAliases>
-	<!-- 给实体Bean一个别名-->
 		<typeAlias type="com.zhiqin.coach.admin.entity.User" alias="User" />
 		<typeAlias type="com.zhiqin.coach.admin.entity.Resources" alias="Resources"/>
 		<typeAlias type="com.zhiqin.coach.admin.entity.Roles" alias="Roles"/>
@@ -18,5 +17,7 @@
 		<typeAlias type="com.zhiqin.coach.admin.dto.CoachDTO" alias="CoachDTO"/>
 		<typeAlias type="com.zhiqin.coach.admin.dto.CourseDTO" alias="CourseDTO"/>
 		<typeAlias type="com.zhiqin.coach.admin.dto.LessonDTO" alias="LessonDTO"/>
+		
+		<typeAlias type="com.zhiqin.coach.admin.dto.TaskDTO" alias="TaskDTO"/>
 	</typeAliases>
 </configuration>

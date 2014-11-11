@@ -103,9 +103,9 @@ $(function(){
 
 			<div id="navMenu">
 				<ul>
-					<li class="selected"><a href="sidebar_1.html"><span>教练宝</span></a></li>
+					<li class="selected"><a href="../coach/coach/menu.htm"><span>教练宝</span></a></li>
 					<li><a href="sidebar_2.html"><span>智勤云校</span></a></li>
-					<li><a href="sidebar_1.html"><span>教练宝C端</span></a></li>
+					<li><a href="../story/story/menu.htm"><span>智勤C端</span></a></li>
 				</ul>
 			</div>
 			
