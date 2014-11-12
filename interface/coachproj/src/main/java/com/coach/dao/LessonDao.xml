@@ -132,7 +132,7 @@
 	union all
 	select s.id, s.name, s.hours, s.startTime, s.endTime 
 	from lesson s
-	where s.coachId = #{coachId} and s.startTime >= #{startDate} and s.status = #{lessonActiveStatus}
+	where s.coachId = #{coachId} and s.courseId is null and s.startTime >= #{startDate} and s.status = #{lessonActiveStatus}
   </select>
   
   <select id="getAssignedHour" parameterType="Map" resultType="Float">

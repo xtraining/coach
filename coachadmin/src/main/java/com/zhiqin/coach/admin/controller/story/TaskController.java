@@ -39,7 +39,7 @@ public class TaskController extends BaseController{
 	
 	@RequestMapping("add")
 	public String add() {
-		return "/story/task-add";
+		return "/story/task-add-xmly";
 	}
 	
 	@ResponseBody

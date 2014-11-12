@@ -27,7 +27,9 @@
 <div class="pageContent">
 	<div class="panelBar">
 		<ul class="toolBar">
-			<li><a class="add" href="${ctx}/story/task/add.htm" target="dialog" mask="true" width="600" height="400" title="新增"><span>新增</span></a></li>
+			<li><a class="add" href="${ctx}/story/task/add.htm?sourceFrom=0" target="dialog" mask="true" title="喜马拉雅"><span>喜马拉雅</span></a></li>
+			<li><a class="add" href="${ctx}/story/task/add.htm?sourceFrom=1" target="dialog" mask="true" width="600" height="400" title="百度"><span>百度</span></a></li>
+			
 			<li class="line">line</li>
 		</ul>
 	</div>

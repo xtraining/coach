@@ -9,7 +9,7 @@ function save(){
 	}
 	$.ajax({
 			type:'POST',
-			url:'${ctx}/story/task/create.htm',
+			url:'${ctx}/story/task/create.htm?sourceFrom=0',
 			data:$("#taskForm").formSerialize(),//序列化表单里所有的内容
 			success: function(data){	
 				switch(data){
@@ -29,23 +29,17 @@ function save(){
 </script>
 <div class="pageContent">
 	<form name="taskForm" id="taskForm" method="post" action="" class="pageForm required-validate">
-	<h2 class="contentTitle">下载任务</h2>
-		<div class="pageFormContent nowrap" layoutH="96">	
+	<h2 class="contentTitle">创建下载任务</h2>
+		<div class="pageFormContent" layoutH="96">	
 			<p>
-				<label>来源网站: </label>
-					<select name="sourceFrom" class="combox">
-						<option value="0">喜马拉雅</option>	
-					</select>
-			</p>
-			<p>
-				<label>地址: </label>
-				<textarea name="url" cols="90" rows="10" maxlength="2000" class="required"></textarea>
-				<span>如果是多个地址请用;分割</span>
+				<label>专辑ID: </label>
+				<input type="text" name="url" value=""/>
+				<span class="info">多个ID用;分割</span>
 			</p>
 		</div>
 		<div class="formBar">
 			<ul>
-				<li><div class="buttonActive"><div class="buttonContent"><button type="button" onclick="save();">保存</button></div></div></li>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="button" onclick="save();">创建</button></div></div></li>
 				<li>
 					<div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div>
 				</li>
