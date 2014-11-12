@@ -211,7 +211,9 @@ public class LessonResolver extends BaseResolver implements ILessonResolver{
 				response.setAttendNum(0);
 				response.setTotalNum(0);
 			}
-			response.setMemberList(mList);
+			if(mList.size() > 0){
+				response.setMemberList(mList);
+			}
 			response.setLessonId(lessonId);
 			cacheAction.setValue(response);
 			return response;

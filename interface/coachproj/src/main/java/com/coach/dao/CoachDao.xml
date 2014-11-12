@@ -57,7 +57,14 @@
 	oc.coachName = (select u.name from coach c inner join tuser u on c.tuserId = u.id  where c.id = #{coachId}) 
 	and oc.idType = (select t.idType from coach c inner join tuser t on c.tuserId = t.id where c.id = #{coachId})
 	and oc.idNumber = (select t.idNumber from coach c inner join tuser t on c.tuserId = t.id where c.id = #{coachId})
-	and oc.status not in (6, 7, 8)
+	and oc.status not in (-1, 6, 7, 8)
+	
+	union
+	
+	select 
+	o.id orgId, o.name orgName, oc.status
+	from organization o inner join organization_coach oc on o.id = oc.organizationid 
+	where oc.coachId = #{coachId} and oc.status in (2, 5)
   </select>
   
   <select id="getDetailById" parameterType="String" resultMap="CoachDetailResult">

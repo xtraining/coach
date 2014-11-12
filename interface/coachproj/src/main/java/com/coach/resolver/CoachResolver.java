@@ -278,14 +278,15 @@ public class CoachResolver extends BaseResolver implements ICoachResolver{
 			if(StringUtils.isNotBlank(oldAvatarUrl) && !oldAvatarUrl.startsWith("http")){
 				QiniuUtils.deleteFile(oldAvatarUrl);
 			}
-			String uptoken = QiniuUtils.getUptoken(request.getRopRequestContext().getVersion(), IMAGE_TYPE.COACH_AVATAR, Long.valueOf(c.getId()));
-			List<String>fileNameList = new ArrayList<String>();
 			String fileNameInQiniu = QiniuUtils.generateCoachImageName(c.getId(), extFileName); 
+			List<String>fileNameList = new ArrayList<String>();
 			if(!StringUtils.equalsIgnoreCase(oldAvatarUrl, fileNameInQiniu)){
 				QiniuUtils.deleteFile(fileNameInQiniu);
 			}
 			coachDao.updateAvatar(c.getId(), fileNameInQiniu);
 			fileNameList.add(fileNameInQiniu);
+			
+			String uptoken = QiniuUtils.getUptoken(fileNameInQiniu, request.getRopRequestContext().getVersion(), IMAGE_TYPE.COACH_AVATAR, Long.valueOf(c.getId()));
 			response.setUptoken(uptoken);
 			response.setKeys(fileNameList);
 		}

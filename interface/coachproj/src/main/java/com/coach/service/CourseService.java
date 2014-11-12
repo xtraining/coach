@@ -17,6 +17,7 @@ import com.coach.request.UpdateCourseRequest;
 import com.coach.request.UpdateCourseStatusRequest;
 import com.coach.resolver.ICourseResolver;
 import com.coach.response.ChiefCourseResponse;
+import com.coach.response.CoachCourseStatusResponse;
 import com.coach.response.ConflictLessonResponse;
 import com.coach.response.CourseDetailResponse;
 import com.coach.response.CourseResponse;
@@ -149,8 +150,8 @@ public class CourseService extends SimpleBaseService{
 	
 	@ServiceMethod(method = "course.updateCoachCourseStatus", version = "1.0", needInSession = NeedInSessionType.YES, httpAction = HttpAction.POST)
     public Object updateCoachCourseStatus(UpdateCourseStatusRequest request) {
-		courseResolver.updateCoachCourseStatus(request.getCoachId(), request.getCourseId(), request.getStatus());
-		return new SimpleResponse();
+		CoachCourseStatusResponse r = courseResolver.updateCoachCourseStatus(request.getCoachId(), request.getCourseId(), request.getStatus());
+		return r;
 	}
 	
 	@ServiceMethod(method = "course.getPersonalCourseList", version = "1.0", needInSession = NeedInSessionType.YES)

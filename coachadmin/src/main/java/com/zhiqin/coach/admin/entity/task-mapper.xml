@@ -12,17 +12,57 @@
 		<result column="sourceFrom" jdbcType="INTEGER" property="sourceFrom" />
 	</resultMap>
 	
+	<resultMap id="DownloadTaskDTOResult" type="com.zhiqin.coach.admin.dto.DownloadTaskDTO">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="fileUrl" jdbcType="VARCHAR" property="fileUrl" />
+		<result column="imageUrl" jdbcType="VARCHAR" property="imageUrl" />
+		<result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="startTime" jdbcType="TIMESTAMP" property="startTime" />
+		<result column="endTime" jdbcType="TIMESTAMP" property="endTime" />
+		<result column="status" jdbcType="INTEGER" property="status" />
+		<result column="title" jdbcType="VARCHAR" property="title" />
+		<result column="subtitle" jdbcType="VARCHAR" property="subtitle" />
+		<result column="type" jdbcType="INTEGER" property="type" />
+		<result column="size" jdbcType="INTEGER" property="size" />
+		<result column="duration" jdbcType="INTEGER" property="duration" />
+	</resultMap>
+	
 	<select id="getTotalNum" parameterType="TaskDTO" resultType="Long">
 		select count(*) from task  
 	</select>
 
 	<select id="getTaskList" parameterType="Map" resultMap="TaskDTOResult" >
 		select * from task order by createTime desc
+		limit ${p.pageNum - 1}, ${p.numPerPage}
 	</select>
 	
-	<insert id="insertCourse" useGeneratedKeys="true" keyProperty="courseId" parameterType="CourseDTO">
-		INSERT INTO course(name, organizationId, address, description, type, groundId, groundName, startTime, endTime, recycleDay, courseHour, lessonHour, lessonNum, code, expiryDate, status, remarks, createTime) 
-		VALUE (#{name}, #{orgId}, #{address}, #{description}, #{type}, #{groundId}, #{groundName}, #{startTime}, #{endTime}, #{recycleDay}, #{courseHour}, #{lessonHour}, #{lessonNum}, #{code}, #{expiryDate}, #{status}, #{remarks}, now()) 
+	<select id="getDownloadTaskTotalNum" parameterType="Integer" resultType="Long">
+		select count(*) from download_task where taskId = #{taskId}
+	</select>
+
+	<select id="getDownloadTaskList" parameterType="Map" resultMap="DownloadTaskDTOResult" >
+		select * from download_task where taskId = #{taskId} order by id
+		limit ${p.pageNum - 1}, ${p.numPerPage}
+	</select>
+	
+	<select id="getById" parameterType="Integer" resultMap="TaskDTOResult" >
+		select * from task where id = #{taskId}
+	</select>
+	
+	<update id="updateStatus" parameterType="Map">
+		update task set status = #{status} where id = #{taskId}
+	</update>
+	
+	<insert id="insertTask" useGeneratedKeys="true" keyProperty="id" parameterType="TaskDTO">
+		INSERT INTO task(url,description,createTime,status,taskNum,sourceFrom) 
+		VALUE (#{url}, #{description}, now(), #{status}, #{taskNum}, #{sourceFrom}) 
+  	</insert>
+  	
+  	<insert id="insertDownloadTask" useGeneratedKeys="true" keyProperty="id" parameterType="DownloadTaskDTO">
+		INSERT INTO download_task(taskId, fileUrl, status, startTime, endTime, imageUrl, title, subtitle, 
+		fileName, type, size, duration, createTime)
+		value(#{taskId}, #{fileUrl}, #{status}, #{startTime}, #{endTime}, #{imageUrl}, #{title}, #{subtitle}, 
+		#{fileName}, #{type}, #{size}, #{duration}, now())
   	</insert>
   	
 </mapper>

@@ -279,14 +279,57 @@ public class Constants {
 		}
 	}
 	
+	public enum DOWNLOAD_SOURCE_FROM {
+		XIMALAYA(0), BAIDU(1);
+		private int value;
+		private DOWNLOAD_SOURCE_FROM(int value) {
+			this.value = value;
+		}
+		public int getValue(){
+			return this.value;
+		}
+	}
+	
 	public enum TASK_STATUS {
-		DRAFT(0), 
-		INPROGRESS(1), SUCCESS(2), FAILURE(3);
+		DRAFT(0), INPROGRESS(1), SUCCESS(2), FAILURE(3);
 		private int value;
 		private TASK_STATUS(int value) {
 			this.value = value;
 		}
 		public int getValue(){
+			return this.value;
+		}
+	}
+	
+	public enum DOWNLOAD_TASK_STATUS {
+		DRAFT(0), INPROGRESS(1), UPLOAD(2), SUCCESS(3), FAILURE(4);
+		private int value;
+		private DOWNLOAD_TASK_STATUS(int value) {
+			this.value = value;
+		}
+		public int getValue(){
+			return this.value;
+		}
+	}
+	
+	public enum DOWNLOAD_TASK_TYPE {
+		COVER(0), ARTIFACT(1);
+		private int value;
+		private DOWNLOAD_TASK_TYPE(int value) {
+			this.value = value;
+		}
+		public int getValue(){
+			return this.value;
+		}
+	}
+	
+	public enum FILE_NAME_PREFIX {
+		IMAGE("image_"), VOICE("voice_");
+		private String value;
+		private FILE_NAME_PREFIX(String value) {
+			this.value = value;
+		}
+		public String getValue(){
 			return this.value;
 		}
 	}

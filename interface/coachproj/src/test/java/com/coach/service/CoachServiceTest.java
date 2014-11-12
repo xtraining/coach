@@ -12,8 +12,8 @@ import com.coach.utils.HttpUtil;
 import com.rop.utils.RopUtils;
 
 public class CoachServiceTest extends TestCase {
-	public static final String SERVER_URL = "http://localhost:8080/coach/service";
-//	public static final String SERVER_URL = "http://114.215.145.26/coach/service";
+//	public static final String SERVER_URL = "http://localhost:8080/coach/service";
+	public static final String SERVER_URL = "http://114.215.145.26/coach/service";
 	public static final String APP_KEY = "iphone_user";
 	public static final String APP_SECRET = "LlnZA8cql4liN4CvjGL5GfwhCh7fwWGE";
 	public static final String VERSION = "V0.5.0.0";
@@ -321,21 +321,21 @@ public class CoachServiceTest extends TestCase {
         assertTrue(response.indexOf("code") <= 0);
 	}*/
 	
-	/*public void testgetBindOrg() {
+	public void testgetBindOrg() {
 		Map <String, String>map = new HashMap<String, String>();
     	map.put("appKey", APP_KEY); //第二个参数为AppKey
     	map.put("method", METHOD.GET_BIND_ORG.getValue()); 
     	map.put("v", "1.0");
     	map.put("format", "json");
-    	map.put("sessionId", "CD47C554-2ADF-4713-851A-5FF928C14A39");
-    	map.put("coachId", "17");
+    	map.put("sessionId", "111F0FED-5009-4CF6-B63A-0453D08F4212");
+    	map.put("coachId", "24");
     	String sign = RopUtils.sign(map, APP_SECRET); //第二个参数为SecretKey, 有O2O系统分配
     	map.put("sign", sign);
     	String response = HttpUtil.postServer(SERVER_URL, map);
         System.out.println("response = " + response);
         assertNotNull(response);
         assertTrue(response.indexOf("code") <= 0);
-	}*/
+	}
 	
 	/*
 	public void testUpdateBindOrg() {
@@ -355,7 +355,7 @@ public class CoachServiceTest extends TestCase {
         assertTrue(response.indexOf("code") <= 0);
 	}
 	*/
-	public void testGetTotalLesson() {
+/*	public void testGetTotalLesson() {
 		Map <String, String>map = new HashMap<String, String>();
     	map.put("appKey", APP_KEY); //第二个参数为AppKey
     	map.put("method", METHOD.GET_TOTAL_LESSON.getValue()); 
@@ -369,5 +369,5 @@ public class CoachServiceTest extends TestCase {
         System.out.println("response = " + response);
         assertNotNull(response);
         assertTrue(response.indexOf("code") <= 0);
-	}
+	}*/
 }

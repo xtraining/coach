@@ -38,7 +38,6 @@ public class LessonDaoImpl extends SqlSessionDaoSupport implements LessonDao{
 			Date endDate) {
 		try{
 			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("checkFlag", LESSON_CHECK_FLAG.CHECKED.getValue());
 			map.put("coachId", coachId);
 			map.put("startDate", startDate);
 			map.put("endDate", endDate);

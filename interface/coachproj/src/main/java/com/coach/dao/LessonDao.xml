@@ -8,6 +8,7 @@
        <result column="startTime" jdbcType="TIMESTAMP" property="startTime" />
        <result column="endTime" jdbcType="TIMESTAMP" property="endTime" />
        <result column="hours" jdbcType="FLOAT" property="hours" />
+       <result column="checkFlag" jdbcType="INTEGER" property="checkFlag" />
        <result column="type" jdbcType="INTEGER" property="type" />
        <result column="groundId" jdbcType="INTEGER" property="groundId" />
        <result column="groundName" jdbcType="VARCHAR" property="groundName" />
@@ -32,16 +33,15 @@
   
   <select id="getLessonInRange" parameterType="Map" resultMap="BaseLessonResult">
     select * from (
-    	select s.id, s.name, s.startTime, s.endTime, s.hours, s.groundId, s.groundName,
-		CASE WHEN s.checkFlag = #{checkFlag} THEN 0
-		WHEN c.type = 0 THEN 1
+    	select s.id, s.name, s.startTime, s.endTime, s.hours, s.groundId, s.groundName,s.checkFlag,
+		CASE WHEN c.type = 0 THEN 1
 		WHEN c.type = 1 THEN 2
 		END type
 		from course c INNER JOIN coach_course cc on c.id  = cc.courseId and c.status = 0 and cc.status = 1
 		INNER JOIN lesson s on c.id = s.courseId and s.status = 0 
 		where cc.coachId = #{coachId} and s.startTime &gt;= #{startDate} and s.endTime &lt; #{endDate}
 	union ALL
-		select s.id, s.name, s.startTime, s.endTime, s.hours, s.groundId, s.groundName, 3 type
+		select s.id, s.name, s.startTime, s.endTime, s.hours, s.groundId, s.groundName, s.checkFlag, 3 type
 		from lesson s where s.coachId  = #{coachId} and s.courseId is null and s.status = 0 and s.startTime &gt;= #{startDate} and s.endTime &lt; #{endDate}
 	)aa order by aa.startTime asc
   </select>

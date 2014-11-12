@@ -22,6 +22,7 @@ public class Lesson extends AbstractBaseModel implements java.io.Serializable {
 	private Timestamp endTime;
 	private Timestamp createTime;
 	private Integer type;
+	private Integer checkFlag;
 	private String name;
 	private String address;
 	private String description;
@@ -211,6 +212,16 @@ public class Lesson extends AbstractBaseModel implements java.io.Serializable {
 	}
 
 
+	public Integer getCheckFlag() {
+		return checkFlag;
+	}
+
+
+	public void setCheckFlag(Integer checkFlag) {
+		this.checkFlag = checkFlag;
+	}
+
+
 	public LessonResponse toResponse() {
 		LessonResponse r =  new LessonResponse();
 		r.setLessonId(id);
@@ -218,6 +229,7 @@ public class Lesson extends AbstractBaseModel implements java.io.Serializable {
 		r.setStartTime(DateUtils.dateToyyyyMMddHHmiss(getStartTime()));
 		r.setEndTime(DateUtils.dateToyyyyMMddHHmiss(getEndTime()));
 		r.setType(getType());
+		r.setCheckFlag(checkFlag);
 		return r;
 	}
 

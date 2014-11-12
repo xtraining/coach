@@ -9,6 +9,7 @@ import com.coach.request.CoachBaseRequest;
 import com.coach.request.GetOrgCourseRequest;
 import com.coach.request.UpdateCourseRequest;
 import com.coach.response.ChiefCourseResponse;
+import com.coach.response.CoachCourseStatusResponse;
 import com.coach.response.ConflictLessonResponse;
 import com.coach.response.CourseDetailResponse;
 import com.coach.response.CourseMemberResponse;
@@ -43,7 +44,7 @@ public interface ICourseResolver {
 
 	public void deleteCourse(Long coachId, Long courseId);
 
-	public void updateCoachCourseStatus(Long coachId, Long courseId,
+	public CoachCourseStatusResponse updateCoachCourseStatus(Long coachId, Long courseId,
 			Integer status);
 
 	public CourseDetailResponse getRejectCourseDetail(Long coachId,

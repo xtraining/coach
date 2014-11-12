@@ -27,13 +27,13 @@ public class QiniuUtils {
 	 * @param objectId
 	 * @return
 	 */
-	public static String getUptoken(String v, IMAGE_TYPE type, Long objectId){
+	public static String getUptoken(String fileName, String v, IMAGE_TYPE type, Long objectId){
         Mac mac = new Mac(Config.getProperty("QINIU_ACCESS_KEY"), Config.getProperty("QINIU_SECRET_KEY"));
         String bucketName = Config.getProperty("QINIU_QA_BUCKET_NAME");
         PutPolicy putPolicy = new PutPolicy(bucketName);
         putPolicy.expires = 10 * 60;
         putPolicy.callbackUrl = Config.getProperty("QINIU_CALLBACK_URL");
-        putPolicy.callbackBody = "name=$(fname)&hash=$(etag)&method=qiniu.uploadCallback&v="+v+"&format=json&appKey=qiniu&type="+type.getValue()+"&objectId="+objectId;
+        putPolicy.callbackBody = "name="+fileName+"&hash=$(etag)&method=qiniu.uploadCallback&v="+v+"&format=json&appKey=qiniu&type="+type.getValue()+"&objectId="+objectId;
         String uptoken = null;
 		try {
 			uptoken = putPolicy.token(mac);

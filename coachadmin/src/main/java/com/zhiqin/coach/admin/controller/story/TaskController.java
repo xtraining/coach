@@ -9,7 +9,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.zhiqin.coach.admin.common.Constants.DOWNLOAD_SOURCE_FROM;
 import com.zhiqin.coach.admin.controller.BaseController;
+import com.zhiqin.coach.admin.dto.DownloadTaskDTO;
 import com.zhiqin.coach.admin.dto.PageInfoDTO;
 import com.zhiqin.coach.admin.dto.TaskDTO;
 import com.zhiqin.coach.admin.service.TaskService;
@@ -37,17 +39,37 @@ public class TaskController extends BaseController{
 		return "/story/task-list";
 	}
 	
-	@RequestMapping("add")
-	public String add() {
-		return "/story/task-add-xmly";
+	@RequestMapping(value = "add")
+	public String add(int sourceFrom,Model model) {
+		switch (sourceFrom) {
+		case 0:
+			return "/story/task-add-xmly";
+
+		default:
+			return null;
+		}
 	}
 	
 	@ResponseBody
 	@RequestMapping("create")
-	public String create(int soureFrom, String url){
-		taskService.create(soureFrom, url);
+	public String create(int sourceFrom, String url, Model model){
+		taskService.create(sourceFrom, url);
 		return "success";
 	}
 	
-
+	@RequestMapping(value = "detail")
+	public String detail(int sourceFrom, int taskId, PageInfoDTO pageInfo, Model model) {
+		switch (sourceFrom) {
+		case 0:{
+			Long totalNum = taskService.getDownloadTaskTotalNum(taskId);
+			List<DownloadTaskDTO> list = taskService.getDownloadTaskList(taskId, pageInfo);
+			model.addAttribute("responseList", list); 
+			model.addAttribute("totalCount", totalNum+"");
+			model.addAttribute("currentNum", pageInfo.getPageNum() == null ? 1 : pageInfo.getPageNum());
+			return "/story/task-detail-xmly";
+		}
+		default:
+			return null;
+		}
+	}
 }

@@ -1,10 +1,14 @@
 package com.zhiqin.coach.admin.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,13 +16,14 @@ import com.zhiqin.coach.admin.common.HtmlParserFactory;
 import com.zhiqin.coach.admin.common.MyHtmlParser;
 import com.zhiqin.coach.admin.common.Constants.TASK_STATUS;
 import com.zhiqin.coach.admin.dao.TaskDao;
+import com.zhiqin.coach.admin.dto.DownloadTaskDTO;
 import com.zhiqin.coach.admin.dto.PageInfoDTO;
 import com.zhiqin.coach.admin.dto.TaskDTO;
 import com.zhiqin.coach.admin.service.TaskService;
 
 @Service
 public class TaskServiceImpl implements TaskService {
-	
+	private static Log log = LogFactory.getLog(TaskServiceImpl.class);
 	@Resource private TaskDao taskDao;
 
 	@Override
@@ -35,12 +40,67 @@ public class TaskServiceImpl implements TaskService {
 	@Transactional
 	public void create(int sourceFrom, String url) {
 		String[] urlArr = StringUtils.split(url, ";");
-		for(String htmlUrl : urlArr){
-			MyHtmlParser parser = HtmlParserFactory.getParser(sourceFrom);
-			TaskDTO dto = parser.parse(htmlUrl);
-			taskDao.create(dto);
+		List<Integer> taskIdList = new ArrayList<Integer>();
+		if(urlArr != null && urlArr.length > 0){
+			for(String htmlUrl : urlArr){
+				MyHtmlParser parser = HtmlParserFactory.getParser(sourceFrom);
+				TaskDTO dto = parser.getTask(StringUtils.trim(htmlUrl));
+				taskDao.create(dto);
+				taskIdList.add(dto.getId());
+			}
 		}
-		
+		if(taskIdList.size() > 0){
+			SimpleAsyncTaskExecutor executor = new SimpleAsyncTaskExecutor("download-task-" + taskIdList);
+			executor.setConcurrencyLimit(-1);
+		    executor.execute(new CreateDownloadTaskThread(taskIdList), 60000L);	
+		}
+	}
+
+	class CreateDownloadTaskThread implements Runnable {
+		private List<Integer> taskIdList;
+		public CreateDownloadTaskThread(List<Integer> taskIdList){
+			this.taskIdList = taskIdList;
+		}
+	    public void run() {
+	    	try {
+				Thread.sleep(3000);
+			} catch (InterruptedException e1) {
+			}
+    		if(taskIdList != null & taskIdList.size() > 0){
+    			for(Integer taskId : taskIdList){
+    				try {
+	    				TaskDTO task = taskDao.getById(taskId);
+	    				MyHtmlParser parser = HtmlParserFactory.getParser(task.getSourceFrom());
+	    				List<DownloadTaskDTO> downloadDtoList = parser.getDownloadTask(task);
+	    				if(downloadDtoList != null && downloadDtoList.size() > 0){
+	    					for(DownloadTaskDTO dto : downloadDtoList){
+	    						taskDao.saveDownloadTask(dto);
+	    					}
+	    				} else {
+	    					taskDao.updateStatus(taskId, TASK_STATUS.FAILURE);
+	    				}
+    				} catch (Throwable e) {
+    					log.error("CreateDownloadTaskThread error", e);
+    					try{
+    						taskDao.updateStatus(taskId, TASK_STATUS.FAILURE);
+    					} catch(Throwable e1){
+    						log.error(e1);
+    					}
+    				}
+    			}
+    		}
+	    }
+	}
+
+	@Override
+	public Long getDownloadTaskTotalNum(int taskId) {
+		return taskDao.getDownloadTaskTotalNum(taskId);
+	}
+
+	@Override
+	public List<DownloadTaskDTO> getDownloadTaskList(int taskId,
+			PageInfoDTO pageInfo) {
+		return taskDao.getDownloadTaskList(taskId, pageInfo);
 	}
 	
 

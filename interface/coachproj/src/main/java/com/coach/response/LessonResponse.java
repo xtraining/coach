@@ -18,7 +18,9 @@ public class LessonResponse implements Serializable {
 	@XmlElement
 	private String endTime;
 	@XmlElement
-	private Integer type;  // 0:已经做过点名动作的  1：机构课程   2. 私人课程  3 。私人生活
+	private Integer checkFlag;
+	@XmlElement
+	private Integer type;  //  1：机构课程   2. 私人课程  3 。私人生活
 	@XmlElement
 	private Float hours;
 	public Long getLessonId() {
@@ -56,6 +58,12 @@ public class LessonResponse implements Serializable {
 	}
 	public void setHours(Float hours) {
 		this.hours = hours;
+	}
+	public Integer getCheckFlag() {
+		return checkFlag;
+	}
+	public void setCheckFlag(Integer checkFlag) {
+		this.checkFlag = checkFlag;
 	}
 
 	

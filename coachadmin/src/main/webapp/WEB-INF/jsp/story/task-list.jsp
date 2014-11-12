@@ -48,12 +48,12 @@
 		</thead>
 		<tbody>
 		    <c:forEach var="item" items="${responseList}">
-			<tr target="sid_user" rel="${item.taskId}">
+			<tr target="sid_user" rel="${item.id}">
 				<td>
-					<input name="ids" value="${item.taskId}" type="checkbox">
+					<input name="ids" value="${item.id}" type="checkbox">
 				</td>
 				<td>
-					${item.taskId}
+					<a href="${ctx}/story/task/detail.htm?taskId=${item.id}&sourceFrom=${item.sourceFrom}" target="navTab" title="任务详情" style="color:#00F;">${item.id}</a>
 				</td>
 				<td>
 				 	 <c:choose> 
@@ -77,7 +77,16 @@
 				<td>
 				 	 <c:choose> 
   						<c:when test="${item.status == 0}"> 
-  						             正常
+  						             初始化
+  						</c:when>  
+  						<c:when test="${item.status == 1}"> 
+  						             进行中
+  						</c:when>  
+  						<c:when test="${item.status == 2}"> 
+  						             成功
+  						</c:when>  
+  						<c:when test="${item.status == 3}"> 
+  						             失败
   						</c:when>  
   						<c:otherwise>
   							未知

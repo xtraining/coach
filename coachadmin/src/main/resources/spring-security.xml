@@ -13,7 +13,7 @@
 	<http pattern="/login/loginCheck.htm" security="none" />
 	<http pattern="/coach/coach/*.htm" security="none" />
 	<http pattern="/coach/org/*.htm" security="none" />
-	<http pattern="/story/**/*.htm" security="none" />
+	<http pattern="/story/**/*.*" security="none" />
 	<http use-expressions="true" auto-config="false"
 		entry-point-ref="myAuthenticationEntryPoint" access-denied-page="/denied.jsp">
 

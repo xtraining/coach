@@ -25,7 +25,6 @@ import com.coach.dao.CoachCourseDao;
 import com.coach.dao.CoachRejectCourseDao;
 import com.coach.dao.CourseDao;
 import com.coach.dao.CourseMemberDao;
-import com.coach.dao.CourseMemberDaoImpl;
 import com.coach.dao.LessonDao;
 import com.coach.dao.LessonMemberDao;
 import com.coach.dao.MemberDao;
@@ -46,6 +45,7 @@ import com.coach.resolver.cacheaction.ClearCacheAction;
 import com.coach.resolver.cacheaction.CourseDetailCacheAction;
 import com.coach.resolver.cacheaction.CourseMemberCacheAction;
 import com.coach.response.ChiefCourseResponse;
+import com.coach.response.CoachCourseStatusResponse;
 import com.coach.response.ConflictLessonResponse;
 import com.coach.response.CourseDetailResponse;
 import com.coach.response.CourseMemberResponse;
@@ -485,7 +485,7 @@ public class CourseResolver extends BaseResolver implements ICourseResolver{
 
 	@Override
 	@Transactional
-	public void updateCoachCourseStatus(Long coachId, Long courseId,
+	public CoachCourseStatusResponse updateCoachCourseStatus(Long coachId, Long courseId,
 			Integer status) {
 		if(status == COACH_COURSE_STATUS.ACCEPTED.getValue()){
 			coachCourseDao.updateStatus(coachId, courseId, COACH_COURSE_STATUS.ACCEPTED);
@@ -493,7 +493,15 @@ public class CourseResolver extends BaseResolver implements ICourseResolver{
 			coachCourseDao.updateStatus(coachId, courseId, COACH_COURSE_STATUS.REJECT);
 			coachRejectCourseDao.saveRejectCourse(coachId, courseId);
 		}
-		
+		CoachCourseStatusResponse r = new CoachCourseStatusResponse();
+		Map<String, Object> flagMap = lessonDao.getNewsFlag(coachId);
+		Long courseNewsFlag = (Long)flagMap.get("courseNewsFlag");
+		if(courseNewsFlag != null && courseNewsFlag.intValue() > 0){
+			r.setCourseNewsFlag(1);
+		} else {
+			r.setCourseNewsFlag(0);
+		}
+		return r;
 	}
 
 
