@@ -4,6 +4,7 @@ package com.zhiqin.coach.admin.dao;
 
 import java.util.List;
 
+import com.zhiqin.coach.admin.common.Constants.DOWNLOAD_TASK_STATUS;
 import com.zhiqin.coach.admin.common.Constants.TASK_STATUS;
 import com.zhiqin.coach.admin.dto.CoachDTO;
 import com.zhiqin.coach.admin.dto.CourseDTO;
@@ -31,6 +32,12 @@ public interface TaskDao extends BaseDao{
 	Long getDownloadTaskTotalNum(int taskId);
 
 	List<DownloadTaskDTO> getDownloadTaskList(int taskId, PageInfoDTO pageInfo);
+
+	Long getDownloadingTaskNum();
+
+	List<DownloadTaskDTO> getDownloadTask(int maxNum);
+
+	void updateDownloadStatus(Long downloadTaskId, DOWNLOAD_TASK_STATUS status);
 
 
 

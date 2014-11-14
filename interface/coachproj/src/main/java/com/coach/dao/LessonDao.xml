@@ -82,9 +82,9 @@
   
   <select id="getNewsFlag" parameterType="Integer" resultType="Map">
 	select c.avatarUrl,
-	case when c.type = 0 then 0 
-	else (select count(cc.id) from coach_course cc where cc.status = 0 and cc.id = #{coachId})end courseNewsFlag,
-	case when c.type = 0 then 0
+	case when c.type = 1 then 0 
+	else (select count(cc.id) from coach_course cc where cc.status = 0 and cc.coachId = #{coachId})end courseNewsFlag,
+	case when c.type = 1 then 0
 	else (select count(*) from coach_news_history hh, member_news n where n.createTime >= hh.lastViewTime and  
 	n.coachId = #{coachId} and hh.coachId = #{coachId})end memberNewsFlag
 	from coach c

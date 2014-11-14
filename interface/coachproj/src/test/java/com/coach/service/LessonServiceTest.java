@@ -26,8 +26,8 @@ public class LessonServiceTest extends TestCase {
     	map.put("v", "1.0");
     	map.put("format", "json");
     	map.put("sessionId", "111F0FED-5009-4CF6-B63A-0453D08F4212");
-    	map.put("coachId", "26");
-    	map.put("date", "2014-11-11");
+    	map.put("coachId", "24");
+    	map.put("date", "2014-11-14");
     	String sign = RopUtils.sign(map, APP_SECRET); //第二个参数为SecretKey, 有O2O系统分配
     	map.put("sign", sign);
     	String response = HttpUtil.postServer(SERVER_URL, map);

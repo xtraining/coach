@@ -18,11 +18,10 @@ public class TaskDTO {
 
 	private Integer id;
 	private String url;
-	private String description;
+	private String progress;
 	private Timestamp createTime;
 	private Integer status;
 	private Integer sourceFrom;
-	private Integer taskNum;
 	public Integer getId() {
 		return id;
 	}
@@ -34,12 +33,6 @@ public class TaskDTO {
 	}
 	public void setUrl(String url) {
 		this.url = url;
-	}
-	public String getDescription() {
-		return description;
-	}
-	public void setDescription(String description) {
-		this.description = description;
 	}
 	public Timestamp getCreateTime() {
 		return createTime;
@@ -59,11 +52,11 @@ public class TaskDTO {
 	public void setSourceFrom(Integer sourceFrom) {
 		this.sourceFrom = sourceFrom;
 	}
-	public Integer getTaskNum() {
-		return taskNum;
+	public String getProgress() {
+		return progress;
 	}
-	public void setTaskNum(Integer taskNum) {
-		this.taskNum = taskNum;
+	public void setProgress(String progress) {
+		this.progress = progress;
 	}
 	
 }

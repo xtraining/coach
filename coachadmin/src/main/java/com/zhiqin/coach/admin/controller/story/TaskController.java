@@ -3,6 +3,7 @@ package com.zhiqin.coach.admin.controller.story;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,11 +11,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.zhiqin.coach.admin.common.Constants.DOWNLOAD_SOURCE_FROM;
+import com.zhiqin.coach.admin.common.Constants.DOWNLOAD_TASK_STATUS;
 import com.zhiqin.coach.admin.controller.BaseController;
 import com.zhiqin.coach.admin.dto.DownloadTaskDTO;
 import com.zhiqin.coach.admin.dto.PageInfoDTO;
+import com.zhiqin.coach.admin.dto.ResponseDTO;
 import com.zhiqin.coach.admin.dto.TaskDTO;
 import com.zhiqin.coach.admin.service.TaskService;
+import com.zhiqin.coach.admin.util.JsonBinder;
+import com.zhiqin.coach.admin.util.JsonUtils;
 
 /**
  * 
@@ -44,7 +49,8 @@ public class TaskController extends BaseController{
 		switch (sourceFrom) {
 		case 0:
 			return "/story/task-add-xmly";
-
+		case 1:
+			return "/story/task-add-bdlb";
 		default:
 			return null;
 		}
@@ -59,17 +65,32 @@ public class TaskController extends BaseController{
 	
 	@RequestMapping(value = "detail")
 	public String detail(int sourceFrom, int taskId, PageInfoDTO pageInfo, Model model) {
+		Long totalNum = taskService.getDownloadTaskTotalNum(taskId);
+		List<DownloadTaskDTO> list = taskService.getDownloadTaskList(taskId, pageInfo);
+		model.addAttribute("taskId", taskId); 
+		model.addAttribute("sourceFrom", sourceFrom); 
+		model.addAttribute("responseList", list); 
+		model.addAttribute("totalCount", totalNum+"");
+		model.addAttribute("currentNum", pageInfo.getPageNum() == null ? 1 : pageInfo.getPageNum());
 		switch (sourceFrom) {
 		case 0:{
-			Long totalNum = taskService.getDownloadTaskTotalNum(taskId);
-			List<DownloadTaskDTO> list = taskService.getDownloadTaskList(taskId, pageInfo);
-			model.addAttribute("responseList", list); 
-			model.addAttribute("totalCount", totalNum+"");
-			model.addAttribute("currentNum", pageInfo.getPageNum() == null ? 1 : pageInfo.getPageNum());
 			return "/story/task-detail-xmly";
+		}
+		case 1:{
+			return "/story/task-detail-bdlb";
 		}
 		default:
 			return null;
 		}
+	}
+	
+	@RequestMapping("redownload")
+	public String redownload(Long downloadTaskId, HttpServletResponse response){
+		taskService.updateDownloadStatus(downloadTaskId, DOWNLOAD_TASK_STATUS.DRAFT);
+		ResponseDTO success = new ResponseDTO();
+		success.setStatusCode("200");
+		success.setNavTabId("任务详情");
+		JsonUtils.write(response, JsonBinder.buildNormalBinder().toJson(success));
+		return null;
 	}
 }

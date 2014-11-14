@@ -6,6 +6,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.zhiqin.coach.admin.common.Constants.DOWNLOAD_TASK_STATUS;
 import com.zhiqin.coach.admin.common.Constants.TASK_STATUS;
 import com.zhiqin.coach.admin.dao.TaskDao;
 import com.zhiqin.coach.admin.dto.DownloadTaskDTO;
@@ -32,6 +33,7 @@ public class TaskDaoImpl extends BaseDaoImpl implements TaskDao
 	public List<TaskDTO> getTaskList(PageInfoDTO pageInfo) {
 		try{
 			Map map = new HashMap();
+			map.put("status", TASK_STATUS.ACTIVE.getValue());
 			map.put("p", pageInfo);
 			return this.getSqlSession().selectList("task.getTaskList", map);
 		} catch(RuntimeException e){
@@ -108,6 +110,45 @@ public class TaskDaoImpl extends BaseDaoImpl implements TaskDao
 			log.error("getDownloadTaskList", e);
 			throw e;
 		}
+	}
+
+	@Override
+	public Long getDownloadingTaskNum() {
+		try{
+			Map map = new HashMap();
+			map.put("status", DOWNLOAD_TASK_STATUS.INPROGRESS.getValue());
+			return this.getSqlSession().selectOne("task.getDownloadingTaskNum", map);
+		} catch(RuntimeException e){
+			log.error("getDownloadingTaskNum", e);
+			throw e;
+		}
+	}
+
+	@Override
+	public List<DownloadTaskDTO> getDownloadTask(int maxNum) {
+		try{
+			Map map = new HashMap();
+			map.put("status", DOWNLOAD_TASK_STATUS.DRAFT.getValue());
+			map.put("maxNum", maxNum);
+			return this.getSqlSession().selectList("task.getDownloadTask", map);
+		} catch(RuntimeException e){
+			log.error("getDownloadTask", e);
+			throw e;
+		}
+	}
+
+	@Override
+	public void updateDownloadStatus(Long downloadTaskId, DOWNLOAD_TASK_STATUS status) {
+		try{
+			Map map = new HashMap();
+			map.put("downloadTaskId", downloadTaskId);
+			map.put("status", status.getValue());
+			this.getSqlSession().update("task.updateDownloadStatus", map);
+		} catch(RuntimeException e){
+			log.error("updateDownloadStatus", e);
+			throw e;
+		}
+		
 	}
 
 

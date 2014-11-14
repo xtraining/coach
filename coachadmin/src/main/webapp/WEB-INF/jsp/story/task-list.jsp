@@ -28,7 +28,7 @@
 	<div class="panelBar">
 		<ul class="toolBar">
 			<li><a class="add" href="${ctx}/story/task/add.htm?sourceFrom=0" target="dialog" mask="true" title="喜马拉雅"><span>喜马拉雅</span></a></li>
-			<li><a class="add" href="${ctx}/story/task/add.htm?sourceFrom=1" target="dialog" mask="true" width="600" height="400" title="百度"><span>百度</span></a></li>
+			<li><a class="add" href="${ctx}/story/task/add.htm?sourceFrom=1" target="dialog" mask="true" title="百度乐播"><span>百度乐播</span></a></li>
 			
 			<li class="line">line</li>
 		</ul>
@@ -40,8 +40,6 @@
 				<th width="5%" align="left">任务ID</th>
 				<th width="10%" align="left">来源</th>
 				<th align="left">地址</th>
-				<th align="left">描述</th>
-				<th width="20%" align="left">进度</th>
 				<th width="10%" align="left">状态</th>
 				<th width="15%" align="left">创建时间</th>
 			</tr>
@@ -60,6 +58,9 @@
   						<c:when test="${item.sourceFrom == 0}"> 
   						             喜马拉雅
   						</c:when>  
+  						<c:when test="${item.sourceFrom == 1}"> 
+  						             百度乐播
+  						</c:when> 
   						<c:otherwise>
   							未知
   						</c:otherwise>
@@ -69,29 +70,7 @@
 					${item.url}
 				</td>
 				<td>
-					${item.description}
-				</td>
-				<td>
-					正在下载第${item.taskNum}个文件
-				</td>
-				<td>
-				 	 <c:choose> 
-  						<c:when test="${item.status == 0}"> 
-  						             初始化
-  						</c:when>  
-  						<c:when test="${item.status == 1}"> 
-  						             进行中
-  						</c:when>  
-  						<c:when test="${item.status == 2}"> 
-  						             成功
-  						</c:when>  
-  						<c:when test="${item.status == 3}"> 
-  						             失败
-  						</c:when>  
-  						<c:otherwise>
-  							未知
-  						</c:otherwise>
-  					 </c:choose>
+					${item.progress}
 				</td>
 				<td>${item.createTime}</td>
 			</tr>

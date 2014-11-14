@@ -5,11 +5,10 @@
 	<resultMap id="TaskDTOResult" type="com.zhiqin.coach.admin.dto.TaskDTO">
 		<id column="id" jdbcType="INTEGER" property="id" />
 		<result column="url" jdbcType="VARCHAR" property="url" />
-		<result column="description" jdbcType="VARCHAR" property="description" />
 		<result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
 		<result column="status" jdbcType="INTEGER" property="status" />
-		<result column="taskNum" jdbcType="INTEGER" property="taskNum" />
 		<result column="sourceFrom" jdbcType="INTEGER" property="sourceFrom" />
+		<result column="progress" jdbcType="VARCHAR" property="progress" />
 	</resultMap>
 	
 	<resultMap id="DownloadTaskDTOResult" type="com.zhiqin.coach.admin.dto.DownloadTaskDTO">
@@ -28,12 +27,15 @@
 	</resultMap>
 	
 	<select id="getTotalNum" parameterType="TaskDTO" resultType="Long">
-		select count(*) from task  
+		select count(*) from task where status = #{status}
 	</select>
 
 	<select id="getTaskList" parameterType="Map" resultMap="TaskDTOResult" >
-		select * from task order by createTime desc
-		limit ${p.pageNum - 1}, ${p.numPerPage}
+		select *, 
+		concat((select count(1) from download_task d where d.taskId = t.id and d.status = 3) , ' / ' , (select count(1) from download_task d where d.taskId = t.id))progress from task t 
+		where t.status = #{status}
+		order by t.createTime desc
+		limit ${(p.pageNum - 1) * p.numPerPage}, ${p.numPerPage}
 	</select>
 	
 	<select id="getDownloadTaskTotalNum" parameterType="Integer" resultType="Long">
@@ -42,7 +44,17 @@
 
 	<select id="getDownloadTaskList" parameterType="Map" resultMap="DownloadTaskDTOResult" >
 		select * from download_task where taskId = #{taskId} order by id
-		limit ${p.pageNum - 1}, ${p.numPerPage}
+		limit ${(p.pageNum - 1) * p.numPerPage}, ${p.numPerPage}
+	</select>
+	
+	<select id="getDownloadingTaskNum" parameterType="Map" resultType="Long" >
+		select ifnull(count(d.id), 0) from download_task d inner join task t on d.taskId = t.id and t.status != 1
+		where d.status = #{status}
+	</select>
+	
+	<select id="getDownloadTask" parameterType="Map" resultMap="DownloadTaskDTOResult" >
+		select d.* from download_task d inner join task t on d.taskId = t.id and t.status != 1
+		where d.status = #{status} order by d.id limit #{maxNum}
 	</select>
 	
 	<select id="getById" parameterType="Integer" resultMap="TaskDTOResult" >
@@ -53,9 +65,13 @@
 		update task set status = #{status} where id = #{taskId}
 	</update>
 	
+	<update id="updateDownloadStatus" parameterType="Map">
+		update download_task set status = #{status} where id = #{downloadTaskId}
+	</update>
+	
 	<insert id="insertTask" useGeneratedKeys="true" keyProperty="id" parameterType="TaskDTO">
-		INSERT INTO task(url,description,createTime,status,taskNum,sourceFrom) 
-		VALUE (#{url}, #{description}, now(), #{status}, #{taskNum}, #{sourceFrom}) 
+		INSERT INTO task(url,createTime,status,sourceFrom) 
+		VALUE (#{url}, now(), #{status}, #{sourceFrom}) 
   	</insert>
   	
   	<insert id="insertDownloadTask" useGeneratedKeys="true" keyProperty="id" parameterType="DownloadTaskDTO">

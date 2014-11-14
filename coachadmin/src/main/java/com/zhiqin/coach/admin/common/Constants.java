@@ -291,7 +291,7 @@ public class Constants {
 	}
 	
 	public enum TASK_STATUS {
-		DRAFT(0), INPROGRESS(1), SUCCESS(2), FAILURE(3);
+		ACTIVE(0), DELETED(1);
 		private int value;
 		private TASK_STATUS(int value) {
 			this.value = value;
@@ -324,7 +324,7 @@ public class Constants {
 	}
 	
 	public enum FILE_NAME_PREFIX {
-		IMAGE("image_"), VOICE("voice_");
+		IMAGE("story_image_"), VOICE("story_voice_");
 		private String value;
 		private FILE_NAME_PREFIX(String value) {
 			this.value = value;

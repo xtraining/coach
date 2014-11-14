@@ -12,9 +12,10 @@ import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.zhiqin.coach.admin.common.Constants.DOWNLOAD_TASK_STATUS;
+import com.zhiqin.coach.admin.common.Constants.TASK_STATUS;
 import com.zhiqin.coach.admin.common.HtmlParserFactory;
 import com.zhiqin.coach.admin.common.MyHtmlParser;
-import com.zhiqin.coach.admin.common.Constants.TASK_STATUS;
 import com.zhiqin.coach.admin.dao.TaskDao;
 import com.zhiqin.coach.admin.dto.DownloadTaskDTO;
 import com.zhiqin.coach.admin.dto.PageInfoDTO;
@@ -76,16 +77,9 @@ public class TaskServiceImpl implements TaskService {
 	    					for(DownloadTaskDTO dto : downloadDtoList){
 	    						taskDao.saveDownloadTask(dto);
 	    					}
-	    				} else {
-	    					taskDao.updateStatus(taskId, TASK_STATUS.FAILURE);
-	    				}
+	    				} 
     				} catch (Throwable e) {
     					log.error("CreateDownloadTaskThread error", e);
-    					try{
-    						taskDao.updateStatus(taskId, TASK_STATUS.FAILURE);
-    					} catch(Throwable e1){
-    						log.error(e1);
-    					}
     				}
     			}
     		}
@@ -101,6 +95,22 @@ public class TaskServiceImpl implements TaskService {
 	public List<DownloadTaskDTO> getDownloadTaskList(int taskId,
 			PageInfoDTO pageInfo) {
 		return taskDao.getDownloadTaskList(taskId, pageInfo);
+	}
+
+	@Override
+	public Long getDownloadingTaskNum() {
+		return taskDao.getDownloadingTaskNum();
+	}
+
+	@Override
+	public List<DownloadTaskDTO> getDownloadTask(int maxNum) {
+		return taskDao.getDownloadTask(maxNum);
+	}
+
+	@Override
+	public void updateDownloadStatus(Long downloadTaskId, DOWNLOAD_TASK_STATUS status) {
+		taskDao.updateDownloadStatus(downloadTaskId, status);
+		
 	}
 	
 

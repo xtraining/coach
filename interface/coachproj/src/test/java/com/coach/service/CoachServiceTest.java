@@ -18,7 +18,7 @@ public class CoachServiceTest extends TestCase {
 	public static final String APP_SECRET = "LlnZA8cql4liN4CvjGL5GfwhCh7fwWGE";
 	public static final String VERSION = "V0.5.0.0";
 
-	/*@Test
+	@Test
 	public void testSignIn() {
 		Map <String, String>map = new HashMap<String, String>();
     	map.put("appKey", APP_KEY); //第二个参数为AppKey
@@ -34,7 +34,7 @@ public class CoachServiceTest extends TestCase {
         System.out.println("response = " + response);
         assertNotNull(response);
         assertTrue(response.indexOf("code") <= 0);
-	}*/
+	}
 	/*@Test
 	public void testUpdateLastAccessTime() {
 		Map <String, String>map = new HashMap<String, String>();
@@ -321,7 +321,7 @@ public class CoachServiceTest extends TestCase {
         assertTrue(response.indexOf("code") <= 0);
 	}*/
 	
-	public void testgetBindOrg() {
+	/*public void testgetBindOrg() {
 		Map <String, String>map = new HashMap<String, String>();
     	map.put("appKey", APP_KEY); //第二个参数为AppKey
     	map.put("method", METHOD.GET_BIND_ORG.getValue()); 
@@ -335,7 +335,7 @@ public class CoachServiceTest extends TestCase {
         System.out.println("response = " + response);
         assertNotNull(response);
         assertTrue(response.indexOf("code") <= 0);
-	}
+	}*/
 	
 	/*
 	public void testUpdateBindOrg() {

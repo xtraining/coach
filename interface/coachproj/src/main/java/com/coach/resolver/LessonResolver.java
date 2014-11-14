@@ -69,7 +69,7 @@ public class LessonResolver extends BaseResolver implements ILessonResolver{
 			date = new Date();
 		}
 		Date startDate = DateUtils.getFirstDayOfWeek(date);
-		Date endDate = DateUtils.addDay(startDate, 8);
+		Date endDate = DateUtils.addDay(startDate, 7);
 		CacheAction<List<LessonResponse>> cacheAction = new OneWeekLessonCacheAction(coachId, startDate, endDate);
 		List<LessonResponse> lessonResponseList = cacheAction.getValue();
 		if(lessonResponseList == null){
@@ -141,7 +141,7 @@ public class LessonResolver extends BaseResolver implements ILessonResolver{
 		if(response != null){
 			return response;
 		} else {
-			Date endDate = DateUtils.addDay(startDate, days + 1);
+			Date endDate = DateUtils.addDay(startDate, days);
 			List<Lesson> list = lessonDao.getDetailRecentInRange(request.getCoachId(), startDate, endDate);
 			response = new ArrayList<LessonDetailResponse>();
 			for(Lesson lesson : list){

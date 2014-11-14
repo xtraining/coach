@@ -9,7 +9,7 @@ function save(){
 	}
 	$.ajax({
 			type:'POST',
-			url:'${ctx}/story/task/create.htm?sourceFrom=0',
+			url:'${ctx}/story/task/create.htm?sourceFrom=1',
 			data:$("#taskForm").formSerialize(),//序列化表单里所有的内容
 			success: function(data){	
 				switch(data){

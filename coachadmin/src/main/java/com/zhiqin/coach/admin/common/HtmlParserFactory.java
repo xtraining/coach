@@ -8,7 +8,9 @@ public class HtmlParserFactory {
 		case 0:
 			parser = new XimalayaParser();
 			break;
-
+		case 1:
+			parser = new BaiduleboParser();
+			break;
 		default:
 			break;
 		}
