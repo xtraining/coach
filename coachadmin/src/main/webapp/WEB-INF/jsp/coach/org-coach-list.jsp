@@ -46,7 +46,7 @@
 				<th align="left">证据类型</th>
 				<th align="left">证据号码</th>
 				<th width="15%" align="left">创建时间</th>
-			 	<th width="15%" align="left">操作</th> 
+			 	<th width="20%" align="left">操作</th> 
 			</tr>
 		</thead>
 		<tbody>
@@ -75,7 +75,7 @@
 					<a href="${ctx}/coach/org/deleteCoach.htm?orgCoachId=${item.orgCoachId}" target="ajaxTodo" title="你确定要删除改教练吗？" style="color:#00F;">删除教练</a>	
 					&nbsp;&nbsp;
 					<c:choose>
-					    <c:when test="${item.coachId == null && item.bindCoachId != null && item.bindCoachId > 0}">
+					    <c:when test="${item.bindCoachId != null && item.bindCoachId > 0}">
 							<c:choose> 
 		  						<c:when test="${item.status == 0 || item.status == null}"> 
 		  						   <a href="${ctx}/coach/org/updateBindStatus.htm?orgCoachId=${item.orgCoachId}&coachId=${item.bindCoachId}&status=1" target="ajaxTodo" style="color:#00F;">
@@ -83,34 +83,50 @@
 		  						   </a>
 		  						</c:when>  
 		  						<c:when test="${item.status == 1}"> 
-		  							<a href="${ctx}/coach/org/updateBindStatus.htm?orgCoachId=${item.orgCoachId}&coachId=${item.bindCoachId}&status=1" target="ajaxTodo" style="color:#00F;">
-		  						          已邀请
-		  						   	</a>
+		  						             已邀请
+		  						</c:when>  
+		  						<c:when test="${item.status == 2}"> 
+		  						              已绑定(教练接受)
+		  							<a href="${ctx}/coach/org/updateBindStatus.htm?orgCoachId=${item.orgCoachId}&coachId=${item.bindCoachId}&status=8" target="ajaxTodo" style="color:#00F;">
+		  							解绑
+		  						    </a>
 		  						</c:when>  
 		  						<c:when test="${item.status == 3}"> 
 		  						             教练拒绝
+		  						    <a href="${ctx}/coach/org/updateBindStatus.htm?orgCoachId=${item.orgCoachId}&coachId=${item.bindCoachId}&status=1" target="ajaxTodo" style="color:#00F;">
+		  						             重新邀请
+		  						    </a>
 		  						</c:when> 
 		  						<c:when test="${item.status == 4}"> 
 		  						   	<a href="${ctx}/coach/org/updateBindStatus.htm?orgCoachId=${item.orgCoachId}&coachId=${item.bindCoachId}&status=5" target="ajaxTodo" style="color:#00F;">
-		  						          接受
+		  						          接受(教练申请)
 		  						   	</a>
-		  						</c:when> 
+		  						</c:when>
+		  						<c:when test="${item.status == 5}"> 
+		  						              已绑定(机构邀请)
+		  						    <a href="${ctx}/coach/org/updateBindStatus.htm?orgCoachId=${item.orgCoachId}&coachId=${item.bindCoachId}&status=8" target="ajaxTodo" style="color:#00F;">
+		  						              解绑
+		  						    </a>
+		  						</c:when>  
 		  						<c:when test="${item.status == 6}"> 
 		  						  	  机构拒绝
+		  						  	<a href="${ctx}/coach/org/updateBindStatus.htm?orgCoachId=${item.orgCoachId}&coachId=${item.bindCoachId}&status=1" target="ajaxTodo" style="color:#00F;">
+		  						               邀请
+		  						    </a>
 		  						</c:when> 
 		  						<c:when test="${item.status == 7}"> 
 		  						   	教练解 绑
+		  						   	<a href="${ctx}/coach/org/updateBindStatus.htm?orgCoachId=${item.orgCoachId}&coachId=${item.bindCoachId}&status=1" target="ajaxTodo" style="color:#00F;">
+		  						               邀请
+		  						    </a>
 		  						</c:when> 
 		  						<c:when test="${item.status == 8}"> 
 		  						   	 机构解绑
+		  						   	 <a href="${ctx}/coach/org/updateBindStatus.htm?orgCoachId=${item.orgCoachId}&coachId=${item.bindCoachId}&status=1" target="ajaxTodo" style="color:#00F;">
+		  						               邀请
+		  						    </a>
 		  						</c:when>
-		  						<c:otherwise>
-		  							已绑定
-		  						</c:otherwise>
 		  					</c:choose>
-		  				</c:when>
-		  				<c:when test="${item.coachId != null && item.coachId > 0}">
-		  					已绑定
 		  				</c:when>
 		  				<c:otherwise>
 		  				</c:otherwise>

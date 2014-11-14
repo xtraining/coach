@@ -31,6 +31,8 @@ public class LessonDetailResponse extends LessonResponse implements Serializable
 	private Float hours;
 	@XmlElement
 	private String orgName;
+	@XmlElement
+	private List<MemberResponse> memberList;
 	public String getGroundName() {
 		return groundName;
 	}
@@ -96,6 +98,12 @@ public class LessonDetailResponse extends LessonResponse implements Serializable
 	}
 	public void setLongitude(Double longitude) {
 		this.longitude = longitude;
+	}
+	public List<MemberResponse> getMemberList() {
+		return memberList;
+	}
+	public void setMemberList(List<MemberResponse> memberList) {
+		this.memberList = memberList;
 	}
 
 	

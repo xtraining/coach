@@ -116,13 +116,18 @@ public class LessonResolver extends BaseResolver implements ILessonResolver{
 			return response;
 		} else {
 			Lesson lesson = null;
+			List<MemberResponse> memberList = null;
 			if(type == null || type == 0){
 				lesson = lessonDao.getLessonDetail(coachId, lessonId);
+				memberList = getLessonMemberList(coachId, lessonId);
 			} else {
 				lesson = lessonDao.getLifeDetail(coachId, lessonId);
 			}
 			if(lesson != null){
 				response = lesson.toDetailResponse();
+				if(memberList != null && memberList.size() > 0){
+					response.setMemberList(memberList);
+				}
 				cacheAction.setValue(response);
 			}
 			return response;

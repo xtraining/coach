@@ -207,8 +207,8 @@ public class OrgController extends BaseController{
 		orgService.updateBindStatus(coachId, orgCoachId, status);
 		ResponseDTO success = new ResponseDTO();
 		success.setStatusCode("200");
-		success.setMessage("绑定成功");
-		success.setNavTabId("机构教练");
+		success.setMessage("修改成功");
+		success.setNavTabId("");
 		JsonUtils.write(response, JsonBinder.buildNormalBinder().toJson(success));
 		return null;
 	}

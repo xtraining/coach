@@ -195,7 +195,8 @@ public class AddCourseRequest extends CoachBaseRequest{
 		c.setType(COURSE_TYPE.PERSONAL.getValue());
 		c.setStartTime(DateUtils.yyyyMMddHHmmssToTimestamp(startTime));
 		c.setLessonNum((int)Math.ceil(courseHour/lessonHour));
-		
+		c.setLatitude(latitude);
+		c.setLongitude(longitude);
 		Calendar cal = Calendar.getInstance();
 		cal.setTimeInMillis(c.getStartTime().getTime());
 		//添加第一天的课程
@@ -232,6 +233,8 @@ public class AddCourseRequest extends CoachBaseRequest{
 		lesson.setEndTime(new Timestamp(startTime.getTime() + (int)(hours * 3600000)));
 		lesson.setHours(hours);
 		lesson.setName(name);
+		lesson.setLatitude(latitude);
+		lesson.setLongitude(longitude);
 		lesson.setStartTime(startTime);
 		lesson.setType(LESSON_TYPE.JOB.getValue());
 		lesson.setAlertSwitch(ALERT_SWITCH.OFF.getValue());
