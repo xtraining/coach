@@ -55,7 +55,7 @@ public class CoachResolver extends BaseResolver implements ICoachResolver{
 	@Resource private CoachExpandDao coachExpandDao;
 	@Resource private ClientAppkeyDao clientAppkeyDao;
 	@Resource private AppVersionDao appVersionDao;
-	public Long getIdByCredentials(String phoneNumber, String password) {
+	public Coach getIdByCredentials(String phoneNumber, String password) {
 		return coachDao.getIdByCredentials(phoneNumber, password);
 	}
 

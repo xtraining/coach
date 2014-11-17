@@ -17,7 +17,7 @@ public class CoachDaoImpl extends SqlSessionDaoSupport implements CoachDao{
 	private static final Logger log = LoggerFactory
 			.getLogger(CoachDaoImpl.class);
 	@Override
-	public Long getIdByCredentials(String phoneNumber, String password) {
+	public Coach getIdByCredentials(String phoneNumber, String password) {
 		try{
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("phoneNumber", phoneNumber);

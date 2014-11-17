@@ -17,6 +17,7 @@
        <result column="weiboId" jdbcType="VARCHAR" property="weiboId" />
        <result column="weixinId" jdbcType="VARCHAR" property="weixinId" />
        <result column="description" jdbcType="VARCHAR" property="description" />
+        <result column="orgSwitch" jdbcType="INTEGER" property="orgSwitch" />
   </resultMap>
   
   <resultMap id="CoachDetailResult" type="com.coach.model.Coach">
@@ -34,8 +35,8 @@
        <result column="description" jdbcType="VARCHAR" property="description" />
   </resultMap>
   
-  <select id="getIdByCredentials" parameterType="java.util.Map" resultType="Long">
-    select c.id from coach c inner join tuser t on c.tuserId = t.id where t.phoneNumber = #{phoneNumber} and t.password = #{password}
+  <select id="getIdByCredentials" parameterType="java.util.Map" resultMap="CoachBasicResult">
+    select c.id, c.orgSwitch from coach c inner join tuser t on c.tuserId = t.id where t.phoneNumber = #{phoneNumber} and t.password = #{password}
   </select>
   
   <select id="getCoachIdByPhoneNumber" parameterType="Map" resultType="Long">

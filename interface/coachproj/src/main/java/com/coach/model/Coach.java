@@ -25,6 +25,7 @@ public class Coach extends Tuser implements java.io.Serializable {
 	private Timestamp lastAccessTime;
 	private Timestamp lockTime;
 	private Integer type;
+	private Integer orgSwitch;
 	private Integer areaId;
 	private String areaName;
 	private String areaCode;
@@ -105,6 +106,14 @@ public class Coach extends Tuser implements java.io.Serializable {
 
 	public void setLockTime(Timestamp lockTime) {
 		this.lockTime = lockTime;
+	}
+
+	public Integer getOrgSwitch() {
+		return orgSwitch;
+	}
+
+	public void setOrgSwitch(Integer orgSwitch) {
+		this.orgSwitch = orgSwitch;
 	}
 
 	public Integer getType() {

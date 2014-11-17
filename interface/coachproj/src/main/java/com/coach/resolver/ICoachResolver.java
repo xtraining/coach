@@ -16,7 +16,7 @@ import com.coach.response.BindOrgResponse;
 import com.coach.response.ProfileDetailResponse;
 import com.coach.response.ProfileResponse;
 public interface ICoachResolver {
-	public Long getIdByCredentials(String phoneNumber, String password);
+	public Coach getIdByCredentials(String phoneNumber, String password);
 
 	public SmsHistory createVcode(String phoneNumber, SMS_TYPE type);
 

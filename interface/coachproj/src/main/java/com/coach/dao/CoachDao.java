@@ -11,7 +11,7 @@ import com.coach.response.ProfileResponse;
 
 public interface CoachDao {
 
-	public Long getIdByCredentials(String phoneNumber, String password);
+	public Coach getIdByCredentials(String phoneNumber, String password);
 
 	public void save(Coach c);
 

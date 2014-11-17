@@ -11,6 +11,8 @@ public class SignInResponse {
 	private String sessionId;
 	@XmlElement
 	private Long coachId;
+	@XmlElement
+	private Integer orgSwitch;
 	public Integer getFlag() {
 		return flag;
 	}
@@ -34,6 +36,12 @@ public class SignInResponse {
 	}
 	public void setCoachId(Long coachId) {
 		this.coachId = coachId;
+	}
+	public Integer getOrgSwitch() {
+		return orgSwitch;
+	}
+	public void setOrgSwitch(Integer orgSwitch) {
+		this.orgSwitch = orgSwitch;
 	}
 	
 }

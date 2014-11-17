@@ -45,6 +45,7 @@ public class SysSessionResolver extends BaseResolver{
 		response.setMsg(Constants.SUCCESS);
 		response.setSessionId(session.getSessionId());
 		response.setCoachId(c.getId());
+		response.setOrgSwitch(c.getOrgSwitch());
 		return response;
 	}
 }

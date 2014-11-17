@@ -112,15 +112,13 @@ public class CoachService extends SimpleBaseService{
 	@ServiceMethod(method = "coach.signIn",version = "1.0", needInSession = NeedInSessionType.NO, httpAction = HttpAction.POST)
     public Object signIn(SignInRequest request) {	
 		SignInResponse response = new SignInResponse();
-		Long coachId = coachResolver.getIdByCredentials(request.getPhoneNumber(), request.getPassword());	
-		if(coachId == null || coachId == 0){
+		Coach coach = coachResolver.getIdByCredentials(request.getPhoneNumber(), request.getPassword());	
+		if(coach == null || coach.getId() == null){
 			response.setFlag(1);
 			response.setMsg("用户名或密码错误");
 			return response;
 		}
-		Coach c = new Coach();
-		c.setId(coachId);
-		response = sessionResolver.setupSignInSuccessResponse(request, c);
+		response = sessionResolver.setupSignInSuccessResponse(request, coach);
 		return response;
 	}
 	
