@@ -380,5 +380,12 @@
 			<scope>system</scope>  
    			<systemPath>${basedir}\src\main\webapp\WEB-INF\lib\Routing4DB-1.1.0.jar</systemPath>
 		</dependency>
+		<dependency>
+			<groupId>org.patchca</groupId>
+			<artifactId>patchca</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>  
+   			<systemPath>${basedir}\src\main\webapp\WEB-INF\lib\patchca.jar</systemPath>
+		</dependency>
 	</dependencies>
 </project>

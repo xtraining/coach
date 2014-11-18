@@ -20,6 +20,7 @@ public class Constants {
 	public static final String MEMBER_IMAGE_PREFIX = "member";
 	public static final String TOPIC_IMAGE_PREFIX = "topic";
 	public static final String USER_SESSION = "userSession";
+	public static final String VALIFICATION_CODE_SESSION_NAME = "valication_code";
 	
 	public enum SYS_USER_STATUS {
 		ACTIVE(0), INACTIVE(1), DELETED(2);
