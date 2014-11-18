@@ -7,12 +7,12 @@ import com.coach.model.Lesson;
 import com.coach.utils.DateUtils;
 
 public class UpdateLifeRequest extends UpdateLessonRequest{
-	private Double longitude;
-	private Double latitude;
 	@NotNull
 	private String name;
 	@NotNull
 	private String address;
+	private Double longitude;
+	private Double latitude;
 	public Double getLongitude() {
 		return longitude;
 	}

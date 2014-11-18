@@ -5,13 +5,12 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import net.oschina.j2cache.CacheObject;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.coach.common.Constants.CACHE_REGION;
-import com.coach.common.Constants.ONE_DAY_CACHE_KEY;
+import com.coach.common.Constants.COURSE_MEMBER_STATUS;
+import com.coach.common.Constants.LESSON_MEMBER_STATUS;
+import com.coach.dao.LessonMemberDao;
 import com.coach.dao.MemberDao;
 import com.coach.dao.MemberNewsDao;
 import com.coach.model.Member;
@@ -24,6 +23,7 @@ import com.coach.utils.DateUtils;
 public class MemberResolver extends BaseResolver implements IMemberResolver{
 	@Resource private MemberDao memberDao;
 	@Resource private MemberNewsDao memberNewsDao;
+	@Resource private LessonMemberDao lessonMemberDao;
 	@SuppressWarnings("unchecked")
 	public List<MemberDetailResponse> getMember(Long coachId,
 			Long courseId) {
@@ -76,7 +76,11 @@ public class MemberResolver extends BaseResolver implements IMemberResolver{
 	}
 
 	@Override
+	@Transactional
 	public void updateMemberStatus(UpdateMemberStatusRequest request) {
+		if(request.getStatus().intValue() == COURSE_MEMBER_STATUS.DELETED.getValue()){
+			lessonMemberDao.updateStatusByCourseId(request.getMemberId(), request.getCourseId(), LESSON_MEMBER_STATUS.DELETED);
+		}
 		memberDao.updateMemberStatus(request.getMemberId(), request.getCourseId(), request.getStatus());
 	}
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.zhiqin.coach.admin.dto.CoachDTO;
 import com.zhiqin.coach.admin.dto.CourseDTO;
+import com.zhiqin.coach.admin.dto.LessonDTO;
 import com.zhiqin.coach.admin.dto.PageInfoDTO;
 import com.zhiqin.coach.admin.dto.SearchCoachDTO;
 import com.zhiqin.coach.admin.dto.SearchCourseDTO;
@@ -24,4 +25,6 @@ public interface CoachService{
 
 	List<CoachDTO> getUnbindCoachList(SearchOrgDTO searchDto,
 			PageInfoDTO pageInfo);
+
+	LessonDTO getConflictLesson(Long coachId, Long courseId);
 }

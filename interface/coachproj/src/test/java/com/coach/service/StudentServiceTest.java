@@ -12,8 +12,8 @@ import com.coach.utils.HttpUtil;
 import com.rop.utils.RopUtils;
 
 public class StudentServiceTest extends TestCase {
-//	public static final String SERVER_URL = "http://localhost:8080/coach/service";
-	public static final String SERVER_URL = "http://114.215.145.26/coach/service";
+	public static final String SERVER_URL = "http://localhost:8080/coach/service";
+//	public static final String SERVER_URL = "http://114.215.145.26/coach/service";
 	public static final String APP_KEY = "iphone_user";
 	public static final String APP_SECRET = "LlnZA8cql4liN4CvjGL5GfwhCh7fwWGE";
 	public static final String VERSION = "V0.5.0.0";
@@ -86,7 +86,7 @@ public class StudentServiceTest extends TestCase {
         assertTrue(response.indexOf("code") <= 0);
 	}*/
 	
-	public void testGetMemberNews(){
+/*	public void testGetMemberNews(){
 		Map <String, String>map = new HashMap<String, String>();
     	map.put("appKey", APP_KEY); //第二个参数为AppKey
     	map.put("method", METHOD.STUDENT_GET_MEMBER_NEWS.getValue()); 
@@ -100,7 +100,7 @@ public class StudentServiceTest extends TestCase {
         System.out.println("response = " + response);
         assertNotNull(response);
         assertTrue(response.indexOf("code") <= 0);
-	}
+	}*/
 	
 /*	public void testUpdateMemberDetail(){
 		Map <String, String>map = new HashMap<String, String>();
@@ -122,7 +122,7 @@ public class StudentServiceTest extends TestCase {
         assertTrue(response.indexOf("code") <= 0);
 	}
 	
-
+*/
 	public void testUpdateMemberStatus(){
 		Map <String, String>map = new HashMap<String, String>();
     	map.put("appKey", APP_KEY); //第二个参数为AppKey
@@ -140,5 +140,5 @@ public class StudentServiceTest extends TestCase {
         System.out.println("response = " + response);
         assertNotNull(response);
         assertTrue(response.indexOf("code") <= 0);
-	}*/
+	}
 }

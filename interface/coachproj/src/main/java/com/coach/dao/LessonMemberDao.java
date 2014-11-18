@@ -18,4 +18,7 @@ public interface LessonMemberDao {
 
 	public void insertLessonMember(Long courseId, Long id);
 
+	public void updateStatusByCourseId(Long memberId, Long courseId,
+			LESSON_MEMBER_STATUS deleted);
+
 }

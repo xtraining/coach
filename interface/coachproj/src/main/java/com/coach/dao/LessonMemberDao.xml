@@ -26,6 +26,14 @@
         (#{item.memberId},#{item.lessonId},#{item.status})  
     </foreach>  
   </insert>
+  
+      
+  <update id="updateStatusByCourseId" parameterType="Map">
+    update lesson_member lm inner join lesson s on lm.lessonId = s.id 
+    set lm.status = #{status}
+    where s.courseId = #{courseId} and s.startTime >= now()
+    and lm.memberId in (#{memberId})
+  </update>
     
   <update id="updateLessonMemberStatus" parameterType="Map">
     update lesson_member set status = #{status}

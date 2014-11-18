@@ -158,15 +158,9 @@
   </update>
   
   <update id="updateLesson" parameterType="Map">
-	update lesson set updateTime = now()
-	 <if test="startTime != null">, startTime = #{startTime}</if>
-	 <if test="endTime != null">, endTime = #{endTime}</if>
-	 <if test="name != null">, name = #{name}</if>
-	 <if test="address != null">, address = #{address}</if>
-	 <if test="longitude != null">, longitude = #{longitude}</if>
-	 <if test="latitude != null">, latitude = #{latitude}</if>
-	 <if test="description != null">, description = #{description}</if>
-	 <if test="alertSwitch != null">, alertSwitch = #{alertSwitch}</if>
+	update lesson set updateTime = now(), startTime = #{startTime}, endTime = #{endTime}, 
+	groundId = #{groundId}, groundName = #{groundName}, address = #{address}, 
+	longitude = #{longitude}, latitude = #{latitude}, description = #{description}, alertSwitch = #{alertSwitch}
 	where id = #{lessonId}
   </update>
   

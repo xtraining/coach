@@ -1,6 +1,7 @@
 package com.coach.dao;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,6 +67,23 @@ public class LessonMemberDaoImpl extends SqlSessionDaoSupport implements LessonM
 			this.getSqlSession().insert("insertLessonMember", map);
 		} catch(RuntimeException e){
 			log.error("insertLessonMemeber", e);
+			throw e;
+		}
+		
+	}
+
+	@Override
+	public void updateStatusByCourseId(Long memberId, Long courseId,
+			LESSON_MEMBER_STATUS deleted) {
+		try{
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("memberId", memberId);
+			map.put("courseId", courseId);
+			map.put("status", deleted.getValue());
+//			map.put("startDate", new Date());
+			this.getSqlSession().update("updateStatusByCourseId", map);
+		} catch(RuntimeException e){
+			log.error("updateStatusByCourseId", e);
 			throw e;
 		}
 		

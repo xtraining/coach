@@ -16,6 +16,13 @@ public class UpdateLessonRequest extends CoachBaseRequest{
 	private String remarks;
 	@NotNull
 	private Long lessonId;
+	@NotNull
+	private String address;
+	private Double longitude;
+	private Double latitude;
+	@NotNull
+    private String groundName;
+	private Integer groundId;
 	public String getStartTime() {
 		return startTime;
 	}
@@ -45,6 +52,36 @@ public class UpdateLessonRequest extends CoachBaseRequest{
 	}
 	public void setLessonId(Long lessonId) {
 		this.lessonId = lessonId;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public Double getLongitude() {
+		return longitude;
+	}
+	public void setLongitude(Double longitude) {
+		this.longitude = longitude;
+	}
+	public Double getLatitude() {
+		return latitude;
+	}
+	public void setLatitude(Double latitude) {
+		this.latitude = latitude;
+	}
+	public String getGroundName() {
+		return groundName;
+	}
+	public void setGroundName(String groundName) {
+		this.groundName = groundName;
+	}
+	public Integer getGroundId() {
+		return groundId;
+	}
+	public void setGroundId(Integer groundId) {
+		this.groundId = groundId;
 	}
 	
 }

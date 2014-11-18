@@ -253,7 +253,7 @@ public class LessonResolver extends BaseResolver implements ILessonResolver{
 					Timestamp newStart = newLesson.getStartTime();
 					Timestamp newEnd = newLesson.getEndTime();
 					Timestamp oldStart = oldLesson.getStartTime();
-					Timestamp oldEnd = oldLesson.getStartTime();
+					Timestamp oldEnd = oldLesson.getEndTime();
 					if((newStart.getTime() >= oldStart.getTime() && newStart.getTime() < oldEnd.getTime())
 							|| (newEnd.getTime() > oldStart.getTime() && newEnd.getTime() <= oldEnd.getTime())
 				            || (newStart.getTime() <= oldStart.getTime() && newEnd.getTime() >= oldEnd.getTime())){
@@ -284,7 +284,7 @@ public class LessonResolver extends BaseResolver implements ILessonResolver{
 					Timestamp newStart = newLesson.getStartTime();
 					Timestamp newEnd = newLesson.getEndTime();
 					Timestamp oldStart = oldLesson.getStartTime();
-					Timestamp oldEnd = oldLesson.getStartTime();
+					Timestamp oldEnd = oldLesson.getEndTime();
 					if((newStart.getTime() >= oldStart.getTime() && newStart.getTime() < oldEnd.getTime())
 							|| (newEnd.getTime() > oldStart.getTime() && newEnd.getTime() <= oldEnd.getTime())
 				            || (newStart.getTime() <= oldStart.getTime() && newEnd.getTime() >= oldEnd.getTime())){
@@ -465,7 +465,7 @@ public class LessonResolver extends BaseResolver implements ILessonResolver{
 				Timestamp newStart = startTime;
 				Timestamp newEnd = endTime;
 				Timestamp oldStart = oldLesson.getStartTime();
-				Timestamp oldEnd = oldLesson.getStartTime();
+				Timestamp oldEnd = oldLesson.getEndTime();
 				if((newStart.getTime() >= oldStart.getTime() && newStart.getTime() < oldEnd.getTime())
 						|| (newEnd.getTime() > oldStart.getTime() && newEnd.getTime() <= oldEnd.getTime())
 			            || (newStart.getTime() <= oldStart.getTime() && newEnd.getTime() >= oldEnd.getTime())){
@@ -488,7 +488,7 @@ public class LessonResolver extends BaseResolver implements ILessonResolver{
 				Timestamp newStart = startTime;
 				Timestamp newEnd = endTime;
 				Timestamp oldStart = oldLesson.getStartTime();
-				Timestamp oldEnd = oldLesson.getStartTime();
+				Timestamp oldEnd = oldLesson.getEndTime();
 				if((newStart.getTime() >= oldStart.getTime() && newStart.getTime() < oldEnd.getTime())
 						|| (newEnd.getTime() > oldStart.getTime() && newEnd.getTime() <= oldEnd.getTime())
 			            || (newStart.getTime() <= oldStart.getTime() && newEnd.getTime() >= oldEnd.getTime())){

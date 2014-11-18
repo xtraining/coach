@@ -20,7 +20,7 @@ function save(){
 							dialogAjaxDone({"statusCode":"300", "message":"请选择教练。", "navTabId":"机构课程", "forwardUrl":"", "callbackType":"", "rel":""});							
 							break;	
 						case "\"input1\"":	
-							dialogAjaxDone({"statusCode":"300", "message":"该课程已被教练接受，不能重新分派。", "navTabId":"机构课程", "forwardUrl":"", "callbackType":"", "rel":""});							
+							dialogAjaxDone({"statusCode":"300", "message":"和教练时间冲突，不能分派。", "navTabId":"机构课程", "forwardUrl":"", "callbackType":"", "rel":""});							
 							break;
 						default:
 							dialogAjaxDone({"statusCode":"300", "message":"分派失败，请重试。", "navTabId":"机构管理", "forwardUrl":"", "callbackType":"closeCurrent", "rel":""});							

@@ -18,6 +18,7 @@ import com.coach.model.Lesson;
 import com.coach.request.GetCheckLessonRequest;
 import com.coach.request.UpdateLessonRequest;
 import com.coach.request.UpdateLifeRequest;
+import com.coach.utils.DateUtils;
 
 public class LessonDaoImpl extends SqlSessionDaoSupport implements LessonDao{
 	private static final Logger log = LoggerFactory
@@ -154,7 +155,8 @@ public class LessonDaoImpl extends SqlSessionDaoSupport implements LessonDao{
 		try{
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("coachId", coachId);
-			map.put("startDate", startTime);
+			String dateStr = DateUtils.dateToyyyyMMdd(startTime);
+			map.put("startDate", DateUtils.yyyyMMddToDate(dateStr));
 			map.put("courseActiveStatus", COURSE_STATUS.ACTIVE.getValue());
 			map.put("lessonActiveStatus", LESSON_STATUS.ACTIVE.getValue());
 			map.put("acceptedStatus", COACH_COURSE_STATUS.ACCEPTED.getValue());
@@ -219,6 +221,11 @@ public class LessonDaoImpl extends SqlSessionDaoSupport implements LessonDao{
 			map.put("endTime", endTime);
 			map.put("description", request.getRemarks());
 			map.put("alertSwitch", request.getAlertSwitch());
+			map.put("address", request.getAddress());
+			map.put("groundName", request.getGroundName());
+			map.put("groundId", request.getGroundId());
+			map.put("longitude", request.getLongitude());
+			map.put("latitude", request.getLatitude());
 			this.getSqlSession().update("updateLesson", map);
 		} catch(Throwable e){
 			log.error("updateLesson", e);

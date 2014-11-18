@@ -15,11 +15,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.zhiqin.coach.admin.controller.BaseController;
 import com.zhiqin.coach.admin.dto.CoachDTO;
 import com.zhiqin.coach.admin.dto.CourseDTO;
+import com.zhiqin.coach.admin.dto.LessonDTO;
 import com.zhiqin.coach.admin.dto.OrgDTO;
 import com.zhiqin.coach.admin.dto.PageInfoDTO;
 import com.zhiqin.coach.admin.dto.ResponseDTO;
 import com.zhiqin.coach.admin.dto.SearchCourseDTO;
 import com.zhiqin.coach.admin.dto.SearchOrgDTO;
+import com.zhiqin.coach.admin.service.CoachService;
 import com.zhiqin.coach.admin.service.OrgService;
 import com.zhiqin.coach.admin.util.JsonBinder;
 import com.zhiqin.coach.admin.util.JsonUtils;
@@ -36,6 +38,8 @@ import com.zhiqin.coach.admin.util.JsonUtils;
 public class OrgController extends BaseController{
 	@Resource
 	private OrgService orgService;
+	@Resource
+	private CoachService coachService;
 	/**
 	 * @param model
 	 * 存放返回界面的model
@@ -187,6 +191,10 @@ public class OrgController extends BaseController{
 //		if(coachIdList != null && coachIdList.size() > 0){
 //			return "input1";
 //		}
+		LessonDTO conflictLesson = coachService.getConflictLesson(coachId, courseId);
+		if(conflictLesson != null){
+			return "input1";
+		}
 		orgService.assignCourse(coachId, courseId);
 		return "success";
 	}
