@@ -176,4 +176,20 @@
 		<property name="targetObject" ref="taskDaoTarget"></property>
 		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
 	</bean>
+	
+	<bean id="sysUserDaoTarget" class="com.zhiqin.coach.admin.dao.impl.SysUserDaoImpl"></bean>
+	<bean id="sysUserDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.zhiqin.coach.admin.dao.SysUserDao"></property>
+		<property name="targetObject" ref="sysUserDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean>
+	
+	<bean id="sysResourceDaoTarget" class="com.zhiqin.coach.admin.dao.impl.SysResourceDaoImpl"></bean>
+	<bean id="sysResourceDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.zhiqin.coach.admin.dao.SysResourceDao"></property>
+		<property name="targetObject" ref="sysResourceDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean>
 </beans>

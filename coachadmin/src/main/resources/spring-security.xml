@@ -6,36 +6,30 @@
 	http://www.springframework.org/schema/security 
 	http://www.springframework.org/schema/security/spring-security-3.1.xsd">
 
+	<debug />
 	<http pattern="/login.jsp" security="none" />
 	<http pattern="/404.jsp" security="none" />
 	<http pattern="/denied.jsp" security="none" />
 	<http pattern="/login/login.htm" security="none" />
 	<http pattern="/login/loginCheck.htm" security="none" />
-	<http pattern="/coach/coach/*.htm" security="none" />
-	<http pattern="/coach/org/*.htm" security="none" />
-	<http pattern="/story/**/*.*" security="none" />
-	<http use-expressions="true" auto-config="false"
-		entry-point-ref="myAuthenticationEntryPoint" access-denied-page="/denied.jsp">
+   
+	<http use-expressions="true" auto-config="false" entry-point-ref="myAuthenticationEntryPoint" access-denied-page="/denied.jsp">
 
-
-		<intercept-url pattern="/background/**" access="isAuthenticated()" />
-		<logout logout-success-url="/j_spring_security_logout"
-			logout-url="/background/login.htm" invalidate-session="true"
-			delete-cookies="JSESSIONID" />
-
-		<session-management invalid-session-url="/background/login.htm"
-			session-fixation-protection="none">
+		<intercept-url pattern="/login/index.htm" access="isAuthenticated()" />
+        <intercept-url pattern="/coach/**" access="isAuthenticated()" />
+        <intercept-url pattern="/story/**" access="isAuthenticated()" />
+        <logout logout-success-url="/" logout-url="/coach/logout.htm" invalidate-session="true" delete-cookies="JSESSIONID"/>
+        
+		<session-management invalid-session-url="/login/login.htm" session-fixation-protection="none">
 			<concurrency-control max-sessions="1"
 				error-if-maximum-exceeded="true" />
 		</session-management>
-		<custom-filter ref="mySecurityFilter" before="FILTER_SECURITY_INTERCEPTOR" />
+        <custom-filter ref="mySecurityFilter" before="FILTER_SECURITY_INTERCEPTOR"/>
 	</http>
-
-	<beans:bean id="myAuthenticationEntryPoint"
-		class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
-		<beans:property name="loginFormUrl" value="/background/login.htm"></beans:property>
-	</beans:bean>
 	
+    <beans:bean id="myAuthenticationEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+        <beans:property name="loginFormUrl" value="/"></beans:property>
+    </beans:bean>
 	<authentication-manager alias="myAuthenticationManager">
 		<authentication-provider user-service-ref="myUserDetailServiceImpl" />
 	</authentication-manager>

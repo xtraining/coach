@@ -19,7 +19,7 @@
 		<filter-name>encode</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
- 
+
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
@@ -36,7 +36,7 @@
 	<servlet-mapping>
 		<servlet-name>springmvc</servlet-name>
 		<url-pattern>*.htm</url-pattern>
-	</servlet-mapping> 
+	</servlet-mapping>
 	
 	  <!-- 权限  Spring Security3.1 的权限过滤-->
   <filter>
@@ -47,22 +47,30 @@
    </filter>
     <filter-mapping>
         <filter-name>springSecurityFilterChain</filter-name>
-        <url-pattern>/background/*</url-pattern>
+        <url-pattern>/coach/*</url-pattern>
     </filter-mapping>
-	
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/story/*</url-pattern>
+    </filter-mapping>
+	<filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/login/*</url-pattern>
+    </filter-mapping>
+    
 	<welcome-file-list>
 		<welcome-file>login.jsp</welcome-file>
-	</welcome-file-list>
+	</welcome-file-list><!--
 
 	<error-page>
 		<error-code>404</error-code>
-		<location>/404.jsp</location>
+		<location>/404/404.jsp</location>
 	</error-page>
 	<error-page>
 		<exception-type>java.lang.Exception</exception-type>
 		<location>/error.jsp</location>
 	</error-page>
-	<!-- 指明对于如下资源文件不采用spring的过滤器 -->
+	--><!-- 指明对于如下资源文件不采用spring的过滤器 -->
 	<servlet-mapping>
 		<servlet-name>default</servlet-name>
 		<url-pattern>*.css</url-pattern>

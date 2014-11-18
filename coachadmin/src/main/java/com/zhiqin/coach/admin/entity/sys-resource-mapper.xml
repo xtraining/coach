@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="resource">
+
+	<select id="getByUserId" parameterType="Integer" resultType="SysResource">
+		select * from sys_resource r inner join sys_role_resource rr on r.id = rr.sysResourceId 
+		inner join sys_user_role rs on rr.sysRoleId = rs.sysRoleId 
+		where rs.sysUserId = #{userId} 
+	</select>
+	
+	<select id="getAll" resultType="SysResource">
+		select * from sys_resource r  
+	</select>
+
+</mapper>

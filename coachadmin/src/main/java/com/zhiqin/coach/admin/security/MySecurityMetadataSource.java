@@ -8,13 +8,16 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.stereotype.Service;
 
-import com.zhiqin.coach.admin.entity.Resources;
+import com.zhiqin.coach.admin.entity.SysResource;
+import com.zhiqin.coach.admin.service.SysResourceService;
+
 
 /**
  * 加载资源与权限的对应关系
@@ -25,6 +28,8 @@ import com.zhiqin.coach.admin.entity.Resources;
  * */
 @Service
 public class MySecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
+	@Autowired
+	private SysResourceService sysResourceService;
 	private static Map<String, Collection<ConfigAttribute>> resourceMap = null;
 
 	public Collection<ConfigAttribute> getAllConfigAttributes() {
@@ -43,11 +48,11 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
 	 */
 	@PostConstruct
 	private void loadResourceDefine() {
+//		System.err.println("-----------MySecurityMetadataSource loadResourceDefine ----------- ");
 		if (resourceMap == null) {
 			resourceMap = new HashMap<String, Collection<ConfigAttribute>>();
-			//TODO:this.resourcesDao.findAll();
-			List<Resources> resources = new ArrayList<Resources>();
-			for (Resources resource : resources) {
+			List<SysResource> resources = this.sysResourceService.getAll();
+			for (SysResource resource : resources) {
 				Collection<ConfigAttribute> configAttributes = new ArrayList<ConfigAttribute>();
 				// TODO:ZZQ 通过资源名称来表示具体的权限 注意：必须"ROLE_"开头
 				// 关联代码：applicationContext-security.xml
@@ -60,10 +65,13 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
 	}
 	//返回所请求资源所需要的权限
 	public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
+//		System.err.println("-----------MySecurityMetadataSource getAttributes ----------- ");
 		String requestUrl = ((FilterInvocation) object).getRequestUrl();
+	//	System.out.println("requestUrl is " + requestUrl);
 		if(resourceMap == null) {
 			loadResourceDefine();
 		}
+		//System.err.println("resourceMap.get(requestUrl); "+resourceMap.get(requestUrl));
 		if(requestUrl.indexOf("?")>-1){
 			requestUrl=requestUrl.substring(0,requestUrl.indexOf("?"));
 		}

@@ -4,16 +4,16 @@ import java.util.HashSet;
 import java.util.Set;
 
 @SuppressWarnings("serial")
-public class Roles implements java.io.Serializable {
+public class SysRole implements java.io.Serializable {
 
 	private Integer id;
-	private Integer enable;//是否禁用角色　1　表示禁用　2　表示不禁用
+	private Integer status;
 	private String name;
 	private String roleKey;
 	private String description;
-	private Set<Resources> resources = new HashSet<Resources>(0);
+	private Set<SysResource> resources = new HashSet<SysResource>(0);
 
-	public Roles() {
+	public SysRole() {
 	}
 
 	public Integer getId() {
@@ -24,12 +24,12 @@ public class Roles implements java.io.Serializable {
 		this.id = id;
 	}
 
-	public Integer getEnable() {
-		return this.enable;
+	public Integer getStatus() {
+		return status;
 	}
 
-	public void setEnable(Integer enable) {
-		this.enable = enable;
+	public void setStatus(Integer status) {
+		this.status = status;
 	}
 
 	public String getName() {
@@ -40,11 +40,11 @@ public class Roles implements java.io.Serializable {
 		this.name = name;
 	}
 
-	public Set<Resources> getResources() {
+	public Set<SysResource> getResources() {
 		return resources;
 	}
 
-	public void setResources(Set<Resources> resources) {
+	public void setResources(Set<SysResource> resources) {
 		this.resources = resources;
 	}
 

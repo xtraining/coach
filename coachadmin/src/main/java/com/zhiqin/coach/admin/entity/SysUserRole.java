@@ -2,7 +2,7 @@ package com.zhiqin.coach.admin.entity;
 
 
 @SuppressWarnings("serial")
-public class UserRoles implements java.io.Serializable {
+public class SysUserRole implements java.io.Serializable {
 
 	private Integer roleId;
 	private Integer userId;

@@ -1,5 +1,6 @@
 package com.zhiqin.coach.admin.controller;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -15,7 +16,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.zhiqin.coach.admin.entity.User;
+import com.zhiqin.coach.admin.common.Constants;
+import com.zhiqin.coach.admin.entity.SysUser;
+import com.zhiqin.coach.admin.service.SysUserService;
 import com.zhiqin.coach.admin.util.JsonBinder;
 import com.zhiqin.coach.admin.util.JsonUtils;
 
@@ -25,9 +28,10 @@ public class LoginController
 {
 	@Autowired
 	private AuthenticationManager myAuthenticationManager;
-	/**
-	 * @return
-	 */
+	
+	@Resource
+	private SysUserService userService;
+	
 	@RequestMapping ("login")
 	public String login(Model model,HttpServletRequest request)
 	{
@@ -45,16 +49,15 @@ public class LoginController
 			if (!request.getMethod().equals("POST")) {
 				request.setAttribute("error","支持POST方法提交！");
 			}
-//			if (Common.isEmpty(username) || Common.isEmpty(password)) {
-			if(false){
-				request.setAttribute("error","用户名或密码不能为空！");
-				return "/background/framework/login";
-			}
 			// 验证用户账号与密码是否正确
-			/*User users = new User();//this.userDao.querySingleUser(username);
-			if (users == null || !users.getUserPassword().equals(password)) {
-				request.setAttribute("error", "用户或密码不正确！");
-			    return "/background/framework/login";
+			SysUser user = userService.getUserByCredentials(username, password);
+			if (user == null || user.getId() == 0) {
+				JsonUtils.write(response, JsonBinder.toJson("result", "input"));
+			    return null;
+			}
+			if(user.getStatus() == 1){
+				JsonUtils.write(response, JsonBinder.toJson("result", "INVALID"));
+			    return null;
 			}
 			Authentication authentication = myAuthenticationManager
 					.authenticate(new UsernamePasswordAuthenticationToken(username,password));
@@ -63,7 +66,7 @@ public class LoginController
 			HttpSession session = request.getSession(true);  
 		    session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);  
 		    // 当验证都通过后，把用户信息放在session里
-			request.getSession().setAttribute("userSession", users);*/
+			request.getSession().setAttribute(Constants.USER_SESSION, user);
 		} catch (AuthenticationException ae) {  
 			request.setAttribute("error", "登录异常，请联系管理员！");
 		    return "/login";

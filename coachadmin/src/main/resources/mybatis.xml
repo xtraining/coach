@@ -3,11 +3,11 @@
 	"http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 	<typeAliases>
-		<typeAlias type="com.zhiqin.coach.admin.entity.User" alias="User" />
-		<typeAlias type="com.zhiqin.coach.admin.entity.Resources" alias="Resources"/>
-		<typeAlias type="com.zhiqin.coach.admin.entity.Roles" alias="Roles"/>
-		<typeAlias type="com.zhiqin.coach.admin.entity.ResourceRoles" alias="ResourceRoles"/>
-		<typeAlias type="com.zhiqin.coach.admin.entity.UserRoles" alias="UserRoles"/>
+		<typeAlias type="com.zhiqin.coach.admin.entity.SysUser" alias="SysUser" />
+		<typeAlias type="com.zhiqin.coach.admin.entity.SysResource" alias="SysResource"/>
+		<typeAlias type="com.zhiqin.coach.admin.entity.SysRole" alias="SysRole"/>
+		<typeAlias type="com.zhiqin.coach.admin.entity.SysRoleResource" alias="SysRoleResource"/>
+		<typeAlias type="com.zhiqin.coach.admin.entity.SysUserRole" alias="SysUserRole"/>
 		
 		
 		<typeAlias type="com.zhiqin.coach.admin.dto.SearchCoachDTO" alias="SearchCoachDTO"/>

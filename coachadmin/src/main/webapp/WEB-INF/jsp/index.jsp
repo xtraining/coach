@@ -97,7 +97,7 @@ $(function(){
 				<a class="logo" href="#">标志</a>
 				<ul class="nav">	
 					<li><a href="modules/sys-user!editMyself.action" target="navTab" title="修改用户">欢迎您：${sessionScope.sys_user_in_session.realName}</a></li>
-					<li><a href="login!logout.action">退出</a></li>
+					<li><a href="../coach/logout.htm">退出</a></li>
 				</ul>				
 			</div>
 

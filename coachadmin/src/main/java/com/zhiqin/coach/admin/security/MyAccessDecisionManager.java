@@ -31,6 +31,7 @@ import org.springframework.stereotype.Service;
 public class MyAccessDecisionManager implements AccessDecisionManager {
 	
 	public void decide(Authentication authentication, Object object, Collection<ConfigAttribute> configAttributes) throws AccessDeniedException, InsufficientAuthenticationException {
+//		System.err.println(" ---------------  MyAccessDecisionManager --------------- ");
 		if(configAttributes == null) {
 			return;
 		}
@@ -40,6 +41,7 @@ public class MyAccessDecisionManager implements AccessDecisionManager {
 			ConfigAttribute configAttribute = iterator.next();
 			//访问所请求资源所需要的权限
 			String needPermission = configAttribute.getAttribute();
+			//System.out.println("needPermission is " + needPermission);
 			//用户所拥有的权限authentication
 			for(GrantedAuthority ga : authentication.getAuthorities()) {
 				if(needPermission.equals(ga.getAuthority())) {
