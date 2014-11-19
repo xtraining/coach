@@ -16,6 +16,8 @@ public class WeekLessonResponse implements Serializable {
 	@XmlElement
 	private Integer memberNewsFlag;
 	@XmlElement
+	private Integer startHour = 0;
+	@XmlElement
 	private List<LessonResponse> lessonList;
 	public String getAvatarUrl() {
 		return avatarUrl;
@@ -41,6 +43,12 @@ public class WeekLessonResponse implements Serializable {
 	}
 	public void setLessonList(List<LessonResponse> lessonList) {
 		this.lessonList = lessonList;
+	}
+	public Integer getStartHour() {
+		return startHour;
+	}
+	public void setStartHour(Integer startHour) {
+		this.startHour = startHour;
 	}
 
 	

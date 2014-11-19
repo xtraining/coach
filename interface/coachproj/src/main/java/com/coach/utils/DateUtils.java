@@ -164,4 +164,9 @@ public class DateUtils {
 		return calendar.getTime();
 	}
 	
+	public static Integer getHour(Timestamp timestamp){
+		Calendar time = Calendar.getInstance(); 
+		time.setTimeInMillis(timestamp.getTime());
+		return time.get(Calendar.HOUR_OF_DAY);
+	}
 }

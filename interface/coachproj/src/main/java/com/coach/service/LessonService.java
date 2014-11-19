@@ -85,8 +85,8 @@ public class LessonService extends SimpleBaseService{
 	
 	@ServiceMethod(method = "lesson.updateLesson", version = "1.0", needInSession = NeedInSessionType.YES)
     public Object updateLesson(UpdateLessonRequest request) {
-		lessonResolver.updateLesson(request);
-		return new SimpleResponse();
+		ConflictLessonResponse r = lessonResolver.updateLesson(request);
+		return r;
 	}
 	
 	@ServiceMethod(method = "lesson.addPersonal", version = "1.0", needInSession = NeedInSessionType.YES)
@@ -97,8 +97,8 @@ public class LessonService extends SimpleBaseService{
 	
 	@ServiceMethod(method = "lesson.updateLife", version = "1.0", needInSession = NeedInSessionType.YES)
     public Object updateLife(UpdateLifeRequest request) {
-		lessonResolver.updateLife(request);
-		return new SimpleResponse();
+		ConflictLessonResponse r = lessonResolver.updateLife(request);
+		return r;
 	}
 	
 	@ServiceMethod(method = "lesson.getCheckLesson", version = "1.0", needInSession = NeedInSessionType.YES)

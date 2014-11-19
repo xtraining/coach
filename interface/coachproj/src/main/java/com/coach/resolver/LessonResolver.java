@@ -72,16 +72,22 @@ public class LessonResolver extends BaseResolver implements ILessonResolver{
 		Date endDate = DateUtils.addDay(startDate, 7);
 		CacheAction<List<LessonResponse>> cacheAction = new OneWeekLessonCacheAction(coachId, startDate, endDate);
 		List<LessonResponse> lessonResponseList = cacheAction.getValue();
+		int startHour = 23;
 		if(lessonResponseList == null){
 			List<Lesson> lessonList = lessonDao.getLessonInRange(coachId, startDate, endDate);
 			lessonResponseList = new ArrayList<LessonResponse>();
 			for(Lesson lesson : lessonList){
 				LessonResponse r =  lesson.toResponse();
+				int lessonStartHour = DateUtils.getHour(DateUtils.yyyyMMddHHmmssToTimestamp(r.getStartTime()));
+				if(startHour > lessonStartHour){
+					startHour = lessonStartHour;
+				}
 				lessonResponseList.add(r);
 			}
 			cacheAction.setValue(lessonResponseList);
 		}
 		WeekLessonResponse response = new WeekLessonResponse();
+		response.setStartHour(startHour);
 		response.setLessonList(lessonResponseList);
 		Map<String, Object> flagMap = lessonDao.getNewsFlag(coachId);
 		String avatarUrl = (String) flagMap.get("avatarUrl");

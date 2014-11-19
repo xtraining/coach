@@ -19,14 +19,14 @@ public class LessonServiceTest extends TestCase {
 	public static final String VERSION = "V0.5.0.0";
 
 	
-	/*public void testGetOneWeekLesson(){
+	public void testGetOneWeekLesson(){
 		Map <String, String>map = new HashMap<String, String>();
     	map.put("appKey", APP_KEY); //第二个参数为AppKey
     	map.put("method", METHOD.GET_ONE_WEEK_LESSON.getValue()); 
     	map.put("v", "1.0");
     	map.put("format", "json");
     	map.put("sessionId", "111F0FED-5009-4CF6-B63A-0453D08F4212");
-    	map.put("coachId", "24");
+    	map.put("coachId", "17");
     	map.put("date", "2014-11-14");
     	String sign = RopUtils.sign(map, APP_SECRET); //第二个参数为SecretKey, 有O2O系统分配
     	map.put("sign", sign);
@@ -34,7 +34,7 @@ public class LessonServiceTest extends TestCase {
         System.out.println("response = " + response);
         assertNotNull(response);
         assertTrue(response.indexOf("code") <= 0);
-	}*/
+	}
 	/*public void testGetLessonDetail(){
 		Map <String, String>map = new HashMap<String, String>();
     	map.put("appKey", APP_KEY); //第二个参数为AppKey
@@ -209,7 +209,7 @@ public class LessonServiceTest extends TestCase {
         assertTrue(response.indexOf("code") <= 0);
 	}*/
 	
-/*	public void testUpdateLife(){
+	/*public void testUpdateLife(){
 		Map <String, String>map = new HashMap<String, String>();
     	map.put("appKey", APP_KEY); //第二个参数为AppKey
     	map.put("method", METHOD.UPDATE_LIFE.getValue()); 
@@ -223,6 +223,7 @@ public class LessonServiceTest extends TestCase {
     	map.put("endTime", "2009-01-01 15:39:33");
     	map.put("alterSwitch", "1");
     	map.put("name", "name");
+    	map.put("groundName", "");
     	map.put("latitude", "34");
     	map.put("longitude", "121");
     	map.put("address", "address");
@@ -233,7 +234,7 @@ public class LessonServiceTest extends TestCase {
         assertNotNull(response);
         assertTrue(response.indexOf("code") <= 0);
 	}
-	*/
+	
 	public void testUpdateLesson(){
 		Map <String, String>map = new HashMap<String, String>();
     	map.put("appKey", APP_KEY); //第二个参数为AppKey
@@ -246,7 +247,7 @@ public class LessonServiceTest extends TestCase {
     	map.put("address", "abc");
     	map.put("groundName", "ground");
     	map.put("remarks", "remarks");
-    	map.put("startTime", "2009-01-01 13:39:33");
+    	map.put("startTime", "2009-01-01 13:00:33");
     	map.put("endTime", "2009-01-01 15:39:33");
     	map.put("alterSwitch", "1");
     	String sign = RopUtils.sign(map, APP_SECRET); //第二个参数为SecretKey, 有O2O系统分配
@@ -255,5 +256,5 @@ public class LessonServiceTest extends TestCase {
         System.out.println("response = " + response);
         assertNotNull(response);
         assertTrue(response.indexOf("code") <= 0);
-	}
+	}*/
 }
