@@ -12,7 +12,7 @@ public class UpdateProfileDetailRequest extends CoachBaseRequest{
 	private Integer gender;
 	private String idNumber;
 	private Integer idType = ID_TYPE.ID_CARD.getValue();
-	@Pattern(regexp = "\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*")
+//	@Pattern(regexp = "\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*")
 	private String email;
 	private String areaCode;
 	private String birthday;
