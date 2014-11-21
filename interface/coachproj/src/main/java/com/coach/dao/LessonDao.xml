@@ -161,6 +161,7 @@
 	update lesson set updateTime = now(), startTime = #{startTime}, endTime = #{endTime}, 
 	groundId = #{groundId}, groundName = #{groundName}, address = #{address}, 
 	longitude = #{longitude}, latitude = #{latitude}, description = #{description}, alertSwitch = #{alertSwitch}
+	<if test="name != null">,name = #{name}</if>
 	where id = #{lessonId}
   </update>
   

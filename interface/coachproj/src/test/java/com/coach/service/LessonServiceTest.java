@@ -12,14 +12,14 @@ import com.coach.utils.HttpUtil;
 import com.rop.utils.RopUtils;
 
 public class LessonServiceTest extends TestCase {
-	public static final String SERVER_URL = "http://localhost:8080/coach/service";
-//	public static final String SERVER_URL = "http://114.215.145.26/coach/service";
+//	public static final String SERVER_URL = "http://localhost:8080/coach/service";
+	public static final String SERVER_URL = "http://114.215.145.26/coach/service";
 	public static final String APP_KEY = "iphone_user";
 	public static final String APP_SECRET = "LlnZA8cql4liN4CvjGL5GfwhCh7fwWGE";
 	public static final String VERSION = "V0.5.0.0";
 
 	
-	public void testGetOneWeekLesson(){
+	/*public void testGetOneWeekLesson(){
 		Map <String, String>map = new HashMap<String, String>();
     	map.put("appKey", APP_KEY); //第二个参数为AppKey
     	map.put("method", METHOD.GET_ONE_WEEK_LESSON.getValue()); 
@@ -34,7 +34,7 @@ public class LessonServiceTest extends TestCase {
         System.out.println("response = " + response);
         assertNotNull(response);
         assertTrue(response.indexOf("code") <= 0);
-	}
+	}*/
 	/*public void testGetLessonDetail(){
 		Map <String, String>map = new HashMap<String, String>();
     	map.put("appKey", APP_KEY); //第二个参数为AppKey
@@ -209,21 +209,20 @@ public class LessonServiceTest extends TestCase {
         assertTrue(response.indexOf("code") <= 0);
 	}*/
 	
-	/*public void testUpdateLife(){
+	public void testUpdateLife(){
 		Map <String, String>map = new HashMap<String, String>();
     	map.put("appKey", APP_KEY); //第二个参数为AppKey
     	map.put("method", METHOD.UPDATE_LIFE.getValue()); 
     	map.put("v", "1.0");
     	map.put("format", "json");
     	map.put("sessionId", "111F0FED-5009-4CF6-B63A-0453D08F4212");
-    	map.put("coachId", "7");
-    	map.put("lessonId", "400");
+    	map.put("coachId", "22");
+    	map.put("lessonId", "800");
     	map.put("remarks", "remarks");
     	map.put("startTime", "2009-01-01 13:39:33");
     	map.put("endTime", "2009-01-01 15:39:33");
     	map.put("alterSwitch", "1");
-    	map.put("name", "name");
-    	map.put("groundName", "");
+    	map.put("name", "name1");
     	map.put("latitude", "34");
     	map.put("longitude", "121");
     	map.put("address", "address");
@@ -234,7 +233,7 @@ public class LessonServiceTest extends TestCase {
         assertNotNull(response);
         assertTrue(response.indexOf("code") <= 0);
 	}
-	
+	/*
 	public void testUpdateLesson(){
 		Map <String, String>map = new HashMap<String, String>();
     	map.put("appKey", APP_KEY); //第二个参数为AppKey
