@@ -17,14 +17,15 @@ import java.net.URLConnection;
 
 public class DownloadUtils {
 
-	public static void download(String url, String fileName) throws IOException {  
+	public static File download(String url, String fileName) throws IOException { 
+		String path = null;
 		String filePath = Config.getProperty("download_file_path");
 		URL theURL = new URL(url);
         URLConnection con = theURL.openConnection();   
         if (fileName != null) {   
             byte[] buffer = new byte[4 * 1024];   
             int read;   
-            String path = filePath + File.separator + fileName;   
+            path = filePath + File.separator + fileName;   
             File fileFolder = new File(filePath);   
             if(!fileFolder.exists()){   
                 fileFolder.mkdir();   
@@ -37,6 +38,7 @@ public class DownloadUtils {
             os.close();   
             in.close();   
         }  
+        return new File(path);
     }  
 	
 	public static void main(String[] args) throws IOException {

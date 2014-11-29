@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.zhiqin.coach.admin.common.Constants.DOWNLOAD_TASK_STATUS;
-import com.zhiqin.coach.admin.common.Constants.TASK_STATUS;
 import com.zhiqin.coach.admin.common.HtmlParserFactory;
 import com.zhiqin.coach.admin.common.MyHtmlParser;
 import com.zhiqin.coach.admin.dao.TaskDao;
@@ -111,6 +110,18 @@ public class TaskServiceImpl implements TaskService {
 	public void updateDownloadStatus(Long downloadTaskId, DOWNLOAD_TASK_STATUS status) {
 		taskDao.updateDownloadStatus(downloadTaskId, status);
 		
+	}
+	
+	@Override
+	public void updateDownloadStatus(Long downloadTaskId, DOWNLOAD_TASK_STATUS status, String fileName) {
+		taskDao.updateDownloadStatus(downloadTaskId, status, fileName);
+		
+	}
+
+	@Override
+	@Transactional
+	public void deleteByIds(String ids) {
+		taskDao.deleteByIds(ids);
 	}
 	
 

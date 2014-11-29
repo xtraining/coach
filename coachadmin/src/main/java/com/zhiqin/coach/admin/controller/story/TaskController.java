@@ -50,7 +50,7 @@ public class TaskController extends BaseController{
 		case 0:
 			return "/story/task-add-xmly";
 		case 1:
-			return "/story/task-add-bdlb";
+			return "/story/task-add-qtfm";
 		default:
 			return null;
 		}
@@ -77,7 +77,7 @@ public class TaskController extends BaseController{
 			return "/story/task-detail-xmly";
 		}
 		case 1:{
-			return "/story/task-detail-bdlb";
+			return "/story/task-detail-qtfm";
 		}
 		default:
 			return null;
@@ -92,5 +92,23 @@ public class TaskController extends BaseController{
 		success.setNavTabId("任务详情");
 		JsonUtils.write(response, JsonBinder.buildNormalBinder().toJson(success));
 		return null;
+	}
+	
+	
+	@RequestMapping("delete")
+	public String delete(String ids, HttpServletResponse response){
+		taskService.deleteByIds(ids);
+		ResponseDTO success = new ResponseDTO();
+		success.setStatusCode("200");
+		success.setMessage("删除成功");
+		success.setNavTabId("任务管理");
+		JsonUtils.write(response, JsonBinder.buildNormalBinder().toJson(success));
+		return null;
+	}
+	
+	
+	@RequestMapping("accept")
+	public String accept(int taskId, Model model){
+		return "/story/task-accept";
 	}
 }

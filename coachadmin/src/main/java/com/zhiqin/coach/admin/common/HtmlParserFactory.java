@@ -9,7 +9,7 @@ public class HtmlParserFactory {
 			parser = new XimalayaParser();
 			break;
 		case 1:
-			parser = new BaiduleboParser();
+			parser = new QingtingFmParser();
 			break;
 		default:
 			break;

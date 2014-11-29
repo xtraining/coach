@@ -33,7 +33,6 @@ public class TaskDaoImpl extends BaseDaoImpl implements TaskDao
 	public List<TaskDTO> getTaskList(PageInfoDTO pageInfo) {
 		try{
 			Map map = new HashMap();
-			map.put("status", TASK_STATUS.ACTIVE.getValue());
 			map.put("p", pageInfo);
 			return this.getSqlSession().selectList("task.getTaskList", map);
 		} catch(RuntimeException e){
@@ -146,6 +145,36 @@ public class TaskDaoImpl extends BaseDaoImpl implements TaskDao
 			this.getSqlSession().update("task.updateDownloadStatus", map);
 		} catch(RuntimeException e){
 			log.error("updateDownloadStatus", e);
+			throw e;
+		}
+		
+	}
+
+	@Override
+	public void updateDownloadStatus(Long downloadTaskId,
+			DOWNLOAD_TASK_STATUS status, String fileName) {
+		try{
+			Map map = new HashMap();
+			map.put("downloadTaskId", downloadTaskId);
+			map.put("status", status.getValue());
+			map.put("fileName", fileName);
+			this.getSqlSession().update("task.updateDownloadStatus", map);
+		} catch(RuntimeException e){
+			log.error("updateDownloadStatus", e);
+			throw e;
+		}
+		
+		
+	}
+
+	@Override
+	public void deleteByIds(String ids) {
+		try{
+			Map map = new HashMap();
+			map.put("ids", ids);
+			this.getSqlSession().update("task.deleteByIds", map);
+		} catch(RuntimeException e){
+			log.error("deleteByIds", e);
 			throw e;
 		}
 		

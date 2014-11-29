@@ -20,6 +20,7 @@ import com.zhiqin.coach.admin.dto.TaskDTO;
 
 public class XimalayaParser extends MyHtmlParser {
 	private static final Logger log = LoggerFactory.getLogger(XimalayaParser.class);
+	//http://www.ximalaya.com/album/286034.xml
 	private static final String DOWNLOAD_URL = "http://www.ximalaya.com/album/{id}.xml";
 
 	@Override

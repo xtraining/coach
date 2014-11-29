@@ -39,6 +39,11 @@ public interface TaskDao extends BaseDao{
 
 	void updateDownloadStatus(Long downloadTaskId, DOWNLOAD_TASK_STATUS status);
 
+	void updateDownloadStatus(Long downloadTaskId, DOWNLOAD_TASK_STATUS status,
+			String fileName);
+
+	void deleteByIds(String ids);
+
 
 
 }

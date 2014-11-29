@@ -27,13 +27,13 @@
 	</resultMap>
 	
 	<select id="getTotalNum" parameterType="TaskDTO" resultType="Long">
-		select count(*) from task where status = #{status}
+		select count(*) from task where status != 1
 	</select>
 
 	<select id="getTaskList" parameterType="Map" resultMap="TaskDTOResult" >
 		select *, 
 		concat((select count(1) from download_task d where d.taskId = t.id and d.status = 3) , ' / ' , (select count(1) from download_task d where d.taskId = t.id))progress from task t 
-		where t.status = #{status}
+		where t.status != 1
 		order by t.createTime desc
 		limit ${(p.pageNum - 1) * p.numPerPage}, ${p.numPerPage}
 	</select>
@@ -65,8 +65,16 @@
 		update task set status = #{status} where id = #{taskId}
 	</update>
 	
+	<update id="deleteByIds" parameterType="Map">
+		update task set status = 1 where id in (${ids})
+	</update>
+	
 	<update id="updateDownloadStatus" parameterType="Map">
-		update download_task set status = #{status} where id = #{downloadTaskId}
+		update download_task set status = #{status}
+		<if test="fileName != null and fileName != '' ">
+			, fileName = #{fileName}
+		</if>
+		where id = #{downloadTaskId}
 	</update>
 	
 	<insert id="insertTask" useGeneratedKeys="true" keyProperty="id" parameterType="TaskDTO">

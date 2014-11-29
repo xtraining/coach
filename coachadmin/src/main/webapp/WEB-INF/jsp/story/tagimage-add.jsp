@@ -27,20 +27,50 @@ function save(){
 			});
 }
 </script>
+
 <div class="pageContent">
 	<form name="taskForm" id="taskForm" method="post" action="" class="pageForm required-validate">
-	<h2 class="contentTitle">创建下载任务</h2>
-		<div class="pageFormContent" layoutH="96">	
+	<input type="hidden" name="type" value="0"/>
+	<h2 class="contentTitle">新增图片</h2>
+		<div class="pageFormContent" layoutH="96">
+			<div class="tabs">
+			<div class="tabsHeader">
+				<div class="tabsHeaderContent">
+					<ul>
+						<li class="selected"><a href="javascript:void(0)"><span>关联标签</span></a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="tabsContent" style="height: 150px;">
+				<div>
+					<table class="list nowrap itemDetail" addButton="关联标签" width="100%">
+						<thead>
+							<tr>
+								<th type="text" name="items[#index#].topicOrder" defaultVal="#index#" size="5" fieldClass="digits">序号</th>
+								<th type="lookup" name="items[#index#].topicInfo.topicName" lookupGroup="items[#index#].topicInfo" lookupUrl="modules/topic!select.action" size="60" fieldClass="required">标签名称</th>
+								<th type="del" width="60">操作</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="tabsFooter">
+				<div class="tabsFooterContent"></div>
+			</div>
+			</div>	
+			<div class="divider"></div>
+			<%for(int i = 0; i < 10; i++){%>
 			<dl>
-				<dt>专辑ID: </dt>
-				<dd><input type="text" name="url" value="" size="60"/>
-				<span class="info">多个ID用英文分号&nbsp;;&nbsp;分割</span>
-				</dd>
+				<dt>图片<%=i+1 %> ：</dt>
+				<dd><input type="file" name="detailImageFile" size="20"/>	</dd>
 			</dl>
+			<%} %>	
 		</div>
 		<div class="formBar">
 			<ul>
-				<li><div class="buttonActive"><div class="buttonContent"><button type="button" onclick="save();">创建</button></div></div></li>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">保存</button></div></div></li>
 				<li>
 					<div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div>
 				</li>

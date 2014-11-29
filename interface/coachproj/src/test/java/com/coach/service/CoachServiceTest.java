@@ -145,7 +145,7 @@ public class CoachServiceTest extends TestCase {
     	map.put("method", METHOD.GET_RESET_PWD_VCODE.getValue()); 
     	map.put("v", "1.0");
     	map.put("format", "json");
-    	map.put("phoneNumber", "13916897010");
+    	map.put("phoneNumber", "13636426042");
     	String sign = RopUtils.sign(map, APP_SECRET); //第二个参数为SecretKey, 有O2O系统分配
     	map.put("sign", sign);
     	String response = HttpUtil.postServer(SERVER_URL, map);

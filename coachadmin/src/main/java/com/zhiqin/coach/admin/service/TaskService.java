@@ -26,4 +26,9 @@ public interface TaskService{
 
 	void updateDownloadStatus(Long id, DOWNLOAD_TASK_STATUS status);
 
+	void updateDownloadStatus(Long id, DOWNLOAD_TASK_STATUS success,
+			String voiceFileName);
+
+	void deleteByIds(String ids);
+
 }

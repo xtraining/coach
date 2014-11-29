@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top">
+	<sql id = "getTopCondition">
+		from top_list where name like '%${name}%' and status != 1
+	</sql>
+	
+	<select id="getTopTotalNum" parameterType="Map" resultType="Long">
+		select count(*)
+		<include refid="getTopCondition" />
+	</select>
+
+	<select id="getTopList" parameterType="Map" resultType="TopDTO" >
+		select *
+		<include refid="getTopCondition" />
+		order by topOrder desc, startTime asc
+		limit ${(p.pageNum - 1) * p.numPerPage}, ${p.numPerPage}
+	</select>
+	
+	<insert id="insertTop" useGeneratedKeys="true" keyProperty="id" parameterType="TopDTO">
+		INSERT INTO top_list(name,type,topOrder, startTime) 
+		VALUE (#{name}, #{type}, #{topOrder},#{startTime}) 
+  	</insert>
+  	
+	<update id="deleteByIds" parameterType="Map">
+		update top_list set status = 1 where id in (${ids})
+	</update>
+</mapper>

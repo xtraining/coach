@@ -28,8 +28,9 @@
 	<div class="panelBar">
 		<ul class="toolBar">
 			<li><a class="add" href="${ctx}/story/task/add.htm?sourceFrom=0" target="dialog" mask="true" title="喜马拉雅"><span>喜马拉雅</span></a></li>
-			<li><a class="add" href="${ctx}/story/task/add.htm?sourceFrom=1" target="dialog" mask="true" title="百度乐播"><span>百度乐播</span></a></li>
-			
+			<li><a class="add" href="${ctx}/story/task/add.htm?sourceFrom=1" target="dialog" mask="true" width="800" title="蜻蜓FM"><span>蜻蜓FM</span></a></li>
+			<li class="line">line</li>
+			<li><a title="确实要删除这些任务吗?" warn="请选择任务" target="selectedTodo" rel="ids" postType="string" href="${ctx}/story/task/delete.htm" class="delete"><span>批量删除</span></a></li>
 			<li class="line">line</li>
 		</ul>
 	</div>
@@ -42,6 +43,7 @@
 				<th align="left">地址</th>
 				<th width="10%" align="left">状态</th>
 				<th width="15%" align="left">创建时间</th>
+				<th width="15%" align="left">操作</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -59,7 +61,7 @@
   						             喜马拉雅
   						</c:when>  
   						<c:when test="${item.sourceFrom == 1}"> 
-  						             百度乐播
+  						             蜻蜓FM
   						</c:when> 
   						<c:otherwise>
   							未知
@@ -73,6 +75,16 @@
 					${item.progress}
 				</td>
 				<td>${item.createTime}</td>
+				<td>	
+				 	<c:choose> 
+  						<c:when test="${item.status == 2}"> 
+  						             已入库
+  						</c:when>  
+  						<c:otherwise>
+						  <a href="${ctx}/story/task/accept.htm?taskId=${item.id}" target="navTab" title="入库" rel="入库" style="color:#00F;">入库</a>	
+  						</c:otherwise>
+  					 </c:choose>				
+				</td>
 			</tr>
 			</c:forEach>
 			</tbody>

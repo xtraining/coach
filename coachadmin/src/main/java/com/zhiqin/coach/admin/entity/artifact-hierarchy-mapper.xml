@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="artifacthierarchy">
+
+	<insert id="insertFromDownload" parameterType="Map">
+		INSERT INTO artifact_hierarchy(artifactId, parentArtifactId, artifactOrder)
+		select #{artifactId}, a.id, 0 
+		from artifact a inner join download_task d on a.downloadTaskId = d.id and a.type = 0 
+		inner join task t on t.id = d.taskId and t.id = #{taskId}
+  	</insert>
+
+	<update id="deleteByArtifactIds" parameterType="Map">
+		delete from artifact_hierarchy where artifactId in (${ids}) or parentArtifactId in (${ids})
+  	</update>
+</mapper>

@@ -21,10 +21,10 @@
 <!--[if lte IE 9]>
 <script src="<%=path %>/static_resource/js/speedup.js" type="text/javascript"></script>
 <![endif]-->
-<style type="text/css">
+<!-- <style type="text/css">
 	#header{height:85px}
 	#leftside, #container, #splitBar, #splitBarProxy{top:90px}
-</style>
+</style> -->
 
 
 <script src="<%=path %>/static_resource/js/jquery-1.7.2.js" type="text/javascript"></script>
@@ -101,13 +101,13 @@ $(function(){
 				</ul>				
 			</div>
 
-			<div id="navMenu">
+		<!-- 	<div id="navMenu">
 				<ul>
 					<li class="selected"><a href="../coach/coach/menu.htm"><span>教练宝</span></a></li>
 					<li><a href="sidebar_2.html"><span>智勤云校</span></a></li>
 					<li><a href="../story/story/menu.htm"><span>智勤C端</span></a></li>
 				</ul>
-			</div>
+			</div> -->
 			
 		</div>
 
@@ -130,9 +130,15 @@ $(function(){
 						<ul class="tree treeFolder">
 							<li><a href="tabsPage.html" target="navTab">菜单</a>
 								<ul>
-									<li><a href="../coach/org/list.htm" target="navTab" rel="机构管理" title="机构管理">机构管理</a></li>
+									<!-- <li><a href="../coach/org/list.htm" target="navTab" rel="机构管理" title="机构管理">机构管理</a></li>
 									<li><a href="../coach/coach/list.htm" target="navTab" rel="教练管理" title="教练管理">教练管理</a></li>
-									<li><a href="../coach/coach/unbindCoachList.htm" target="navTab" rel="待绑定教练管理" title="待绑定教练管理">待绑定教练管理</a></li>
+									<li><a href="../coach/coach/unbindCoachList.htm" target="navTab" rel="待绑定教练管理" title="待绑定教练管理">待绑定教练管理</a></li> -->
+									<li><a href="../story/top/list.htm" target="navTab" rel="首页推荐" title="首页推荐">首页推荐</a></li>
+									<li><a href="../story/artifact/list.htm" target="navTab" rel="故事管理" title="故事管理">故事管理</a></li>
+									<li><a href="../story/category/list.htm" target="navTab" rel="分类管理" title="分类管理">分类管理</a></li>
+									<li><a href="../story/tag/list.htm" target="navTab" rel="标签管理" title="标签管理">标签管理</a></li>
+									<li><a href="../story/tagimage/list.htm" target="navTab" rel="图库管理" title="图库管理">图库管理</a></li>
+									<li><a href="../story/task/list.htm" target="navTab" rel="任务管理" title="任务管理">任务管理</a></li>
 								</ul>
 							</li>
 						</ul>

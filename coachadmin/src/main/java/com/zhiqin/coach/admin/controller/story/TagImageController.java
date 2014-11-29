@@ -1,0 +1,74 @@
+package com.zhiqin.coach.admin.controller.story;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.zhiqin.coach.admin.controller.BaseController;
+import com.zhiqin.coach.admin.dto.PageInfoDTO;
+import com.zhiqin.coach.admin.dto.ResponseDTO;
+import com.zhiqin.coach.admin.dto.SearchTagImageDTO;
+import com.zhiqin.coach.admin.dto.TagDTO;
+import com.zhiqin.coach.admin.dto.TagImageDTO;
+import com.zhiqin.coach.admin.service.ImageService;
+import com.zhiqin.coach.admin.service.TagService;
+import com.zhiqin.coach.admin.util.JsonBinder;
+import com.zhiqin.coach.admin.util.JsonUtils;
+
+/**
+ * 
+ * @author lanyuan
+ * 2013-11-19
+ * @Email: mmm333zzz520@163.com
+ * @version 1.0v
+ */
+@Controller
+@RequestMapping("/story/tagimage/")
+public class TagImageController extends BaseController{
+	private static final Logger log = LoggerFactory
+			.getLogger(TagImageController.class);
+	@Resource
+	private TagService tagSerivce;
+	@Resource
+	private ImageService imageSerivce;
+	
+	@RequestMapping("list")
+	public String list(Model model, SearchTagImageDTO searchDto, PageInfoDTO pageInfo) {
+		if(searchDto.getTagId() != null){
+			TagDTO dto = tagSerivce.getById(searchDto.getTagId().intValue());
+			if(dto != null){
+				searchDto.setTagName(dto.getName());
+			}
+		}
+		Long totalNum = imageSerivce.getTagImageTotalNum(searchDto);
+		List<TagImageDTO> list = imageSerivce.getTagImageList(searchDto, pageInfo);
+		model.addAttribute("responseList", list); 
+		model.addAttribute("searchDto", searchDto); 
+		model.addAttribute("totalCount", totalNum+"");
+		model.addAttribute("currentNum", pageInfo.getPageNum() == null ? 1 : pageInfo.getPageNum());
+		return "/story/tagimage-list";
+	}
+	
+	@RequestMapping(value = "add")
+	public String add(Model model) {
+		return "/story/tagimage-add";
+	}
+	
+	@RequestMapping("delete")
+	public String delete(String ids, HttpServletResponse response){
+//		tagSerivce.deleteByIds(ids);
+		ResponseDTO success = new ResponseDTO();
+		success.setStatusCode("200");
+		success.setMessage("删除成功");
+		success.setNavTabId("图库管理");
+		JsonUtils.write(response, JsonBinder.buildNormalBinder().toJson(success));
+		return null;
+	}
+}

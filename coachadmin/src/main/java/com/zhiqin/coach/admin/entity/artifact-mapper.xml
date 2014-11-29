@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="artifact">
+	<sql id = "getArtifactCondition">
+		from artifact a 
+		<if test="searchDto.categoryId != null">
+			inner join artifact_category ac on a.id = ac.artifactId 
+			inner join category c on ac.categoryId = c.id and c.id = #{searchDto.categoryId}
+		</if>
+		<if test="searchDto.categoryName != null and searchDto.categoryName != ''">
+			inner join artifact_category acc on a.id = acc.artifactId 
+			inner join category cc on acc.categoryId = cc.id and lower(cc.name) like '%${searchDto.categoryName}%'
+		</if>
+		<if test="searchDto.tagId != null">
+			inner join artifact_tag at on a.id = at.artifactId 
+			inner join tag t on at.tagId = t.id and t.id = #{searchDto.tagId}
+		</if>
+		<if test="searchDto.tagName != null and searchDto.tagName != ''">
+			inner join artifact_tag att on a.id = att.artifactId 
+			inner join tag tt on att.tagId = tt.id and lower(tt.name) like '%${searchDto.tagName}%'
+		</if>
+		where a.status != 1
+		<if test="searchDto.type != null">
+			and a.type = #{searchDto.type}
+		</if>
+		<if test="searchDto.title != null and searchDto.title != ''">
+			and lower(a.title) like '%${searchDto.title}%'
+		</if>
+	</sql>
+	
+	<select id="getArtifactTotalNum" parameterType="Map" resultType="Long">
+		select count(a.id)
+		<include refid="getArtifactCondition" />
+	</select>
+
+	<select id="getArtifactList" parameterType="Map" resultType="ArtifactDTO" >
+		select a.*
+		<include refid="getArtifactCondition" />
+		order by a.createTime desc
+		limit ${(p.pageNum - 1) * p.numPerPage}, ${p.numPerPage}
+	</select>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="ArtifactDTO">
+		INSERT INTO artifact(title, subtitle, createTime, type, description, hitNum, materialType, fileName, duration, status)
+		VALUE (#{title}, #{subtitle}, now(), #{type}, #{description}, #{hitNum}, #{materialType}, #{fileName}, #{duration}, #{status})
+  	</insert>
+
+	<insert id="insertFromDownload" useGeneratedKeys="true" keyProperty="id" parameterType="ArtifactDTO">
+		INSERT INTO artifact(title, subtitle, createTime, type, description, hitNum, materialType, fileName, duration, status, downloadTaskId)
+		select d.title, d.subtitle, now(), type, null, 1, 0, d.fileName, d.duration, 0, d.id  from download_task d where d.id = #{downloadTaskId}
+  	</insert>
+
+	<update id="deleteByIds" parameterType="Map">
+		update artifact set status = 1 where id in (${ids})
+  	</update>
+</mapper>

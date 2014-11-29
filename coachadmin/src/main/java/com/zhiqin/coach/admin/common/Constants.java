@@ -4,7 +4,6 @@ import com.zhiqin.coach.admin.util.Config;
 
 
 public class Constants {
-	public static final String SERVER_URL = Config.getProperty("HOP_URL") + "/service";
 	public static final String APP_KEY = "web_admin";
 	public static final String SECRET_KEY = "OhP7seHIaAK4BsgOxrkjmULheq3pB2aY";
 	public static final String METHOD = "method";
@@ -282,7 +281,7 @@ public class Constants {
 	}
 	
 	public enum DOWNLOAD_SOURCE_FROM {
-		XIMALAYA(0), BAIDU(1);
+		XIMALAYA(0), QINGTINGFM(1);
 		private int value;
 		private DOWNLOAD_SOURCE_FROM(int value) {
 			this.value = value;
@@ -332,6 +331,28 @@ public class Constants {
 			this.value = value;
 		}
 		public String getValue(){
+			return this.value;
+		}
+	}
+	
+	public enum IMAGE_TYPE {
+		DETAIL(0), LIST(1);
+		private int value;
+		private IMAGE_TYPE(int value) {
+			this.value = value;
+		}
+		public int getValue(){
+			return this.value;
+		}
+	}
+	
+	public enum IMAGE_FROM {
+		ARTIFACT(0), TOP_LIST(1);
+		private int value;
+		private IMAGE_FROM(int value) {
+			this.value = value;
+		}
+		public int getValue(){
 			return this.value;
 		}
 	}

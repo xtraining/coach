@@ -192,4 +192,68 @@
 		<property name="targetObject" ref="sysResourceDaoTarget"></property>
 		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
 	</bean>
+	
+	<bean id="topDaoTarget" class="com.zhiqin.coach.admin.dao.impl.TopDaoImpl"></bean>
+	<bean id="topDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.zhiqin.coach.admin.dao.TopDao"></property>
+		<property name="targetObject" ref="topDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean>
+	
+	<bean id="artifactDaoTarget" class="com.zhiqin.coach.admin.dao.impl.ArtifactDaoImpl"></bean>
+	<bean id="artifactDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.zhiqin.coach.admin.dao.ArtifactDao"></property>
+		<property name="targetObject" ref="artifactDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean>
+	
+	<bean id="tagDaoTarget" class="com.zhiqin.coach.admin.dao.impl.TagDaoImpl"></bean>
+	<bean id="tagDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.zhiqin.coach.admin.dao.TagDao"></property>
+		<property name="targetObject" ref="tagDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean>
+	
+	<bean id="artifactTagDaoTarget" class="com.zhiqin.coach.admin.dao.impl.ArtifactTagDaoImpl"></bean>
+	<bean id="artifactTagDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.zhiqin.coach.admin.dao.ArtifactTagDao"></property>
+		<property name="targetObject" ref="artifactTagDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean>
+	
+	<bean id="artifactHierarchyDaoTarget" class="com.zhiqin.coach.admin.dao.impl.ArtifactHierarchyDaoImpl"></bean>
+	<bean id="artifactHierarchyDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.zhiqin.coach.admin.dao.ArtifactHierarchyDao"></property>
+		<property name="targetObject" ref="artifactHierarchyDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean>
+	
+	<bean id="artifactImageDaoTarget" class="com.zhiqin.coach.admin.dao.impl.ArtifactImageDaoImpl"></bean>
+	<bean id="artifactImageDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.zhiqin.coach.admin.dao.ArtifactImageDao"></property>
+		<property name="targetObject" ref="artifactImageDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean>
+	
+	<bean id="categoryDaoTarget" class="com.zhiqin.coach.admin.dao.impl.CategoryDaoImpl"></bean>
+	<bean id="categoryDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.zhiqin.coach.admin.dao.CategoryDao"></property>
+		<property name="targetObject" ref="categoryDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean>
+	
+	<bean id="imageDaoTarget" class="com.zhiqin.coach.admin.dao.impl.ImageDaoImpl"></bean>
+	<bean id="imageDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.zhiqin.coach.admin.dao.ImageDao"></property>
+		<property name="targetObject" ref="imageDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean>
 </beans>
