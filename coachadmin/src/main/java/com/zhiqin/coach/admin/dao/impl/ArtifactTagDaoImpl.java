@@ -10,6 +10,7 @@ import com.zhiqin.coach.admin.dao.ArtifactTagDao;
 import com.zhiqin.coach.admin.dto.ArtifactDTO;
 import com.zhiqin.coach.admin.dto.PageInfoDTO;
 import com.zhiqin.coach.admin.dto.SearchArtifactDTO;
+import com.zhiqin.coach.admin.dto.TagDTO;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class ArtifactTagDaoImpl extends BaseDaoImpl implements ArtifactTagDao
@@ -46,5 +47,29 @@ public class ArtifactTagDaoImpl extends BaseDaoImpl implements ArtifactTagDao
 			throw e;
 		}
 		
+	}
+
+
+	@Override
+	public List<TagDTO> getByArtifactId(long artifactId) {
+		try{
+			Map map = new HashMap();
+			map.put("artifactId", artifactId);
+			return this.getSqlSession().selectList("artifacttag.getByArtifactId", map);
+		} catch(RuntimeException e){
+			log.error("getByArtifactId", e);
+			throw e;
+		}
+	}
+
+
+	@Override
+	public void deleteByArtifactId(Long artifactId) {
+		try{
+			this.getSqlSession().delete("artifacttag.deleteByArtifactId", artifactId);
+		} catch(RuntimeException e){
+			log.error("deleteByArtifactId", e);
+			throw e;
+		}
 	}
 }

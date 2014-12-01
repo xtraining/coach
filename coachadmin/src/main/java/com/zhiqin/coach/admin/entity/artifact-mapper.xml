@@ -41,6 +41,18 @@
 		limit ${(p.pageNum - 1) * p.numPerPage}, ${p.numPerPage}
 	</select>
 	
+	<select id="getById" parameterType="Long" resultType="ArtifactDTO">
+		select distinct a.*, i.fileName imageName from artifact a left outer join artifact_image ai on a.id = ai.objectId and ai.imageFrom = 0 and ai.imageStyle = 0
+		left outer join image_inf i on ai.imageId = i.id and i.tagImage = 0
+		where a.id = #{artifactId} limit 1
+	</select>
+	
+	<select id="getSubListByArtifactId" parameterType="Long" resultType="ArtifactDTO">
+		select distinct a.id, a.title imageName from 
+		artifact_hierarchy r inner join artifact a on r.artifactId = a.id and a.status != 1
+		where r.parentArtifactId = #{artifactId} 
+	</select>
+	
 	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="ArtifactDTO">
 		INSERT INTO artifact(title, subtitle, createTime, type, description, hitNum, materialType, fileName, duration, status)
 		VALUE (#{title}, #{subtitle}, now(), #{type}, #{description}, #{hitNum}, #{materialType}, #{fileName}, #{duration}, #{status})
@@ -57,5 +69,9 @@
   	
   	<update id="updateFileName" parameterType="ArtifactDTO">
 		update artifact set fileName = #{fileName} where id = #{id}
+  	</update>
+  	
+  	<update id="updateArtifact" parameterType="ArtifactDTO">
+		update artifact set title = #{title}, subtitle = #{subtitle}, duration = #{duration}, hitNum = #{hitNum}, status=#{status} where id = #{id}
   	</update>
 </mapper>

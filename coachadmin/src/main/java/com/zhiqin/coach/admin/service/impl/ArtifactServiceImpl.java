@@ -35,6 +35,7 @@ import com.zhiqin.coach.admin.dto.SearchArtifactDTO;
 import com.zhiqin.coach.admin.dto.TagArrayDTO;
 import com.zhiqin.coach.admin.dto.TagDTO;
 import com.zhiqin.coach.admin.service.ArtifactService;
+import com.zhiqin.coach.admin.util.Config;
 import com.zhiqin.coach.admin.util.DownloadUtils;
 import com.zhiqin.coach.admin.util.QiniuUtils;
 
@@ -58,7 +59,15 @@ public class ArtifactServiceImpl implements ArtifactService {
 	@Override
 	public List<ArtifactDTO> getArtifactList(SearchArtifactDTO searchDto,
 			PageInfoDTO pageInfo) {
-		return artifactDao.getArtifactList(searchDto, pageInfo);
+		 List<ArtifactDTO> list = artifactDao.getArtifactList(searchDto, pageInfo);
+		 for(ArtifactDTO dto : list){
+			 dto.setFileUrl(Config.getProperty("QINIU_DOMAIN") + dto.getFileName());
+			 List<String> imageList = artifactImageDao.getArtifactImageByObjectId(dto.getId(), IMAGE_FROM.ARTIFACT, IMAGE_STYLE.LIST);
+			 if(imageList != null && imageList.size() > 0){
+				 dto.setImageUrl(Config.getProperty("QINIU_DOMAIN") + imageList.get(0));
+			 }
+		 }
+		 return list;
 	}
 
 	@Override
@@ -149,6 +158,79 @@ public class ArtifactServiceImpl implements ArtifactService {
 			artifactCategoryDao.save(artifact.getId(), cat.getId(), cat.getCategoryOrder());
 		}
 		
+	}
+
+	@Override
+	public ArtifactDTO getById(long artifactId) {
+		ArtifactDTO dto = artifactDao.getById(artifactId);
+		dto.setFileUrl(Config.getProperty("QINIU_DOMAIN") + dto.getFileName());
+		dto.setImageUrl(Config.getProperty("QINIU_DOMAIN") + dto.getImageName());
+		return dto;
+	}
+
+	@Override
+	public List<TagDTO> getTagByArtifactId(long artifactId) {
+		return artifactTagDao.getByArtifactId(artifactId);
+	}
+
+	@Override
+	public List<CategoryDTO> getCategoryByArtifactId(long artifactId) {
+		return artifactCategoryDao.getByArtifactId(artifactId);
+	}
+
+	@Override
+	public List<ArtifactDTO> getSublistById(long artifactId) {
+		return artifactDao.getSubListByArtifactId(artifactId);
+	}
+
+	@Override
+	public void update(ArtifactDTO artifact, CategoryArrayDTO categorys,
+			TagArrayDTO tags, MultipartFile listImageFile,
+			MultipartFile mediaFile) throws IOException, AuthException, JSONException {
+		artifactDao.updateArtifact(artifact);
+		artifactTagDao.deleteByArtifactId(artifact.getId());
+		TagDTO[] tagArr = tags.getTag();
+		for(TagDTO tag : tagArr){
+			artifactTagDao.save(artifact.getId(), tag.getId(), tag.getTagOrder());
+		}
+		artifactCategoryDao.deleteByArtifactId(artifact.getId());
+		
+		CategoryDTO[] catArr = categorys.getCategory();
+		for(CategoryDTO cat : catArr){
+			artifactCategoryDao.save(artifact.getId(), cat.getId(), cat.getCategoryOrder());
+		}
+		
+		if(StringUtils.isBlank(artifact.getImageUrl()) || (listImageFile != null && listImageFile.getSize() > 0)){ //做了修改
+			imageDao.deleteByIds(artifact.getImageId()+"");
+			artifactImageDao.deleteByImageId(artifact.getImageId(), IMAGE_FROM.ARTIFACT);
+			QiniuUtils.deleteFile(artifact.getImageName());
+			
+			ArtifactImageDTO  image = new ArtifactImageDTO();
+			image.setTagImage(0);
+			imageDao.insert(image);
+			
+			String fileName = QiniuUtils.generateArtifactImageName(image.getId(), listImageFile.getOriginalFilename());
+			image.setFileName(fileName);
+			File localFile = DownloadUtils.getFile(listImageFile.getInputStream(), fileName);
+			String uptoken = QiniuUtils.getUptoken();
+			QiniuUtils.upload(uptoken, fileName, localFile);
+			imageDao.updateFileName(image);
+			localFile.delete();
+			
+			artifactImageDao.deleteByArtifactId(artifact.getId(), IMAGE_FROM.ARTIFACT, IMAGE_STYLE.LIST);
+			artifactImageDao.insert(artifact.getId(), image.getId(), IMAGE_FROM.ARTIFACT, IMAGE_STYLE.LIST);
+		} 
+		if(StringUtils.isBlank(artifact.getFileUrl()) || (mediaFile != null && mediaFile.getSize() > 0)){ //做了修改
+			QiniuUtils.deleteFile(artifact.getFileName());
+			
+			String fileName = QiniuUtils.generateArtifactImageName(artifact.getId(), mediaFile.getOriginalFilename());
+			artifact.setFileName(fileName);
+			File localFile = DownloadUtils.getFile(mediaFile.getInputStream(), fileName);
+			String uptoken = QiniuUtils.getUptoken();
+			QiniuUtils.upload(uptoken, fileName, localFile);
+			artifactDao.updateFileName(artifact);
+			localFile.delete();
+		} 
 	}
 	
 

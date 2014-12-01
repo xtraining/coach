@@ -91,4 +91,36 @@ public class ArtifactDaoImpl extends BaseDaoImpl implements ArtifactDao
 		}
 		
 	}
+
+	@Override
+	public ArtifactDTO getById(long artifactId) {
+		try{
+			return this.getSqlSession().selectOne("artifact.getById", artifactId);
+		} catch(RuntimeException e){
+			log.error("getById", e);
+			throw e;
+		}
+	}
+
+	@Override
+	public List<ArtifactDTO> getSubListByArtifactId(long artifactId) {
+		try{
+			return this.getSqlSession().selectList("artifact.getSubListByArtifactId", artifactId);
+		} catch(RuntimeException e){
+			log.error("getSubListByArtifactId", e);
+			throw e;
+		}
+	}
+
+	@Override
+	public void updateArtifact(ArtifactDTO dto) {
+		try{
+			this.getSqlSession().update("artifact.updateArtifact", dto);
+		} catch(RuntimeException e){
+			log.error("updateArtifact", e);
+			throw e;
+		}
+		
+		
+	}
 }

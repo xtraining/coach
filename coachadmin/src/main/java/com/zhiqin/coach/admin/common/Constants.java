@@ -336,7 +336,7 @@ public class Constants {
 	}
 	
 	public enum IMAGE_STYLE {
-		DETAIL(0), LIST(1);
+		LIST(0), DETAIL(1);
 		private int value;
 		private IMAGE_STYLE(int value) {
 			this.value = value;

@@ -11,4 +11,14 @@
 		delete from artifact_tag
 		where tagId = #{tagId} and artifactId in (${artifactIds})
 	</delete>
+	
+	<delete id="deleteByArtifactId" parameterType="Long">
+		delete from artifact_tag
+		where artifactId = #{artifactId}
+	</delete>
+	
+	<select id="getByArtifactId" parameterType="Long" resultType="TagDTO">
+		select t.* from artifact_tag a inner join tag t on a.tagId = t.id
+		where a.artifactId = #{artifactId} 
+	</select>
 </mapper>

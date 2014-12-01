@@ -28,6 +28,10 @@ public class ArtifactDTO {
 	private Integer materialType;//书、故事
 	private String  description;
 	private Long downloadTaskId;
+	private String fileUrl;
+	private String imageUrl;
+	private String imageName;
+	private Long imageId;
 	public Long getId() {
 		return id;
 	}
@@ -99,6 +103,30 @@ public class ArtifactDTO {
 	}
 	public void setDownloadTaskId(Long downloadTaskId) {
 		this.downloadTaskId = downloadTaskId;
+	}
+	public String getFileUrl() {
+		return fileUrl;
+	}
+	public void setFileUrl(String fileUrl) {
+		this.fileUrl = fileUrl;
+	}
+	public String getImageUrl() {
+		return imageUrl;
+	}
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
+	public String getImageName() {
+		return imageName;
+	}
+	public void setImageName(String imageName) {
+		this.imageName = imageName;
+	}
+	public Long getImageId() {
+		return imageId;
+	}
+	public void setImageId(Long imageId) {
+		this.imageId = imageId;
 	}
 	
 }

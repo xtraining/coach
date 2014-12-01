@@ -34,6 +34,12 @@
 		order by t.tagOrder 
 	</select>
 	
+	<select id="getArtifactImageByAritifactId" parameterType="Map" resultType="String" >
+		select i.fileName from image_inf i inner join artifact_image a 
+		on i.id = a.imageId and i.tagImage = 0 and a.imageFrom = #{imageFrom} and a.imageStyle = #{imageStyle}
+		where a.objectId = #{objectId}
+	</select>
+	
 	<select id="getTagByImageId" parameterType="Long" resultType="TagDTO" >
 		select t.* from image_inf i 
 		inner join artifact_image a on i.id = a.imageId and i.tagImage = 1 and a.imageFrom = 2 
@@ -44,6 +50,10 @@
 	
 	<delete id="deleteByImageId" parameterType="Map">
 		delete from artifact_image where imageId = #{imageId} and imageFrom = #{imageFrom}
+  	</delete>
+  	
+  	<delete id="deleteByArtifactId" parameterType="Map">
+		delete from artifact_image where objectId = #{objectId} and imageFrom = #{imageFrom} and imageStyle = #{imageStyle}
   	</delete>
 
 	<insert id="insert" parameterType="Map">

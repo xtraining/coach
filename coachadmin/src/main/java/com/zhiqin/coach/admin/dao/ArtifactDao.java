@@ -27,4 +27,10 @@ public interface ArtifactDao extends BaseDao{
 
 	void updateFileName(ArtifactDTO image);
 
+	ArtifactDTO getById(long artifactId);
+
+	List<ArtifactDTO> getSubListByArtifactId(long artifactId);
+
+	void updateArtifact(ArtifactDTO dto);
+
 }

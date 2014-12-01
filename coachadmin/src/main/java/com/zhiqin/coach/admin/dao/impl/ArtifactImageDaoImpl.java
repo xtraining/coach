@@ -95,4 +95,35 @@ public class ArtifactImageDaoImpl extends BaseDaoImpl implements ArtifactImageDa
 		}
 		
 	}
+
+	@Override
+	public List<String> getArtifactImageByObjectId(Long objectId, IMAGE_FROM imageFrom, IMAGE_STYLE imageStyle) {
+		try{
+			Map map = new HashMap();
+			map.put("objectId", objectId);
+			map.put("imageFrom", imageFrom.getValue());
+			map.put("imageStyle", imageStyle.getValue());
+			return this.getSqlSession().selectList("artifactimage.getArtifactImageByAritifactId", map);
+		} catch(RuntimeException e){
+			log.error("getArtifactImageByAritifactId", e);
+			throw e;
+		}
+		
+	}
+
+	@Override
+	public void deleteByArtifactId(Long artifactId, IMAGE_FROM imageFrom,
+			IMAGE_STYLE imageStyle) {
+		try{
+			Map map = new HashMap();
+			map.put("objectId", artifactId);
+			map.put("imageFrom", imageFrom.getValue());
+			map.put("imageStyle", imageStyle.getValue());
+			this.getSqlSession().delete("artifactimage.deleteByArtifactId", map);
+		} catch(RuntimeException e){
+			log.error("deleteByArtifactId", e);
+			throw e;
+		}
+		
+	}
 }

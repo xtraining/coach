@@ -101,6 +101,39 @@ public class ArtifactController extends BaseController{
 		out.print("success");
 	}
 	
+	@RequestMapping("edit")
+	public String edit(long artifactId, Model model, SearchArtifactDTO searchDto, PageInfoDTO pageInfo) {
+		ArtifactDTO dto = artifactService.getById(artifactId);
+		List<TagDTO> tags = artifactService.getTagByArtifactId(artifactId);
+		List<CategoryDTO> categories = artifactService.getCategoryByArtifactId(artifactId);
+		model.addAttribute("editObj", dto); 
+		model.addAttribute("tags", tags); 
+		model.addAttribute("categories", categories); 
+		if(dto.getType().intValue() == 0){
+			List<ArtifactDTO> sublist = artifactService.getSublistById(artifactId);
+			model.addAttribute("sublist", sublist); 
+			return "/story/artifact-edit-album";
+		} else {
+			return "/story/artifact-edit";
+		}
+	}
+	
+	@RequestMapping(value="update", method=RequestMethod.POST)  
+	public void update(ArtifactDTO dto, CategoryArrayDTO categorys, TagArrayDTO tags, @RequestParam MultipartFile listImageFile, @RequestParam MultipartFile mediaFile, HttpServletRequest request, HttpServletResponse response) throws IOException, AuthException, JSONException{
+		PrintWriter out = response.getWriter();  
+		if(categorys == null || categorys.getCategory() == null || categorys.getCategory().length == 0){
+			out.print("input1");
+			return;
+		}
+		if(tags == null || tags.getTag() == null || tags.getTag().length == 0){
+			out.print("input2");
+			return;
+		}
+		artifactService.update(dto, categorys, tags, listImageFile, mediaFile);
+		out.print("success");
+	}
+	
+	
 	@RequestMapping("select")
 	public String select(Model model, SearchArtifactDTO searchDto, PageInfoDTO pageInfo) {
 		list(model, searchDto, pageInfo);

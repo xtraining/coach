@@ -30,4 +30,8 @@ public interface ArtifactImageDao extends BaseDao{
 
 	void deleteByImageId(Long imageId, IMAGE_FROM imageFrom);
 
+	List<String> getArtifactImageByObjectId(Long objectId, IMAGE_FROM imageFrom, IMAGE_STYLE imageStyle);
+
+	void deleteByArtifactId(Long id, IMAGE_FROM artifact, IMAGE_STYLE list);
+
 }
