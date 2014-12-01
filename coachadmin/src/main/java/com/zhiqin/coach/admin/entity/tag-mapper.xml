@@ -4,8 +4,8 @@
 <mapper namespace="tag">
 	<sql id = "getTagCondition">
 		from tag where status != 2
-		<if test="name != null">
-			and lower(name) like '%${name}%'
+		<if test="name != null and name != ''">
+			and name like '%${name}%'
 		</if>
 	</sql>
 	

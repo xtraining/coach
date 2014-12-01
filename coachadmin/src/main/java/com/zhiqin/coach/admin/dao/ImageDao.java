@@ -7,17 +7,16 @@ import java.util.List;
 import com.zhiqin.coach.admin.dto.CategoryDTO;
 import com.zhiqin.coach.admin.dto.PageInfoDTO;
 import com.zhiqin.coach.admin.dto.SearchTagImageDTO;
-import com.zhiqin.coach.admin.dto.TagImageDTO;
+import com.zhiqin.coach.admin.dto.TagDTO;
+import com.zhiqin.coach.admin.dto.ArtifactImageDTO;
 
 
 public interface ImageDao extends BaseDao{
 
-	Long getTagImageTotalNum(SearchTagImageDTO searchDto);
 
-	List<TagImageDTO> getTagImage(SearchTagImageDTO searchDto, PageInfoDTO pageInfo);
+	void insert(ArtifactImageDTO image);
 
-	List<String> getTagNameListByImageId(Long id);
+	void updateFileName(ArtifactImageDTO image);
 
-
-
+	void deleteByIds(String ids);
 }

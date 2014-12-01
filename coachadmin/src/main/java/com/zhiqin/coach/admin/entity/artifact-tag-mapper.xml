@@ -4,10 +4,10 @@
 <mapper namespace="artifacttag">
 	<insert id="insert" parameterType="Map">
 		INSERT INTO artifact_tag(artifactId, tagId, artifactTagOrder)
-		VALUE (#{artifactId}, #{tagId}, 0)
+		VALUE (#{artifactId}, #{tagId}, #{artifactTagOrder})
   	</insert>
   	  	
-  	<delete id="delete" parameterType="map">
+  	<delete id="delete" parameterType="Map">
 		delete from artifact_tag
 		where tagId = #{tagId} and artifactId in (${artifactIds})
 	</delete>

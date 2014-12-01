@@ -10,7 +10,7 @@
 		</if>
 		<if test="searchDto.categoryName != null and searchDto.categoryName != ''">
 			inner join artifact_category acc on a.id = acc.artifactId 
-			inner join category cc on acc.categoryId = cc.id and lower(cc.name) like '%${searchDto.categoryName}%'
+			inner join category cc on acc.categoryId = cc.id and cc.name like '%${searchDto.categoryName}%'
 		</if>
 		<if test="searchDto.tagId != null">
 			inner join artifact_tag at on a.id = at.artifactId 
@@ -18,14 +18,14 @@
 		</if>
 		<if test="searchDto.tagName != null and searchDto.tagName != ''">
 			inner join artifact_tag att on a.id = att.artifactId 
-			inner join tag tt on att.tagId = tt.id and lower(tt.name) like '%${searchDto.tagName}%'
+			inner join tag tt on att.tagId = tt.id and tt.name like '%${searchDto.tagName}%'
 		</if>
 		where a.status != 1
 		<if test="searchDto.type != null">
 			and a.type = #{searchDto.type}
 		</if>
 		<if test="searchDto.title != null and searchDto.title != ''">
-			and lower(a.title) like '%${searchDto.title}%'
+			and a.title like '%${searchDto.title}%'
 		</if>
 	</sql>
 	
@@ -53,5 +53,9 @@
 
 	<update id="deleteByIds" parameterType="Map">
 		update artifact set status = 1 where id in (${ids})
+  	</update>
+  	
+  	<update id="updateFileName" parameterType="ArtifactDTO">
+		update artifact set fileName = #{fileName} where id = #{id}
   	</update>
 </mapper>

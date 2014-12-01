@@ -20,7 +20,9 @@ public class TagDaoImpl extends BaseDaoImpl implements TagDao
 	@Override
 	public Long getTagTotalNum(String name) {
 		try{
-			return  this.getSqlSession().selectOne("tag.getTagTotalNum");
+			Map map = new HashMap();
+			map.put("name", name);
+			return  this.getSqlSession().selectOne("tag.getTagTotalNum", map);
 		} catch(RuntimeException e){
 			log.error("getTagTotalNum", e);
 			throw e;
@@ -31,7 +33,7 @@ public class TagDaoImpl extends BaseDaoImpl implements TagDao
 	public List<TagDTO> getTagList(String name, PageInfoDTO pageInfo) {
 		try{
 			Map map = new HashMap();
-			map.put("status", TASK_STATUS.ACTIVE.getValue());
+			map.put("name", name);
 			map.put("p", pageInfo);
 			return this.getSqlSession().selectList("tag.getTagList", map);
 		} catch(RuntimeException e){

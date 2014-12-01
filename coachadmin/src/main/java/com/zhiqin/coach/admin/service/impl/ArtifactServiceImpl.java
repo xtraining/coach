@@ -1,6 +1,7 @@
 package com.zhiqin.coach.admin.service.impl;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -11,21 +12,30 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.qiniu.api.auth.AuthException;
 import com.zhiqin.coach.admin.common.Constants.DOWNLOAD_TASK_TYPE;
 import com.zhiqin.coach.admin.common.Constants.IMAGE_FROM;
-import com.zhiqin.coach.admin.common.Constants.IMAGE_TYPE;
+import com.zhiqin.coach.admin.common.Constants.IMAGE_STYLE;
+import com.zhiqin.coach.admin.dao.ArtifactCategoryDao;
 import com.zhiqin.coach.admin.dao.ArtifactDao;
 import com.zhiqin.coach.admin.dao.ArtifactHierarchyDao;
 import com.zhiqin.coach.admin.dao.ArtifactImageDao;
 import com.zhiqin.coach.admin.dao.ArtifactTagDao;
+import com.zhiqin.coach.admin.dao.ImageDao;
 import com.zhiqin.coach.admin.dao.impl.ArtifactImageDaoImpl;
 import com.zhiqin.coach.admin.dto.ArtifactDTO;
+import com.zhiqin.coach.admin.dto.ArtifactImageDTO;
+import com.zhiqin.coach.admin.dto.CategoryArrayDTO;
+import com.zhiqin.coach.admin.dto.CategoryDTO;
 import com.zhiqin.coach.admin.dto.DownloadTaskDTO;
 import com.zhiqin.coach.admin.dto.PageInfoDTO;
 import com.zhiqin.coach.admin.dto.SearchArtifactDTO;
+import com.zhiqin.coach.admin.dto.TagArrayDTO;
+import com.zhiqin.coach.admin.dto.TagDTO;
 import com.zhiqin.coach.admin.service.ArtifactService;
+import com.zhiqin.coach.admin.util.DownloadUtils;
 import com.zhiqin.coach.admin.util.QiniuUtils;
 
 @Service
@@ -38,6 +48,8 @@ public class ArtifactServiceImpl implements ArtifactService {
 	@Resource private ArtifactImageDao artifactImageDao;
 	@Resource private ArtifactHierarchyDao artifactHierarchyDao;
 	@Resource private ArtifactTagDao artifactTagDao;
+	@Resource private ImageDao imageDao;
+	@Resource private ArtifactCategoryDao artifactCategoryDao;
 	@Override
 	public Long getArtifactTotalNum(SearchArtifactDTO searchDto) {
 		return artifactDao.getArtifactTotalNum(searchDto);
@@ -51,18 +63,11 @@ public class ArtifactServiceImpl implements ArtifactService {
 
 	@Override
 	@Transactional
-	public void create(ArtifactDTO dto) {
-		artifactDao.insert(dto);
-		
-	}
-
-	@Override
-	@Transactional
 	public void saveAssign(String artifactIds, int tagId) {
 		artifactTagDao.delete(tagId, artifactIds);
 		String[] artifactIdArr = StringUtils.split(artifactIds, ",");
 		for(String artifactId : artifactIdArr){
-			artifactTagDao.save(artifactId, tagId);
+			artifactTagDao.save(Long.valueOf(artifactId), Long.valueOf(tagId), 0);
 		}
 		
 	}
@@ -87,7 +92,9 @@ public class ArtifactServiceImpl implements ArtifactService {
 			// do nothing. 如果是封面，不需要做上下级的关联 
 		}
 		
-		artifactImageDao.insertFromDownload(story.getId(), imageFileName, IMAGE_FROM.ARTIFACT, IMAGE_TYPE.DETAIL);
+		ArtifactImageDTO  image = new ArtifactImageDTO();
+		imageDao.insert(image);
+		artifactImageDao.insert(story.getId(), image.getId(), IMAGE_FROM.ARTIFACT, IMAGE_STYLE.DETAIL);
 		try{
 			if(imageFile != null){
 				QiniuUtils.upload(uptoken, imageFileName, imageFile);
@@ -102,6 +109,46 @@ public class ArtifactServiceImpl implements ArtifactService {
 	public void deleteByIds(String ids) {
 		artifactDao.deleteByIds(ids);
 		artifactHierarchyDao.deleteByArtifactIds(ids);
+	}
+
+	@Override
+	@Transactional
+	public void create(ArtifactDTO artifact, CategoryArrayDTO categorys,
+			TagArrayDTO tags, MultipartFile listImageFile,
+			MultipartFile mediaFile) throws IOException, AuthException, JSONException {
+		ArtifactImageDTO  image = new ArtifactImageDTO();
+		image.setTagImage(0);
+		imageDao.insert(image);
+		
+		String fileName = QiniuUtils.generateArtifactImageName(image.getId(), listImageFile.getOriginalFilename());
+		image.setFileName(fileName);
+		File localFile = DownloadUtils.getFile(listImageFile.getInputStream(), fileName);
+		String uptoken = QiniuUtils.getUptoken();
+		QiniuUtils.upload(uptoken, fileName, localFile);
+		imageDao.updateFileName(image);
+		localFile.delete();
+		
+		artifactDao.insert(artifact);
+		
+		artifactImageDao.insert(artifact.getId(), image.getId(), IMAGE_FROM.ARTIFACT, IMAGE_STYLE.LIST);
+		
+		fileName = QiniuUtils.generateArtifactMediaName(image.getId(), mediaFile.getOriginalFilename());
+		artifact.setFileName(fileName);
+		localFile = DownloadUtils.getFile(mediaFile.getInputStream(), fileName);
+		QiniuUtils.upload(uptoken, fileName, localFile);
+		artifactDao.updateFileName(artifact);
+		localFile.delete();
+		
+		TagDTO[] tagArr = tags.getTag();
+		for(TagDTO tag : tagArr){
+			artifactTagDao.save(artifact.getId(), tag.getId(), tag.getTagOrder());
+		}
+		
+		CategoryDTO[] catArr = categorys.getCategory();
+		for(CategoryDTO cat : catArr){
+			artifactCategoryDao.save(artifact.getId(), cat.getId(), cat.getCategoryOrder());
+		}
+		
 	}
 	
 

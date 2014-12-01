@@ -11,12 +11,16 @@ import java.util.List;
  * @author Lenovo
  *
  */
-public class TagImageDTO {
+public class ArtifactImageDTO {
 
 	private Long id;
 	private String fileName;
-	public String tagNameList;
+	private String tagNameList;
 	private String url;
+	private Integer type; 
+	private Long objectId;
+	private Long imageId;
+	private Integer tagImage;
 	public String getFileName() {
 		return fileName;
 	}
@@ -40,6 +44,30 @@ public class TagImageDTO {
 	}
 	public void setUrl(String url) {
 		this.url = url;
+	}
+	public Integer getType() {
+		return type;
+	}
+	public void setType(Integer type) {
+		this.type = type;
+	}
+	public Long getImageId() {
+		return imageId;
+	}
+	public void setImageId(Long imageId) {
+		this.imageId = imageId;
+	}
+	public Long getObjectId() {
+		return objectId;
+	}
+	public void setObjectId(Long objectId) {
+		this.objectId = objectId;
+	}
+	public Integer getTagImage() {
+		return tagImage;
+	}
+	public void setTagImage(Integer tagImage) {
+		this.tagImage = tagImage;
 	}
 	
 }

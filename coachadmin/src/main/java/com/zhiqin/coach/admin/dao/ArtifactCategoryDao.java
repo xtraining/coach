@@ -10,10 +10,10 @@ import com.zhiqin.coach.admin.dto.SearchArtifactDTO;
 
 
 
-public interface ArtifactTagDao extends BaseDao{
+public interface ArtifactCategoryDao extends BaseDao{
 
-	void save(Long artifactId, Long tagId, int artifactTagOrder);
+	void save(Long artifactId, Long categoryId, int artifactCategoryOrder);
 
-	void delete(int tagId, String artifactIds);
+	void delete(int categoryId, String artifactIds);
 
 }

@@ -17,7 +17,7 @@ public class Constants {
 	public static final String QUESTION_IMAGE_PREFIX = "question";
 	public static final String ANSWER_IMAGE_PREFIX = "answer";
 	public static final String MEMBER_IMAGE_PREFIX = "member";
-	public static final String TOPIC_IMAGE_PREFIX = "topic";
+	public static final String TAG_IMAGE_PREFIX = "image_tag";
 	public static final String USER_SESSION = "userSession";
 	public static final String VALIFICATION_CODE_SESSION_NAME = "valication_code";
 	
@@ -335,19 +335,19 @@ public class Constants {
 		}
 	}
 	
-	public enum IMAGE_TYPE {
+	public enum IMAGE_STYLE {
 		DETAIL(0), LIST(1);
 		private int value;
-		private IMAGE_TYPE(int value) {
+		private IMAGE_STYLE(int value) {
 			this.value = value;
 		}
 		public int getValue(){
 			return this.value;
 		}
 	}
-	
+
 	public enum IMAGE_FROM {
-		ARTIFACT(0), TOP_LIST(1);
+		ARTIFACT(0), TOP_LIST(1), TAG(2);
 		private int value;
 		private IMAGE_FROM(int value) {
 			this.value = value;

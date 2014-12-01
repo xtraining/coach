@@ -88,4 +88,11 @@ public class CategoryController extends BaseController{
 		PrintWriter out = response.getWriter();  
 		out.print("success");
 	}
+	
+	
+	@RequestMapping("select")
+	public String select(Model model, String name, PageInfoDTO pageInfo) {
+		list(model, name, pageInfo);
+		return "/story/category-select";
+	}
 }

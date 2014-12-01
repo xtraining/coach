@@ -5,7 +5,7 @@
 	<sql id = "getCategoryCondition">
 		from category where status != 2
 		<if test="name != null">
-			and lower(name) like '%${name}%'
+			and name like '%${name}%'
 		</if>
 	</sql>
 	

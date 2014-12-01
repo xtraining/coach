@@ -14,6 +14,7 @@ import com.qiniu.api.io.PutRet;
 import com.qiniu.api.rs.PutPolicy;
 import com.qiniu.api.rs.RSClient;
 import com.zhiqin.coach.admin.common.Constants;
+import com.zhiqin.coach.admin.common.Constants.FILE_NAME_PREFIX;
 
 public class QiniuUtils {
 	public static String getUptoken() throws AuthException, JSONException{
@@ -42,11 +43,23 @@ public class QiniuUtils {
 		}
 	}
 
-	public static String generateTopicImageName(Long topicId, String uploadFileName) {
+	public static String generateTagImageName(Long imageId, String uploadFileName) {
 		String suffix = DateUtils.dateToyyyyMMddHHmissWithSeparator(new Timestamp(new Date().getTime()));
 		String extFileName = uploadFileName.substring(uploadFileName.lastIndexOf("."));	
-		String fileName = Constants.TOPIC_IMAGE_PREFIX + "_" + topicId + "_" + suffix + extFileName;
+		String fileName = Constants.TAG_IMAGE_PREFIX + "_" + imageId + "_" + suffix + extFileName;
 		return fileName;
+	}
+
+	public static String generateArtifactImageName(Long id,
+			String originalFilename) {
+		String extFileName = originalFilename.substring(originalFilename.lastIndexOf("."));	
+		return FILE_NAME_PREFIX.IMAGE.getValue() + id + extFileName;
+	}
+
+	public static String generateArtifactMediaName(Long id,
+			String originalFilename) {
+		String extFileName = originalFilename.substring(originalFilename.lastIndexOf("."));	
+		return FILE_NAME_PREFIX.VOICE.getValue() + id + extFileName;
 	}
 
 }

@@ -42,7 +42,7 @@
 	</select>
 	
 	<select id="getIdByName" parameterType="String" resultType="Long">
-		select g.id from organization g where lower(g.name) = #{orgName} and g.status != 1
+		select g.id from organization g where g.name = #{orgName} and g.status != 1
 	</select>
 	
 	<select id="getOrgById" parameterType="Long" resultMap="OrgDTOResult">

@@ -225,6 +225,14 @@
 		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
 	</bean>
 	
+	<bean id="artifactCategoryDaoTarget" class="com.zhiqin.coach.admin.dao.impl.ArtifactCategoryDaoImpl"></bean>
+	<bean id="artifactCategoryDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.zhiqin.coach.admin.dao.ArtifactCategoryDao"></property>
+		<property name="targetObject" ref="artifactCategoryDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean>
+	
 	<bean id="artifactHierarchyDaoTarget" class="com.zhiqin.coach.admin.dao.impl.ArtifactHierarchyDaoImpl"></bean>
 	<bean id="artifactHierarchyDao"
 		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">

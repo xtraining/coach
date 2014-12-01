@@ -5,6 +5,7 @@ import java.util.List;
 import com.zhiqin.coach.admin.dto.ArtifactDTO;
 import com.zhiqin.coach.admin.dto.PageInfoDTO;
 import com.zhiqin.coach.admin.dto.SearchArtifactDTO;
+import com.zhiqin.coach.admin.dto.ArtifactImageDTO;
 
 
 
@@ -23,5 +24,7 @@ public interface ArtifactDao extends BaseDao{
 
 
 	void deleteByIds(String ids);
+
+	void updateFileName(ArtifactDTO image);
 
 }

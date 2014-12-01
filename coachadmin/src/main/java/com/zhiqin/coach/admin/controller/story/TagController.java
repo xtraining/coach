@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.zhiqin.coach.admin.controller.BaseController;
-import com.zhiqin.coach.admin.dto.ArtifactItem;
-import com.zhiqin.coach.admin.dto.CategoryDTO;
 import com.zhiqin.coach.admin.dto.PageInfoDTO;
 import com.zhiqin.coach.admin.dto.ResponseDTO;
 import com.zhiqin.coach.admin.dto.TagDTO;
@@ -87,5 +85,11 @@ public class TagController extends BaseController{
 		tagSerivce.update(dto);
 		PrintWriter out = response.getWriter();  
 		out.print("success");
+	}
+	
+	@RequestMapping("select")
+	public String select(Model model, String name, PageInfoDTO pageInfo) {
+		list(model, name, pageInfo);
+		return "/story/tag-select";
 	}
 }

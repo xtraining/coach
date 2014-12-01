@@ -12,6 +12,7 @@ import com.zhiqin.coach.admin.dto.CoachDTO;
 import com.zhiqin.coach.admin.dto.PageInfoDTO;
 import com.zhiqin.coach.admin.dto.SearchArtifactDTO;
 import com.zhiqin.coach.admin.dto.SearchCoachDTO;
+import com.zhiqin.coach.admin.dto.ArtifactImageDTO;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class ArtifactDaoImpl extends BaseDaoImpl implements ArtifactDao
@@ -75,6 +76,17 @@ public class ArtifactDaoImpl extends BaseDaoImpl implements ArtifactDao
 			this.getSqlSession().update("artifact.deleteByIds", map);
 		} catch(RuntimeException e){
 			log.error("deleteByIds", e);
+			throw e;
+		}
+		
+	}
+
+	@Override
+	public void updateFileName(ArtifactDTO image) {
+		try{
+			this.getSqlSession().update("artifact.updateFileName", image);
+		} catch(RuntimeException e){
+			log.error("updateFileName", e);
 			throw e;
 		}
 		

@@ -19,11 +19,12 @@ public class ArtifactTagDaoImpl extends BaseDaoImpl implements ArtifactTagDao
 
 
 	@Override
-	public void save(String artifactId, int tagId) {
+	public void save(Long artifactId, Long tagId, int artifactTagOrder) {
 		try{
 			Map map = new HashMap();
 			map.put("artifactId", artifactId);
 			map.put("tagId", tagId);
+			map.put("artifactTagOrder", artifactTagOrder);
 			this.getSqlSession().insert("artifacttag.insert", map);
 		} catch(RuntimeException e){
 			log.error("insert", e);

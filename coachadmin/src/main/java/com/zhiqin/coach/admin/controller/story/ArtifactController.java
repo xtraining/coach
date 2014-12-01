@@ -8,7 +8,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang3.StringUtils;
+import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -19,12 +19,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.qiniu.api.auth.AuthException;
 import com.zhiqin.coach.admin.controller.BaseController;
 import com.zhiqin.coach.admin.dto.ArtifactDTO;
+import com.zhiqin.coach.admin.dto.CategoryArrayDTO;
 import com.zhiqin.coach.admin.dto.CategoryDTO;
 import com.zhiqin.coach.admin.dto.PageInfoDTO;
 import com.zhiqin.coach.admin.dto.ResponseDTO;
 import com.zhiqin.coach.admin.dto.SearchArtifactDTO;
+import com.zhiqin.coach.admin.dto.TagArrayDTO;
 import com.zhiqin.coach.admin.dto.TagDTO;
 import com.zhiqin.coach.admin.service.ArtifactService;
 import com.zhiqin.coach.admin.service.CategoryService;
@@ -84,9 +87,17 @@ public class ArtifactController extends BaseController{
 	}
 	
 	@RequestMapping(value="create", method=RequestMethod.POST)  
-	public void create(ArtifactDTO dto, @RequestParam MultipartFile listImageFile, @RequestParam MultipartFile[] detailImageFile, HttpServletRequest request, HttpServletResponse response) throws IOException{
-		artifactService.create(dto);
+	public void create(ArtifactDTO dto, CategoryArrayDTO categorys, TagArrayDTO tags, @RequestParam MultipartFile listImageFile, @RequestParam MultipartFile mediaFile, HttpServletRequest request, HttpServletResponse response) throws IOException, AuthException, JSONException{
 		PrintWriter out = response.getWriter();  
+		if(categorys == null || categorys.getCategory() == null || categorys.getCategory().length == 0){
+			out.print("input1");
+			return;
+		}
+		if(tags == null || tags.getTag() == null || tags.getTag().length == 0){
+			out.print("input2");
+			return;
+		}
+		artifactService.create(dto, categorys, tags, listImageFile, mediaFile);
 		out.print("success");
 	}
 	
