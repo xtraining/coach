@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coach.dao.MemberDao">
+
+  <resultMap id="BaseMemberResult" type="com.coach.model.Member">
+  	   <id column="id" jdbcType="BIGINT" property="id" />
+       <result column="name" jdbcType="VARCHAR" property="name" />
+       <result column="phoneNumber" jdbcType="VARCHAR" property="phoneNumber" />
+  </resultMap>
+  
+  <resultMap id="DetailMemberResult" type="com.coach.model.Member">
+  	   <id column="id" jdbcType="BIGINT" property="id" />
+       <result column="name" jdbcType="VARCHAR" property="name" />
+       <result column="phoneNumber" jdbcType="VARCHAR" property="phoneNumber" />
+       <result column="courseName" jdbcType="VARCHAR" property="courseName" />
+       <result column="courseId" jdbcType="BIGINT" property="courseId" />
+       <result column="status" jdbcType="INTEGER" property="status" />
+       <result column="attendNum" jdbcType="INTEGER" property="attendNum" />
+       <result column="lessonNum" jdbcType="INTEGER" property="courseTotalNum" />
+       <result column="courseType" jdbcType="INTEGER" property="courseType" />
+       <result column="date" jdbcType="TIMESTAMP" property="date" />
+  </resultMap>
+
+  <select id="getMemberByCourseId" parameterType="Map" resultMap="BaseMemberResult">
+    select m.id, m.name, m.phoneNumber from course_member cm inner join member m on cm.memberId = m.id
+    where cm.status != #{status} and cm.courseId = #{courseId}
+  </select>
+  
+  <select id="getMemberByCoachId" parameterType="Map" resultMap="DetailMemberResult">
+    select c.id courseId, c.name courseName, c.type courseType, 
+	(select count(distinct cm.memberId) from course_member cm where c.id = cm.courseId and cm.status != #{cmDeletedStatus}) memberNum, 
+	c.createTime date
+	from 
+	coach ch INNER JOIN coach_course cc on ch.id = cc.coachId
+	INNER JOIN course c on cc.courseId = c.id and c.status = #{courseActiveStatus}
+	where ch.id = #{coachId}
+  </select>
+  
+  <select id="getMemberByCoachIdAndKeyword" parameterType="Map" resultMap="DetailMemberResult">
+    select m.id, m.name, m.phoneNumber, c.id courseId, c.name courseName, cm.status, c.type courseType, 
+    (select count(distinct cm.memberId) from course_member cm where c.id = cm.courseId and cm.status != #{cmDeletedStatus}) memberNum, 
+	(select count(s.id) from lesson s INNER JOIN lesson_member lm on s.id = lm.lessonId 
+	 where s.courseId = c.id and lm.status = #{attendStatus} and lm.memberId = m.id) attendNum, 
+	lessonNum, c.createTime date
+	from 
+	coach ch INNER JOIN coach_course cc on ch.id = cc.coachId
+	INNER JOIN course c on cc.courseId = c.id and c.status = #{courseActiveStatus}
+	INNER JOIN course_member cm on c.id = cm.courseId and cm.status != #{cmDeletedStatus}
+	INNER JOIN member m on cm.memberId = m.id
+	where ch.id = #{coachId} and (lower(m.name) like #{keyword} or m.phoneNumber like #{keyword})
+  </select>
+  
+  <select id="getMemberDetailByCoachId" parameterType="Map" resultMap="DetailMemberResult">
+    select m.id, m.name, m.phoneNumber, cm.status, lessonNum, 
+	(select count(s.id) from lesson s INNER JOIN lesson_member lm on s.id = lm.lessonId 
+	 where s.courseId = c.id and lm.status = #{attendStatus} and lm.memberId = m.id) attendNum 
+	from 
+	coach_course cc INNER JOIN course c on cc.courseId = c.id and c.status = #{courseActiveStatus}
+	INNER JOIN course_member cm on c.id = cm.courseId and cm.status != #{cmDeletedStatus}
+	INNER JOIN member m on cm.memberId = m.id
+	where cc.coachId = #{coachId} and c.id = #{courseId}
+  </select>
+  
+  <select id="getMemberWithAttendHistory" parameterType="Map" resultMap="DetailMemberResult">
+    select m.id, m.name, m.phoneNumber, s.startTime date, ifnull(m.gender, 2)gender, cm.status, c.name courseName
+	from 
+	coach_course cc INNER JOIN course c on cc.courseId = c.id
+	INNER JOIN course_member cm on c.id = cm.courseId 
+	INNER JOIN member m on cm.memberId = m.id
+	INNER JOIN lesson s on s.courseId = c.id
+	INNER JOIN lesson_member lm on lm.lessonId = s.id
+	where cc.coachId = #{coachId} and c.id = #{courseId} and m.id = #{memberId} and lm.status = #{attendStatus} 
+	and lm.memberId = #{memberId}
+	order by s.startTime asc
+  </select>
+  
+  <select id="getMemberByCourseIdAndMemberId" parameterType="Map" resultMap="DetailMemberResult">
+    select m.id, m.name, m.phoneNumber, null date, ifnull(m.gender, 2)gender, cm.status, c.name courseName
+	from 
+	course c INNER JOIN course_member cm on c.id = cm.courseId 
+	INNER JOIN member m on cm.memberId = m.id
+	where c.id = #{courseId} and m.id = #{memberId} 
+  </select>
+  
+  <insert id="insertMember" useGeneratedKeys="true" keyProperty="id" parameterType="com.coach.model.Member">
+    INSERT INTO member(name, parentName, phoneNumber, createTime, code) 
+    value(#{name}, #{parentName}, #{phoneNumber}, now(), #{code})
+  </insert>
+  
+  <update id="updateMember" parameterType="com.coach.model.Member">
+    update member set name = #{name}, phoneNumber = #{phoneNumber}, gender = #{gender} 
+    where id = #{id}
+  </update>
+  
+  <update id="updateBasicMember" parameterType="com.coach.model.Member">
+    update member set name = #{name}, phoneNumber = #{phoneNumber}
+    where id = #{id}
+  </update>
+    
+  <update id="updateMemberStatus" parameterType="Map">
+    update course_member set status = #{status}
+    where memberId = #{memberId} and courseId = #{courseId}
+  </update>
+</mapper>

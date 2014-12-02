@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coach.dao.AreaDao">
+  <resultMap id="BaseAreaResult" type="com.coach.response.AreaResponse">
+       <id column="code" jdbcType="INTEGER" property="areaCode" />
+       <result column="fullName" jdbcType="VARCHAR" property="name" />
+  </resultMap>
+  
+  <select id="getAllProvinces" resultMap="BaseAreaResult">
+    select code, fullName from area where code != '000000' and code like '%0000' order by code
+  </select>
+  
+  <select id="getSubareaByCode" parameterType="Map" resultMap="BaseAreaResult">
+    select code, fullName from area where code != '000000' and code != #{code} and code like #{subcode} order by code
+  </select>
+</mapper>

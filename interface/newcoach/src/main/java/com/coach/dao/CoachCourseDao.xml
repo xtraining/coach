@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coach.dao.CoachCourseDao">
+
+  <update id="updateCoachCourseStatus" parameterType="Map">
+	update coach_course set status = #{status}, updateTime = now()
+	where coachId = #{coachId} and courseId = #{courseId}
+  </update>
+  
+  <insert id="insertCoachCourse" parameterType="com.coach.model.CoachCourse">
+	INSERT INTO coach_course(coachId, courseId, flag, status, createTime) 
+	VALUE (#{coachId}, #{courseId}, #{flag}, #{status}, now()) 
+  </insert>
+  
+</mapper>

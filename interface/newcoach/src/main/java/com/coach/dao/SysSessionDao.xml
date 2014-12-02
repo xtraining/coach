@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coach.dao.CoachExpandDao">
+
+	 <resultMap id="SysSessionResult" type="com.coach.model.SysSession">
+	      <result column="id" jdbcType="BIGINT" property="id" />
+	      <result column="receiverId" jdbcType="BIGINT" property="receiverId" />
+	      <result column="receiverType" jdbcType="INTEGER" property="receiverType" />
+	 </resultMap>
+
+	<select id="getValidSessionBySessionId" parameterType="String" resultMap="SysSessionResult">
+		select id, receiverId, receiverType from sys_session where sessionId = #{sessionId}
+	</select>
+	
+	<insert id="insertSysSession" parameterType="com.coach.model.SysSession">
+	    INSERT INTO sys_session(createTime, status, sessionId, receiverId, receiverType) 
+	    VALUE (now(), #{status}, #{sessionId}, #{receiverId}, #{receiverType})
+	</insert>
+	
+	<delete id="invalidSessionBySessionId" parameterType="String">
+	   delete from sys_session where sessionId = #{sessionId}
+	</delete>
+</mapper>

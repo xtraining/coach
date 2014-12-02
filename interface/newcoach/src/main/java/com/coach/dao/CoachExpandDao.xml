@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coach.dao.CoachExpandDao">
+  <insert id="insertCoachExpand" useGeneratedKeys="true" keyProperty="id" parameterType="com.coach.model.CoachExpand">
+	 insert into coach_expand(coachId, uuid, osType, baiduUserId, baiduChannelId, appVersionId, status, osVersion) 
+	 value (#{coachId}, #{uuid}, #{osType}, #{baiduUserId}, #{baiduChannelId}, #{appVersionId}, #{status}, #{osVersion}) 
+  </insert>
+  
+  <update id="updateBaiduBinding" parameterType="Map">
+	    update coach_expand set status = 1 where baiduUserId = #{baiduUserId} and baiduChannelId = #{baiduChannelId} and coachId = #{coachId}
+	</update>
+</mapper>

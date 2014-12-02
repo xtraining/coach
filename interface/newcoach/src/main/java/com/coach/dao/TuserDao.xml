@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coach.dao.TuserDao">
+  
+  <select id="getByPhoneNumber" parameterType="Map" resultType="Long">
+    select t.id from tuser t where t.phoneNumber = #{phoneNumber} and t.status != #{status} 
+  </select>
+  
+  <insert id="insertTuser" useGeneratedKeys="true" keyProperty="id" parameterType="com.coach.model.Tuser">
+	 insert into tuser(phoneNumber, password, createTime, status, name, gender, idNumber, idType, birthday, email) 
+		value (#{phoneNumber}, #{password}, now(), #{status}, #{name}, #{gender}, #{idNumber}, #{idType}, #{birthday}, #{email})
+  </insert>
+</mapper>

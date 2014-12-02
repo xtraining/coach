@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coach.dao.MemberNewsDao">
+  <resultMap id="MemberNewsResponse" type="com.coach.response.MemberNewsResponse">
+       <result column="orgId" jdbcType="INTEGER" property="orgId" />
+       <result column="orgName" jdbcType="VARCHAR" property="orgName" />
+       <result column="courseId" jdbcType="BIGINT" property="courseId" />
+       <result column="courseName" jdbcType="VARCHAR" property="courseName" />
+       <result column="memberId" jdbcType="BIGINT" property="memberId" />
+       <result column="memberName" jdbcType="VARCHAR" property="memberName" />
+       <result column="status" jdbcType="INTEGER" property="status" />
+       <result column="createTime" jdbcType="VARCHAR" property="createTime" />
+       <result column="newFlag" jdbcType="INTEGER" property="newFlag" />
+  </resultMap>
+  
+  <insert id="insertMemberNews" parameterType="com.coach.model.MemberNews">
+    insert into user (name)
+    values (#{name})
+  </insert>
+  
+  <select id="getNews" parameterType="Map" resultMap="MemberNewsResponse">
+   select o.id orgId, o.name orgName, c.id courseId, c.name courseName, 
+   m.id memberId, m.name memberName, n.status, Date_Format(m.createTime, '%Y-%m-%d %T')createTime,
+	(case when h.lastViewTime is NULL then 1
+	     when n.createTime > h.lastViewTime then 1 
+	     else 0 end)newFlag
+	from organization o INNER JOIN organization_coach oc on o.id = oc.organizationId
+	INNER JOIN course c on c.organizationId = o.id and c.status = #{courseActiveStatus}
+	INNER JOIN coach_course cc on c.id = cc.courseId and cc.status = #{acceptedStatus} and cc.coachId = #{coachId}
+	INNER JOIN member_news n on n.courseId = c.id and n.coachId = #{coachId}
+	INNER JOIN member m on n.memberId = m.id
+	INNER JOIN course_member cm on cm.memberId = m.id and cm.courseId = c.id and cm.status != #{deletedStatus}
+	LEFT JOIN coach_news_history h on h.coachId = n.coachId
+	order by m.createTime desc 
+  </select>
+</mapper>
