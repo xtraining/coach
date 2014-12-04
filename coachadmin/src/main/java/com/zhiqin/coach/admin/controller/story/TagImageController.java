@@ -25,7 +25,7 @@ import com.zhiqin.coach.admin.dto.ResponseDTO;
 import com.zhiqin.coach.admin.dto.SearchTagImageDTO;
 import com.zhiqin.coach.admin.dto.TagArrayDTO;
 import com.zhiqin.coach.admin.dto.TagDTO;
-import com.zhiqin.coach.admin.dto.ArtifactImageDTO;
+import com.zhiqin.coach.admin.dto.TagImageDTO;
 import com.zhiqin.coach.admin.service.ImageService;
 import com.zhiqin.coach.admin.service.TagService;
 import com.zhiqin.coach.admin.util.JsonBinder;
@@ -57,7 +57,7 @@ public class TagImageController extends BaseController{
 			}
 		}
 		Long totalNum = imageService.getTagImageTotalNum(searchDto);
-		List<ArtifactImageDTO> list = imageService.getTagImageList(searchDto, pageInfo);
+		List<TagImageDTO> list = imageService.getTagImageList(searchDto, pageInfo);
 		model.addAttribute("responseList", list); 
 		model.addAttribute("searchDto", searchDto); 
 		model.addAttribute("totalCount", totalNum+"");

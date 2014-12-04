@@ -5,7 +5,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.zhiqin.coach.admin.common.Constants.IMAGE_STYLE;
 import com.zhiqin.coach.admin.dao.ArtifactHierarchyDao;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })

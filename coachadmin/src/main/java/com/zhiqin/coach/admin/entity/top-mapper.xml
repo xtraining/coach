@@ -18,12 +18,25 @@
 		limit ${(p.pageNum - 1) * p.numPerPage}, ${p.numPerPage}
 	</select>
 	
+	<select id="getById" parameterType="Long" resultType="TopDTO" >
+		select * from top_list where id = #{id}
+	</select>
+	
+	<select id="getArtifactByTopId" parameterType="Long" resultType="ArtifactDTO" >
+		select a.id, a.title from top_list_artifact t inner join artifact a on t.artifactId = a.id and a.status != 1
+		where t.topId = #{id} order by t.artifactOrder
+	</select>
+	
 	<insert id="insertTop" useGeneratedKeys="true" keyProperty="id" parameterType="TopDTO">
-		INSERT INTO top_list(name,type,topOrder, startTime) 
-		VALUE (#{name}, #{type}, #{topOrder},#{startTime}) 
+		INSERT INTO top_list(name,type,topOrder, startTime, tags) 
+		VALUE (#{name}, #{type}, #{topOrder},#{startTime}, #{tags}) 
   	</insert>
   	
 	<update id="deleteByIds" parameterType="Map">
 		update top_list set status = 1 where id in (${ids})
+	</update>
+	
+	<update id="updateListImageFileName" parameterType="Map">
+		update top_list set listImageFileName = #{dto.listImageFileName} where id = #{dto.id}
 	</update>
 </mapper>

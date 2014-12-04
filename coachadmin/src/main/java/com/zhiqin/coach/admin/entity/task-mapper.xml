@@ -52,6 +52,17 @@
 		where d.status = #{status}
 	</select>
 	
+	<select id="getArtifactByTaskId" parameterType="Long" resultType="ArtifactDTO" >
+		select a.id, a.downloadTaskId from artifact a inner join download_task d on a.downloadTaskId = d.id and a.status = 3
+		inner join task t on d.taskId = t.id and d.status = 3
+		where t.id = #{taskId}
+	</select>
+	
+	<select id="getArtifactByDownloadTaskId" parameterType="Long" resultType="ArtifactDTO" >
+		select a.id, a.downloadTaskId from artifact a inner join download_task d on a.downloadTaskId = d.id and a.status = 3
+		where d.id = #{downloadTaskId}
+	</select>
+	
 	<select id="getDownloadTask" parameterType="Map" resultMap="DownloadTaskDTOResult" >
 		select d.* from download_task d inner join task t on d.taskId = t.id and t.status != 1
 		where d.status = #{status} order by d.id limit #{maxNum}
@@ -64,6 +75,13 @@
 	<update id="updateStatus" parameterType="Map">
 		update task set status = #{status} where id = #{taskId}
 	</update>
+	
+	
+	<update id="updateDownloadTaskStatus" parameterType="Map">
+		update download_task set status = #{status} where id in 
+		<foreach collection="downloadIdList" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
+	</update>
+	
 	
 	<update id="deleteByIds" parameterType="Map">
 		update task set status = 1 where id in (${ids})

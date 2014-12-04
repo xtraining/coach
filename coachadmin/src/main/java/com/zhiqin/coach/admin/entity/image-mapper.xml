@@ -3,12 +3,12 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="image">
 	
-	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="ArtifactImageDTO">
-		INSERT INTO image_inf(fileName, status, tagImage) 
-		VALUE (#{fileName}, 0, #{tagImage}) 
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="TagImageDTO">
+		INSERT INTO image_inf(fileName, status) 
+		VALUE (#{fileName}, 0) 
   	</insert>
   	
-  	<update id="updateFileName" parameterType="ArtifactImageDTO">
+  	<update id="updateFileName" parameterType="TagImageDTO">
 		update image_inf set fileName = #{fileName} where id = #{id}
   	</update>
   	

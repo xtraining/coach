@@ -16,15 +16,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.qiniu.api.auth.AuthException;
-import com.zhiqin.coach.admin.common.Constants.IMAGE_FROM;
-import com.zhiqin.coach.admin.common.Constants.IMAGE_STYLE;
-import com.zhiqin.coach.admin.dao.ArtifactImageDao;
 import com.zhiqin.coach.admin.dao.ImageDao;
-import com.zhiqin.coach.admin.dto.ArtifactImageDTO;
+import com.zhiqin.coach.admin.dao.TagImageDao;
 import com.zhiqin.coach.admin.dto.PageInfoDTO;
 import com.zhiqin.coach.admin.dto.SearchTagImageDTO;
 import com.zhiqin.coach.admin.dto.TagArrayDTO;
 import com.zhiqin.coach.admin.dto.TagDTO;
+import com.zhiqin.coach.admin.dto.TagImageDTO;
 import com.zhiqin.coach.admin.service.ImageService;
 import com.zhiqin.coach.admin.util.Config;
 import com.zhiqin.coach.admin.util.DownloadUtils;
@@ -34,20 +32,20 @@ import com.zhiqin.coach.admin.util.QiniuUtils;
 public class ImageServiceImpl implements ImageService {
 	private static Log log = LogFactory.getLog(ImageServiceImpl.class);
 	@Resource private ImageDao imageDao;
-	@Resource private ArtifactImageDao artifactImageDao;
+	@Resource private TagImageDao tagImageDao;
 	@Override
 	public Long getTagImageTotalNum(SearchTagImageDTO searchDto) {
-		return artifactImageDao.getTagImageTotalNum(searchDto);
+		return tagImageDao.getTagImageTotalNum(searchDto);
 	}
 	@Override
-	public List<ArtifactImageDTO> getTagImageList(SearchTagImageDTO searchDto,
+	public List<TagImageDTO> getTagImageList(SearchTagImageDTO searchDto,
 			PageInfoDTO pageInfo) {
-		List<ArtifactImageDTO> list = artifactImageDao.getTagImage(searchDto, pageInfo);
-		for(ArtifactImageDTO image : list){
+		List<TagImageDTO> list = tagImageDao.getTagImage(searchDto, pageInfo);
+		for(TagImageDTO image : list){
 			if(searchDto.getTagId() != null){
 				image.setTagNameList(searchDto.getTagName());
 			} else {
-				List<String> tagNameList = artifactImageDao.getTagNameListByImageId(image.getId());
+				List<String> tagNameList = tagImageDao.getTagNameListByImageId(image.getId());
 				if(tagNameList != null && tagNameList.size() > 0){
 					image.setTagNameList(tagNameList.toString());
 				}
@@ -62,8 +60,7 @@ public class ImageServiceImpl implements ImageService {
 			String uptoken = QiniuUtils.getUptoken();
 			for(MultipartFile file : imageFile){
 				if(file != null && file.getSize() > 0){
-					ArtifactImageDTO image = new ArtifactImageDTO();
-					image.setTagImage(1);
+					TagImageDTO image = new TagImageDTO();
 					imageDao.insert(image);
 					String fileName = QiniuUtils.generateTagImageName(image.getId(), file.getOriginalFilename());
 					image.setFileName(fileName);
@@ -74,7 +71,7 @@ public class ImageServiceImpl implements ImageService {
 					
 					TagDTO[] tags = items.getTag();
 					for(TagDTO tag : tags){
-						artifactImageDao.insert(tag.getId(), image.getId(), IMAGE_FROM.TAG, IMAGE_STYLE.DETAIL);
+						tagImageDao.insert(tag.getId(), image.getId());
 					}
 				}
 			}
@@ -88,18 +85,18 @@ public class ImageServiceImpl implements ImageService {
 	}
 	@Override
 	public List<TagDTO> getTagByImageId(long imageId) {
-		return artifactImageDao.getTagByImageId(imageId);
+		return tagImageDao.getTagByImageId(imageId);
 	}
 	
 	@Override
 	@Transactional
 	public void saveAssignTag(TagArrayDTO items, Long imageId) {
-		artifactImageDao.deleteByImageId(imageId, IMAGE_FROM.TAG);
+		tagImageDao.deleteByImageId(imageId);
 		TagDTO[] tags = items.getTag();
 		Set<Long> tagIdSet = new HashSet<Long>();
 		for(TagDTO tag : tags){
 			if(!tagIdSet.contains(tag.getId())){
-				artifactImageDao.insert(tag.getId(), imageId, IMAGE_FROM.TAG, IMAGE_STYLE.DETAIL);
+				tagImageDao.insert(tag.getId(), imageId);
 				tagIdSet.add(tag.getId());
 			}
 		}

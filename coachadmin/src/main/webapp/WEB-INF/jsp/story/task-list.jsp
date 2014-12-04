@@ -41,9 +41,10 @@
 				<th width="5%" align="left">任务ID</th>
 				<th width="10%" align="left">来源</th>
 				<th align="left">地址</th>
-				<th width="10%" align="left">状态</th>
-				<th width="15%" align="left">创建时间</th>
-				<th width="15%" align="left">操作</th>
+				<th width="12%" align="left">创建时间</th>
+				<th width="15%" align="left">下载状态(成功数/总数)</th>
+				<th width="15%" align="left">入库状态(已入库数/总数)</th>
+				<th width="10%" align="left">入库状态</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -71,19 +72,22 @@
 				<td>
 					${item.url}
 				</td>
+				<td>${item.createTime}</td>
 				<td>
 					${item.progress}
 				</td>
-				<td>${item.createTime}</td>
+				<td>
+					${item.progress}
+				</td>
 				<td>	
-				 	<c:choose> 
+				 	<%-- <c:choose> 
   						<c:when test="${item.status == 2}"> 
   						             已入库
   						</c:when>  
   						<c:otherwise>
-						  <a href="${ctx}/story/task/accept.htm?taskId=${item.id}" target="navTab" title="入库" rel="入库" style="color:#00F;">入库</a>	
+						  <a href="${ctx}/story/task/accept.htm?taskId=${item.id}&downloadTaskId=0" target="navTab" title="入库" rel="入库" style="color:#00F;">入库</a>	
   						</c:otherwise>
-  					 </c:choose>				
+  					 </c:choose>	 --%>	
 				</td>
 			</tr>
 			</c:forEach>

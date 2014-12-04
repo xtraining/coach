@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.zhiqin.coach.admin.common.Constants.DOWNLOAD_TASK_STATUS;
 import com.zhiqin.coach.admin.common.Constants.TASK_STATUS;
 import com.zhiqin.coach.admin.dao.TaskDao;
+import com.zhiqin.coach.admin.dto.ArtifactDTO;
 import com.zhiqin.coach.admin.dto.DownloadTaskDTO;
 import com.zhiqin.coach.admin.dto.PageInfoDTO;
 import com.zhiqin.coach.admin.dto.TaskDTO;
@@ -178,6 +179,40 @@ public class TaskDaoImpl extends BaseDaoImpl implements TaskDao
 			throw e;
 		}
 		
+	}
+
+	@Override
+	public List<ArtifactDTO> getArtifactByTaskId(int taskId) {
+		try{
+			return this.getSqlSession().selectList("task.getArtifactByTaskId", taskId);
+		} catch(RuntimeException e){
+			log.error("getArtifactIdByTaskId", e);
+			throw e;
+		}
+	}
+
+	@Override
+	public void updateStatus(List<Long> downloadIdList, int status) {
+		try{
+			Map map = new HashMap();
+			map.put("downloadIdList", downloadIdList);
+			map.put("status", status);
+			this.getSqlSession().update("task.updateDownloadTaskStatus", map);
+		} catch(RuntimeException e){
+			log.error("updateDownloadTaskStatus", e);
+			throw e;
+		}
+		
+	}
+
+	@Override
+	public List<ArtifactDTO> getArtifactByDownloadTaskId(int downloadTaskId) {
+		try{
+			return this.getSqlSession().selectList("task.getArtifactByDownloadTaskId", downloadTaskId);
+		} catch(RuntimeException e){
+			log.error("getArtifactIdByDownloadTaskId", e);
+			throw e;
+		}
 	}
 
 

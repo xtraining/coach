@@ -1,5 +1,7 @@
 package com.zhiqin.coach.admin.controller.story;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -13,9 +15,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.zhiqin.coach.admin.common.Constants.DOWNLOAD_SOURCE_FROM;
 import com.zhiqin.coach.admin.common.Constants.DOWNLOAD_TASK_STATUS;
 import com.zhiqin.coach.admin.controller.BaseController;
+import com.zhiqin.coach.admin.dto.CategoryArrayDTO;
 import com.zhiqin.coach.admin.dto.DownloadTaskDTO;
 import com.zhiqin.coach.admin.dto.PageInfoDTO;
 import com.zhiqin.coach.admin.dto.ResponseDTO;
+import com.zhiqin.coach.admin.dto.TagArrayDTO;
 import com.zhiqin.coach.admin.dto.TaskDTO;
 import com.zhiqin.coach.admin.service.TaskService;
 import com.zhiqin.coach.admin.util.JsonBinder;
@@ -89,7 +93,7 @@ public class TaskController extends BaseController{
 		taskService.updateDownloadStatus(downloadTaskId, DOWNLOAD_TASK_STATUS.DRAFT);
 		ResponseDTO success = new ResponseDTO();
 		success.setStatusCode("200");
-		success.setNavTabId("任务详情");
+		success.setNavTabId("");
 		JsonUtils.write(response, JsonBinder.buildNormalBinder().toJson(success));
 		return null;
 	}
@@ -108,7 +112,24 @@ public class TaskController extends BaseController{
 	
 	
 	@RequestMapping("accept")
-	public String accept(int taskId, Model model){
+	public String accept(int taskId, int downloadTaskId, Model model){
+		model.addAttribute("taskId", taskId); 
+		model.addAttribute("downloadTaskId", downloadTaskId); 
 		return "/story/task-accept";
+	}
+	
+	@RequestMapping("saveAccept")
+	public void saveAccept(int taskId, int downloadTaskId, TagArrayDTO tags, CategoryArrayDTO categories, Model model, HttpServletResponse response) throws IOException{
+		PrintWriter out = response.getWriter();  
+		if(categories == null || categories.getCategory() == null || categories.getCategory().length == 0){
+			out.print("input1");
+			return;
+		}
+		if(tags == null || tags.getTag() == null || tags.getTag().length == 0){
+			out.print("input2");
+			return;
+		}
+		taskService.saveAccept(taskId, downloadTaskId, tags, categories);
+		out.print("success");
 	}
 }

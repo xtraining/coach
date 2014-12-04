@@ -241,11 +241,11 @@
 		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
 	</bean>
 	
-	<bean id="artifactImageDaoTarget" class="com.zhiqin.coach.admin.dao.impl.ArtifactImageDaoImpl"></bean>
-	<bean id="artifactImageDao"
+	<bean id="tagImageDaoTarget" class="com.zhiqin.coach.admin.dao.impl.TagImageDaoImpl"></bean>
+	<bean id="tagImageDao"
 		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
-		<property name="targetInterface" value="com.zhiqin.coach.admin.dao.ArtifactImageDao"></property>
-		<property name="targetObject" ref="artifactImageDaoTarget"></property>
+		<property name="targetInterface" value="com.zhiqin.coach.admin.dao.TagImageDao"></property>
+		<property name="targetObject" ref="tagImageDaoTarget"></property>
 		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
 	</bean>
 	

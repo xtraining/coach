@@ -1,14 +1,6 @@
 package com.coach.model;
 
 import java.sql.Timestamp;
-import java.util.Date;
-
-import org.apache.commons.lang.StringUtils;
-
-import com.coach.response.ProfileDetailResponse;
-import com.coach.response.ProfileResponse;
-import com.coach.utils.Config;
-import com.coach.utils.DateUtils;
 
 /**
  * Coach entity. @author MyEclipse Persistence Tools
@@ -20,15 +12,10 @@ public class Coach extends Tuser implements java.io.Serializable {
 
 	private Long id;
 	private String avatarUrl;
-	private Integer graphicLock;
 	private Timestamp createTime;
 	private Timestamp lastAccessTime;
 	private Timestamp lockTime;
 	private Integer type;
-	private Integer orgSwitch;
-	private Integer areaId;
-	private String areaName;
-	private String areaCode;
 	private String description;
 	private Long tuserId;
 	private Integer registerType;
@@ -38,9 +25,7 @@ public class Coach extends Tuser implements java.io.Serializable {
 	private String qqUsername;
 	private String weixinUsername;
 	private String weiboUsername;
-	/** default constructor */
-	public Coach() {
-	}
+	private Integer smsSwitch;
 
 	// Property accessors
 
@@ -66,14 +51,6 @@ public class Coach extends Tuser implements java.io.Serializable {
 
 	public void setAvatarUrl(String avatarUrl) {
 		this.avatarUrl = avatarUrl;
-	}
-
-	public Integer getGraphicLock() {
-		return this.graphicLock;
-	}
-
-	public void setGraphicLock(Integer graphicLock) {
-		this.graphicLock = graphicLock;
 	}
 
 	public Timestamp getCreateTime() {
@@ -108,14 +85,6 @@ public class Coach extends Tuser implements java.io.Serializable {
 		this.lockTime = lockTime;
 	}
 
-	public Integer getOrgSwitch() {
-		return orgSwitch;
-	}
-
-	public void setOrgSwitch(Integer orgSwitch) {
-		this.orgSwitch = orgSwitch;
-	}
-
 	public Integer getType() {
 		return this.type;
 	}
@@ -124,30 +93,6 @@ public class Coach extends Tuser implements java.io.Serializable {
 		this.type = type;
 	}
 
-
-	public Integer getAreaId() {
-		return areaId;
-	}
-
-	public void setAreaId(Integer areaId) {
-		this.areaId = areaId;
-	}
-
-	public String getAreaName() {
-		return areaName;
-	}
-
-	public void setAreaName(String areaName) {
-		this.areaName = areaName;
-	}
-
-	public String getAreaCode() {
-		return areaCode;
-	}
-
-	public void setAreaCode(String areaCode) {
-		this.areaCode = areaCode;
-	}
 	public Integer getRegisterType() {
 		return registerType;
 	}
@@ -203,52 +148,15 @@ public class Coach extends Tuser implements java.io.Serializable {
 	public void setWeiboUsername(String weiboUsername) {
 		this.weiboUsername = weiboUsername;
 	}
-	
-	public ProfileResponse toProfileResponse() {
-		ProfileResponse r = new ProfileResponse();
-		r.setCoachId(getId());
-		if(StringUtils.isNotBlank(avatarUrl)){
-			if(avatarUrl.trim().startsWith("http")){
-				r.setAvatarUrl(avatarUrl);
-			} else {
-				r.setAvatarUrl(Config.getProperty("QINIU_DOMAIN") + avatarUrl);
-			}
-		} else {
-			r.setAvatarUrl("");
-		}
-		r.setName(getName());
-		r.setGender(getGender());
-		r.setQqId(getQqId());
-		r.setWeiboId(getWeiboId());
-		r.setWeixinId(getWeixinId());
-		r.setDescription(description);
-		return r;
+
+	public Integer getSmsSwitch() {
+		return smsSwitch;
 	}
 
-	public ProfileDetailResponse toProfileDetailResponse() {
-		ProfileDetailResponse r = new ProfileDetailResponse();
-		r.setCoachId(id);
-		r.setAreaCode(areaCode);
-		r.setAreaName(areaName);
-		if(StringUtils.isNotBlank(avatarUrl)){
-			if(avatarUrl.trim().startsWith("http")){
-				r.setAvatarUrl(avatarUrl);
-			} else {
-				r.setAvatarUrl(Config.getProperty("QINIU_DOMAIN") + avatarUrl);
-			}
-		} else {
-			r.setAvatarUrl("");
-		}
-		r.setBirthday(DateUtils.dateToyyyyMMdd(getBirthday()));
-		r.setEmail(getEmail());
-		r.setGender(getGender());
-		r.setIdNumber(getIdNumber());
-		r.setIdType(getIdType());
-		r.setName(getName());
-		r.setPhoneNumber(getPhoneNumber());
-		r.setDescription(description);
-		return r;
+	public void setSmsSwitch(Integer smsSwitch) {
+		this.smsSwitch = smsSwitch;
 	}
+	
 
 
 }

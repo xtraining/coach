@@ -399,5 +399,19 @@
 			<scope>system</scope>  
    			<systemPath>${basedir}\src\main\webapp\WEB-INF\lib\patchca.jar</systemPath>
 		</dependency>
+		<dependency>
+			<groupId>org.ansj</groupId>
+			<artifactId>ansj_seg</artifactId>
+			<version>2.0.6</version>
+			<scope>system</scope>  
+   			<systemPath>${basedir}\src\main\webapp\WEB-INF\lib\ansj_seg-2.0.6.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>org.nlp</groupId>
+			<artifactId>nlp-lang</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>  
+   			<systemPath>${basedir}\src\main\webapp\WEB-INF\lib\nlp-lang.jar</systemPath>
+		</dependency>
 	</dependencies>
 </project>

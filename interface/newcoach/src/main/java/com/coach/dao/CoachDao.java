@@ -3,8 +3,6 @@ package com.coach.dao;
 import java.util.List;
 
 import com.coach.model.Coach;
-import com.coach.response.BindOrgResponse;
-import com.coach.response.ProfileResponse;
 
 
 
@@ -31,12 +29,8 @@ public interface CoachDao {
 
 	public void unbindThirdParty(int type, Long id);
 
-	public void updateAvatar(Long id, String fileNameInQiniu);
-
-	public List<BindOrgResponse> getBindOrg(Long coachId);
-
-	public void updateBindOrgStatus(Coach c, Integer orgId);
-
 	public Long getCoachIdByPhoneNumber(String phoneNumber);
+
+	public List<Long> getByToken(Long coachId, String token);
 
 }

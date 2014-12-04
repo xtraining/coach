@@ -12,12 +12,21 @@ import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.zhiqin.coach.admin.common.Constants;
 import com.zhiqin.coach.admin.common.Constants.DOWNLOAD_TASK_STATUS;
 import com.zhiqin.coach.admin.common.HtmlParserFactory;
 import com.zhiqin.coach.admin.common.MyHtmlParser;
+import com.zhiqin.coach.admin.dao.ArtifactCategoryDao;
+import com.zhiqin.coach.admin.dao.ArtifactDao;
+import com.zhiqin.coach.admin.dao.ArtifactTagDao;
 import com.zhiqin.coach.admin.dao.TaskDao;
+import com.zhiqin.coach.admin.dto.ArtifactDTO;
+import com.zhiqin.coach.admin.dto.CategoryArrayDTO;
+import com.zhiqin.coach.admin.dto.CategoryDTO;
 import com.zhiqin.coach.admin.dto.DownloadTaskDTO;
 import com.zhiqin.coach.admin.dto.PageInfoDTO;
+import com.zhiqin.coach.admin.dto.TagArrayDTO;
+import com.zhiqin.coach.admin.dto.TagDTO;
 import com.zhiqin.coach.admin.dto.TaskDTO;
 import com.zhiqin.coach.admin.service.TaskService;
 
@@ -25,7 +34,9 @@ import com.zhiqin.coach.admin.service.TaskService;
 public class TaskServiceImpl implements TaskService {
 	private static Log log = LogFactory.getLog(TaskServiceImpl.class);
 	@Resource private TaskDao taskDao;
-
+	@Resource private ArtifactTagDao artifactTagDao;
+	@Resource private ArtifactDao artifactDao;
+	@Resource private ArtifactCategoryDao artifactCategoryDao;
 	@Override
 	public Long getTotalNum() {
 		return taskDao.getTotalNum();
@@ -122,6 +133,45 @@ public class TaskServiceImpl implements TaskService {
 	@Transactional
 	public void deleteByIds(String ids) {
 		taskDao.deleteByIds(ids);
+	}
+
+	@Override
+	@Transactional
+	public void saveAccept(int taskId, int downloadTaskId, TagArrayDTO tags,
+			CategoryArrayDTO categories) {
+		if(taskId > 0){
+			List<ArtifactDTO> artifactList = taskDao.getArtifactByTaskId(taskId);
+			saveAccept(tags, categories, artifactList);
+		} else if(downloadTaskId > 0){
+			List<ArtifactDTO> artifactList = taskDao.getArtifactByDownloadTaskId(downloadTaskId);
+			saveAccept(tags, categories, artifactList);
+		}
+		
+	}
+
+	private void saveAccept(TagArrayDTO tags, CategoryArrayDTO categories,
+			List<ArtifactDTO> artifactList) {
+		if(artifactList != null && artifactList.size() > 0){
+			List<Long> artifactIdList = new ArrayList<Long>();
+			List<Long> downloadIdList = new ArrayList<Long>();
+			for(ArtifactDTO dto : artifactList){
+				artifactIdList.add(dto.getId());
+				downloadIdList.add(dto.getDownloadTaskId());
+			}
+			artifactDao.updateStatus(artifactIdList, Constants.ARTIFACT_STATUS.ACTIVE.getValue());
+			taskDao.updateStatus(downloadIdList, Constants.DOWNLOAD_TASK_STATUS.UPLOAD.getValue());
+			for(Long artifactId : artifactIdList){
+				TagDTO[] tagArr = tags.getTag();
+				for(TagDTO tag : tagArr){
+					artifactTagDao.save(artifactId, tag.getId(), tag.getTagOrder());
+				}
+				
+				CategoryDTO[] catArr = categories.getCategory();
+				for(CategoryDTO cat : catArr){
+					artifactCategoryDao.save(artifactId, cat.getId(), cat.getCategoryOrder());
+				}
+			}
+		}
 	}
 	
 

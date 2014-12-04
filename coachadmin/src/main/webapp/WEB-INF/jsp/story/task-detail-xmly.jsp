@@ -30,6 +30,7 @@
 			<tr>
 				<th width="2%" align="left"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
 				<th width="3%" align="left">下载ID</th>
+				<th width="5%" align="left">操作</th>
 				<th width="3%" align="left">类型</th>
 				<th width="10%" align="left">标题</th>
 				<th width="10%"  align="left">副标题</th>
@@ -49,6 +50,13 @@
 				<td>
 					${item.id}
 				</td>
+				<td>
+				 	<c:choose> 
+  						<c:when test="${item.status == 3}"> 
+  						<a href="${ctx}/story/task/accept.htm?taskId=0&downloadTaskId=${item.id}" target="navTab" title="入库" rel="入库" style="color:#00F;">入库</a>
+  						</c:when>
+  					</c:choose>
+  				</td>
 				<td>
 					<c:choose> 
   						<c:when test="${item.type == 0}"> 
@@ -77,13 +85,13 @@
   						             下载中&nbsp;&nbsp; <a href="${ctx}/story/task/redownload.htm?downloadTaskId=${item.id}" target="ajaxTodo" style="color:#00F;">重试</a>
   						</c:when> 
   						<c:when test="${item.status == 2}"> 
-  						             保存中
+  						             已入库
   						</c:when> 
   						<c:when test="${item.status == 3}"> 
-  						             完成
+  						            下载完成
   						</c:when> 
   						<c:otherwise>
-  							失败&nbsp;&nbsp; <a href="${ctx}/story/task/redownload.htm?downloadTaskId=${item.id}" target="ajaxTodo" style="color:#00F;">重试</a>
+  							下载失败&nbsp;&nbsp; <a href="${ctx}/story/task/redownload.htm?downloadTaskId=${item.id}" target="ajaxTodo" style="color:#00F;">重试</a>
   						</c:otherwise>
   					 </c:choose>
 				</td>

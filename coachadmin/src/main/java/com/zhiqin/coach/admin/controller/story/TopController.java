@@ -1,6 +1,5 @@
 package com.zhiqin.coach.admin.controller.story;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
@@ -11,7 +10,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.FileUtils;
+import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -21,9 +20,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.qiniu.api.auth.AuthException;
 import com.zhiqin.coach.admin.controller.BaseController;
+import com.zhiqin.coach.admin.dto.ArtifactArrayDTO;
+import com.zhiqin.coach.admin.dto.ArtifactDTO;
 import com.zhiqin.coach.admin.dto.PageInfoDTO;
 import com.zhiqin.coach.admin.dto.ResponseDTO;
+import com.zhiqin.coach.admin.dto.TagArrayDTO;
+import com.zhiqin.coach.admin.dto.TagDTO;
 import com.zhiqin.coach.admin.dto.TopDTO;
 import com.zhiqin.coach.admin.service.TopService;
 import com.zhiqin.coach.admin.util.DateUtils;
@@ -43,12 +47,12 @@ public class TopController extends BaseController{
 	private static final Logger log = LoggerFactory
 			.getLogger(TopController.class);
 	@Resource
-	private TopService topSerivce;
+	private TopService topService;
 	
 	@RequestMapping("list")
 	public String list(Model model, String name, PageInfoDTO pageInfo) {
-		Long totalNum = topSerivce.getTopTotalNum(name);
-		List<TopDTO> list = topSerivce.getTopList(name, pageInfo);
+		Long totalNum = topService.getTopTotalNum(name);
+		List<TopDTO> list = topService.getTopList(name, pageInfo);
 		model.addAttribute("responseList", list); 
 		model.addAttribute("name", name); 
 		model.addAttribute("totalCount", totalNum+"");
@@ -65,30 +69,30 @@ public class TopController extends BaseController{
 	
 	@RequestMapping(value = "edit")
 	public String edit(int topId, Model model) {
+		TopDTO dto = topService.getById(topId);
+		List<ArtifactDTO> artifacts = topService.getArtifactByTopId(topId);
+		model.addAttribute("editObj", dto);
+		model.addAttribute("artifacts", artifacts);
 		return "/story/top-edit";
 	}
 	
 	@RequestMapping(value="create", method=RequestMethod.POST)  
-	public void create(TopDTO dto, @RequestParam MultipartFile imageFile, HttpServletRequest request, HttpServletResponse response) throws IOException{
-		topSerivce.create(dto);
+	public void create(TopDTO dto, ArtifactArrayDTO artifacts, @RequestParam MultipartFile imageFile, HttpServletRequest request, HttpServletResponse response) throws IOException, AuthException, JSONException{
+		topService.create(dto, artifacts, imageFile);
 		PrintWriter out = response.getWriter();  
-		String realPath = request.getSession().getServletContext().getRealPath("/WEB-INF/upload"); 
-		if(imageFile != null && !imageFile.isEmpty() && imageFile.getSize() > 0){
-	        try {
-				FileUtils.copyInputStreamToFile(imageFile.getInputStream(), new File(realPath, imageFile.getOriginalFilename()));
-				out.print("success");
-			} catch (IOException e) {
-				log.error("file upload error : " + e);
-				out.print("error");
+		out.print("success");
+	}
 	
-			} 
-		}
+	@RequestMapping(value="update", method=RequestMethod.POST)  
+	public void update(TopDTO dto, ArtifactArrayDTO artifacts, @RequestParam MultipartFile listImageFile, HttpServletRequest request, HttpServletResponse response) throws IOException, AuthException, JSONException{
+		topService.update(dto, artifacts, listImageFile);
+		PrintWriter out = response.getWriter();  
 		out.print("success");
 	}
 	
 	@RequestMapping("delete")
 	public String delete(String ids, HttpServletResponse response){
-		topSerivce.deleteByIds(ids);
+		topService.deleteByIds(ids);
 		ResponseDTO success = new ResponseDTO();
 		success.setStatusCode("200");
 		success.setMessage("删除成功");

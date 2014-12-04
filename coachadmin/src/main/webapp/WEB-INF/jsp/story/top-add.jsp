@@ -32,9 +32,15 @@ function checkupload(){
 				</dd>
 			</dl>
 			<dl>
+				<dt>标签： </dt>
+				<dd>
+					<input type="text" name="tags" maxlength="200" size="40" class="" value=""/>
+				</dd>
+			</dl>
+			<dl>
 				<dt>开始时间：</dt>
 				<dd>
-					<input type="text" name="startTime" class="date required" dateFmt="yyyy-MM-dd HH:mm" value="${nowTime}" readonly="true"/>
+					<input type="text" name="startTimeStr" class="date required" dateFmt="yyyy-MM-dd HH:mm" value="${nowTime}" readonly="true"/>
 					<a class="inputDateButton" href="javascript:;">选择</a>
 				</dd>
 			</dl>
@@ -54,34 +60,6 @@ function checkupload(){
 			<div class="tabsHeader">
 				<div class="tabsHeaderContent">
 					<ul>
-						<li class="selected"><a href="javascript:void(0)"><span>关联标签</span></a></li>
-					</ul>
-				</div>
-			</div>
-			<div class="tabsContent" style="height: 100px;">
-				<div>
-					<table class="list nowrap itemDetail" addButton="关联标签" width="100%">
-						<thead>
-							<tr>
-								<th type="text" name="items[#index#].topicOrder" defaultVal="#index#" size="5" fieldClass="digits">序号</th>
-								<th type="lookup" name="items[#index#].topicInfo.topicName" lookupGroup="items[#index#].topicInfo" lookupUrl="modules/topic!select.action" size="60" fieldClass="required">故事名称</th>
-								<th type="del" width="60">操作</th>
-							</tr>
-						</thead>
-						<tbody>
-						</tbody>
-					</table>
-				</div>
-			</div>
-			<div class="tabsFooter">
-				<div class="tabsFooterContent"></div>
-			</div>
-			</div>	
-			<div class="divider"></div>
-			<div class="tabs">
-			<div class="tabsHeader">
-				<div class="tabsHeaderContent">
-					<ul>
 						<li class="selected"><a href="javascript:void(0)"><span>添加故事</span></a></li>
 					</ul>
 				</div>
@@ -91,8 +69,8 @@ function checkupload(){
 					<table class="list nowrap itemDetail" addButton="添加故事" width="100%">
 						<thead>
 							<tr>
-								<th type="text" name="items[#index#].topicOrder" defaultVal="#index#" size="5" fieldClass="digits">序号</th>
-								<th type="lookup" name="items[#index#].topicInfo.topicName" lookupGroup="items[#index#].topicInfo" lookupUrl="modules/topic!select.action" size="60" fieldClass="required">故事名称</th>
+								<th type="text" name="artifact[#index#].artifactOrder" defaultVal="#index#" size="5" fieldClass="digits">序号</th>
+								<th type="lookup" name="artifact[#index#].title" lookupGroup="artifact[#index#]" lookupUrl="${ctx}/story/artifact/select.htm" size="60" fieldClass="required">故事名称</th>
 								<th type="del" width="60">操作</th>
 							</tr>
 						</thead>

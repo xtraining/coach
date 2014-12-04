@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import com.coach.common.Constants.COACH_STATUS;
 import com.coach.common.Constants.ORG_COACH_STATUS;
 import com.coach.model.Coach;
-import com.coach.response.BindOrgResponse;
 
 public class CoachDaoImpl extends SqlSessionDaoSupport implements CoachDao{
 	private static final Logger log = LoggerFactory
@@ -136,47 +135,6 @@ public class CoachDaoImpl extends SqlSessionDaoSupport implements CoachDao{
 	}
 
 	@Override
-	public void updateAvatar(Long coachId, String fileNameInQiniu) {
-		try{
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("coachId", coachId);
-			map.put("fileNameInQiniu", fileNameInQiniu);
-			this.getSqlSession().update("updateAvatar", map);
-		} catch(RuntimeException e){
-			log.error("updateAvatar", e);
-			throw e;
-		}
-		
-	}
-
-	@Override
-	public List<BindOrgResponse> getBindOrg(Long coachId) {
-		try{
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("coachId", coachId);
-			return this.getSqlSession().selectList("getBindOrg", map);
-		} catch(RuntimeException e){
-			log.error("getBindOrg", e);
-			throw e;
-		}
-	}
-
-	@Override
-	public void updateBindOrgStatus(Coach c, Integer orgId) {
-		try{
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("coachObj", c);
-			map.put("orgId", orgId);
-			map.put("status", ORG_COACH_STATUS.ORG_NONE.getValue());
-			this.getSqlSession().update("updateBindOrgStatus", map);
-		} catch(RuntimeException e){
-			log.error("updateBindOrgStatus", e);
-			throw e;
-		}
-		
-	}
-
-	@Override
 	public Long getCoachIdByPhoneNumber(String phoneNumber) {
 		try{
 			Map<String, Object> map = new HashMap<String, Object>();
@@ -185,6 +143,20 @@ public class CoachDaoImpl extends SqlSessionDaoSupport implements CoachDao{
 			return  this.getSqlSession().selectOne("getCoachIdByPhoneNumber", map);
 		} catch(RuntimeException e){
 			log.error("getByPhoneNumber", e);
+			throw e;
+		}
+	}
+
+
+	@Override
+	public List<Long> getByToken(Long coachId, String token) {
+		try{
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("token", token);
+			map.put("coachId", coachId+"");
+			return  this.getSqlSession().selectList("getByToken", map);
+		} catch(RuntimeException e){
+			log.error("getByToken", e);
 			throw e;
 		}
 	}

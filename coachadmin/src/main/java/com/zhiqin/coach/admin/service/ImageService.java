@@ -12,13 +12,13 @@ import com.zhiqin.coach.admin.dto.PageInfoDTO;
 import com.zhiqin.coach.admin.dto.SearchTagImageDTO;
 import com.zhiqin.coach.admin.dto.TagArrayDTO;
 import com.zhiqin.coach.admin.dto.TagDTO;
-import com.zhiqin.coach.admin.dto.ArtifactImageDTO;
+import com.zhiqin.coach.admin.dto.TagImageDTO;
 
 public interface ImageService{
 
 	Long getTagImageTotalNum(SearchTagImageDTO searchDto);
 
-	List<ArtifactImageDTO> getTagImageList(SearchTagImageDTO searchDto,
+	List<TagImageDTO> getTagImageList(SearchTagImageDTO searchDto,
 			PageInfoDTO pageInfo);
 
 	void createFiles(TagArrayDTO items, MultipartFile[] imageFile) throws AuthException, JSONException, IOException;

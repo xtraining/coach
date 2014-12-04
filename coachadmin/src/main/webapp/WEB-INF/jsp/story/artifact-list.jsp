@@ -52,20 +52,18 @@ function viewFile(url, title){
 						<option value="1" <c:if test="${searchDto.type == 1}">selected</c:if>>单集</option>	
 					</select>
 				</td>	
-			</tr>
-			<tr>
 				<td>
 					分类ID：<input type="text" name="categoryId" class="digits" value="${searchDto.categoryId}"/>
 				</td>
 				<td>
 					分类名称：<input type="text" name="categoryName" value="${searchDto.categoryName}"/>
 				</td>
-				<td>
+				<%-- <td>
 					标签ID：<input type="text" name="tagId" class="digits" value="${searchDto.tagId}"/>
 				</td>
 				<td>
 					标签名称：<input type="text" name="tagName" value="${searchDto.tagName}"/>
-				</td>
+				</td> --%>
 			</tr>
 		</table>		
 		<div class="subBar">
@@ -80,7 +78,7 @@ function viewFile(url, title){
 	<div class="panelBar">
 		<ul class="toolBar">
 			<li><a class="add" href="${ctx}/story/artifact/add.htm" target="navTab" title="新增故事" rel="故事详情"><span>新增故事</span></a></li>
-			<li><a class="add" href="${ctx}/story/artifact/addAlbum.htm" target="navTab" title="新增专辑" rel="故事详情"><span>新增专辑</span></a></li>
+			<%-- <li><a class="add" href="${ctx}/story/artifact/addAlbum.htm" target="navTab" title="新增专辑" rel="故事详情"><span>新增专辑</span></a></li> --%>
 			<li><a class="edit" href="javascript:assginTag();"><span>批量设置标签</span></a></li>
 			<li><a title="确实要删除这些内容吗?" warn="请选择故事" target="selectedTodo" rel="ids" postType="string" href="${ctx}/story/artifact/delete.htm" class="delete"><span>批量删除</span></a></li>
 			<li class="line">line</li>

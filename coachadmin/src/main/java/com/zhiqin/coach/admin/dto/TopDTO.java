@@ -20,7 +20,11 @@ public class TopDTO {
 	private Integer type;
 	private Integer topOrder;
 	private Integer status;
+	private String startTimeStr;
 	private Timestamp startTime;
+	private String listImageFileName;
+	private String listImageFileUrl;
+	private String tags;
 	public Long getId() {
 		return id;
 	}
@@ -56,6 +60,30 @@ public class TopDTO {
 	}
 	public void setStartTime(Timestamp startTime) {
 		this.startTime = startTime;
+	}
+	public String getTags() {
+		return tags;
+	}
+	public void setTags(String tags) {
+		this.tags = tags;
+	}
+	public String getListImageFileName() {
+		return listImageFileName;
+	}
+	public void setListImageFileName(String listImageFileName) {
+		this.listImageFileName = listImageFileName;
+	}
+	public String getStartTimeStr() {
+		return startTimeStr;
+	}
+	public void setStartTimeStr(String startTimeStr) {
+		this.startTimeStr = startTimeStr;
+	}
+	public String getListImageFileUrl() {
+		return listImageFileUrl;
+	}
+	public void setListImageFileUrl(String listImageFileUrl) {
+		this.listImageFileUrl = listImageFileUrl;
 	}
 	
 }

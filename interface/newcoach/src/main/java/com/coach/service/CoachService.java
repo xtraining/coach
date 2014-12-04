@@ -20,8 +20,8 @@ import com.coach.request.ScanSignInRequest;
 import com.coach.request.SignInRequest;
 import com.coach.request.SignOutRequest;
 import com.coach.request.SignUpRequest;
-import com.coach.resolver.ICoachResolver;
-import com.coach.resolver.ILessonResolver;
+import com.coach.resolver.CoachResolver;
+import com.coach.resolver.TeamResolver;
 import com.coach.resolver.SmsResolver;
 import com.coach.resolver.SysSessionResolver;
 import com.coach.response.SignInResponse;
@@ -30,13 +30,13 @@ import com.rop.annotation.HttpAction;
 import com.rop.annotation.NeedInSessionType;
 import com.rop.annotation.ServiceMethod;
 import com.rop.annotation.ServiceMethodBean;
+import com.rop.response.BusinessServiceErrorResponse;
 
 @ServiceMethodBean
 public class CoachService extends SimpleBaseService{
-	@Resource private ICoachResolver coachResolver;
+	@Resource private CoachResolver coachResolver;
 	@Autowired private SysSessionResolver sessionResolver;
 	@Autowired private SmsResolver smsResolver;
-	@Resource private ILessonResolver lessonResolver;
 	
 	@ServiceMethod(method = "coach.updateLastAccessTime",version = "1.0",needInSession = NeedInSessionType.YES, httpAction = HttpAction.POST)
     public Object updateLastAccessTime(CoachBaseRequest request) {
@@ -54,7 +54,7 @@ public class CoachService extends SimpleBaseService{
 	@ServiceMethod(method = "coach.getSignUpVcode", version = "1.0", needInSession = NeedInSessionType.NO, httpAction = HttpAction.POST)
     public Object getSignUpVcode(GetVcodeRequest request) {
 		//check whether the phone number already exists or not.
-		Long tuserId = 1L;//coachResolver.checkByPhoneNumber(request.getPhoneNumber());
+		Long tuserId = coachResolver.checkByPhoneNumber(request.getPhoneNumber());
 		SimpleResponse r = new SimpleResponse();
 		if(tuserId != null && tuserId > 0){
 			r.setFlag(1);
@@ -199,6 +199,20 @@ public class CoachService extends SimpleBaseService{
 	@ServiceMethod(method = "coach.scanSignIn",version = "1.0", needInSession = NeedInSessionType.YES)
     public Object scanSignIn(ScanSignInRequest request) {
 		SimpleResponse s = new SimpleResponse();
-		return s;
+		SysSession session = sessionResolver.getValidSessionBySessionId(request.getRopRequestContext().getSessionId());
+		if(session == null || session.getReceiverType() == null || session.getReceiverId() == null || 
+				session.getReceiverType().intValue() != RECEIVER_TYPE.COACH.getValue() || session.getReceiverId().intValue() != request.getCoachId()){
+			s.setFlag(1);
+			s.setMsg("Session ID doesn't match with Coach ID.");
+			return s;
+		}
+		boolean checkToken = coachResolver.checkToken(request.getCoachId(), request.getToken());
+		if(checkToken){
+			return s;
+		} else {
+			s.setFlag(1);
+			s.setMsg("Token failed.");
+			return s;
+		}
 	}
 }

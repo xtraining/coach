@@ -53,13 +53,19 @@ public class QiniuUtils {
 	public static String generateArtifactImageName(Long id,
 			String originalFilename) {
 		String extFileName = originalFilename.substring(originalFilename.lastIndexOf("."));	
-		return FILE_NAME_PREFIX.IMAGE.getValue() + id + extFileName;
+		return FILE_NAME_PREFIX.STORY_IMAGE.getValue() + id + extFileName;
 	}
 
 	public static String generateArtifactMediaName(Long id,
 			String originalFilename) {
 		String extFileName = originalFilename.substring(originalFilename.lastIndexOf("."));	
 		return FILE_NAME_PREFIX.VOICE.getValue() + id + extFileName;
+	}
+
+	public static String generateTopListImageName(Long id,
+			String originalFilename) {
+		String extFileName = originalFilename.substring(originalFilename.lastIndexOf("."));	
+		return FILE_NAME_PREFIX.TOP_LIST_IMAGE.getValue() + id + extFileName;
 	}
 
 }

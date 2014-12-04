@@ -5,7 +5,7 @@ import java.util.List;
 import com.zhiqin.coach.admin.dto.ArtifactDTO;
 import com.zhiqin.coach.admin.dto.PageInfoDTO;
 import com.zhiqin.coach.admin.dto.SearchArtifactDTO;
-import com.zhiqin.coach.admin.dto.ArtifactImageDTO;
+import com.zhiqin.coach.admin.dto.TagImageDTO;
 
 
 
@@ -32,5 +32,9 @@ public interface ArtifactDao extends BaseDao{
 	List<ArtifactDTO> getSubListByArtifactId(long artifactId);
 
 	void updateArtifact(ArtifactDTO dto);
+
+	void deleteByDownloadTaskId(Long id);
+
+	void updateStatus(List<Long> artifactIdList, int value);
 
 }

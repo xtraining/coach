@@ -134,9 +134,10 @@ $(function(){
 									<li><a href="../coach/coach/list.htm" target="navTab" rel="教练管理" title="教练管理">教练管理</a></li>
 									<li><a href="../coach/coach/unbindCoachList.htm" target="navTab" rel="待绑定教练管理" title="待绑定教练管理">待绑定教练管理</a></li> -->
 									<li><a href="../story/top/list.htm" target="navTab" rel="首页推荐" title="首页推荐">首页推荐</a></li>
-									<li><a href="../story/artifact/list.htm" target="navTab" rel="故事管理" title="故事管理">故事管理</a></li>
 									<li><a href="../story/category/list.htm" target="navTab" rel="分类管理" title="分类管理">分类管理</a></li>
-									<li><a href="../story/tag/list.htm" target="navTab" rel="标签管理" title="标签管理">标签管理</a></li>
+									<li><a href="../story/artifact/list.htm" target="navTab" rel="故事管理" title="故事管理">故事管理</a></li>
+									<li><a href="../story/keyword/list.htm" target="navTab" rel="关键字管理" title="关键字管理">关键字管理</a></li>
+									<!-- <li><a href="../story/tag/list.htm" target="navTab" rel="标签管理" title="标签管理">标签管理</a></li> -->
 									<li><a href="../story/tagimage/list.htm" target="navTab" rel="图库管理" title="图库管理">图库管理</a></li>
 									<li><a href="../story/task/list.htm" target="navTab" rel="任务管理" title="任务管理">任务管理</a></li>
 								</ul>

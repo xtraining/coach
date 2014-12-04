@@ -10,7 +10,7 @@ import com.zhiqin.coach.admin.dao.ImageDao;
 import com.zhiqin.coach.admin.dto.PageInfoDTO;
 import com.zhiqin.coach.admin.dto.SearchTagImageDTO;
 import com.zhiqin.coach.admin.dto.TagDTO;
-import com.zhiqin.coach.admin.dto.ArtifactImageDTO;
+import com.zhiqin.coach.admin.dto.TagImageDTO;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class ImageDaoImpl extends BaseDaoImpl implements ImageDao
@@ -20,7 +20,7 @@ public class ImageDaoImpl extends BaseDaoImpl implements ImageDao
 
 
 	@Override
-	public void insert(ArtifactImageDTO image) {
+	public void insert(TagImageDTO image) {
 		try{
 			this.getSqlSession().insert("image.insert", image);
 		} catch(RuntimeException e){
@@ -31,7 +31,7 @@ public class ImageDaoImpl extends BaseDaoImpl implements ImageDao
 	}
 
 	@Override
-	public void updateFileName(ArtifactImageDTO image) {
+	public void updateFileName(TagImageDTO image) {
 		try{
 			this.getSqlSession().update("image.updateFileName", image);
 		} catch(RuntimeException e){

@@ -2,25 +2,28 @@
 <%@include file="../taglib.jsp" %>
 <script type="text/javascript">
 function save(){
-	var $form = $($("#taskForm"));
+	var $form = $($("#taskForm1"));
 
 	if (!$form.valid()) {
 		return false;
 	}
 	$.ajax({
 			type:'POST',
-			url:'${ctx}/story/task/create.htm?sourceFrom=1',
-			data:$("#taskForm").formSerialize(),//序列化表单里所有的内容
+			url:'${ctx}/story/task/saveAccept.htm',
+			data:$("#taskForm1").formSerialize(),//序列化表单里所有的内容
 			success: function(data){	
 				switch(data){
-						case "\"success\"":	
-							dialogAjaxDone({"statusCode":"200", "message":"创建成功。", "navTabId":"任务管理", "forwardUrl":"", "callbackType":"closeCurrent", "rel":""});	
+						case "success":	
+							navTabAjaxDone({"statusCode":"200", "message":"已入库成功。", "navTabId":"任务管理", "forwardUrl":"", "callbackType":"closeCurrent", "rel":""});	
 							break;
-						case "\"input\"":	
-							dialogAjaxDone({"statusCode":"300", "message":"请选择来源网站。", "navTabId":"任务管理", "forwardUrl":"", "callbackType":"", "rel":""});							
+						case "input1":	
+							navTabAjaxDone({"statusCode":"300", "message":"请设置分类。", "navTabId":"任务管理", "forwardUrl":"", "callbackType":"", "rel":""});							
+							break;	
+						case "input2":	
+							navTabAjaxDone({"statusCode":"300", "message":"请设置标签。", "navTabId":"任务管理", "forwardUrl":"", "callbackType":"", "rel":""});							
 							break;	
 						default:
-							dialogAjaxDone({"statusCode":"300", "message":"分派失败，请重试。", "navTabId":"任务管理", "forwardUrl":"", "callbackType":"closeCurrent", "rel":""});							
+							navTabAjaxDone({"statusCode":"300", "message":"入库失败，请重试。", "navTabId":"任务管理", "forwardUrl":"", "callbackType":"closeCurrent", "rel":""});							
 							break;	
 					}
 			}
@@ -29,8 +32,10 @@ function save(){
 </script>
 
 <div class="pageContent">
-	<form name="taskForm" id="taskForm" method="post" action="" class="pageForm required-validate">
+	<form name="taskForm1" id="taskForm1" method="post" action="" class="pageForm required-validate">
 	<input type="hidden" name="type" value="0"/>
+	<input type="hidden" name="taskId" value="${taskId}"/>
+	<input type="hidden" name="downloadTaskId" value="${downloadTaskId}"/>
 	<h2 class="contentTitle">入库</h2>
 		<div class="pageFormContent" layoutH="96">
 			<div class="tabs">
@@ -43,11 +48,11 @@ function save(){
 			</div>
 			<div class="tabsContent" style="height: 150px;">
 				<div>
-					<table class="list nowrap itemDetail" addButton="关联标签" width="100%">
+					<table class="list nowrap itemDetail" addButton="添加" width="100%">
 						<thead>
 							<tr>
-								<th type="text" name="items[#index#].topicOrder" defaultVal="#index#" size="5" fieldClass="digits">序号</th>
-								<th type="lookup" name="items[#index#].topicInfo.topicName" lookupGroup="items[#index#].topicInfo" lookupUrl="modules/topic!select.action" size="60" fieldClass="required">标签名称</th>
+								<th type="text" name="tag[#index#].tagOrder" defaultVal="#index#" size="5" fieldClass="digits">序号</th>
+								<th type="lookup" name="tag[#index#].name" lookupGroup="tag[#index#]" lookupUrl="${ctx}/story/tag/select.htm" size="60" fieldClass="required">标签名称</th>
 								<th type="del" width="60">操作</th>
 							</tr>
 						</thead>
@@ -71,11 +76,11 @@ function save(){
 			</div>
 			<div class="tabsContent" style="height: 150px;">
 				<div>
-					<table class="list nowrap itemDetail" addButton="关联分类" width="100%">
+					<table class="list nowrap itemDetail" addButton="增加" width="100%">
 						<thead>
 							<tr>
-								<th type="text" name="items[#index#].topicOrder" defaultVal="#index#" size="5" fieldClass="digits">序号</th>
-								<th type="lookup" name="items[#index#].topicInfo.topicName" lookupGroup="items[#index#].topicInfo" lookupUrl="modules/topic!select.action" size="60" fieldClass="required">分类名称</th>
+								<th type="text" name="category[#index#].categoryOrder" defaultVal="#index#" size="5" fieldClass="digits">序号</th>
+								<th type="lookup" name="category[#index#].name" lookupGroup="category[#index#]" lookupUrl="${ctx}/story/category/select.htm" size="60" fieldClass="required">分类名称</th>
 								<th type="del" width="60">操作</th>
 							</tr>
 						</thead>
@@ -91,7 +96,7 @@ function save(){
 		</div>
 		<div class="formBar">
 			<ul>
-				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">保存</button></div></div></li>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="button" onclick="save();">创建</button></div></div></li>
 				<li>
 					<div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div>
 				</li>

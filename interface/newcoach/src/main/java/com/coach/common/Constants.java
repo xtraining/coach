@@ -17,62 +17,15 @@ public class Constants {
 	
 	
 	public enum METHOD {
-		GET_SUBAREA("common.getSubarea"), 
-		CLEAR_CACHE("common.clearCache"), 
-		
 		BIND_BAIDU_PUSH_MESSAGE("coach.bindBaiduPushMessage"),
-		BIND_THIRD_PARTY("coach.bindThirdParty"),
-		UNBIND_THIRD_PARTY("coach.unbindThirdParty"),
 		SIGN_IN("coach.signIn"),
 		SIGN_OUT("coach.signOut"),
 		SIGN_UP("coach.signUp"), 
 		GET_SIGN_UP_VCODE("coach.getSignUpVcode"), 
 		UPDATE_LAST_ACCESS_TIME("coach.updateLastAccessTime"), 
-		THIRD_PARTY_SIGN_IN("coach.thirdPartySignIn"), 
-		THIRD_PARTY_SIGN_UP("coach.thirdPartySignUp"),
 		GET_RESET_PWD_VCODE("coach.getResetPwdVcode"), 
 		RESET_PASSWORD("coach.resetPassword"),
-		GET_PROFILE("coach.getProfile"),
-		GET_PROFILE_DETAIL("coach.getProfileDetail"), 
-		UPDATE_PROFILE_DETAIL("coach.updateProfileDetail"),
-		GET_TOTAL_LESSON("coach.getTotalLesson"), 
-		UPLOAD_AVATAR("coach.uploadAvatar"),
-		GET_BIND_ORG("coach.getBindOrg"),
-		UPDATE_BIND_ORG_STATUS("coach.updateBindOrgStatus"),
-		
-		GET_CHIEF_COURSE("course.getChiefCourse"),
-		GET_ORG_COURSE("course.getOrgCourse"), 
-		GET_NEW_COURSE("course.getNewCourse"), 
-		ADD_COURSE("course.addCourse"),
-		UPDATE_COURSE("course.updateCourse"),
-		GET_COURSE_DETAIL("course.getCourseDetail"), 
-		GET_PERSONAL_COURSE("course.getPersonalCourseList"),
-		GET_COURSE_MEMBER("course.getCourseMember"), 
-		DELETE_COURSE("course.deleteCourse"),
-		UPDATE_COACH_COURSE_STATUS("course.updateCoachCourseStatus"),
-		GET_REJECT_COURSE_DETAIL("course.getRejectCourseDetail"), 
-		GET_UNASSIGNED_COURSE("course.getUnassignedCourse")		,
-		
-		GET_ONE_WEEK_LESSON("lesson.getOneWeekLesson"), 
-		GET_LESSON_DETAIL("lesson.getLessonDetail"), 
-		GET_RECENT_LESSON("lesson.getRecentLesson"), 
-		GET_LESSON_MEMBER("lesson.getLessonMember"), 
-		CHECK_LESSON("lesson.checkMember"), 
-		ADD_PERSONAL("lesson.addPersonal"),
-		ADD_LESSON("lesson.addLesson"), 
-		GET_CHECK_LESSON("lesson.getCheckLesson"), 
-		GET_LESSON_MEMBER_LIST("lesson.getLessonMemberList"), 
-		DELETE_LESSON("lesson.deleteLesson"), 
-		UPDATE_LESSON("lesson.updateLesson"), 
-		UPDATE_LIFE("lesson.updateLife"),
-		
-		STUDENT_SEARCH_MEMBER("student.searchMember"),
-		STUDENT_GET_COURSE_LIST("student.getCourseList"),
-		STUDENT_GET_MEMBER("student.getMember"), 
-		STUDENT_GET_MEMBER_DETAIL("student.getMemberDetail"),
-		STUDENT_GET_MEMBER_NEWS("student.getMemberNews"), 
-		UPDATE_MEMBER_DETAIL("student.updateMemberDetail"), 
-		UPDATE_MEMBER_STATUS("student.updateMemberStatus");
+		SCAN_SING_IN("coach.scanSignIn");
 		
 		private String value;
 		private METHOD(String value) {

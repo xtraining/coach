@@ -302,6 +302,17 @@ public class Constants {
 		}
 	}
 	
+	public enum ARTIFACT_STATUS {
+		ACTIVE(0), DELETED(1), HIDDEN(2), DRAFT(3);
+		private int value;
+		private ARTIFACT_STATUS(int value) {
+			this.value = value;
+		}
+		public int getValue(){
+			return this.value;
+		}
+	}
+	
 	public enum DOWNLOAD_TASK_STATUS {
 		DRAFT(0), INPROGRESS(1), UPLOAD(2), SUCCESS(3), FAILURE(4);
 		private int value;
@@ -325,34 +336,13 @@ public class Constants {
 	}
 	
 	public enum FILE_NAME_PREFIX {
-		IMAGE("story_image_"), VOICE("story_voice_");
+		STORY_IMAGE("story_image_"), VOICE("story_voice_"), TOP_LIST_IMAGE("top_list_image_"),
+		TOP_DETAIL_IMAGE("top_detail_image_"), CATEGORY("category_image_"), TAG("tag_image_");
 		private String value;
 		private FILE_NAME_PREFIX(String value) {
 			this.value = value;
 		}
 		public String getValue(){
-			return this.value;
-		}
-	}
-	
-	public enum IMAGE_STYLE {
-		LIST(0), DETAIL(1);
-		private int value;
-		private IMAGE_STYLE(int value) {
-			this.value = value;
-		}
-		public int getValue(){
-			return this.value;
-		}
-	}
-
-	public enum IMAGE_FROM {
-		ARTIFACT(0), TOP_LIST(1), TAG(2);
-		private int value;
-		private IMAGE_FROM(int value) {
-			this.value = value;
-		}
-		public int getValue(){
 			return this.value;
 		}
 	}

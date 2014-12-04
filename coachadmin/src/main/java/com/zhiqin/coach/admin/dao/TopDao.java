@@ -4,6 +4,7 @@ package com.zhiqin.coach.admin.dao;
 
 import java.util.List;
 
+import com.zhiqin.coach.admin.dto.ArtifactDTO;
 import com.zhiqin.coach.admin.dto.PageInfoDTO;
 import com.zhiqin.coach.admin.dto.TopDTO;
 
@@ -19,6 +20,12 @@ public interface TopDao extends BaseDao{
 	void deleteByIds(String ids);
 
 	void deleteVersionByIds(String ids);
+
+	void updateListImageFileName(TopDTO dto);
+
+	TopDTO getById(int topId);
+
+	List<ArtifactDTO> getArtifactByTopId(int topId);
 
 
 

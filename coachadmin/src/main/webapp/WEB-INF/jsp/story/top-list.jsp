@@ -40,7 +40,7 @@
 				<th width="10%" align="left">合集ID</th>
 				<th align="left">名称</th>
 				<th align="10%">权重</th>
-				<th width="15%" align="left">类型</th>
+				<!-- <th width="15%" align="left">类型</th> -->
 				<th width="15%" align="left">开始时间</th>
 				<th width="15%" align="left">状态</th>
 			</tr>
@@ -58,12 +58,12 @@
 					<a href="${ctx}/story/top/edit.htm?topId=${item.id}" target="navTab" title="推荐详情" rel="推荐详情" style="color:#00F;">${item.name}</a>
 				</td>
 				<td>${item.topOrder}</td>
-				<td>
+				<%-- <td>
 					<c:choose>
 					<c:when test="${item.type == 0}">故事</c:when> 
 					<c:when test="${item.type == 1}">书</c:when> 
 					</c:choose>
-				</td>
+				</td> --%>
 				<td>${item.startTime}</td>
 				<td>
 					<c:choose>

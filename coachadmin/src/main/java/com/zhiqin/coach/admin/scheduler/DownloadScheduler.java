@@ -52,12 +52,12 @@ public class DownloadScheduler {
 				File voiceFile = null;
 				if(StringUtils.isNotBlank(dto.getImageUrl())){
 					String extName = getExtName(dto.getImageUrl());
-					imageFileName = FILE_NAME_PREFIX.IMAGE.getValue() + dto.getId() + extName;
+					imageFileName = "download_" + FILE_NAME_PREFIX.STORY_IMAGE.getValue() + dto.getId() + extName;
 					imageFile = DownloadUtils.download(dto.getImageUrl(), imageFileName);
 				}
 				if(StringUtils.isNotBlank(dto.getFileUrl())){
 					String extName = getExtName(dto.getFileUrl());
-					voiceFileName = FILE_NAME_PREFIX.VOICE.getValue() + dto.getId() + extName;
+					voiceFileName = "download_" + FILE_NAME_PREFIX.VOICE.getValue() + dto.getId() + extName;
 					voiceFile = DownloadUtils.download(dto.getFileUrl(), voiceFileName);
 				}
 				taskService.updateDownloadStatus(dto.getId(), DOWNLOAD_TASK_STATUS.SUCCESS, voiceFileName);

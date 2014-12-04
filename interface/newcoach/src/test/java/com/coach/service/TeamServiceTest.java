@@ -17,7 +17,7 @@ public class TeamServiceTest extends TestCase {
 	public static final String APP_KEY = "iphone_user";
 	public static final String APP_SECRET = "LlnZA8cql4liN4CvjGL5GfwhCh7fwWGE";
 	public static final String VERSION = "V0.5.0.0";
-	public static final String SESSION_ID = "123";
+	public static final String SESSION_ID = "100BBF85-5CC1-440A-B43A-7C06E2EC7653";
 	
 	/*public void testGetTeamList(){
 		Map <String, String>map = new HashMap<String, String>();

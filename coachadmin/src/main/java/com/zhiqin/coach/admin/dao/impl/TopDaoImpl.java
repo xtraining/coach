@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.zhiqin.coach.admin.dao.TopDao;
+import com.zhiqin.coach.admin.dto.ArtifactDTO;
 import com.zhiqin.coach.admin.dto.PageInfoDTO;
 import com.zhiqin.coach.admin.dto.TopDTO;
 
@@ -71,6 +72,41 @@ public class TopDaoImpl extends BaseDaoImpl implements TopDao
 			this.getSqlSession().update("top.deleteVersionByIds", map);
 		} catch(RuntimeException e){
 			log.error("getTopList", e);
+			throw e;
+		}
+		
+	}
+
+	@Override
+	public void updateListImageFileName(TopDTO dto) {
+		try{
+			Map map = new HashMap();
+			map.put("dto", dto);
+			this.getSqlSession().update("top.updateListImageFileName", map);
+		} catch(RuntimeException e){
+			log.error("updateListImageFileName", e);
+			throw e;
+		}
+		
+		
+	}
+
+	@Override
+	public TopDTO getById(int topId) {
+		try{
+			return this.getSqlSession().selectOne("top.getById", topId);
+		} catch(RuntimeException e){
+			log.error("getById", e);
+			throw e;
+		}
+	}
+
+	@Override
+	public List<ArtifactDTO> getArtifactByTopId(int topId) {
+		try{
+			return this.getSqlSession().selectList("top.getArtifactByTopId", topId);
+		} catch(RuntimeException e){
+			log.error("getArtifactByTopId", e);
 			throw e;
 		}
 		

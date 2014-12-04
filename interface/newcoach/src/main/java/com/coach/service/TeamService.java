@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import com.coach.request.AddMemberRequest;
 import com.coach.request.ChangeTeamStatusRequest;
 import com.coach.request.CheckMemberRequest;
@@ -16,6 +18,7 @@ import com.coach.request.TeamCheckIdRequest;
 import com.coach.request.TeamIdRequest;
 import com.coach.request.UpdateMemberRequest;
 import com.coach.request.UpdateTeamRequest;
+import com.coach.resolver.TeamResolver;
 import com.coach.response.CheckResponse;
 import com.coach.response.MemberDetailResponse;
 import com.coach.response.MemberResponse;
@@ -30,6 +33,8 @@ import com.rop.annotation.ServiceMethodBean;
 
 @ServiceMethodBean
 public class TeamService extends SimpleBaseService{
+	@Resource private TeamResolver teamResolver;
+
 	@ServiceMethod(method = "team.getList", version = "1.0", needInSession = NeedInSessionType.YES)
     public Object getList(GetTeamListRequest request) {
 		List<TeamResponse> list = new ArrayList<TeamResponse>();

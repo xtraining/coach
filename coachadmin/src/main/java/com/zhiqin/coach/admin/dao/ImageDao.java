@@ -8,15 +8,15 @@ import com.zhiqin.coach.admin.dto.CategoryDTO;
 import com.zhiqin.coach.admin.dto.PageInfoDTO;
 import com.zhiqin.coach.admin.dto.SearchTagImageDTO;
 import com.zhiqin.coach.admin.dto.TagDTO;
-import com.zhiqin.coach.admin.dto.ArtifactImageDTO;
+import com.zhiqin.coach.admin.dto.TagImageDTO;
 
 
 public interface ImageDao extends BaseDao{
 
 
-	void insert(ArtifactImageDTO image);
+	void insert(TagImageDTO image);
 
-	void updateFileName(ArtifactImageDTO image);
+	void updateFileName(TagImageDTO image);
 
 	void deleteByIds(String ids);
 }
