@@ -1,5 +1,6 @@
 package com.coach.resolver;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -17,6 +18,7 @@ import com.coach.common.Constants.SMS_TYPE;
 import com.coach.dao.SmsHistoryDao;
 import com.coach.model.Member;
 import com.coach.model.SmsHistory;
+import com.coach.utils.DateUtils;
 import com.coach.utils.SMSUtil;
 import com.coach.utils.SMSUtil2;
 @Service
@@ -56,16 +58,18 @@ public class SmsResolver extends BaseResolver{
         }
 	}
 
-	public void sendAttendSms(List<Member> smsMemberList) {
+	public void sendAttendSms(List<Member> smsMemberList, String phoneNumber) {
 		SimpleAsyncTaskExecutor executor2 = new SimpleAsyncTaskExecutor("sms-"+smsMemberList.toString());
 		executor2.setConcurrencyLimit(-1);
-	    executor2.execute(new SendSmsThread(smsMemberList), 60000L);
+	    executor2.execute(new SendSmsThread(smsMemberList, phoneNumber), 60000L);
 	}
 	
 	class SendSmsThread implements Runnable {
 		private List<Member> smsMemberList;
-		public SendSmsThread(List<Member> smsMemberList){
+		private String phoneNumber;
+		public SendSmsThread(List<Member> smsMemberList, String phoneNumber){
 			this.smsMemberList = smsMemberList;
+			this.phoneNumber = phoneNumber;
 		}
         public void run() {
         	try {
@@ -77,6 +81,8 @@ public class SmsResolver extends BaseResolver{
         				msg = Config.getProperty("attend_msg");
         			}
         			msg = StringUtils.replace(msg, "{memberName}", m.getName());
+        			msg = StringUtils.replace(msg, "{date}", DateUtils.dateToMMDD(new Date()));
+        			msg = StringUtils.replace(msg, "{phoneNumber}", phoneNumber);
         			SMS_STATUS status = SMS_STATUS.SENT_SUCCESS;
         			if(StringUtils.equals("1", Config.getProperty("sms_channel"))){
         				SMSUtil.send(m.getPhoneNumber(), msg);

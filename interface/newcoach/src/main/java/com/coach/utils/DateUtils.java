@@ -169,4 +169,10 @@ public class DateUtils {
 		time.setTimeInMillis(timestamp.getTime());
 		return time.get(Calendar.HOUR_OF_DAY);
 	}
+
+	public static String dateToMMDD(Date date) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("MM月dd日");
+		String timeStr = dateFormat.format(date);
+		return timeStr;
+	}
 }

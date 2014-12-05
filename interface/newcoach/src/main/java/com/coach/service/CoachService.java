@@ -13,6 +13,7 @@ import com.coach.model.Coach;
 import com.coach.model.SmsHistory;
 import com.coach.model.SysSession;
 import com.coach.request.BindBaiduPushMessageRequest;
+import com.coach.request.ChangeSMSStatusRequest;
 import com.coach.request.CoachBaseRequest;
 import com.coach.request.GetVcodeRequest;
 import com.coach.request.ResetPasswordRequest;
@@ -21,7 +22,6 @@ import com.coach.request.SignInRequest;
 import com.coach.request.SignOutRequest;
 import com.coach.request.SignUpRequest;
 import com.coach.resolver.CoachResolver;
-import com.coach.resolver.TeamResolver;
 import com.coach.resolver.SmsResolver;
 import com.coach.resolver.SysSessionResolver;
 import com.coach.response.SignInResponse;
@@ -30,7 +30,6 @@ import com.rop.annotation.HttpAction;
 import com.rop.annotation.NeedInSessionType;
 import com.rop.annotation.ServiceMethod;
 import com.rop.annotation.ServiceMethodBean;
-import com.rop.response.BusinessServiceErrorResponse;
 
 @ServiceMethodBean
 public class CoachService extends SimpleBaseService{
@@ -214,5 +213,12 @@ public class CoachService extends SimpleBaseService{
 			s.setMsg("Token failed.");
 			return s;
 		}
+	}
+	
+	@ServiceMethod(method = "coach.changeSMSStatus",version = "1.0", needInSession = NeedInSessionType.YES)
+    public Object changeSMSStatus(ChangeSMSStatusRequest request) {
+		coachResolver.changeSMSStatus(request);
+		SimpleResponse s = new SimpleResponse();
+		return s;
 	}
 }

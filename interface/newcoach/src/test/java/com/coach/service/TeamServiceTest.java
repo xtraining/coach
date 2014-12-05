@@ -119,7 +119,7 @@ public class TeamServiceTest extends TestCase {
     	map.put("attendMemberId", "2, 4");
     	map.put("longitude", "39.983424");
     	map.put("latitude", "116.322987");
-//    	map.put("teamCheckId", "3");
+    	map.put("teamCheckId", "3");
     	String sign = RopUtils.sign(map, APP_SECRET); //第二个参数为SecretKey, 有O2O系统分配
     	map.put("sign", sign);
     	String response = HttpUtil.postServer(SERVER_URL, map);
@@ -192,9 +192,10 @@ public class TeamServiceTest extends TestCase {
     	map.put("v", "1.0");
     	map.put("format", "json");
     	map.put("sessionId", SESSION_ID);
-    	map.put("coachId", "17");
-    	map.put("memberId", "1");
+    	map.put("coachId", "20");
+    	map.put("memberId", "2");
     	map.put("teamId", "2");
+    	map.put("phoneNumber", "13636426042");
     	String sign = RopUtils.sign(map, APP_SECRET); //第二个参数为SecretKey, 有O2O系统分配
     	map.put("sign", sign);
     	String response = HttpUtil.postServer(SERVER_URL, map);
@@ -210,7 +211,7 @@ public class TeamServiceTest extends TestCase {
     	map.put("v", "1.0");
     	map.put("format", "json");
     	map.put("sessionId", SESSION_ID);
-    	map.put("coachId", "17");
+    	map.put("coachId", "20");
     	map.put("teamId", "2");
     	String sign = RopUtils.sign(map, APP_SECRET); //第二个参数为SecretKey, 有O2O系统分配
     	map.put("sign", sign);
@@ -220,15 +221,34 @@ public class TeamServiceTest extends TestCase {
         assertTrue(response.indexOf("code") <= 0);
 	}*/
 	
-/*	public void testGetTeamCheckHistory(){
+	/*	public void testGetTeamCheckHistory(){
 		Map <String, String>map = new HashMap<String, String>();
     	map.put("appKey", APP_KEY); //第二个参数为AppKey
     	map.put("method", "team.getTeamCheckHistory"); 
     	map.put("v", "1.0");
     	map.put("format", "json");
     	map.put("sessionId", SESSION_ID);
-    	map.put("coachId", "17");
-    	map.put("teamCheckId", "2");
+    	map.put("coachId", "20");
+    	map.put("teamId", "2");
+    	map.put("pageNumber", 1+"");
+    	map.put("pageSize", 10+"");
+    	String sign = RopUtils.sign(map, APP_SECRET); //第二个参数为SecretKey, 有O2O系统分配
+    	map.put("sign", sign);
+    	String response = HttpUtil.postServer(SERVER_URL, map);
+        System.out.println("response = " + response);
+        assertNotNull(response);
+        assertTrue(response.indexOf("code") <= 0);
+	}*/
+	
+	/*public void testGetTeamCheckDetail(){
+		Map <String, String>map = new HashMap<String, String>();
+    	map.put("appKey", APP_KEY); //第二个参数为AppKey
+    	map.put("method", "team.getTeamCheckDetail"); 
+    	map.put("v", "1.0");
+    	map.put("format", "json");
+    	map.put("sessionId", SESSION_ID);
+    	map.put("coachId", "20");
+    	map.put("teamCheckId", "4");
     	String sign = RopUtils.sign(map, APP_SECRET); //第二个参数为SecretKey, 有O2O系统分配
     	map.put("sign", sign);
     	String response = HttpUtil.postServer(SERVER_URL, map);

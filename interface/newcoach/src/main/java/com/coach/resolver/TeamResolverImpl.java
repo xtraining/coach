@@ -1,6 +1,9 @@
 package com.coach.resolver;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,11 +32,18 @@ import com.coach.request.AddMemberRequest;
 import com.coach.request.ChangeTeamStatusRequest;
 import com.coach.request.CheckMemberRequest;
 import com.coach.request.CreateTeamRequest;
-import com.coach.request.GetMemberListRequest;
+import com.coach.request.GetMemberDetailRequest;
+import com.coach.request.GetTeamCheckHistoryRequest;
 import com.coach.request.MemberIdRequest;
+import com.coach.request.TeamCheckIdRequest;
+import com.coach.request.TeamIdRequest;
 import com.coach.request.UpdateMemberRequest;
 import com.coach.request.UpdateTeamRequest;
+import com.coach.response.CheckResponse;
+import com.coach.response.GetTeamCheckResponse;
+import com.coach.response.MemberDetailResponse;
 import com.coach.response.MemberResponse;
+import com.coach.response.TeamCheckResponse;
 import com.coach.response.TeamResponse;
 import com.coach.utils.HttpUtil;
 import com.coach.utils.JsonBinder;
@@ -109,7 +119,7 @@ public class TeamResolverImpl implements TeamResolver{
 
 	@Override
 	public List<MemberResponse> getMemberListByTeamId(
-			GetMemberListRequest request) {
+			TeamIdRequest request) {
 		List<Member> list = memberDao.getList(request.getCoachId(), request.getTeamId());
 		List<MemberResponse> rList = new ArrayList<MemberResponse>();
 		for(Member m : list){
@@ -186,7 +196,7 @@ public class TeamResolverImpl implements TeamResolver{
 	    executor1.execute(new UpdateLocationThread(check.getId(), request.getLongitude(), request.getLatitude()), 60000L);	
 		
 	    if(smsSwitch){
-	    	smsResolver.sendAttendSms(smsMemberList);
+	    	smsResolver.sendAttendSms(smsMemberList, c.getPhoneNumber());
 	    }
 	}
 	
@@ -220,6 +230,76 @@ public class TeamResolverImpl implements TeamResolver{
 				log.error("UpdateLocationThread error", e);
 			}
         }
+	}
+
+	@Override
+	public GetTeamCheckResponse getLatestCheck(Long coachId, Long teamId) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.HOUR, 3);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		Timestamp startTime = new Timestamp(calendar.getTimeInMillis());
+		Long teamCheckId = teamCheckDao.getLatestCheck(teamId, startTime);
+		if(teamCheckId == null){
+			return null;
+		}
+		GetTeamCheckResponse response = new GetTeamCheckResponse();
+		response.setTeamCheckId(teamCheckId);
+		List<Member> memberList = teamCheckDao.getMemberByCheckId(coachId, teamCheckId);
+		List<MemberResponse> rList = new ArrayList<MemberResponse>();
+		for(Member m : memberList){
+			MemberResponse r = m.toResponse();
+			rList.add(r);
+		}
+		response.setMemberResponse(rList);
+		return response;
+	}
+
+	@Override
+	public List<CheckResponse> getTeamCheckHistory(GetTeamCheckHistoryRequest request) {
+		List<TeamCheck> list = teamCheckDao.getTeamCheckHistory(request.getTeamId(), request.getPageNumber(), request.getPageSize());
+		List<CheckResponse> lt = new ArrayList<CheckResponse>();
+		for(TeamCheck check : list){
+			CheckResponse r1 = check.toResponse();
+			lt.add(r1);
+		}
+		return lt;
+	}
+
+	@Override
+	public List<MemberResponse> getTeamCheckById(TeamCheckIdRequest request) {
+		List<Member> memberList = teamCheckDao.getMemberByCheckId(request.getCoachId(), request.getTeamCheckId());
+		List<MemberResponse> rList = new ArrayList<MemberResponse>();
+		for(Member m : memberList){
+			MemberResponse r = m.toResponse();
+			rList.add(r);
+		}
+		return rList;
+	}
+
+	@Override
+	public List<List<TeamCheckResponse>> getMemberDetail(GetMemberDetailRequest request) {
+		List<List<TeamCheckResponse>> response = new ArrayList<List<TeamCheckResponse>>();
+		List<TeamCheck> list = teamCheckDao.getMemberCheckHistory(request.getCoachId(), request.getTeamId(), request.getMemberId());
+		List<TeamCheckResponse> rList = new ArrayList<TeamCheckResponse>();
+		for(TeamCheck teamCheck : list){
+			rList.add(teamCheck.toTeamCheckResponse());
+		}
+		response.add(rList);
+		
+		List<TeamMember> teamMemberList = teamCheckDao.getTeamMemberListByPhoneNumber(request.getCoachId(), request.getPhoneNumber());
+		for(TeamMember teamMember : teamMemberList){
+			if(teamMember.getMemberId().longValue() != request.getMemberId()){
+				List<TeamCheck> tempList = teamCheckDao.getMemberCheckHistory(request.getCoachId(), teamMember.getTeamId(), teamMember.getMemberId());
+				List<TeamCheckResponse> tempRlist = new ArrayList<TeamCheckResponse>();
+				for(TeamCheck teamCheck : tempList){
+					tempRlist.add(teamCheck.toTeamCheckResponse());
+				}
+				response.add(tempRlist);
+			}
+		}
+		
+		return response;
 	}
 	
 }

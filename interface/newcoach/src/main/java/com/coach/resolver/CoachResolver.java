@@ -4,6 +4,7 @@ import com.coach.common.Constants.SMS_TYPE;
 import com.coach.model.Coach;
 import com.coach.model.SmsHistory;
 import com.coach.request.BindBaiduPushMessageRequest;
+import com.coach.request.ChangeSMSStatusRequest;
 import com.coach.request.SignOutRequest;
 import com.coach.request.SignUpRequest;
 public interface CoachResolver {
@@ -35,5 +36,7 @@ public interface CoachResolver {
 	public Long getCoachIdByPhoneNumber(String phoneNumber);
 
 	public boolean checkToken(Long coachId, String token);
+
+	public void changeSMSStatus(ChangeSMSStatusRequest request);
 
 }

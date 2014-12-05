@@ -10,14 +10,20 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "teamCheckResponse")
 public class TeamCheckResponse extends TeamResponse implements Serializable {
 	@XmlElement
-	private List<CheckResponse> checkResponse;
-
-	public List<CheckResponse> getCheckResponse() {
-		return checkResponse;
+	private String address;
+	@XmlElement
+	private String createTime;
+	public String getAddress() {
+		return address;
 	}
-
-	public void setCheckResponse(List<CheckResponse> checkResponse) {
-		this.checkResponse = checkResponse;
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public String getCreateTime() {
+		return createTime;
+	}
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
 	}
 
 

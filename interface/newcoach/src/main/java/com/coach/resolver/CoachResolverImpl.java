@@ -29,6 +29,7 @@ import com.coach.model.CoachExpand;
 import com.coach.model.SmsHistory;
 import com.coach.model.Tuser;
 import com.coach.request.BindBaiduPushMessageRequest;
+import com.coach.request.ChangeSMSStatusRequest;
 import com.coach.request.SignOutRequest;
 import com.coach.request.SignUpRequest;
 @Service
@@ -168,6 +169,16 @@ public class CoachResolverImpl extends BaseResolver implements CoachResolver{
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public void changeSMSStatus(ChangeSMSStatusRequest request) {
+		if(request.getStatus() > 0){
+			coachDao.updateSMSStatus(request.getCoachId(), 1);
+		} else {
+			coachDao.updateSMSStatus(request.getCoachId(), 0);
+		}
+		
 	}
 
 }

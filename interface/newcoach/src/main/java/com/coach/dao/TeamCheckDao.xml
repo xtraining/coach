@@ -2,6 +2,48 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.coach.dao.TeamCheckDao">
 
+ <select id="getLatestCheck" parameterType="Map" resultType="Long">
+		select c.id from team_check c 
+		where c.teamId = #{teamId} and c.createTime >= #{startTime} and c.status != -1
+		order by c.createTime desc limit 1
+  </select>
+	
+
+  <select id="getMemberByCheckId" parameterType="Map" resultType="com.coach.model.Member">
+		select m.id, m.name, m.phoneNumber, t.status 
+		from team_check_member t inner join member m on t.memberId = m.id
+		inner join team_check c on c.id = t.teamCheckId
+		where c.id = #{teamCheckId} and m.coachId = #{coachId}
+		and c.status != 1 and t.status != -1 and m.status != -1
+  </select>
+  
+  <select id="getMemberCheckHistory" parameterType="Map" resultType="com.coach.model.TeamCheck">
+		select c.teamId, t.name as teamName, c.createTime, c.province, c.city,c.district,
+		c.street, cm.status from team_check c 
+		inner join team_check_member cm on c.id = cm.teamCheckId and cm.status != -1 and c.status != -1
+		inner join member m on m.id = cm.memberId and m.status != -1
+		inner join team t on c.teamId = t.id and t.status != -1
+		where m.id = #{memberId} and c.teamId = #{teamId}
+		order by c.createTime desc
+  </select>
+  
+  <select id="getTeamMemberListByPhoneNumber" parameterType="Map" resultType="com.coach.model.TeamMember">
+		select t.* from member m inner join team_member t on m.id = t.memberId
+		where m.coachId = #{coachId} and m.phoneNumber = #{phoneNumber}
+		and m.status != -1 and t.status != -1
+  </select>
+	
+
+  <select id="getTeamCheckHistory" parameterType="Map" resultType="com.coach.model.TeamCheck">
+		select c.*, 
+		(select count(distinct m.id) from team_check_member m where m.teamCheckId = c.id and m.status = 0) attendNum,
+		(select count(distinct m.id) from team_check_member m where m.teamCheckId = c.id and m.status = 0) absentNum
+		from team_check c
+		where c.teamId = #{teamId} and c.status != -1
+		order by c.createTime desc
+		limit ${(pageNumber-1) * pageSize}, ${pageSize} 
+  </select>
+  
   <update id="updateTime" parameterType="Long">
 	 update team_check set updateTime = now() where id = #{teamCheckId}
   </update>

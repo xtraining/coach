@@ -3,27 +3,15 @@ package com.coach.request;
 import javax.validation.constraints.NotNull;
 
 
-public class GetMemberDetailRequest extends CoachBaseRequest{
+public class GetMemberDetailRequest extends MemberIdRequest{
 	@NotNull
-    private Long courseId;
-	@NotNull
-    private Long memberId;
+    private String phoneNumber;
 
-	public Long getMemberId() {
-		return memberId;
+	public String getPhoneNumber() {
+		return phoneNumber;
 	}
 
-	public void setMemberId(Long memberId) {
-		this.memberId = memberId;
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
-
-	public Long getCourseId() {
-		return courseId;
-	}
-
-	public void setCourseId(Long courseId) {
-		this.courseId = courseId;
-	}
-
-	
 }

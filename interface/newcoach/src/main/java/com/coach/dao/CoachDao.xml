@@ -11,7 +11,8 @@
        <result column="weiboId" jdbcType="VARCHAR" property="weiboId" />
        <result column="weixinId" jdbcType="VARCHAR" property="weixinId" />
        <result column="description" jdbcType="VARCHAR" property="description" />
-        <result column="smsSwitch" jdbcType="INTEGER" property="smsSwitch" />
+       <result column="smsSwitch" jdbcType="INTEGER" property="smsSwitch" />
+       <result column="phoneNumber" jdbcType="VARCHAR" property="phoneNumber" />
   </resultMap>
   
   <resultMap id="CoachDetailResult" type="com.coach.model.Coach">
@@ -37,7 +38,7 @@
   </select>
   
   <select id="getBasicById" parameterType="String" resultMap="CoachBasicResult">
-    select c.id, t.name, t.gender, c.avatarUrl, c.qqId, c.weiboId, c.weixinId, c.description, c.smsSwitch 
+    select c.id, t.name, t.gender, t.phoneNumber, c.avatarUrl, c.qqId, c.weiboId, c.weixinId, c.description, c.smsSwitch 
     from coach c inner join tuser t on c.tuserId = t.id  
     where c.id=#{coachId}
   </select>
@@ -65,5 +66,9 @@
 	<update id="updateLastAccessTime" parameterType="Integer">
 	    update coach set lastAccessTime = now()
 	    where id = #{coachId}  
+	</update>
+	
+	<update id="updateSMSStatus" parameterType="Map">
+	    update coach set smsSwitch=#{status} where id = #{coachId}
 	</update>
 </mapper>

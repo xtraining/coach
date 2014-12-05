@@ -146,4 +146,19 @@ public class CoachDaoImpl extends SqlSessionDaoSupport implements CoachDao{
 			throw e;
 		}
 	}
+
+
+	@Override
+	public void updateSMSStatus(Long coachId, int status) {
+		try{
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("status", status+"");
+			map.put("coachId", coachId+"");
+			 this.getSqlSession().update("updateSMSStatus", map);
+		} catch(RuntimeException e){
+			log.error("updateSMSStatus", e);
+			throw e;
+		}
+		
+	}
 }

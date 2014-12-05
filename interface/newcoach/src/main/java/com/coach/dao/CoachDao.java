@@ -31,4 +31,6 @@ public interface CoachDao {
 
 	public List<Long> getByToken(Long coachId, String token);
 
+	public void updateSMSStatus(Long coachId, int i);
+
 }
