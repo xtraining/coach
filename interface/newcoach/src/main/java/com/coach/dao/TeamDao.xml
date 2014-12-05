@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coach.dao.TuserDao">
+
+	<select id="getListByCoachId" parameterType="Map" resultType="com.coach.model.Team">
+		select *, (select count(m.id) from team_member m where m.teamId = t.id and m.status != -1)memberNum from team t where t.coachId = #{coachId} and t.status = #{status}
+	</select>
+  
+  <insert id="insertTeam" useGeneratedKeys="true" keyProperty="id" parameterType="com.coach.model.Team">
+	 insert into team(name,coachId,createTime,status) value (#{name}, #{coachId}, now(), #{status})
+  </insert>
+  
+  <update id="updateTeamStatus" parameterType="com.coach.model.Team">
+	 update team set status = #{status} where id = #{id} and coachId = #{coachId}
+  </update>
+  
+  <update id="updateTeam" parameterType="com.coach.model.Team">
+	 update team set name = #{name} where id = #{id} and coachId = #{coachId}
+  </update>
+</mapper>

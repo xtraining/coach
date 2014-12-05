@@ -37,58 +37,59 @@ public class TeamService extends SimpleBaseService{
 
 	@ServiceMethod(method = "team.getList", version = "1.0", needInSession = NeedInSessionType.YES)
     public Object getList(GetTeamListRequest request) {
-		List<TeamResponse> list = new ArrayList<TeamResponse>();
-		TeamResponse r = new TeamResponse();
-		r.setTeamId(1L);
-		r.setName("篮球一班");
-		r.setMemberNum(10);
-		list.add(r);
+		List<TeamResponse> list = teamResolver.getListByCoachId(request.getCoachId(), request.getStatus());
 		return list;
 	}
 	
 	@ServiceMethod(method = "team.createTeam", version = "1.0", needInSession = NeedInSessionType.YES, httpAction = HttpAction.POST)
     public Object createTeam(CreateTeamRequest request) {
-		return new SimpleResponse();
+		Long teamId = teamResolver.create(request);
+		SimpleResponse r =  new SimpleResponse();
+		r.setId(teamId);
+		return r;
 	}
 	
 	@ServiceMethod(method = "team.updateTeam", version = "1.0", needInSession = NeedInSessionType.YES, httpAction = HttpAction.POST)
     public Object updateTeam(UpdateTeamRequest request) {
+		teamResolver.updateTeam(request);
 		return new SimpleResponse();
 	}
 	
 	@ServiceMethod(method = "team.changeStatus", version = "1.0", needInSession = NeedInSessionType.YES)
     public Object changeStatus(ChangeTeamStatusRequest request) {
+		teamResolver.updateTeamStatus(request);
 		return new SimpleResponse();
 	}
 	
 	@ServiceMethod(method = "team.getMemberList", version = "1.0", needInSession = NeedInSessionType.YES)
     public Object getMemberList(GetMemberListRequest request) {
-		List<MemberResponse> list = new ArrayList<MemberResponse>();
-		MemberResponse r = new MemberResponse();
-		r.setMemberId(1L);
-		r.setMemberName("zzp");
-		r.setPhoneNumber("13645678909");
-		list.add(r);
+		List<MemberResponse> list = teamResolver.getMemberListByTeamId(request);
 		return list;
 	}
 	
 	@ServiceMethod(method = "team.checkMember", version = "1.0", needInSession = NeedInSessionType.YES)
     public Object checkMember(CheckMemberRequest request) {
+		teamResolver.checkMember(request);
 		return new SimpleResponse();
 	}
 	
 	@ServiceMethod(method = "team.addMember", version = "1.0", needInSession = NeedInSessionType.YES)
     public Object addMember(AddMemberRequest request) {
-		return new SimpleResponse();
+		Long memberId = teamResolver.createMember(request); 
+		SimpleResponse r =  new SimpleResponse();
+		r.setId(memberId);
+		return r;
 	}
 	
 	@ServiceMethod(method = "team.deleteMember", version = "1.0", needInSession = NeedInSessionType.YES)
     public Object deleteMember(MemberIdRequest request) {
+		teamResolver.deleteMember(request);
 		return new SimpleResponse();
 	}
 	
 	@ServiceMethod(method = "team.updateMember", version = "1.0", needInSession = NeedInSessionType.YES)
     public Object updateMember(UpdateMemberRequest request) {
+		teamResolver.updateMember(request);
 		return new SimpleResponse();
 	}
 	
@@ -121,6 +122,18 @@ public class TeamService extends SimpleBaseService{
 	
 	@ServiceMethod(method = "team.getTeamCheck", version = "1.0", needInSession = NeedInSessionType.YES)
     public Object getTeamCheck(TeamIdRequest request) {
+		List<MemberResponse> list = new ArrayList<MemberResponse>();
+		MemberResponse r = new MemberResponse();
+		r.setMemberId(1L);
+		r.setMemberName("zzp");
+		r.setStatus(1);
+		r.setPhoneNumber("13645678909");
+		list.add(r);
+		return list;
+	}
+	
+	@ServiceMethod(method = "team.getTeamCheckHistory", version = "1.0", needInSession = NeedInSessionType.YES)
+    public Object getTeamCheckHistory(TeamIdRequest request) {
 		List<CheckResponse> lt = new ArrayList<CheckResponse>();
 		CheckResponse r1 = new CheckResponse();
 		r1.setTeamCheckId(3L);
@@ -133,8 +146,8 @@ public class TeamService extends SimpleBaseService{
 	}
 	
 	
-	@ServiceMethod(method = "team.getTeamCheckHistory", version = "1.0", needInSession = NeedInSessionType.YES)
-    public Object getTeamCheckHistory(TeamCheckIdRequest request) {
+	@ServiceMethod(method = "team.getTeamCheckDetail", version = "1.0", needInSession = NeedInSessionType.YES)
+    public Object getTeamCheckDetail(TeamCheckIdRequest request) {
 		List<MemberResponse> list = new ArrayList<MemberResponse>();
 		MemberResponse r = new MemberResponse();
 		r.setMemberId(1L);

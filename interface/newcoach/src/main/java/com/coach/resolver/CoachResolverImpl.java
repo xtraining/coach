@@ -134,11 +134,6 @@ public class CoachResolverImpl extends BaseResolver implements CoachResolver{
 		}
 	}
 	
-
-	public Long getByThirdPartyId(String thirdPartyId, Integer type) {
-		return coachDao.getByThirdPartyId(thirdPartyId, type);
-	}
-
 	public void bindBaiduPushMessage(BindBaiduPushMessageRequest request) {
 		coachExpandDao.deleteBaiduBinding(request.getCoachId(), request.getBaiduUserId(), request.getBaiduChannelId());
 		int osType = clientAppkeyDao.getOsTypeByAppkey(request.getRopRequestContext().getAppKey());

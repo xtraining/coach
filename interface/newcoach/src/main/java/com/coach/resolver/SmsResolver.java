@@ -1,5 +1,7 @@
 package com.coach.resolver;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
@@ -9,8 +11,11 @@ import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.stereotype.Service;
 
 import com.coach.common.Config;
+import com.coach.common.Constants.RECEIVER_TYPE;
 import com.coach.common.Constants.SMS_STATUS;
+import com.coach.common.Constants.SMS_TYPE;
 import com.coach.dao.SmsHistoryDao;
+import com.coach.model.Member;
 import com.coach.model.SmsHistory;
 import com.coach.utils.SMSUtil;
 import com.coach.utils.SMSUtil2;
@@ -50,4 +55,48 @@ public class SmsResolver extends BaseResolver{
 			}
         }
 	}
+
+	public void sendAttendSms(List<Member> smsMemberList) {
+		SimpleAsyncTaskExecutor executor2 = new SimpleAsyncTaskExecutor("sms-"+smsMemberList.toString());
+		executor2.setConcurrencyLimit(-1);
+	    executor2.execute(new SendSmsThread(smsMemberList), 60000L);
+	}
+	
+	class SendSmsThread implements Runnable {
+		private List<Member> smsMemberList;
+		public SendSmsThread(List<Member> smsMemberList){
+			this.smsMemberList = smsMemberList;
+		}
+        public void run() {
+        	try {
+        		for(Member m : smsMemberList){
+        			String msg = null;
+        			if(m.getStatus() == 0){
+        				msg = Config.getProperty("absent_msg");
+        			} else {
+        				msg = Config.getProperty("attend_msg");
+        			}
+        			msg = StringUtils.replace(msg, "{memberName}", m.getName());
+        			SMS_STATUS status = SMS_STATUS.SENT_SUCCESS;
+        			if(StringUtils.equals("1", Config.getProperty("sms_channel"))){
+        				SMSUtil.send(m.getPhoneNumber(), msg);
+        			} else if(StringUtils.equals("2", Config.getProperty("sms_channel"))){
+        				status = SMSUtil2.send(m.getPhoneNumber(), msg);
+        			}
+        			SmsHistory h = new SmsHistory();
+        			h.setPhoneNumber(m.getPhoneNumber());
+        			h.setContent(msg);
+        			h.setReceiverId(m.getId());
+        			h.setType(SMS_TYPE.ALERT_MSG.getValue());
+        			h.setVcode("000000");
+        			h.setStatus(status.getValue());
+        			h.setReceiverType(RECEIVER_TYPE.MEMBER.getValue());
+        			smsHistoryDao.save(h);
+        		}
+			} catch (Throwable e) {
+				log.error("SendSmsThread  error", e);
+			}
+        }
+	}
+
 }

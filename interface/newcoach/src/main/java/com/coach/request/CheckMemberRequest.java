@@ -5,35 +5,45 @@ import javax.validation.constraints.NotNull;
 
 
 
-public class CheckMemberRequest extends CoachBaseRequest{
-	@NotNull
-    private Long teamId;
+public class CheckMemberRequest extends TeamIdRequest{
+	private Long teamCheckId;
 	private String attendMemberId;
-//	private String absentMemberId;
+	private Double latitude;
+	private Double longitude;
 
-	public Long getTeamId() {
-		return teamId;
-	}
-
-	public void setTeamId(Long teamId) {
-		this.teamId = teamId;
-	}
 
 	public String getAttendMemberId() {
 		return attendMemberId;
+	}
+
+	public Long getTeamCheckId() {
+		return teamCheckId;
+	}
+
+	public void setTeamCheckId(Long teamCheckId) {
+		this.teamCheckId = teamCheckId;
+	}
+
+	public Double getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(Double latitude) {
+		this.latitude = latitude;
+	}
+
+	public Double getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(Double longitude) {
+		this.longitude = longitude;
 	}
 
 	public void setAttendMemberId(String attendMemberId) {
 		this.attendMemberId = attendMemberId;
 	}
 
-/*	public String getAbsentMemberId() {
-		return absentMemberId;
-	}
-
-	public void setAbsentMemberId(String absentMemberId) {
-		this.absentMemberId = absentMemberId;
-	}*/
 	
 }
 

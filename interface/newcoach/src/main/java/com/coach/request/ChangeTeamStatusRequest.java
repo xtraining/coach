@@ -5,17 +5,9 @@ import javax.validation.constraints.NotNull;
 
 
 
-public class ChangeTeamStatusRequest extends CoachBaseRequest{
-	@NotNull
-    private Long teamId;
+public class ChangeTeamStatusRequest extends TeamIdRequest{
 	@NotNull
 	private Integer status;   //-1:删除  0：正常  1：结课
-	public Long getTeamId() {
-		return teamId;
-	}
-	public void setTeamId(Long teamId) {
-		this.teamId = teamId;
-	}
 	public Integer getStatus() {
 		return status;
 	}

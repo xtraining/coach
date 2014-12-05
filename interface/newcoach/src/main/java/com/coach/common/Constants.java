@@ -161,7 +161,7 @@ public class Constants {
 	}
 	
 	public enum SMS_TYPE {
-		SIGN_UP(0), RESET_PWD(1);
+		SIGN_UP(0), RESET_PWD(1), ALERT_MSG(2);
 		private int value;
 		private SMS_TYPE(int value) {
 			this.value = value;

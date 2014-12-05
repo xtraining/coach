@@ -5,10 +5,9 @@ import javax.validation.constraints.NotNull;
 
 
 
-public class UpdateTeamRequest extends CoachBaseRequest{
+public class UpdateTeamRequest extends TeamIdRequest{
 	@NotNull
     private String name;
-
 	public String getName() {
 		return name;
 	}
@@ -17,6 +16,5 @@ public class UpdateTeamRequest extends CoachBaseRequest{
 		this.name = name;
 	}
 
-    
 }
 

@@ -37,7 +37,7 @@
   </select>
   
   <select id="getBasicById" parameterType="String" resultMap="CoachBasicResult">
-    select c.id, t.name, t.gender, c.avatarUrl, c.qqId, c.weiboId, c.weixinId, c.description 
+    select c.id, t.name, t.gender, c.avatarUrl, c.qqId, c.weiboId, c.weixinId, c.description, c.smsSwitch 
     from coach c inner join tuser t on c.tuserId = t.id  
     where c.id=#{coachId}
   </select>

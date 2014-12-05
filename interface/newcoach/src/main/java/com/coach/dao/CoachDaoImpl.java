@@ -41,20 +41,6 @@ public class CoachDaoImpl extends SqlSessionDaoSupport implements CoachDao{
 	}
 
 	@Override
-	public Long getByThirdPartyId(String thirdPartyId, Integer type) {
-		try{
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("thirdPartyId", thirdPartyId);
-			map.put("thirdPartyType", type);
-			map.put("status", COACH_STATUS.DELETED.getValue());
-			return  this.getSqlSession().selectOne("getByThirdPartyId", map);
-		} catch(RuntimeException e){
-			log.error("getByThirdPartyId", e);
-			throw e;
-		}
-	}
-
-	@Override
 	public void resetPassword(String phoneNumber, String password) {
 		try{
 			Map<String, Object> map = new HashMap<String, Object>();

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coach.dao.TeamCheckDao">
+
+  <update id="updateTime" parameterType="Long">
+	 update team_check set updateTime = now() where id = #{teamCheckId}
+  </update>
+  
+  <update id="updateLoaction" parameterType="Long">
+	 update team_check set province = #{province}, city = #{city}, district = #{district}, street = #{street},
+	 streetNumber = #{streetNumber} where id = #{teamCheckId}
+  </update>
+  
+  <insert id="insertTeamCheck" useGeneratedKeys="true" keyProperty="id" parameterType="com.coach.model.TeamCheck">
+	 insert into team_check(status, teamId, createTime, longitude, latitude) Value(0, #{teamId}, now(), #{longitude}, #{latitude})
+  </insert>
+</mapper>

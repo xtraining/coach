@@ -26,15 +26,16 @@ public class TeamServiceTest extends TestCase {
     	map.put("v", "1.0");
     	map.put("format", "json");
     	map.put("sessionId", SESSION_ID);
-    	map.put("coachId", "17");
+    	map.put("coachId", "20");
+    	map.put("status", "0");
     	String sign = RopUtils.sign(map, APP_SECRET); //第二个参数为SecretKey, 有O2O系统分配
     	map.put("sign", sign);
     	String response = HttpUtil.postServer(SERVER_URL, map);
         System.out.println("response = " + response);
         assertNotNull(response);
         assertTrue(response.indexOf("code") <= 0);
-	}*/
-	
+	}
+	*/
 	/*public void testCreateTeam(){
 		Map <String, String>map = new HashMap<String, String>();
     	map.put("appKey", APP_KEY); //第二个参数为AppKey
@@ -42,7 +43,7 @@ public class TeamServiceTest extends TestCase {
     	map.put("v", "1.0");
     	map.put("format", "json");
     	map.put("sessionId", SESSION_ID);
-    	map.put("coachId", "17");
+    	map.put("coachId", "20");
     	map.put("name", "篮球二班");
     	String sign = RopUtils.sign(map, APP_SECRET); //第二个参数为SecretKey, 有O2O系统分配
     	map.put("sign", sign);
@@ -59,9 +60,9 @@ public class TeamServiceTest extends TestCase {
     	map.put("v", "1.0");
     	map.put("format", "json");
     	map.put("sessionId", SESSION_ID);
-    	map.put("coachId", "17");
-    	map.put("teamId", "7");
-    	map.put("name", "篮球二班");
+    	map.put("coachId", "20");
+    	map.put("teamId", "2");
+    	map.put("name", "篮球二班1");
     	String sign = RopUtils.sign(map, APP_SECRET); //第二个参数为SecretKey, 有O2O系统分配
     	map.put("sign", sign);
     	String response = HttpUtil.postServer(SERVER_URL, map);
@@ -77,8 +78,8 @@ public class TeamServiceTest extends TestCase {
     	map.put("v", "1.0");
     	map.put("format", "json");
     	map.put("sessionId", SESSION_ID);
-    	map.put("coachId", "17");
-    	map.put("teamId", "7");
+    	map.put("coachId", "20");
+    	map.put("teamId", "2");
     	map.put("status", "-1");
     	String sign = RopUtils.sign(map, APP_SECRET); //第二个参数为SecretKey, 有O2O系统分配
     	map.put("sign", sign);
@@ -87,16 +88,16 @@ public class TeamServiceTest extends TestCase {
         assertNotNull(response);
         assertTrue(response.indexOf("code") <= 0);
 	}*/
-	/*
-	public void testGetMemberList(){
+	
+	/*public void testGetMemberList(){
 		Map <String, String>map = new HashMap<String, String>();
     	map.put("appKey", APP_KEY); //第二个参数为AppKey
     	map.put("method", "team.getMemberList"); 
     	map.put("v", "1.0");
     	map.put("format", "json");
     	map.put("sessionId", SESSION_ID);
-    	map.put("coachId", "17");
-    	map.put("teamId", "7");
+    	map.put("coachId", "20");
+    	map.put("teamId", "2");
     	String sign = RopUtils.sign(map, APP_SECRET); //第二个参数为SecretKey, 有O2O系统分配
     	map.put("sign", sign);
     	String response = HttpUtil.postServer(SERVER_URL, map);
@@ -106,23 +107,26 @@ public class TeamServiceTest extends TestCase {
 	}*/
 	
 
-	/*public void testCheckMember(){
+	public void testCheckMember(){
 		Map <String, String>map = new HashMap<String, String>();
     	map.put("appKey", APP_KEY); //第二个参数为AppKey
     	map.put("method", "team.checkMember"); 
     	map.put("v", "1.0");
     	map.put("format", "json");
     	map.put("sessionId", SESSION_ID);
-    	map.put("coachId", "17");
-    	map.put("teamId", "7");
-    	map.put("attendMemberId", "1,3,5");
+    	map.put("coachId", "20");
+    	map.put("teamId", "2");
+    	map.put("attendMemberId", "2, 4");
+    	map.put("longitude", "39.983424");
+    	map.put("latitude", "116.322987");
+//    	map.put("teamCheckId", "3");
     	String sign = RopUtils.sign(map, APP_SECRET); //第二个参数为SecretKey, 有O2O系统分配
     	map.put("sign", sign);
     	String response = HttpUtil.postServer(SERVER_URL, map);
         System.out.println("response = " + response);
         assertNotNull(response);
         assertTrue(response.indexOf("code") <= 0);
-	}*/
+	}
 	
 	/*public void testAddMember(){
 		Map <String, String>map = new HashMap<String, String>();
@@ -131,10 +135,10 @@ public class TeamServiceTest extends TestCase {
     	map.put("v", "1.0");
     	map.put("format", "json");
     	map.put("sessionId", SESSION_ID);
-    	map.put("coachId", "17");
-    	map.put("teamId", "7");
-    	map.put("phoneNumber", "13612345678");
-    	map.put("memberName", "zzp");
+    	map.put("coachId", "20");
+    	map.put("teamId", "2");
+    	map.put("phoneNumber", "13612332632");
+    	map.put("memberName", "zzp3");
     	String sign = RopUtils.sign(map, APP_SECRET); //第二个参数为SecretKey, 有O2O系统分配
     	map.put("sign", sign);
     	String response = HttpUtil.postServer(SERVER_URL, map);
@@ -143,15 +147,15 @@ public class TeamServiceTest extends TestCase {
         assertTrue(response.indexOf("code") <= 0);
 	}*/
 	
-/*	public void testDeleteMember(){
+	/*public void testDeleteMember(){
 		Map <String, String>map = new HashMap<String, String>();
     	map.put("appKey", APP_KEY); //第二个参数为AppKey
     	map.put("method", "team.deleteMember"); 
     	map.put("v", "1.0");
     	map.put("format", "json");
     	map.put("sessionId", SESSION_ID);
-    	map.put("coachId", "17");
-    	map.put("teamId", "7");
+    	map.put("coachId", "20");
+    	map.put("teamId", "2");
     	map.put("memberId", "1");
     	String sign = RopUtils.sign(map, APP_SECRET); //第二个参数为SecretKey, 有O2O系统分配
     	map.put("sign", sign);
@@ -168,8 +172,8 @@ public class TeamServiceTest extends TestCase {
     	map.put("v", "1.0");
     	map.put("format", "json");
     	map.put("sessionId", SESSION_ID);
-    	map.put("coachId", "17");
-    	map.put("teamId", "7");
+    	map.put("coachId", "20");
+    	map.put("teamId", "2");
     	map.put("memberId", "1");
     	map.put("memberName", "zzp");
     	map.put("phoneNumber", "12389432532");
@@ -216,7 +220,7 @@ public class TeamServiceTest extends TestCase {
         assertTrue(response.indexOf("code") <= 0);
 	}*/
 	
-	public void testGetTeamCheckHistory(){
+/*	public void testGetTeamCheckHistory(){
 		Map <String, String>map = new HashMap<String, String>();
     	map.put("appKey", APP_KEY); //第二个参数为AppKey
     	map.put("method", "team.getTeamCheckHistory"); 
@@ -231,5 +235,5 @@ public class TeamServiceTest extends TestCase {
         System.out.println("response = " + response);
         assertNotNull(response);
         assertTrue(response.indexOf("code") <= 0);
-	}
+	}*/
 }

@@ -2,6 +2,8 @@ package com.coach.request;
 
 import javax.validation.constraints.NotNull;
 
+import com.coach.model.Member;
+
 
 
 
@@ -37,6 +39,13 @@ public class UpdateMemberRequest extends CoachBaseRequest{
 	}
 	public void setMemberId(Long memberId) {
 		this.memberId = memberId;
+	}
+	public Member toMember() {
+		Member m = new Member();
+		m.setId(memberId);
+		m.setName(memberName);
+		m.setPhoneNumber(phoneNumber);
+		return m;
 	}
 	
 	

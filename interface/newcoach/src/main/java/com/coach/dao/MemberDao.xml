@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coach.dao.MemberDao">
+
+	<select id="getMemberList" parameterType="Map" resultType="com.coach.model.Member">
+		select m.*
+		from team_member t inner join member m on t.memberId = m.id and t.status != -1 and m.status != -1
+		where m.coachId = #{coachId} and t.teamId = #{teamId}
+	</select>
+	
+  <insert id="insertMember" useGeneratedKeys="true" keyProperty="id" parameterType="com.coach.model.Member">
+	 insert into member(name, phoneNumber, coachId, createTime, status) value (#{name}, #{phoneNumber}, #{coachId}, now(), #{status})
+  </insert>
+  
+  <update id="updateMember" parameterType="Map">
+  	update member m inner join team_member t on t.memberId = m.id and t.teamId = #{teamId} and m.coachId = #{coachId}
+  	set m.name = #{mdto.name}, phoneNumber = #{mdto.phoneNumber} where m.id = #{mdto.id}
+  </update>
+  
+  <update id="deleteMember" parameterType="Map">
+  	update member m inner join team_member t on t.memberId = m.id and t.teamId = #{teamId} and m.coachId = #{coachId}
+  	set m.status = -1, t.status = -1 where m.id = #{memberId}
+  </update>
+</mapper>

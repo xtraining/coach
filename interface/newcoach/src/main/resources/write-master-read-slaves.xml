@@ -189,5 +189,44 @@
 		<property name="targetObject" ref="tuserDaoTarget"></property>
 		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
 	</bean>  
+		
+    <bean id="teamDaoTarget" class="com.coach.dao.TeamDaoImpl"></bean>
+	<bean id="teamDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.coach.dao.TeamDao"></property>
+		<property name="targetObject" ref="teamDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean>  
 	
+	<bean id="teamMemberDaoTarget" class="com.coach.dao.TeamMemberDaoImpl"></bean>
+	<bean id="teamMemberDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.coach.dao.TeamMemberDao"></property>
+		<property name="targetObject" ref="teamMemberDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean>  
+	
+	<bean id="memberDaoTarget" class="com.coach.dao.MemberDaoImpl"></bean>
+	<bean id="memberDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.coach.dao.MemberDao"></property>
+		<property name="targetObject" ref="memberDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean>  
+	
+	<bean id="teamCheckDaoTarget" class="com.coach.dao.TeamCheckDaoImpl"></bean>
+	<bean id="teamCheckDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.coach.dao.TeamCheckDao"></property>
+		<property name="targetObject" ref="teamCheckDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean>  
+	
+	<bean id="teamCheckMemberDaoTarget" class="com.coach.dao.TeamCheckMemberDaoImpl"></bean>
+	<bean id="teamCheckMemberDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.coach.dao.TeamCheckMemberDao"></property>
+		<property name="targetObject" ref="teamCheckMemberDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean>  
 </beans>

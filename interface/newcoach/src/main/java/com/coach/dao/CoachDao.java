@@ -13,8 +13,6 @@ public interface CoachDao {
 
 	public void save(Coach c);
 
-	public Long getByThirdPartyId(String thirdPartyId, Integer type);
-
 	public void resetPassword(String phoneNumber, String password);
 
 	public Coach getBasicById(Long coachId);

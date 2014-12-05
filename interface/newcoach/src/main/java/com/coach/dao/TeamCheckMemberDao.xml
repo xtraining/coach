@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coach.dao.TeamCheckMemberDao">
+	<select id="getSmsMemberList" parameterType="Map" resultType="com.coach.model.Member">
+		select m.id, m.name, m.phoneNumber, 1 status from team_member t inner join member m on t.memberId = m.id and m.status != -1
+		inner join team_check_member c on c.memberId = m.id and c.teamCheckId = #{teamCheckId}
+		where t.teamId = #{teamId} and t.status = 0 and c.status = 0 and t.memberId in
+		<foreach collection="attendMemberIdList" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
+		
+		union all
+		
+		select m.id, m.name, m.phoneNumber, 0 status from team_member t inner join member m on t.memberId = m.id and m.status != -1
+		inner join team_check_member c on c.memberId = m.id and c.teamCheckId = #{teamCheckId}
+		where t.teamId = #{teamId} and t.status = 0 and c.status = 1 and t.memberId not in
+		<foreach collection="attendMemberIdList" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
+	</select>
+	
+	<delete id="deleteByTeamCheckId" parameterType="Long">
+		delete from team_check_member where teamCheckId = #{teamCheckId}
+	</delete>
+	
+	<insert id="saveAttend" useGeneratedKeys="true" keyProperty="id" parameterType="Map">
+	 insert into team_check_member(teamCheckId,memberId,createTime,status) 
+	 select #{teamCheckId},  t.memberId ,now(), 1 from team_member t where t.teamId = #{teamId} and t.status != -1 
+	 and t.memberId in <foreach collection="attendMemberIdList" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
+ 	 </insert>
+  
+  	<insert id="saveAbcent" useGeneratedKeys="true" keyProperty="id" parameterType="Map">
+	 insert into team_check_member(teamCheckId,memberId,createTime,status) 
+	 select #{teamCheckId}, t.memberId  ,now(), 0 from team_member t where t.teamId = #{teamId} and t.status != -1 
+	 and t.memberId not in <foreach collection="attendMemberIdList" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
+ 	 
+ 	 </insert>
+</mapper>
