@@ -77,7 +77,6 @@ function saveAccept(){
 			<tr>
 				<th width="2%" align="left"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
 				<th width="3%" align="left">下载ID</th>
-				<th width="5%" align="left">操作</th>
 				<th width="3%" align="left">类型</th>
 				<th width="10%" align="left">标题</th>
 				<th width="10%"  align="left">副标题</th>
@@ -97,9 +96,6 @@ function saveAccept(){
 				<td>
 					${item.id}
 				</td>
-				<td>
-  					<a href="${ctx}/story/task/accept.htm?taskId=0&downloadTaskId=${item.id}" target="navTab" title="入库" rel="入库" style="color:#00F;">设置标签</a>
-  				</td>
 				<td>
 					<c:choose> 
   						<c:when test="${item.type == 0}"> 
