@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.zhiqin.coach.admin.dao.ArtifactCategoryDao;
+import com.zhiqin.coach.admin.dto.ArtifactDTO;
 import com.zhiqin.coach.admin.dto.CategoryDTO;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -17,13 +18,9 @@ public class ArtifactCategoryDaoImpl extends BaseDaoImpl implements ArtifactCate
 
 
 	@Override
-	public void save(Long artifactId, Long categoryId, int artifactCategoryOrder) {
+	public void save(ArtifactDTO artifact) {
 		try{
-			Map map = new HashMap();
-			map.put("artifactId", artifactId);
-			map.put("categoryId", categoryId);
-			map.put("artifactCategoryOrder", artifactCategoryOrder);
-			this.getSqlSession().insert("artifactcategory.insert", map);
+			this.getSqlSession().insert("artifactcategory.insert", artifact);
 		} catch(RuntimeException e){
 			log.error("insert", e);
 			throw e;

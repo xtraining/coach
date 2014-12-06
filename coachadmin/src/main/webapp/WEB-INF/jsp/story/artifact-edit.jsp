@@ -8,9 +8,7 @@ function checkupload(){
 	if(response == "success"){
 		navTabAjaxDone({"statusCode":"200", "message":"保存成功", "navTabId":"故事管理", "forwardUrl":"", "callbackType":"closeCurrent", "rel":""});	
 	}  else if(response == "input1"){
-		navTabAjaxDone({"statusCode":"300", "message":"请为故事关联分类.", "navTabId":"故事管理", "forwardUrl":"", "callbackType":"", "rel":""});							
-	}  else if(response == "input2"){
-		navTabAjaxDone({"statusCode":"300", "message":"请为故事关联标签.", "navTabId":"故事管理", "forwardUrl":"", "callbackType":"", "rel":""});							
+		navTabAjaxDone({"statusCode":"300", "message":"请为故事设置分类.", "navTabId":"故事管理", "forwardUrl":"", "callbackType":"", "rel":""});							
 	}  else {
 		navTabAjaxDone({"statusCode":"300", "message":"保存失败，请关闭重试.", "navTabId":"故事管理", "forwardUrl":"", "callbackType":"", "rel":""});							
 	} 
@@ -53,6 +51,29 @@ function viewFile(url, title){
 				</dd>
 			</dl>
 			<dl>
+				<dt>分类：</dt>
+				<dd>
+					<select name="categoryId" class="combox">
+						<option value="-1">请选择分类</option>	
+						<c:forEach var="item" items="${categories}">
+						<option value="${item.id}" <c:if test="${editObj.categoryId == item.id}">selected</c:if>>${item.name}</option>		
+						</c:forEach>
+					</select>
+				</dd>
+			</dl>
+			<dl>
+				<dt>分类权重： </dt>
+				<dd>
+					<input type="text" name="categoryOrder" maxlength="200" size="40" class="required digits" value="${editObj.categoryOrder}"/>
+				</dd>
+			</dl>
+			<dl>
+				<dt>标签： </dt>
+				<dd>
+					<input type="text" name="tags" maxlength="200" size="40" class="" value="${editObj.tags}"/>
+				</dd>
+			</dl>
+			<dl>
 				<dt>播放次数： </dt>
 				<dd>
 					<input type="text" name="hitNum" size="40" class="digits required" value="${editObj.hitNum}"/>
@@ -91,94 +112,7 @@ function viewFile(url, title){
 				   	 	<a href="javascript:viewFile('${editObj.imageUrl}', '缩略图');" title="查看图片" style="color:#00F;">查看图片</a>
 				    </c:if>
 				</dd>
-					
 			</dl>
-			<div class="divider"></div>
-			<div class="tabs">
-			<div class="tabsHeader">
-				<div class="tabsHeaderContent">
-					<ul>
-						<li class="selected"><a href="javascript:void(0)"><span>关联标签</span></a></li>
-					</ul>
-				</div>
-			</div>
-			<div class="tabsContent" style="height: 150px;">
-				<div>
-					<table class="list nowrap itemDetail" addButton="增加" width="100%">
-						<thead>
-							<tr>
-								<th type="text" name="tag[#index#].tagOrder" defaultVal="#index#" size="5" fieldClass="digits">序号</th>
-								<th type="lookup" name="tag[#index#].name" lookupGroup="tag[#index#]" lookupUrl="${ctx}/story/tag/select.htm" size="60" fieldClass="required">标签名称</th>
-								<th type="del" width="60">操作</th>
-							</tr>
-						</thead>
-						<tbody>
-						<c:forEach var="item" items="${tags}" varStatus="status">  
-						<tr class="unitBox">
-							<td>
-								<input class="digits required textInput" type="text" size="10" value="${status.index+1}" name="tag['${status.index}'].tagOrder">
-							</td>
-							<td>
-								<input type="hidden" name="tag['${status.index}'].id" value="${item.id}">
-								<input class="required readonly textInput" type="text" size="60" lookuppk="id" name="tag['${status.index}'].name" value="${item.name}">
-								<a class="btnLook" title="查找带回" lookuppk="id" lookupgroup="tag['${status.index}']" href="${ctx}/story/tag/select.htm">查找带回</a>
-							</td>
-							<td>
-								<a class="btnDel " href="javascript:void(0)">删除</a>
-							</td>
-						</tr>
-						</c:forEach>
-						</tbody>
-					</table>
-				</div>
-			</div>
-			<div class="tabsFooter">
-				<div class="tabsFooterContent"></div>
-			</div>
-			</div>	
-			<div class="divider"></div>
-			<div class="tabs">
-			<div class="tabsHeader">
-				<div class="tabsHeaderContent">
-					<ul>
-						<li class="selected"><a href="javascript:void(0)"><span>关联分类</span></a></li>
-					</ul>
-				</div>
-			</div>
-			<div class="tabsContent" style="height: 150px;">
-				<div>
-					<table class="list nowrap itemDetail" addButton="增加" width="100%">
-						<thead>
-							<tr>
-								<th type="text" name="category[#index#].categoryOrder" defaultVal="#index#" size="5" fieldClass="digits">序号</th>
-								<th type="lookup" name="category[#index#].name" lookupGroup="category[#index#]" lookupUrl="${ctx}/story/category/select.htm" size="60" fieldClass="required">分类名称</th>
-								<th type="del" width="60">操作</th>
-							</tr>
-						</thead>
-						<tbody>
-						<c:forEach var="item" items="${categories}" varStatus="status">  
-						<tr class="unitBox">
-							<td>
-								<input class="digits required textInput" type="text" size="10" value="${status.index+1}" name="category['${status.index}'].categoryOrder">
-							</td>
-							<td>
-								<input type="hidden" name="category['${status.index}'].id" value="${item.id}">
-								<input class="required readonly textInput" type="text" size="60" lookuppk="id" name="category['${status.index}'].name" value="${item.name}">
-								<a class="btnLook" title="查找带回" lookuppk="id" lookupgroup="category['${status.index}']" href="${ctx}/story/category/select.htm">查找带回</a>
-							</td>
-							<td>
-								<a class="btnDel " href="javascript:void(0)">删除</a>
-							</td>
-						</tr>
-						</c:forEach>
-						</tbody>
-					</table>
-				</div>
-			</div>
-			<div class="tabsFooter">
-				<div class="tabsFooterContent"></div>
-			</div>
-			</div>
 		</div>
 		<div class="formBar">
 			<ul>

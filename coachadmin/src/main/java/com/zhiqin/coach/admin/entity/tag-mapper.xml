@@ -17,7 +17,7 @@
 	<select id="getTagList" parameterType="Map" resultType="TagDTO" >
 		select *
 		<include refid="getTagCondition" />
-		order by tagOrder desc, name asc
+		order by name asc
 		limit ${(p.pageNum - 1) * p.numPerPage}, ${p.numPerPage}
 	</select>
 	
@@ -25,9 +25,13 @@
 		select * from tag where id = #{tagId}
 	</select>
 	
+	<select id="getTagIdByName" parameterType="String" resultType="Long">
+		select id from tag where name = #{name}
+	</select>
+	
 	<insert id="insertTag" useGeneratedKeys="true" keyProperty="id" parameterType="TagDTO">
-		INSERT INTO tag(name, status, tagOrder) 
-		VALUE (#{name}, #{status}, #{tagOrder}) 
+		INSERT INTO tag(name) 
+		VALUE (#{name}) 
   	</insert>
   	
   	<update id="deleteByIds" parameterType="Map">

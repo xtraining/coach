@@ -61,7 +61,7 @@
 					${item.createTime}
 				</td>
 				<td>					
-				  <a href="${ctx}/story/artifact/list.htm?categoryId=${item.id}" target="navTab" rel="故事管理" title="故事管理" style="color:#00F;">关联故事</a>
+				  <a href="${ctx}/story/artifact/listForCategory.htm?categoryId=${item.id}" target="navTab" rel="分类故事" title="分类故事" style="color:#00F;">关联的故事</a>
 				</td>
 			</tr>
 			</c:forEach>

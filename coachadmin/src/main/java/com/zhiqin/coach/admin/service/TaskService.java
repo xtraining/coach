@@ -33,6 +33,6 @@ public interface TaskService{
 
 	void deleteByIds(String ids);
 
-	void saveAccept(int taskId, int downloadTaskId, TagArrayDTO tags, CategoryArrayDTO categories);
+	void saveAccept(int taskId, String downloadTaskIds, int categoryId);
 
 }

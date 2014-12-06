@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.ansj.domain.Term;
+import org.ansj.splitWord.analysis.ToAnalysis;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.slf4j.Logger;
@@ -108,9 +110,16 @@ public class ArtifactServiceImpl implements ArtifactService {
 
 	@Override
 	@Transactional
-	public void create(ArtifactDTO artifact, CategoryArrayDTO categorys,
-			TagArrayDTO tags, MultipartFile listImageFile,
+	public void create(ArtifactDTO artifact, MultipartFile listImageFile,
 			MultipartFile mediaFile) throws IOException, AuthException, JSONException {
+		List<Term> wordList = ToAnalysis.parse(artifact.getTitle());
+		StringBuilder tags = new StringBuilder();
+		if(wordList != null && wordList.size() >0){
+			for(Term word : wordList){
+				tags.append(word.getName() + ",");
+			}
+		}
+		artifact.setTags(artifact.getTags() + "," + tags);
 		artifactDao.insert(artifact);
 		
 		String fileName = QiniuUtils.generateArtifactImageName(artifact.getId(), listImageFile.getOriginalFilename());
@@ -128,15 +137,7 @@ public class ArtifactServiceImpl implements ArtifactService {
 		artifactDao.updateFileName(artifact);
 		localFile.delete();
 		
-		TagDTO[] tagArr = tags.getTag();
-		for(TagDTO tag : tagArr){
-			artifactTagDao.save(artifact.getId(), tag.getId(), tag.getTagOrder());
-		}
-		
-		CategoryDTO[] catArr = categorys.getCategory();
-		for(CategoryDTO cat : catArr){
-			artifactCategoryDao.save(artifact.getId(), cat.getId(), cat.getCategoryOrder());
-		}
+		artifactCategoryDao.save(artifact);
 		
 	}
 
@@ -164,8 +165,7 @@ public class ArtifactServiceImpl implements ArtifactService {
 	}
 
 	@Override
-	public void update(ArtifactDTO artifact, CategoryArrayDTO categorys,
-			TagArrayDTO tags, MultipartFile listImageFile,
+	public void update(ArtifactDTO artifact, MultipartFile listImageFile,
 			MultipartFile mediaFile) throws IOException, AuthException, JSONException {
 		String uptoken = null;
 		if(StringUtils.isBlank(artifact.getImageUrl()) || (listImageFile != null && listImageFile.getSize() > 0)){ //做了修改
@@ -190,17 +190,9 @@ public class ArtifactServiceImpl implements ArtifactService {
 		} 
 		artifactDao.updateArtifact(artifact);
 		
-		artifactTagDao.deleteByArtifactId(artifact.getId());
-		TagDTO[] tagArr = tags.getTag();
-		for(TagDTO tag : tagArr){
-			artifactTagDao.save(artifact.getId(), tag.getId(), tag.getTagOrder());
-		}
 		artifactCategoryDao.deleteByArtifactId(artifact.getId());
 		
-		CategoryDTO[] catArr = categorys.getCategory();
-		for(CategoryDTO cat : catArr){
-			artifactCategoryDao.save(artifact.getId(), cat.getId(), cat.getCategoryOrder());
-		}
+		artifactCategoryDao.save(artifact);
 	}
 	
 

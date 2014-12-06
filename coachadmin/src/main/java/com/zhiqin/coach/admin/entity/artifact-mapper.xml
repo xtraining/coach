@@ -42,7 +42,7 @@
 	</select>
 	
 	<select id="getById" parameterType="Long" resultType="ArtifactDTO">
-		select distinct a.* from artifact a 
+		select distinct a.*, c.categoryId, c.artifactCategoryOrder categoryOrder from artifact a left outer join artifact_category c on a.id = c.artifactId
 		where a.id = #{artifactId} limit 1
 	</select>
 	
@@ -53,8 +53,8 @@
 	</select>
 	
 	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="ArtifactDTO">
-		INSERT INTO artifact(title, subtitle, createTime, type, description, hitNum, materialType, fileName, duration, status)
-		VALUE (#{title}, #{subtitle}, now(), #{type}, #{description}, #{hitNum}, #{materialType}, #{fileName}, #{duration}, #{status})
+		INSERT INTO artifact(title, subtitle, createTime, type, description, hitNum, materialType, fileName, duration, status, tags)
+		VALUE (#{title}, #{subtitle}, now(), #{type}, #{description}, #{hitNum}, #{materialType}, #{fileName}, #{duration}, #{status}, #{tags})
   	</insert>
 
 	<insert id="insertFromDownload" useGeneratedKeys="true" keyProperty="id" parameterType="ArtifactDTO">
@@ -76,7 +76,7 @@
   	
   	<update id="updateArtifact" parameterType="ArtifactDTO">
 		update artifact set title = #{title}, subtitle = #{subtitle}, duration = #{duration}, hitNum = #{hitNum}, status=#{status},
-		fileName = #{fileName}, imageName = #{imageName} where id = #{id}
+		fileName = #{fileName}, imageName = #{imageName}, tags=#{tags} where id = #{id}
   	</update>
   	
   	<update id="updateStatus" parameterType="Map">

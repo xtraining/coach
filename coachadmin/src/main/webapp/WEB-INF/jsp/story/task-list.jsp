@@ -54,7 +54,7 @@
 					<input name="ids" value="${item.id}" type="checkbox">
 				</td>
 				<td>
-					<a href="${ctx}/story/task/detail.htm?taskId=${item.id}&sourceFrom=${item.sourceFrom}" target="navTab" title="任务详情" style="color:#00F;">${item.id}</a>
+					<a href="${ctx}/story/task/detail.htm?taskId=${item.id}&sourceFrom=${item.sourceFrom}" target="navTab" title="任务详情" rel="任务详情" style="color:#00F;">${item.id}</a>
 				</td>
 				<td>
 				 	 <c:choose> 

@@ -63,6 +63,11 @@
 		where d.id = #{downloadTaskId}
 	</select>
 	
+	<select id="getArtifactByDownloadTaskIdList" parameterType="Map" resultType="ArtifactDTO" >
+		select a.id, a.downloadTaskId from artifact a inner join download_task d on a.downloadTaskId = d.id and a.status = 3
+		where d.id in <foreach collection="downloadTaskIdList" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
+	</select>
+	
 	<select id="getDownloadTask" parameterType="Map" resultMap="DownloadTaskDTOResult" >
 		select d.* from download_task d inner join task t on d.taskId = t.id and t.status != 1
 		where d.status = #{status} order by d.id limit #{maxNum}

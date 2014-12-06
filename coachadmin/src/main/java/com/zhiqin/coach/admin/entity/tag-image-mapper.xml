@@ -23,23 +23,22 @@
 	<select id="getTagImage" parameterType="Map" resultType="TagImageDTO" >
 		select distinct i.*
 		<include refid="getTagImageCondition" />
+		order by i.id desc
 		limit ${(pageInfo.pageNum - 1) * pageInfo.numPerPage}, ${pageInfo.numPerPage}
 	</select>
 	
 	<select id="getTagNameListByImageId" parameterType="Long" resultType="String" >
 		select t.name from image_inf i 
 		inner join tag_image a on i.id = a.imageId 
-		inner join tag t on t.id = a.tagId and t.status != 2 
+		inner join tag t on t.id = a.tagId
 		where i.id = #{imageId}
-		order by t.tagOrder 
 	</select>
 	
 	<select id="getTagByImageId" parameterType="Long" resultType="TagDTO" >
 		select t.* from image_inf i 
 		inner join tag_image a on i.id = a.imageId 
-		inner join tag t on t.id = a.tagId and t.status != 2 
+		inner join tag t on t.id = a.tagId 
 		where i.id = #{imageId}
-		order by t.tagOrder 
 	</select>
 	
 	<delete id="deleteByImageId" parameterType="Map">
@@ -47,7 +46,7 @@
   	</delete>
 
 	<insert id="insert" parameterType="Map">
-		INSERT INTO tag_image(tagId, imageId, imageOrder)
-		Value (#{tagId}, #{imageId}, #{imageOrder})
+		INSERT INTO tag_image(tagId, imageId)
+		Value (#{tagId}, #{imageId})
   	</insert>
 </mapper>

@@ -112,6 +112,44 @@ public class TopDaoImpl extends BaseDaoImpl implements TopDao
 		
 	}
 
+	@Override
+	public void update(TopDTO dto) {
+		try{
+			this.getSqlSession().update("top.update", dto);
+		} catch(RuntimeException e){
+			log.error("update", e);
+			throw e;
+		}
+		
+	}
+
+	@Override
+	public void insertArtifact(Long topId, Long artifactId, Integer artifactOrder) {
+		try{
+			Map map = new HashMap();
+			map.put("topId", topId);
+			map.put("artifactId", artifactId);
+			map.put("artifactOrder", artifactOrder);
+			this.getSqlSession().insert("top.insertArtifact", map);
+		} catch(RuntimeException e){
+			log.error("insertArtifact", e);
+			throw e;
+		}
+		
+	}
+
+	@Override
+	public void deleteArtifactById(Long topId) {
+		try{
+			this.getSqlSession().delete("top.deleteArtifactById", topId);
+		} catch(RuntimeException e){
+			log.error("deleteArtifactById", e);
+			throw e;
+		}
+		
+		
+	}
+
 	
 	
 }

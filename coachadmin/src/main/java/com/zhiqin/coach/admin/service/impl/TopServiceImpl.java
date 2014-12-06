@@ -13,6 +13,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.qiniu.api.auth.AuthException;
@@ -32,6 +33,7 @@ public class TopServiceImpl implements TopService {
 	private static Log log = LogFactory.getLog(TopServiceImpl.class);
 	@Resource private TopDao topDao;
 	@Override
+	@Transactional
 	public void create(TopDTO dto, ArtifactArrayDTO artifacts, MultipartFile imageFile) throws IOException, AuthException, JSONException{
 		List<Term> wordList = ToAnalysis.parse(dto.getName());
 		StringBuilder tags = new StringBuilder();
@@ -51,20 +53,37 @@ public class TopServiceImpl implements TopService {
 		QiniuUtils.upload(uptoken, fileName, localFile);
 		topDao.updateListImageFileName(dto);
 		localFile.delete();
+		
+		for(ArtifactDTO a : artifacts.getArtifact()){
+			topDao.insertArtifact(dto.getId(), a.getId(), a.getArtifactOrder());
+		}
 	}
 	
 	@Override
+	@Transactional
 	public void update(TopDTO dto, ArtifactArrayDTO artifacts,
 			MultipartFile listImageFile) throws AuthException, JSONException, IOException {
 		if(StringUtils.isBlank(dto.getListImageFileUrl()) || (listImageFile != null && listImageFile.getSize() > 0)){ //做了修改
 			String uptoken = QiniuUtils.getUptoken();
 			QiniuUtils.deleteFile(dto.getListImageFileName());
-			File localFile = DownloadUtils.getFile(listImageFile.getInputStream(), dto.getListImageFileName());
-			QiniuUtils.upload(uptoken, dto.getListImageFileName(), localFile);
+			
+			String fileName = QiniuUtils.generateTopListImageName(dto.getId(), listImageFile.getOriginalFilename());
+			dto.setListImageFileName(fileName);
+			File localFile = DownloadUtils.getFile(listImageFile.getInputStream(), fileName);
+			QiniuUtils.upload(uptoken, fileName, localFile);
+			topDao.updateListImageFileName(dto);
 			localFile.delete();
 		}
 		dto.setStartTime(DateUtils.yyyyMMddHHmmToTimestamp(dto.getStartTimeStr()));
 		topDao.update(dto);
+		
+		topDao.deleteArtifactById(dto.getId());
+		if(artifacts != null && artifacts.getArtifact() != null){
+			for(ArtifactDTO a : artifacts.getArtifact()){
+				if(a.getId() != null)
+					topDao.insertArtifact(dto.getId(), a.getId(), a.getArtifactOrder());
+			}
+		}
 		
 	}
 	@Override

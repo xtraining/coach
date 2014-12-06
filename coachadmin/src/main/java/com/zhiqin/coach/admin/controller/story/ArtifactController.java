@@ -78,6 +78,11 @@ public class ArtifactController extends BaseController{
 	
 	@RequestMapping(value = "add")
 	public String add(Model model) {
+		PageInfoDTO pageInfo = new PageInfoDTO();
+		pageInfo.setPageNum(1);
+		pageInfo.setNumPerPage(1000);
+		List<CategoryDTO> categories = categoryService.getCategoryList(null, pageInfo);
+		model.addAttribute("categories", categories); 
 		return "/story/artifact-add";
 	}
 	
@@ -87,27 +92,24 @@ public class ArtifactController extends BaseController{
 	}
 	
 	@RequestMapping(value="create", method=RequestMethod.POST)  
-	public void create(ArtifactDTO dto, CategoryArrayDTO categorys, TagArrayDTO tags, @RequestParam MultipartFile listImageFile, @RequestParam MultipartFile mediaFile, HttpServletRequest request, HttpServletResponse response) throws IOException, AuthException, JSONException{
+	public void create(ArtifactDTO dto, @RequestParam MultipartFile listImageFile, @RequestParam MultipartFile mediaFile, HttpServletRequest request, HttpServletResponse response) throws IOException, AuthException, JSONException{
 		PrintWriter out = response.getWriter();  
-		if(categorys == null || categorys.getCategory() == null || categorys.getCategory().length == 0){
+		if(dto.getCategoryId() == null || dto.getCategoryId() == -1){
 			out.print("input1");
 			return;
 		}
-		if(tags == null || tags.getTag() == null || tags.getTag().length == 0){
-			out.print("input2");
-			return;
-		}
-		artifactService.create(dto, categorys, tags, listImageFile, mediaFile);
+		artifactService.create(dto, listImageFile, mediaFile);
 		out.print("success");
 	}
 	
 	@RequestMapping("edit")
 	public String edit(long artifactId, Model model, SearchArtifactDTO searchDto, PageInfoDTO pageInfo) {
 		ArtifactDTO dto = artifactService.getById(artifactId);
-		List<TagDTO> tags = artifactService.getTagByArtifactId(artifactId);
-		List<CategoryDTO> categories = artifactService.getCategoryByArtifactId(artifactId);
+		pageInfo = new PageInfoDTO();
+		pageInfo.setPageNum(1);
+		pageInfo.setNumPerPage(1000);
+		List<CategoryDTO> categories = categoryService.getCategoryList(null, pageInfo);
 		model.addAttribute("editObj", dto); 
-		model.addAttribute("tags", tags); 
 		model.addAttribute("categories", categories); 
 		if(dto.getType().intValue() == 0){
 			List<ArtifactDTO> sublist = artifactService.getSublistById(artifactId);
@@ -119,20 +121,21 @@ public class ArtifactController extends BaseController{
 	}
 	
 	@RequestMapping(value="update", method=RequestMethod.POST)  
-	public void update(ArtifactDTO dto, CategoryArrayDTO categorys, TagArrayDTO tags, @RequestParam MultipartFile listImageFile, @RequestParam MultipartFile mediaFile, HttpServletRequest request, HttpServletResponse response) throws IOException, AuthException, JSONException{
+	public void update(ArtifactDTO dto, @RequestParam MultipartFile listImageFile, @RequestParam MultipartFile mediaFile, HttpServletRequest request, HttpServletResponse response) throws IOException, AuthException, JSONException{
 		PrintWriter out = response.getWriter();  
-		if(categorys == null || categorys.getCategory() == null || categorys.getCategory().length == 0){
+		if(dto.getCategoryId() == null || dto.getCategoryId() == -1){
 			out.print("input1");
 			return;
 		}
-		if(tags == null || tags.getTag() == null || tags.getTag().length == 0){
-			out.print("input2");
-			return;
-		}
-		artifactService.update(dto, categorys, tags, listImageFile, mediaFile);
+		artifactService.update(dto, listImageFile, mediaFile);
 		out.print("success");
 	}
 	
+	@RequestMapping("listForCategory")
+	public String listForCategory(Model model, SearchArtifactDTO searchDto, PageInfoDTO pageInfo) {
+		list(model, searchDto, pageInfo);
+		return "/story/category-artifact-list";
+	}
 	
 	@RequestMapping("select")
 	public String select(Model model, SearchArtifactDTO searchDto, PageInfoDTO pageInfo) {

@@ -25,7 +25,7 @@ public interface ArtifactService{
 	List<ArtifactDTO> getArtifactList(SearchArtifactDTO searchDto,
 			PageInfoDTO pageInfo);
 
-	void create(ArtifactDTO dto, CategoryArrayDTO categorys, TagArrayDTO tags, MultipartFile listImageFile, MultipartFile mediaFile) throws IOException, AuthException, JSONException;
+	void create(ArtifactDTO dto, MultipartFile listImageFile, MultipartFile mediaFile) throws IOException, AuthException, JSONException;
 
 	void saveAssign(String artifactIds, int tagId);
 
@@ -42,7 +42,7 @@ public interface ArtifactService{
 
 	List<ArtifactDTO> getSublistById(long artifactId);
 
-	void update(ArtifactDTO dto, CategoryArrayDTO categorys, TagArrayDTO tags,
+	void update(ArtifactDTO dto, 
 			MultipartFile listImageFile, MultipartFile mediaFile) throws IOException, AuthException, JSONException;
 
 

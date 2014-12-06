@@ -8,9 +8,7 @@ function checkupload(){
 	if(response == "success"){
 		navTabAjaxDone({"statusCode":"200", "message":"创建成功", "navTabId":"故事管理", "forwardUrl":"", "callbackType":"closeCurrent", "rel":""});	
 	}  else if(response == "input1"){
-		navTabAjaxDone({"statusCode":"300", "message":"请为故事关联分类.", "navTabId":"故事管理", "forwardUrl":"", "callbackType":"", "rel":""});							
-	}  else if(response == "input2"){
-		navTabAjaxDone({"statusCode":"300", "message":"请为故事关联标签.", "navTabId":"故事管理", "forwardUrl":"", "callbackType":"", "rel":""});							
+		navTabAjaxDone({"statusCode":"300", "message":"请为故事关选择类.", "navTabId":"故事管理", "forwardUrl":"", "callbackType":"", "rel":""});							
 	}  else {
 		navTabAjaxDone({"statusCode":"300", "message":"创建失败，请关闭重试.", "navTabId":"故事管理", "forwardUrl":"", "callbackType":"", "rel":""});							
 	} 
@@ -23,7 +21,7 @@ function checkupload(){
 	<input type="hidden" name="type" value="1"/>
 	<input type="hidden" name="materialType" value="0"/>
 	<h2 class="contentTitle">新增故事</h2>
-		<div class="pageFormContent" layoutH="96">
+		<div class="pageFormContent nowrap" layoutH="96">
 			<dl>
 				<dt>标题： </dt>
 				<dd>
@@ -34,6 +32,29 @@ function checkupload(){
 				<dt>副标题： </dt>
 				<dd>
 					<input type="text" name="subtitle" size="40"/>
+				</dd>
+			</dl>
+			<dl>
+				<dt>分类：</dt>
+				<dd>
+					<select name="categoryId" class="combox">
+						<option value="-1">请选择分类</option>	
+						<c:forEach var="item" items="${categories}">
+						<option value="${item.id}" >${item.name}</option>		
+						</c:forEach>
+					</select>
+				</dd>
+			</dl>
+			<dl>
+				<dt>分类权重： </dt>
+				<dd>
+					<input type="text" name="categoryOrder" maxlength="200" size="40" class="required digits" value="0"/>
+				</dd>
+			</dl>
+			<dl>
+				<dt>标签： </dt>
+				<dd>
+					<input type="text" name="tags" maxlength="200" size="40" class="" value=""/>
 				</dd>
 			</dl>
 			<dl>
@@ -63,62 +84,6 @@ function checkupload(){
 				<dt>列表图片 ：</dt>
 				<dd><input type="file" name="listImageFile" size="20" class="required"/>	</dd>
 			</dl>
-			<div class="divider"></div>
-			<div class="tabs">
-			<div class="tabsHeader">
-				<div class="tabsHeaderContent">
-					<ul>
-						<li class="selected"><a href="javascript:void(0)"><span>关联标签</span></a></li>
-					</ul>
-				</div>
-			</div>
-			<div class="tabsContent" style="height: 150px;">
-				<div>
-					<table class="list nowrap itemDetail" addButton="增加" width="100%">
-						<thead>
-							<tr>
-								<th type="text" name="tag[#index#].tagOrder" defaultVal="#index#" size="5" fieldClass="digits">序号</th>
-								<th type="lookup" name="tag[#index#].name" lookupGroup="tag[#index#]" lookupUrl="${ctx}/story/tag/select.htm" size="60" fieldClass="required">标签名称</th>
-								<th type="del" width="60">操作</th>
-							</tr>
-						</thead>
-						<tbody>
-						</tbody>
-					</table>
-				</div>
-			</div>
-			<div class="tabsFooter">
-				<div class="tabsFooterContent"></div>
-			</div>
-			</div>	
-			<div class="divider"></div>
-			<div class="tabs">
-			<div class="tabsHeader">
-				<div class="tabsHeaderContent">
-					<ul>
-						<li class="selected"><a href="javascript:void(0)"><span>关联分类</span></a></li>
-					</ul>
-				</div>
-			</div>
-			<div class="tabsContent" style="height: 150px;">
-				<div>
-					<table class="list nowrap itemDetail" addButton="增加" width="100%">
-						<thead>
-							<tr>
-								<th type="text" name="category[#index#].categoryOrder" defaultVal="#index#" size="5" fieldClass="digits">序号</th>
-								<th type="lookup" name="category[#index#].name" lookupGroup="category[#index#]" lookupUrl="${ctx}/story/category/select.htm" size="60" fieldClass="required">分类名称</th>
-								<th type="del" width="60">操作</th>
-							</tr>
-						</thead>
-						<tbody>
-						</tbody>
-					</table>
-				</div>
-			</div>
-			<div class="tabsFooter">
-				<div class="tabsFooterContent"></div>
-			</div>
-			</div>
 		</div>
 		<div class="formBar">
 			<ul>

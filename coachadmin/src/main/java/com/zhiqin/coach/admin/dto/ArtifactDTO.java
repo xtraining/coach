@@ -32,6 +32,9 @@ public class ArtifactDTO {
 	private String imageUrl;
 	private String imageName;
 	private Long imageId;
+	private Long categoryId;
+	private Integer categoryOrder;
+	private String tags;
 	public Long getId() {
 		return id;
 	}
@@ -127,6 +130,24 @@ public class ArtifactDTO {
 	}
 	public void setImageId(Long imageId) {
 		this.imageId = imageId;
+	}
+	public Long getCategoryId() {
+		return categoryId;
+	}
+	public void setCategoryId(Long categoryId) {
+		this.categoryId = categoryId;
+	}
+	public String getTags() {
+		return tags;
+	}
+	public void setTags(String tags) {
+		this.tags = tags;
+	}
+	public Integer getCategoryOrder() {
+		return categoryOrder;
+	}
+	public void setCategoryOrder(Integer categoryOrder) {
+		this.categoryOrder = categoryOrder;
 	}
 	
 }

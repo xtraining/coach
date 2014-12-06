@@ -21,13 +21,13 @@ public interface ImageService{
 	List<TagImageDTO> getTagImageList(SearchTagImageDTO searchDto,
 			PageInfoDTO pageInfo);
 
-	void createFiles(TagArrayDTO items, MultipartFile[] imageFile) throws AuthException, JSONException, IOException;
+	void createFiles(String[] tags, MultipartFile[] imageFile) throws AuthException, JSONException, IOException;
 
 	void deleteByIds(String ids);
 
 	List<TagDTO> getTagByImageId(long imageId);
 
-	void saveAssignTag(TagArrayDTO items, Long imageId);
+	void saveAssignTag(String tags, Long imageId);
 
 
 

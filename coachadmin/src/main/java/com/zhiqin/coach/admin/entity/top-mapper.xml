@@ -28,8 +28,8 @@
 	</select>
 	
 	<insert id="insertTop" useGeneratedKeys="true" keyProperty="id" parameterType="TopDTO">
-		INSERT INTO top_list(name,type,topOrder, startTime, tags) 
-		VALUE (#{name}, #{type}, #{topOrder},#{startTime}, #{tags}) 
+		INSERT INTO top_list(name,type,topOrder, startTime, tags, status) 
+		VALUE (#{name}, #{type}, #{topOrder},#{startTime}, #{tags}, #{status}) 
   	</insert>
   	
 	<update id="deleteByIds" parameterType="Map">
@@ -38,5 +38,19 @@
 	
 	<update id="updateListImageFileName" parameterType="Map">
 		update top_list set listImageFileName = #{dto.listImageFileName} where id = #{dto.id}
+	</update>
+	
+	<update id="update" parameterType="TopDTO">
+		update top_list set name = #{name}, topOrder = #{topOrder}, startTime=#{startTime}, tags = #{tags},
+		status = #{status} where id = #{id}
+	</update>
+	
+	<insert id="insertArtifact" useGeneratedKeys="true" keyProperty="id" parameterType="Map">
+		INSERT INTO top_list_artifact(topId,artifactId,artifactOrder) 
+		VALUE (#{topId}, #{artifactId}, #{artifactOrder}) 
+  	</insert>
+  	
+  	<update id="deleteArtifactById" parameterType="Long">
+		delete from top_list_artifact where topId = #{topId}
 	</update>
 </mapper>

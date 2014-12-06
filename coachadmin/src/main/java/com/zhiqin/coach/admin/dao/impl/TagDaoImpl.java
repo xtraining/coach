@@ -74,6 +74,16 @@ public class TagDaoImpl extends BaseDaoImpl implements TagDao
 			throw e;
 		}
 	}
+	
+	@Override
+	public Long getTagIdByName(String name) {
+		try{
+			return  this.getSqlSession().selectOne("tag.getTagIdByName", name);
+		} catch(RuntimeException e){
+			log.error("getTagIdByName", e);
+			throw e;
+		}
+	}
 
 	@Override
 	public void update(TagDTO dto) {

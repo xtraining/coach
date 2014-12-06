@@ -215,6 +215,19 @@ public class TaskDaoImpl extends BaseDaoImpl implements TaskDao
 		}
 	}
 
+	@Override
+	public List<ArtifactDTO> getArtifactByDownloadTaskId(
+			List<Long> downloadTaskIdList) {
+		try{
+			Map map = new HashMap();
+			map.put("downloadTaskIdList", downloadTaskIdList);
+			return this.getSqlSession().selectList("task.getArtifactByDownloadTaskIdList", map);
+		} catch(RuntimeException e){
+			log.error("getArtifactIdByDownloadTaskIdList", e);
+			throw e;
+		}
+	}
+
 
 	
 	

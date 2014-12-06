@@ -68,7 +68,11 @@ public class TagImageController extends BaseController{
 	@RequestMapping("assignTag")
 	public String assignTag(long imageId, Model model) {
 		List<TagDTO> tagList = imageService.getTagByImageId(imageId);
-		model.addAttribute("tagList", tagList); 
+		String tags = "";
+		for(TagDTO tagDto : tagList){
+			tags += tagDto.getName() + ",";
+		}
+		model.addAttribute("tags", tags); 
 		model.addAttribute("imageId", imageId); 
 		return "/story/tagimage-assign-tag";
 	}
@@ -91,24 +95,16 @@ public class TagImageController extends BaseController{
 	}
 	
 	@RequestMapping(value="create", method=RequestMethod.POST)  
-	public void create(TagArrayDTO items, @RequestParam MultipartFile[] imageFile, HttpServletRequest request, HttpServletResponse response) throws IOException, AuthException, JSONException{
+	public void create(String[] tags, @RequestParam MultipartFile[] imageFile, HttpServletRequest request, HttpServletResponse response) throws IOException, AuthException, JSONException{
 		PrintWriter out = response.getWriter();  
-		if(items == null || items.getTag() == null || items.getTag().length == 0){
-			out.print("input");
-			return;
-		}
-		imageService.createFiles(items, imageFile);
+		imageService.createFiles(tags, imageFile);
 		out.print("success");
 	}
 	
 	@RequestMapping(value="saveAssignTag", method=RequestMethod.POST)  
-	public void saveAssignTag(TagArrayDTO items, Long imageId, HttpServletRequest request, HttpServletResponse response) throws IOException, AuthException, JSONException{
+	public void saveAssignTag(String tags, Long imageId, HttpServletRequest request, HttpServletResponse response) throws IOException, AuthException, JSONException{
 		PrintWriter out = response.getWriter();  
-		if(items == null || items.getTag() == null || items.getTag().length == 0){
-			out.print("input");
-			return;
-		}
-		imageService.saveAssignTag(items, imageId);
+		imageService.saveAssignTag(tags, imageId);
 		out.print("success");
 	}
 }

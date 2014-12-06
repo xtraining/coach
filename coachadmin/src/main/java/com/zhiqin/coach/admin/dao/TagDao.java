@@ -26,5 +26,7 @@ public interface TagDao extends BaseDao{
 
 	void update(TagDTO dto);
 
+	Long getTagIdByName(String name);
+
 
 }

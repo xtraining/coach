@@ -19,9 +19,6 @@ function viewImage(url){
 		<table class="searchContent">
 			<tr>
 				<td>
-					标签ID：<input type="text" name="tagId" class="digits" value="${searchDto.tagId}"/>
-				</td>
-				<td>
 					标签名称：<input type="text" name="tagName" value="${searchDto.tagName}"/>
 				</td>
 			</tr>
@@ -66,7 +63,7 @@ function viewImage(url){
 				</td>
 				<td>${item.tagNameList}</td>
 				<td>
-				 <a href="${ctx}/story/tagimage/assignTag.htm?imageId=${item.id}" target="navTab" rel="设置标签" title="设置标签" style="color:#00F;">设置标签</a>
+				 <a href="${ctx}/story/tagimage/assignTag.htm?imageId=${item.id}" target="dialog" mask="true" rel="设置标签" title="设置标签" style="color:#00F;">设置标签</a>
 				</td>
 			</tr>
 			</c:forEach>

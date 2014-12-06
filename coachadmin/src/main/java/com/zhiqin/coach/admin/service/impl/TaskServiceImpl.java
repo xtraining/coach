@@ -137,19 +137,23 @@ public class TaskServiceImpl implements TaskService {
 
 	@Override
 	@Transactional
-	public void saveAccept(int taskId, int downloadTaskId, TagArrayDTO tags,
-			CategoryArrayDTO categories) {
+	public void saveAccept(int taskId, String downloadTaskIds, int categoryId) {
 		if(taskId > 0){
 			List<ArtifactDTO> artifactList = taskDao.getArtifactByTaskId(taskId);
-			saveAccept(tags, categories, artifactList);
-		} else if(downloadTaskId > 0){
-			List<ArtifactDTO> artifactList = taskDao.getArtifactByDownloadTaskId(downloadTaskId);
-			saveAccept(tags, categories, artifactList);
+			saveAccept(categoryId, artifactList);
+		} else if(StringUtils.isNotBlank(downloadTaskIds)){
+			String [] downloadTaskId = StringUtils.split(downloadTaskIds, ",");
+			List<Long>downloadTaskIdList = new ArrayList<Long>();
+			for(String id : downloadTaskId){
+				downloadTaskIdList.add(Long.valueOf(StringUtils.trim(id)));
+			}
+			List<ArtifactDTO> artifactList = taskDao.getArtifactByDownloadTaskId(downloadTaskIdList);
+			saveAccept(categoryId, artifactList);
 		}
 		
 	}
 
-	private void saveAccept(TagArrayDTO tags, CategoryArrayDTO categories,
+	private void saveAccept(int categoryId,
 			List<ArtifactDTO> artifactList) {
 		if(artifactList != null && artifactList.size() > 0){
 			List<Long> artifactIdList = new ArrayList<Long>();
@@ -161,15 +165,11 @@ public class TaskServiceImpl implements TaskService {
 			artifactDao.updateStatus(artifactIdList, Constants.ARTIFACT_STATUS.ACTIVE.getValue());
 			taskDao.updateStatus(downloadIdList, Constants.DOWNLOAD_TASK_STATUS.UPLOAD.getValue());
 			for(Long artifactId : artifactIdList){
-				TagDTO[] tagArr = tags.getTag();
-				for(TagDTO tag : tagArr){
-					artifactTagDao.save(artifactId, tag.getId(), tag.getTagOrder());
-				}
-				
-				CategoryDTO[] catArr = categories.getCategory();
-				for(CategoryDTO cat : catArr){
-					artifactCategoryDao.save(artifactId, cat.getId(), cat.getCategoryOrder());
-				}
+				ArtifactDTO artifact = new ArtifactDTO();
+				artifact.setId(artifactId);
+				artifact.setCategoryId(Long.valueOf(categoryId));
+				artifact.setCategoryOrder(0);
+				artifactCategoryDao.save(artifact);
 			}
 		}
 	}

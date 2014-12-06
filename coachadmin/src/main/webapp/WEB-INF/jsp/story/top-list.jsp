@@ -68,7 +68,7 @@
 				<td>
 					<c:choose>
 					<c:when test="${item.status == 0}">显示</c:when> 
-					<c:when test="${item.status == 1}">隐藏</c:when> 
+					<c:when test="${item.status == 2}">隐藏</c:when> 
 					</c:choose>
 				</td>
 			</tr>

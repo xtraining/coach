@@ -8,6 +8,7 @@ import java.util.Set;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONException;
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.qiniu.api.auth.AuthException;
 import com.zhiqin.coach.admin.dao.ImageDao;
+import com.zhiqin.coach.admin.dao.TagDao;
 import com.zhiqin.coach.admin.dao.TagImageDao;
 import com.zhiqin.coach.admin.dto.PageInfoDTO;
 import com.zhiqin.coach.admin.dto.SearchTagImageDTO;
@@ -33,6 +35,7 @@ public class ImageServiceImpl implements ImageService {
 	private static Log log = LogFactory.getLog(ImageServiceImpl.class);
 	@Resource private ImageDao imageDao;
 	@Resource private TagImageDao tagImageDao;
+	@Resource private TagDao tagDao;
 	@Override
 	public Long getTagImageTotalNum(SearchTagImageDTO searchDto) {
 		return tagImageDao.getTagImageTotalNum(searchDto);
@@ -55,10 +58,12 @@ public class ImageServiceImpl implements ImageService {
 		return list;
 	}
 	@Override
-	public void createFiles(TagArrayDTO items, MultipartFile[] imageFile) throws AuthException, JSONException, IOException {
+	public void createFiles(String[] tags, MultipartFile[] imageFile) throws AuthException, JSONException, IOException {
 		if(imageFile != null && imageFile.length > 0){
 			String uptoken = QiniuUtils.getUptoken();
-			for(MultipartFile file : imageFile){
+			int size = imageFile.length;
+			for(int i = 0; i < size; i++){
+				MultipartFile file = imageFile[i];
 				if(file != null && file.getSize() > 0){
 					TagImageDTO image = new TagImageDTO();
 					imageDao.insert(image);
@@ -69,9 +74,19 @@ public class ImageServiceImpl implements ImageService {
 					imageDao.updateFileName(image);
 					localFile.delete();
 					
-					TagDTO[] tags = items.getTag();
-					for(TagDTO tag : tags){
-						tagImageDao.insert(tag.getId(), image.getId());
+					if(StringUtils.isNotBlank(tags[i])){
+						String tag[] = StringUtils.split(tags[i], ",");
+						for(String name : tag){
+							Long tagId = tagDao.getTagIdByName(name);
+							if(tagId != null && tagId > 0){
+								tagImageDao.insert(tagId, image.getId());
+							} else {
+								TagDTO tagDTO = new TagDTO();
+								tagDTO.setName(name);
+								tagDao.create(tagDTO);
+								tagImageDao.insert(tagDTO.getId(), image.getId());
+							}
+						}
 					}
 				}
 			}
@@ -90,17 +105,22 @@ public class ImageServiceImpl implements ImageService {
 	
 	@Override
 	@Transactional
-	public void saveAssignTag(TagArrayDTO items, Long imageId) {
+	public void saveAssignTag(String tags, Long imageId) {
 		tagImageDao.deleteByImageId(imageId);
-		TagDTO[] tags = items.getTag();
-		Set<Long> tagIdSet = new HashSet<Long>();
-		for(TagDTO tag : tags){
-			if(!tagIdSet.contains(tag.getId())){
-				tagImageDao.insert(tag.getId(), imageId);
-				tagIdSet.add(tag.getId());
+		if(StringUtils.isNotBlank(tags)){
+			String tag[] = StringUtils.split(tags, ",");
+			for(String name : tag){
+				Long tagId = tagDao.getTagIdByName(name);
+				if(tagId != null && tagId > 0){
+					tagImageDao.insert(tagId, imageId);
+				} else {
+					TagDTO tagDTO = new TagDTO();
+					tagDTO.setName(name);
+					tagDao.create(tagDTO);
+					tagImageDao.insert(tagDTO.getId(), imageId);
+				}
 			}
 		}
-		
 	}
 
 }

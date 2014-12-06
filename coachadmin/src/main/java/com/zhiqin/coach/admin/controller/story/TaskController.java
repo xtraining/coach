@@ -16,11 +16,13 @@ import com.zhiqin.coach.admin.common.Constants.DOWNLOAD_SOURCE_FROM;
 import com.zhiqin.coach.admin.common.Constants.DOWNLOAD_TASK_STATUS;
 import com.zhiqin.coach.admin.controller.BaseController;
 import com.zhiqin.coach.admin.dto.CategoryArrayDTO;
+import com.zhiqin.coach.admin.dto.CategoryDTO;
 import com.zhiqin.coach.admin.dto.DownloadTaskDTO;
 import com.zhiqin.coach.admin.dto.PageInfoDTO;
 import com.zhiqin.coach.admin.dto.ResponseDTO;
 import com.zhiqin.coach.admin.dto.TagArrayDTO;
 import com.zhiqin.coach.admin.dto.TaskDTO;
+import com.zhiqin.coach.admin.service.CategoryService;
 import com.zhiqin.coach.admin.service.TaskService;
 import com.zhiqin.coach.admin.util.JsonBinder;
 import com.zhiqin.coach.admin.util.JsonUtils;
@@ -37,7 +39,8 @@ import com.zhiqin.coach.admin.util.JsonUtils;
 public class TaskController extends BaseController{
 	@Resource
 	private TaskService taskService;
-	
+	@Resource
+	private CategoryService categoryService;
 	@RequestMapping("list")
 	public String list(Model model, PageInfoDTO pageInfo) {
 		Long totalNum = taskService.getTotalNum();
@@ -71,6 +74,8 @@ public class TaskController extends BaseController{
 	public String detail(int sourceFrom, int taskId, PageInfoDTO pageInfo, Model model) {
 		Long totalNum = taskService.getDownloadTaskTotalNum(taskId);
 		List<DownloadTaskDTO> list = taskService.getDownloadTaskList(taskId, pageInfo);
+		List<CategoryDTO> categories = categoryService.getCategoryList(null, pageInfo);
+		model.addAttribute("categories", categories); 
 		model.addAttribute("taskId", taskId); 
 		model.addAttribute("sourceFrom", sourceFrom); 
 		model.addAttribute("responseList", list); 
@@ -119,17 +124,9 @@ public class TaskController extends BaseController{
 	}
 	
 	@RequestMapping("saveAccept")
-	public void saveAccept(int taskId, int downloadTaskId, TagArrayDTO tags, CategoryArrayDTO categories, Model model, HttpServletResponse response) throws IOException{
+	public void saveAccept(int taskId, String downloadTaskIds, int categoryId, Model model, HttpServletResponse response) throws IOException{
 		PrintWriter out = response.getWriter();  
-		if(categories == null || categories.getCategory() == null || categories.getCategory().length == 0){
-			out.print("input1");
-			return;
-		}
-		if(tags == null || tags.getTag() == null || tags.getTag().length == 0){
-			out.print("input2");
-			return;
-		}
-		taskService.saveAccept(taskId, downloadTaskId, tags, categories);
+		taskService.saveAccept(taskId, downloadTaskIds, categoryId);
 		out.print("success");
 	}
 }

@@ -13,7 +13,7 @@ import com.zhiqin.coach.admin.dto.SearchArtifactDTO;
 
 public interface ArtifactCategoryDao extends BaseDao{
 
-	void save(Long artifactId, Long categoryId, int artifactCategoryOrder);
+	void save(ArtifactDTO artifact);
 
 	void delete(int categoryId, String artifactIds);
 

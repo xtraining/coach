@@ -6,9 +6,9 @@ function checkupload(){
 	var doc = iframe[0].contentDocument || iframe[0].content;
 	var response = $(doc).find("body").text();
 	if(response == "success"){
-		navTabAjaxDone({"statusCode":"200", "message":"保存成功", "navTabId":"", "forwardUrl":"", "callbackType":"closeCurrent", "rel":""});	
+		navTabAjaxDone({"statusCode":"200", "message":"保存成功", "navTabId":"首页推荐", "forwardUrl":"", "callbackType":"closeCurrent", "rel":""});	
 	}  else {
-		navTabAjaxDone({"statusCode":"300", "message":"保存失败，请关闭重试.", "navTabId":"推荐内容", "forwardUrl":"", "callbackType":"", "rel":""});							
+		navTabAjaxDone({"statusCode":"300", "message":"保存失败，请关闭重试.", "navTabId":"首页推荐", "forwardUrl":"", "callbackType":"", "rel":""});							
 	} 
 }
 function deleteImg(){
@@ -23,11 +23,12 @@ function viewFile(url, title){
 
 <div class="pageContent">
 	<form action="${ctx}/story/top/update.htm" method="post" enctype="multipart/form-data" class="pageForm required-validate"  onsubmit="return iframeCallback(this, checkupload)">
+	<input type="hidden" name="id" value="${editObj.id}"/>
 	<input type="hidden" name="type" value="0"/>
 	<input type="hidden" name="listImageFileName" id="imageUrl" value="${editObj.listImageFileName}"/>
 	<input type="hidden" name="listImageFileUrl" value="${editObj.listImageFileUrl}"/>
 	<h2 class="contentTitle">推荐详情</h2>
-		<div class="pageFormContent" layoutH="96">
+		<div class="pageFormContent nowrap" layoutH="96">
 			<dl>
 				<dt>名称： </dt>
 				<dd>
@@ -49,7 +50,7 @@ function viewFile(url, title){
 			<dl>
 				<dt>开始时间：</dt>
 				<dd>
-					<input type="text" name="startTime" class="date required" dateFmt="yyyy-MM-dd HH:mm" value="${editObj.startTimeStr}" readonly="true"/>
+					<input type="text" name="startTimeStr" class="date required" dateFmt="yyyy-MM-dd HH:mm" value="${editObj.startTimeStr}" readonly="true"/>
 					<a class="inputDateButton" href="javascript:;">选择</a>
 				</dd>
 			</dl>
@@ -57,14 +58,14 @@ function viewFile(url, title){
 				<dt>状态： </dt>
 				<dd>
 					<input type="radio" name="status" value="0" <c:if test="${editObj.status == 0}">checked</c:if>/>显示 
-					<input type="radio" name="status" value="1" <c:if test="${editObj.status == 1}">checked</c:if>/>隐藏
+					<input type="radio" name="status" value="2" <c:if test="${editObj.status == 2}">checked</c:if>/>隐藏
 				</dd>
 			</dl>
 			
 			<dl>
 				<dt>首页图片 ：</dt>
 				<dd id="uploadImageDD">
-				    <input type="file" name="listImageFile" size="20" class="required"/>
+				    <input type="file" name="listImageFile" size="20"/>
 				    <c:if test="${editObj.listImageFileUrl != null}">
 				    	<a href="javascript:deleteImg();" title="删除" style="color:#00F;">删除</a>&nbsp;&nbsp;
 				   	 	<a href="javascript:viewFile('${editObj.listImageFileUrl}', '缩略图');" title="查看图片" style="color:#00F;">查看图片</a>

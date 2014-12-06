@@ -22,38 +22,14 @@ function checkupload(){
 	<input type="hidden" name="type" value="0"/>
 	<h2 class="contentTitle">新增图片</h2>
 		<div class="pageFormContent" layoutH="96">
-			<div class="tabs">
-			<div class="tabsHeader">
-				<div class="tabsHeaderContent">
-					<ul>
-						<li class="selected"><a href="javascript:void(0)"><span>关联标签</span></a></li>
-					</ul>
-				</div>
-			</div>
-			<div class="tabsContent" style="height: 150px;">
-				<div>
-					<table class="list nowrap itemDetail" addButton="添加" width="100%">
-						<thead>
-							<tr>
-								<th type="text" name="tag[#index#].tagOrder" defaultVal="#index#" size="5" fieldClass="digits">序号</th>
-								<th type="lookup" name="tag[#index#].name" lookupGroup="tag[#index#]" lookupUrl="${ctx}/story/tag/select.htm" size="60" fieldClass="required">标签名称</th>
-								<th type="del" width="60">操作</th>
-							</tr>
-						</thead>
-						<tbody>
-						</tbody>
-					</table>
-				</div>
-			</div>
-			<div class="tabsFooter">
-				<div class="tabsFooterContent"></div>
-			</div>
-			</div>	
-			<div class="divider"></div>
 			<%for(int i = 0; i < 10; i++){%>
 			<dl>
 				<dt>图片<%=i+1 %> ：</dt>
 				<dd><input type="file" name="imageFile" size="20"/>	</dd>
+			</dl>
+			<dl>
+				<dt>标签 ：</dt>
+				<dd><input type="text" name="tags" maxlength="200" size="60" class="" value=""/></dd>
 			</dl>
 			<%} %>	
 		</div>

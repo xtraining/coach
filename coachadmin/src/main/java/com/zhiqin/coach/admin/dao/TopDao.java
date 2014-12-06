@@ -27,6 +27,12 @@ public interface TopDao extends BaseDao{
 
 	List<ArtifactDTO> getArtifactByTopId(int topId);
 
+	void update(TopDTO dto);
+
+	void insertArtifact(Long id, Long id2, Integer artifactOrder);
+
+	void deleteArtifactById(Long id);
+
 
 
 }
