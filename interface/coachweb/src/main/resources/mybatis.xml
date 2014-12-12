@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias type="com.zhiqin.coach.admin.entity.SysUser" alias="SysUser" />
+		<typeAlias type="com.zhiqin.coach.admin.entity.SysResource" alias="SysResource"/>
+		<typeAlias type="com.zhiqin.coach.admin.entity.SysRole" alias="SysRole"/>
+		<typeAlias type="com.zhiqin.coach.admin.entity.SysRoleResource" alias="SysRoleResource"/>
+		<typeAlias type="com.zhiqin.coach.admin.entity.SysUserRole" alias="SysUserRole"/>
+		
+		
+		<typeAlias type="com.zhiqin.coach.admin.dto.SearchCoachDTO" alias="SearchCoachDTO"/>
+		<typeAlias type="com.zhiqin.coach.admin.dto.SearchCourseDTO" alias="SearchCourseDTO"/>
+		<typeAlias type="com.zhiqin.coach.admin.dto.SearchOrgDTO" alias="SearchOrgDTO"/>
+		<typeAlias type="com.zhiqin.coach.admin.dto.OrgDTO" alias="OrgDTO"/>
+		<typeAlias type="com.zhiqin.coach.admin.dto.CoachDTO" alias="CoachDTO"/>
+		<typeAlias type="com.zhiqin.coach.admin.dto.CourseDTO" alias="CourseDTO"/>
+		<typeAlias type="com.zhiqin.coach.admin.dto.LessonDTO" alias="LessonDTO"/>
+		
+		<typeAlias type="com.zhiqin.coach.admin.dto.SearchArtifactDTO" alias="SearchArtifactDTO"/>
+		<typeAlias type="com.zhiqin.coach.admin.dto.TaskDTO" alias="TaskDTO"/>
+		<typeAlias type="com.zhiqin.coach.admin.dto.DownloadTaskDTO" alias="DownloadTaskDTO"/>
+		<typeAlias type="com.zhiqin.coach.admin.dto.TopDTO" alias="TopDTO"/>
+		<typeAlias type="com.zhiqin.coach.admin.dto.ArtifactDTO" alias="ArtifactDTO"/>
+		<typeAlias type="com.zhiqin.coach.admin.dto.TagDTO" alias="TagDTO"/>
+		<typeAlias type="com.zhiqin.coach.admin.dto.CategoryDTO" alias="CategoryDTO"/>
+		<typeAlias type="com.zhiqin.coach.admin.dto.TagImageDTO" alias="TagImageDTO"/>
+		<typeAlias type="com.zhiqin.coach.admin.dto.SearchTagImageDTO" alias="SearchTagImageDTO"/>
+	</typeAliases>
+</configuration>

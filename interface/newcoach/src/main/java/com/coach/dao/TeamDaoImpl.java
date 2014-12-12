@@ -8,6 +8,7 @@ import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.coach.common.Constants.TEAM_TYPE;
 import com.coach.model.Team;
 import com.coach.model.TeamCheck;
 
@@ -63,6 +64,19 @@ public class TeamDaoImpl extends SqlSessionDaoSupport implements TeamDao{
 		}
 		
 		
+	}
+
+	@Override
+	public Long getDoneNumber(Long coachId, TEAM_TYPE type) {
+		try{
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("coachId", coachId);
+			map.put("type", type);
+			return  this.getSqlSession().selectOne("getDoneNumber", map);
+		} catch(RuntimeException e){
+			log.error("getDoneNumber", e);
+			throw e;
+		}
 	}
 	
 }

@@ -1,5 +1,9 @@
 package com.coach.dao;
 
+import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +43,30 @@ public class SysSessionDaoImpl extends SqlSessionDaoSupport implements SysSessio
 			throw e;
 		}
 		
+	}
+
+	@Override
+	public void removeInalidSession(Timestamp timestamp) {
+		try{
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("timestamp", timestamp);
+			this.getSqlSession().delete("removeInalidSession", map);
+		} catch(RuntimeException e){
+			log.error("removeInalidSession", e);
+			throw e;
+		}
+		
+		
+	}
+
+	@Override
+	public void updateLastAccessTime(String sessionId) {
+		try{
+			this.getSqlSession().update("updateWebLastAccessTime", sessionId);
+		} catch(RuntimeException e){
+			log.error("updateWebLastAccessTime", e);
+			throw e;
+		}
 	}
 
 

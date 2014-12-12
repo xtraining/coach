@@ -12,10 +12,10 @@ import com.coach.utils.HttpUtil;
 import com.rop.utils.RopUtils;
 
 public class TeamServiceTest extends TestCase {
-	public static final String SERVER_URL = "http://localhost:8080/coach/service";
-//	public static final String SERVER_URL = "http://114.215.145.26/coach/service";
-	public static final String APP_KEY = "iphone_user";
-	public static final String APP_SECRET = "LlnZA8cql4liN4CvjGL5GfwhCh7fwWGE";
+//	public static final String SERVER_URL = "http://localhost:8080/coach/service";
+	public static final String SERVER_URL = "http://114.215.145.26/coach/service";
+	public static final String APP_KEY = "web_user";
+	public static final String APP_SECRET = "dUnogGHrvDYnowxANsk063EVmxepTJU2TbfzX9";
 	public static final String VERSION = "V0.5.0.0";
 	public static final String SESSION_ID = "100BBF85-5CC1-440A-B43A-7C06E2EC7653";
 	
@@ -27,15 +27,15 @@ public class TeamServiceTest extends TestCase {
     	map.put("format", "json");
     	map.put("sessionId", SESSION_ID);
     	map.put("coachId", "20");
-    	map.put("status", "0");
+    	map.put("status", "2");
     	String sign = RopUtils.sign(map, APP_SECRET); //第二个参数为SecretKey, 有O2O系统分配
     	map.put("sign", sign);
     	String response = HttpUtil.postServer(SERVER_URL, map);
         System.out.println("response = " + response);
         assertNotNull(response);
         assertTrue(response.indexOf("code") <= 0);
-	}
-	*/
+	}*/
+	
 	/*public void testCreateTeam(){
 		Map <String, String>map = new HashMap<String, String>();
     	map.put("appKey", APP_KEY); //第二个参数为AppKey
@@ -107,7 +107,7 @@ public class TeamServiceTest extends TestCase {
 	}*/
 	
 
-	public void testCheckMember(){
+	/*public void testCheckMember(){
 		Map <String, String>map = new HashMap<String, String>();
     	map.put("appKey", APP_KEY); //第二个参数为AppKey
     	map.put("method", "team.checkMember"); 
@@ -126,7 +126,7 @@ public class TeamServiceTest extends TestCase {
         System.out.println("response = " + response);
         assertNotNull(response);
         assertTrue(response.indexOf("code") <= 0);
-	}
+	}*/
 	
 	/*public void testAddMember(){
 		Map <String, String>map = new HashMap<String, String>();

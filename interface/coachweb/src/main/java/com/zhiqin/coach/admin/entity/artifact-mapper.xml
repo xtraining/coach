@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="artifact">
+	<sql id = "getArtifactCondition">
+		from artifact a 
+		<if test="searchDto.categoryId != null">
+			inner join artifact_category ac on a.id = ac.artifactId 
+			inner join category c on ac.categoryId = c.id and c.id = #{searchDto.categoryId}
+		</if>
+		<if test="searchDto.categoryName != null and searchDto.categoryName != ''">
+			inner join artifact_category acc on a.id = acc.artifactId 
+			inner join category cc on acc.categoryId = cc.id and cc.name like '%${searchDto.categoryName}%'
+		</if>
+		<if test="searchDto.tagId != null">
+			inner join artifact_tag at on a.id = at.artifactId 
+			inner join tag t on at.tagId = t.id and t.id = #{searchDto.tagId}
+		</if>
+		<if test="searchDto.tagName != null and searchDto.tagName != ''">
+			inner join artifact_tag att on a.id = att.artifactId 
+			inner join tag tt on att.tagId = tt.id and tt.name like '%${searchDto.tagName}%'
+		</if>
+		where a.status in (0, 2)
+		<if test="searchDto.type != null">
+			and a.type = #{searchDto.type}
+		</if>
+		<if test="searchDto.title != null and searchDto.title != ''">
+			and a.title like '%${searchDto.title}%'
+		</if>
+	</sql>
+	
+	<select id="getArtifactTotalNum" parameterType="Map" resultType="Long">
+		select count(a.id)
+		<include refid="getArtifactCondition" />
+	</select>
+
+	<select id="getArtifactList" parameterType="Map" resultType="ArtifactDTO" >
+		select a.*
+		<include refid="getArtifactCondition" />
+		order by a.createTime desc
+		limit ${(p.pageNum - 1) * p.numPerPage}, ${p.numPerPage}
+	</select>
+	
+	<select id="getById" parameterType="Long" resultType="ArtifactDTO">
+		select distinct a.*, c.categoryId, c.artifactCategoryOrder categoryOrder from artifact a left outer join artifact_category c on a.id = c.artifactId
+		where a.id = #{artifactId} limit 1
+	</select>
+	
+	<select id="getSubListByArtifactId" parameterType="Long" resultType="ArtifactDTO">
+		select distinct a.id, a.title imageName from 
+		artifact_hierarchy r inner join artifact a on r.artifactId = a.id and a.status in (0, 2)
+		where r.parentArtifactId = #{artifactId} 
+	</select>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="ArtifactDTO">
+		INSERT INTO artifact(title, subtitle, createTime, type, description, hitNum, materialType, fileName, duration, status, tags)
+		VALUE (#{title}, #{subtitle}, now(), #{type}, #{description}, #{hitNum}, #{materialType}, #{fileName}, #{duration}, #{status}, #{tags})
+  	</insert>
+
+	<insert id="insertFromDownload" useGeneratedKeys="true" keyProperty="id" parameterType="ArtifactDTO">
+		INSERT INTO artifact(title, subtitle, createTime, type, description, hitNum, materialType, fileName, duration, status, downloadTaskId)
+		select d.title, d.subtitle, now(), type, null, 1, 0, d.fileName, d.duration, 3, d.id  from download_task d where d.id = #{downloadTaskId}
+  	</insert>
+
+	<update id="deleteByIds" parameterType="Map">
+		update artifact set status = 1 where id in (${ids})
+  	</update>
+  	
+  	<update id="updateFileName" parameterType="ArtifactDTO">
+		update artifact set fileName = #{fileName}, imageName = #{imageName} where id = #{id}
+  	</update>
+  	
+  	<update id="deleteByDownloadTaskId" parameterType="Long">
+		update artifact set status = 1 where downloadTaskId = #{downloadTaskId}
+  	</update>
+  	
+  	<update id="updateArtifact" parameterType="ArtifactDTO">
+		update artifact set title = #{title}, subtitle = #{subtitle}, duration = #{duration}, hitNum = #{hitNum}, status=#{status},
+		fileName = #{fileName}, imageName = #{imageName}, tags=#{tags} where id = #{id}
+  	</update>
+  	
+  	<update id="updateStatus" parameterType="Map">
+		update artifact set status = #{status} where id in 
+		<foreach collection="artifactIdList" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
+	</update>
+</mapper>

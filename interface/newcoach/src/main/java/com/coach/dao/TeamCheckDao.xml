@@ -30,13 +30,13 @@
   <select id="getTeamMemberListByPhoneNumber" parameterType="Map" resultType="com.coach.model.TeamMember">
 		select t.* from member m inner join team_member t on m.id = t.memberId
 		where m.coachId = #{coachId} and m.phoneNumber = #{phoneNumber}
-		and m.status != -1 and t.status != -1
+		and m.status != -1 and t.status = 0
   </select>
 	
 
   <select id="getTeamCheckHistory" parameterType="Map" resultType="com.coach.model.TeamCheck">
 		select c.*, 
-		(select count(distinct m.id) from team_check_member m where m.teamCheckId = c.id and m.status = 0) attendNum,
+		(select count(distinct m.id) from team_check_member m where m.teamCheckId = c.id and m.status = 1) attendNum,
 		(select count(distinct m.id) from team_check_member m where m.teamCheckId = c.id and m.status = 0) absentNum
 		from team_check c
 		where c.teamId = #{teamId} and c.status != -1

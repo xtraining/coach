@@ -1,5 +1,8 @@
 package com.coach.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
@@ -7,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.coach.common.Config;
 import com.coach.common.Constants;
+import com.coach.common.Constants.METHOD;
 import com.coach.common.Constants.RECEIVER_TYPE;
 import com.coach.common.Constants.SMS_TYPE;
 import com.coach.model.Coach;
@@ -24,19 +28,21 @@ import com.coach.request.SignUpRequest;
 import com.coach.resolver.CoachResolver;
 import com.coach.resolver.SmsResolver;
 import com.coach.resolver.SysSessionResolver;
+import com.coach.response.QrcodeSignInResponse;
 import com.coach.response.SignInResponse;
 import com.coach.response.SimpleResponse;
+import com.coach.utils.HttpUtil;
 import com.rop.annotation.HttpAction;
 import com.rop.annotation.NeedInSessionType;
 import com.rop.annotation.ServiceMethod;
 import com.rop.annotation.ServiceMethodBean;
+import com.rop.utils.RopUtils;
 
 @ServiceMethodBean
 public class CoachService extends SimpleBaseService{
 	@Resource private CoachResolver coachResolver;
 	@Autowired private SysSessionResolver sessionResolver;
 	@Autowired private SmsResolver smsResolver;
-	
 	@ServiceMethod(method = "coach.updateLastAccessTime",version = "1.0",needInSession = NeedInSessionType.YES, httpAction = HttpAction.POST)
     public Object updateLastAccessTime(CoachBaseRequest request) {
 		int result = coachResolver.updateLastAccessTime(request.getCoachId());
@@ -196,7 +202,7 @@ public class CoachService extends SimpleBaseService{
 	}
 	
 	@ServiceMethod(method = "coach.scanSignIn",version = "1.0", needInSession = NeedInSessionType.YES)
-    public Object scanSignIn(ScanSignInRequest request) {
+    public Object scanSignIn(ScanSignInRequest request) throws Exception {
 		SimpleResponse s = new SimpleResponse();
 		SysSession session = sessionResolver.getValidSessionBySessionId(request.getRopRequestContext().getSessionId());
 		if(session == null || session.getReceiverType() == null || session.getReceiverId() == null || 
@@ -205,14 +211,28 @@ public class CoachService extends SimpleBaseService{
 			s.setMsg("Session ID doesn't match with Coach ID.");
 			return s;
 		}
-		boolean checkToken = coachResolver.checkToken(request.getCoachId(), request.getToken());
-		if(checkToken){
+    	String response = coachResolver.sendToWeb(request);
+		if("0".equals(response)){
 			return s;
 		} else {
 			s.setFlag(1);
 			s.setMsg("Token failed.");
 			return s;
 		}
+	}
+	
+	@ServiceMethod(method = "coach.qrcodeSignIn",version = "1.0", needInSession = NeedInSessionType.NO)
+    public Object qrcodeSignIn(CoachBaseRequest request) throws Exception {
+		QrcodeSignInResponse s = new QrcodeSignInResponse();
+		SysSession session = sessionResolver.getValidSessionBySessionId(request.getRopRequestContext().getSessionId());
+		if(session == null || session.getReceiverType() == null || session.getReceiverId() == null || 
+				session.getReceiverType().intValue() != RECEIVER_TYPE.COACH.getValue() || session.getReceiverId().intValue() != request.getCoachId()){
+			return s;
+		}
+		Coach c = coachResolver.getBasicById(request.getCoachId());
+		s.setCoachId(request.getCoachId());
+		s.setPhoneNumber(c.getPhoneNumber());
+		return s;
 	}
 	
 	@ServiceMethod(method = "coach.changeSMSStatus",version = "1.0", needInSession = NeedInSessionType.YES)

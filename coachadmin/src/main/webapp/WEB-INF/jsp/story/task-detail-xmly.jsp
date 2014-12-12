@@ -21,7 +21,6 @@ function saveAccept(){
 	}
 	idsStr = idsStr.substring(0, idsStr.length-1);
 	var urlStr = "${ctx}/story/task/saveAccept.htm?taskId=0&downloadTaskIds="+idsStr+"&categoryId="+categoryId.value;
-	alert(urlStr);
 	$.ajax({
 			type:'POST',
 			url:urlStr,
@@ -77,7 +76,7 @@ function saveAccept(){
 			<tr>
 				<th width="2%" align="left"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
 				<th width="3%" align="left">下载ID</th>
-				<th width="3%" align="left">类型</th>
+				<!-- <th width="3%" align="left">类型</th> -->
 				<th width="10%" align="left">标题</th>
 				<th width="10%"  align="left">副标题</th>
 				<th width="5%" align="left">时长(秒)</th>
@@ -96,7 +95,7 @@ function saveAccept(){
 				<td>
 					${item.id}
 				</td>
-				<td>
+				<%-- <td>
 					<c:choose> 
   						<c:when test="${item.type == 0}"> 
   						              封面
@@ -105,7 +104,7 @@ function saveAccept(){
   							内容
   						</c:otherwise>
   					</c:choose>
-  				</td>
+  				</td> --%>
 				<td>
 					${item.title}
 				</td>

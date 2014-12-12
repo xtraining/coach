@@ -14,6 +14,8 @@ public class Constants {
 	public static final String COACH_AVATAR_PREFIX = "coach_avatar";
 	public static final String READ_FROM_CACHE_SWITCH = "read_from_cache_switch";
 	public static final int COURSE_OFFSET = 5;
+	public static final String WEBSOCKET_USERNAME = "websocket_username";
+	public static final String SESSION_USERNAME = "session_username";
 	
 	
 	public enum METHOD {
@@ -227,7 +229,7 @@ public class Constants {
 	}
 	
 	public enum RECEIVER_TYPE {
-		COACH(0), MEMBER(1);
+		COACH(0), MEMBER(1), WEB_COACH(2);
 		private int value;
 		private RECEIVER_TYPE(int value) {
 			this.value = value;
@@ -401,6 +403,17 @@ public class Constants {
 		MEMBER_NEWS(0), COURSE_NEWS(1);
 		private int value;
 		private NEWS_TYPE(int value) {
+			this.value = value;
+		}
+		public int getValue(){
+		return this.value;
+		}
+	}
+	
+	public enum TEAM_TYPE {
+		NORMAL(0), DONE(1), ALL(2);
+		private int value;
+		private TEAM_TYPE(int value) {
 			this.value = value;
 		}
 		public int getValue(){

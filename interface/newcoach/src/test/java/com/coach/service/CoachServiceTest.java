@@ -35,7 +35,7 @@ public class CoachServiceTest extends TestCase {
         assertTrue(response.indexOf("code") <= 0);
 	}*/
 	
-	@Test
+	/*@Test
 	public void testUpdateSMSStatus() {
 		Map <String, String>map = new HashMap<String, String>();
     	map.put("appKey", APP_KEY); //第二个参数为AppKey
@@ -51,7 +51,7 @@ public class CoachServiceTest extends TestCase {
         System.out.println("response = " + response);
         assertNotNull(response);
         assertTrue(response.indexOf("code") <= 0);
-	}
+	}*/
 
 	/*@Test
 	public void testGetSignUpVcode() {
@@ -86,7 +86,7 @@ public class CoachServiceTest extends TestCase {
         assertNotNull(response);
         assertTrue(response.indexOf("code") <= 0);
 	}*/
-/*	public void testSignIn() {
+	/*public void testSignIn() {
 		Map <String, String>map = new HashMap<String, String>();
     	map.put("appKey", APP_KEY); //第二个参数为AppKey
     	map.put("method", METHOD.SIGN_IN.getValue()); 
@@ -182,7 +182,7 @@ public class CoachServiceTest extends TestCase {
     	map.put("format", "json");
     	map.put("sessionId", SESSION_ID);
     	map.put("coachId", "20");
-    	map.put("token", "123");
+    	map.put("token", "BCD0D53F3A9E4FE9833050522DD080C1");
     	String sign = RopUtils.sign(map, APP_SECRET); //第二个参数为SecretKey, 有O2O系统分配
     	map.put("sign", sign);
     	String response = HttpUtil.postServer(SERVER_URL, map);
@@ -190,4 +190,5 @@ public class CoachServiceTest extends TestCase {
         assertNotNull(response);
         assertTrue(response.indexOf("code") <= 0);
 	}
+	
 }

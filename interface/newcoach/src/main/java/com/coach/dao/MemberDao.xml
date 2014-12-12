@@ -4,7 +4,7 @@
 
 	<select id="getMemberList" parameterType="Map" resultType="com.coach.model.Member">
 		select m.*
-		from team_member t inner join member m on t.memberId = m.id and t.status != -1 and m.status != -1
+		from team_member t inner join member m on t.memberId = m.id and t.status = 0 and m.status != -1
 		where m.coachId = #{coachId} and t.teamId = #{teamId}
 	</select>
 	
@@ -21,4 +21,11 @@
   	update member m inner join team_member t on t.memberId = m.id and t.teamId = #{teamId} and m.coachId = #{coachId}
   	set m.status = -1, t.status = -1 where m.id = #{memberId}
   </update>
+  
+   <update id="deleteMemberInBatch" parameterType="Map">
+  	update member m inner join team_member t on t.memberId = m.id and t.teamId = #{teamId} and m.coachId = #{coachId}
+  	set m.status = -1, t.status = -1 where m.id in 
+  	<foreach collection="list" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
+  </update>
+  
 </mapper>

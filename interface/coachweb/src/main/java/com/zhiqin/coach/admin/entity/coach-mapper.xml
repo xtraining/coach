@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="coach">
+	<resultMap id="CoachDTO" type="com.zhiqin.coach.admin.dto.CoachDTO">
+		<id column="id" jdbcType="BIGINT" property="coachId" />
+		<result column="name" jdbcType="VARCHAR" property="coachName" />
+		<result column="phoneNumber" jdbcType="VARCHAR" property="phoneNumber" />
+		<result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="status" jdbcType="INTEGER" property="status" />
+	</resultMap>
+	
+	<sql id="getCoachCondition">
+		from coach c inner join tuser t on c.tuserId = t.id
+		left outer join organization_coach oc on c.id = oc.coachId 
+		where 1 = 1
+		<if test="coachId != null">
+			and c.id = ${coachId}
+		</if>
+		<if test="coachName != null and coachName != ''">
+			and t.name like '%${coachName}%'
+		</if>
+		<if test="phoneNumber != null and phoneNumber != ''">
+			and t.phoneNumber like '%${phoneNumber}%'
+		</if>
+		<if test="type != null">
+			and c.type = ${type}
+		</if>
+	</sql>
+
+	<select id="getTotalNum" parameterType="SearchOrgDTO" resultType="Long">
+		select count(*) 
+		<include refid="getCoachCondition" />
+	</select>
+
+	<select id="getCoachList" parameterType="Map" resultMap="CoachDTO" >
+		select c.id, t.name, t.phoneNumber, c.createTime, oc.status 
+		<include refid="getCoachCondition" />
+		limit ${p.pageNum - 1}, ${p.numPerPage}
+	</select>
+
+</mapper>

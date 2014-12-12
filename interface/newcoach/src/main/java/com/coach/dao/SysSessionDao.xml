@@ -20,4 +20,12 @@
 	<delete id="invalidSessionBySessionId" parameterType="String">
 	   delete from sys_session where sessionId = #{sessionId}
 	</delete>
+	
+	<delete id="removeInalidSession" parameterType="Map">
+	   delete from sys_session where createTime &lt; #{timestamp} and receiverType = 2
+	</delete>
+	
+	<update id="updateWebLastAccessTime" parameterType="String">
+	   update sys_session set createTime = now() where sessionId = #{sessionId}
+	</update>
 </mapper>

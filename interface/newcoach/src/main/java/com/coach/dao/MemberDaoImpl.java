@@ -70,5 +70,21 @@ public class MemberDaoImpl extends SqlSessionDaoSupport implements MemberDao{
 		}
 		
 	}
+
+	@Override
+	public void delete(Long coachId, Long teamId, List<Long> list) {
+		try{
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("coachId", coachId);
+			map.put("teamId", teamId);
+			map.put("list",list);
+			this.getSqlSession().update("deleteMemberInBatch", map);
+		} catch(RuntimeException e){
+			log.error("deleteMemberInBatch", e);
+			throw e;
+		}
+		
+	}
+
 	
 }

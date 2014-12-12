@@ -13,6 +13,8 @@ public class TeamCheckResponse extends TeamResponse implements Serializable {
 	private String address;
 	@XmlElement
 	private String createTime;
+	@XmlElement
+	private Integer status;
 	public String getAddress() {
 		return address;
 	}
@@ -24,6 +26,12 @@ public class TeamCheckResponse extends TeamResponse implements Serializable {
 	}
 	public void setCreateTime(String createTime) {
 		this.createTime = createTime;
+	}
+	public Integer getStatus() {
+		return status;
+	}
+	public void setStatus(Integer status) {
+		this.status = status;
 	}
 
 

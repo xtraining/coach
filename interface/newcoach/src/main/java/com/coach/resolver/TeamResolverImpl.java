@@ -3,7 +3,6 @@ package com.coach.resolver;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.coach.common.Config;
+import com.coach.common.Constants.TEAM_TYPE;
 import com.coach.dao.CoachDao;
 import com.coach.dao.MemberDao;
 import com.coach.dao.TeamCheckDao;
@@ -29,11 +29,13 @@ import com.coach.model.Team;
 import com.coach.model.TeamCheck;
 import com.coach.model.TeamMember;
 import com.coach.request.AddMemberRequest;
+import com.coach.request.ChangeMemberTeamRequest;
 import com.coach.request.ChangeTeamStatusRequest;
 import com.coach.request.CheckMemberRequest;
 import com.coach.request.CreateTeamRequest;
 import com.coach.request.GetMemberDetailRequest;
 import com.coach.request.GetTeamCheckHistoryRequest;
+import com.coach.request.MemberIdListRequest;
 import com.coach.request.MemberIdRequest;
 import com.coach.request.TeamCheckIdRequest;
 import com.coach.request.TeamIdRequest;
@@ -41,7 +43,6 @@ import com.coach.request.UpdateMemberRequest;
 import com.coach.request.UpdateTeamRequest;
 import com.coach.response.CheckResponse;
 import com.coach.response.GetTeamCheckResponse;
-import com.coach.response.MemberDetailResponse;
 import com.coach.response.MemberResponse;
 import com.coach.response.TeamCheckResponse;
 import com.coach.response.TeamResponse;
@@ -285,7 +286,9 @@ public class TeamResolverImpl implements TeamResolver{
 		for(TeamCheck teamCheck : list){
 			rList.add(teamCheck.toTeamCheckResponse());
 		}
-		response.add(rList);
+		if(rList.size() > 0){
+			response.add(rList);
+		}
 		
 		List<TeamMember> teamMemberList = teamCheckDao.getTeamMemberListByPhoneNumber(request.getCoachId(), request.getPhoneNumber());
 		for(TeamMember teamMember : teamMemberList){
@@ -300,6 +303,45 @@ public class TeamResolverImpl implements TeamResolver{
 		}
 		
 		return response;
+	}
+
+	@Override
+	public Long getDoneNumber(Long coachId, TEAM_TYPE type) {
+		Long num = teamDao.getDoneNumber(coachId, type);
+		return num;
+	}
+
+	@Override
+	public void deleteMemberInBatch(MemberIdListRequest request) {
+		String []ids = StringUtils.split(request.getMemberIds(), ",");
+		List<Long> list = new ArrayList<Long>();
+		for(String id : ids){
+			list.add(Long.valueOf(StringUtils.trim(id)));
+		}
+		if(list.size() > 0){
+			memberDao.delete(request.getCoachId(), request.getTeamId(), list);
+		}
+	}
+
+	@Override
+	@Transactional
+	public void changeMemberTeamInBatch(ChangeMemberTeamRequest request) {
+		String []ids = StringUtils.split(request.getMemberIds(), ",");
+		List<Long> list = new ArrayList<Long>();
+		for(String id : ids){
+			list.add(Long.valueOf(StringUtils.trim(id)));
+		}
+		if(list.size() > 0){
+			teamMemberDao.changeMemberToDone(request.getTeamId(), list);
+			for(Long memberId : list){
+				TeamMember m = new TeamMember();
+				m.setMemberId(memberId);
+				m.setTeamId(request.getTargetTeamId());
+				m.setStatus(0);
+				teamMemberDao.insert(m);
+			}
+		}
+		
 	}
 	
 }

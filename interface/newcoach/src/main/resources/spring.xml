@@ -17,8 +17,13 @@
         http://www.springframework.org/schema/task/spring-task.xsd
         http://www.springframework.org/schema/jee
         http://www.springframework.org/schema/jee/spring-jee-3.1.xsd
+        http://www.springframework.org/schema/websocket
+        http://www.springframework.org/schema/websocket/spring-websocket-4.0.xsd
         http://www.springframework.org/schema/cache 
         http://www.springframework.org/schema/cache/spring-cache.xsd">
 
+	<task:annotation-driven executor="myExecutor" scheduler="myScheduler" />
+	<task:executor id="myExecutor" pool-size="50" />
+	<task:scheduler id="myScheduler" pool-size="100" />  
 	<import resource="write-master-read-slaves.xml"/> 
 </beans>

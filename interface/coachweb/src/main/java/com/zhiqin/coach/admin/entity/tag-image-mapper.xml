@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tagimage">
+	<sql id = "getTagImageCondition">
+		from image_inf i 
+		<if test="searchDto.tagId != null">
+			left outer join tag_image a on i.id = a.imageId
+			and a.tagId = #{searchDto.tagId}
+		</if>
+		<if test="searchDto.tagName != null and searchDto.tagName != ''">
+			left outer join tag_image aa on i.id = aa.imageId
+			inner join tag t on t.id = aa.tagId and t.name like '%${searchDto.tagName}%'
+		</if>
+		where i.status != 1 
+	</sql>
+	
+	<select id="getTagImageTotalNum" parameterType="Map" resultType="Long">
+		select count(distinct i.id)
+		<include refid="getTagImageCondition" />
+	</select>
+
+	<select id="getTagImage" parameterType="Map" resultType="TagImageDTO" >
+		select distinct i.*
+		<include refid="getTagImageCondition" />
+		order by i.id desc
+		limit ${(pageInfo.pageNum - 1) * pageInfo.numPerPage}, ${pageInfo.numPerPage}
+	</select>
+	
+	<select id="getTagNameListByImageId" parameterType="Long" resultType="String" >
+		select t.name from image_inf i 
+		inner join tag_image a on i.id = a.imageId 
+		inner join tag t on t.id = a.tagId
+		where i.id = #{imageId}
+	</select>
+	
+	<select id="getTagByImageId" parameterType="Long" resultType="TagDTO" >
+		select t.* from image_inf i 
+		inner join tag_image a on i.id = a.imageId 
+		inner join tag t on t.id = a.tagId 
+		where i.id = #{imageId}
+	</select>
+	
+	<delete id="deleteByImageId" parameterType="Map">
+		delete from tag_image where imageId = #{imageId} 
+  	</delete>
+
+	<insert id="insert" parameterType="Map">
+		INSERT INTO tag_image(tagId, imageId)
+		Value (#{tagId}, #{imageId})
+  	</insert>
+</mapper>

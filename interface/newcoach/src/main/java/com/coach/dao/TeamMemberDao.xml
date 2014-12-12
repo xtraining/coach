@@ -5,4 +5,11 @@
   <insert id="insertTeamMember" useGeneratedKeys="true" keyProperty="id" parameterType="com.coach.model.TeamMember">
 	 insert into team_member(teamId, memberId,createTime,status) value (#{teamId}, #{memberId}, now(), #{status})
   </insert>
+  
+  <update id="updateMemberTeam" parameterType="Map">
+  	update team_member t
+  	set t.status = 1 
+  	where t.teamId = #{teamId} and t.memberId in 
+  	<foreach collection="list" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
+  </update>
 </mapper>

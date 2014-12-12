@@ -17,5 +17,7 @@ public interface MemberDao {
 
 	void delete(Long coachId, Long teamId, Long memberId);
 
+	void delete(Long coachId, Long teamId, List<Long> list);
+
 
 }

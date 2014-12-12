@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>智勤教育</title>
+    <link rel="stylesheet" href="static_resource/css/hello-coach-index.css"/>
+</head>
+<body>
+    <div class="login-content">
+        <div class="left-opacity"></div>
+        <div class="right-login-opacity"></div>
+        <!--<div class="ft-opacity"></div>-->
+        <!-- 左侧二维码 start -->
+        <div class="qr-code-login">
+            <div class="pic-box">
+                <img src="login/qrcode" alt="扫描二维码快速登录"/>
+            </div>
+            <p>请打开“教练宝”手机端，开启扫一扫功能</p>
+            <p>扫描上方二维码以快速登录</p>
+        </div>
+        <!-- 左侧二维码 end -->
+        <!-- 右侧手动登录 start -->
+        <div class="general-login">
+            <div class="hd">
+                <div class="pic">
+                    <b class="left-triangle"></b>
+                    <img src="static_resource/images/login-tit.jpg" alt="coach"/>
+                    <b class="right-triangle"></b>
+                </div>
+                <p>登录</p>
+            </div>
+            <form action="login/login" method="post">
+                <div class="field field-username">
+                    <label class="text-label" for="jLoginName"><i class="login-name"></i><span class="hidden-span">用户名</span></label>
+                    <input class="input-text" name="jLoginName" type="text" />
+                </div>
+                <div class="field field-password">
+                    <label class="text-label" for="JPassWord"><i class="login-pass-word"></i><span class="hidden-span">密码</span></label>
+                    <input class="input-text" name="JPassWord" type="password" />
+                </div>
+                <div class="field">
+                    <div class="remember">
+                        <input class="checkbox" type="checkbox" id="JRemember" checked/>
+                        <label for="JRemember">记住密码</label>
+                    </div>
+                </div>
+                <div class="field">
+                    <button type="submit" class="login-primary-btn">登&nbsp;&nbsp;&nbsp;&nbsp;录</button>
+                </div>
+            </form>
+            <div class="other"><a href="register.htm">免费注册</a></div>
+        </div>
+        <!-- 右侧手动登录 end -->
+        <!-- 底部信息 start -->
+        <!--<div class="login-ft">-->
+            <!--<a href="#" target="_blank">客服中心</a>-->
+            <!--<a href="#" target="_blank">关于我们</a>-->
+        <!--</div>-->
+        <!-- 底部信息 end -->
+
+    </div>
+    <!-- 背景图片 start -->
+    <div class="login-bg-wrap">
+        <!--<img src="images/login-big-bg.jpg" alt=""/>-->
+        <!--<div class="bg-1"></div>-->
+        <!--<div class="bg-2"></div>-->
+        <!--<div class="bg-3"></div>-->
+        <!--<div class="bg-4"></div>-->
+        <!--<div class="bg-5"></div>-->
+        <!--<div class="bg-6"></div>-->
+    </div>
+    <!-- 背景图片 end -->
+    <script data-main="scripts/main" src="bower_components/requirejs/require.js"></script>
+</body>
+</html>

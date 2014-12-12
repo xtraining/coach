@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="image">
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="TagImageDTO">
+		INSERT INTO image_inf(fileName, status) 
+		VALUE (#{fileName}, 0) 
+  	</insert>
+  	
+  	<update id="updateFileName" parameterType="TagImageDTO">
+		update image_inf set fileName = #{fileName} where id = #{id}
+  	</update>
+  	
+  	<update id="deleteByIds" parameterType="Map">
+		update image_inf set status = 1 where id in (${ids})
+	</update>
+  	
+</mapper>

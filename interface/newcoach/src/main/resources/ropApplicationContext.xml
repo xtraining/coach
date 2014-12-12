@@ -49,6 +49,10 @@
         <bean class="com.coach.PreDoServiceEventListener"/>
         <bean class="com.coach.AfterDoServiceEventListener"/>
     </rop:listeners>
+    
+    <rop:interceptors>
+		<bean class="com.coach.interceptor.WebUserAccessInterceptor"/>
+	</rop:interceptors>
 
 	<import resource="spring.xml"/> 
 	

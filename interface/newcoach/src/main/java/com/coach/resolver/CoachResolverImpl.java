@@ -2,12 +2,15 @@ package com.coach.resolver;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,8 +33,13 @@ import com.coach.model.SmsHistory;
 import com.coach.model.Tuser;
 import com.coach.request.BindBaiduPushMessageRequest;
 import com.coach.request.ChangeSMSStatusRequest;
+import com.coach.request.ScanSignInRequest;
 import com.coach.request.SignOutRequest;
 import com.coach.request.SignUpRequest;
+import com.coach.response.SignInResponse;
+import com.coach.utils.HttpUtil;
+import com.coach.utils.JsonBinder;
+import com.rop.utils.RopUtils;
 @Service
 public class CoachResolverImpl extends BaseResolver implements CoachResolver{
 	@Resource private CoachDao coachDao;
@@ -40,6 +48,7 @@ public class CoachResolverImpl extends BaseResolver implements CoachResolver{
 	@Resource private CoachExpandDao coachExpandDao;
 	@Resource private ClientAppkeyDao clientAppkeyDao;
 	@Resource private AppVersionDao appVersionDao;
+	@Autowired private SysSessionResolver sessionResolver;
 	public Coach getIdByCredentials(String phoneNumber, String password) {
 		return coachDao.getIdByCredentials(phoneNumber, password);
 	}
@@ -179,6 +188,20 @@ public class CoachResolverImpl extends BaseResolver implements CoachResolver{
 			coachDao.updateSMSStatus(request.getCoachId(), 0);
 		}
 		
+	}
+
+	@Override
+	public String sendToWeb(ScanSignInRequest request) {
+		SignInResponse webSignInResponse = sessionResolver.setupWebSignInSuccessResponse(request, request.getCoachId());
+		Map <String, String>map = new HashMap<String, String>();
+    	map.put("appKey", "coach_user"); //第二个参数为AppKey
+    	map.put("token", request.getToken()); 
+    	map.put("coachId", webSignInResponse.getCoachId()+"");
+    	map.put("coachSessionId", webSignInResponse.getSessionId());
+    	String sign = RopUtils.sign(map, "OhP7seHIaAK4BsgOxrkjmULheq3pB2aY");
+    	map.put("sign", sign);
+    	String response = HttpUtil.postServer(Config.getProperty("coach_web_url"), map);
+    	return response;
 	}
 
 }

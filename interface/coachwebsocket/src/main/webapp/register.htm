@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>智勤教育</title>
+    <link rel="stylesheet" href="static_resource/css/hello-coach-index.css"/>
+</head>
+<body>
+    <div class="login-content">
+        <div class="left-opacity"></div>
+        <div class="right-register-opacity"></div>
+        <div class="ft-opacity"></div>
+        <!-- 左侧二维码 start -->
+            <div class="qr-code-login">
+                <div class="pic-box">
+                    <img src="login/qrcode" alt="扫描二维码快速登录"/>
+                </div>
+                <p>请打开“教练宝”手机端，开启扫一扫功能</p>
+                <p>扫描上方二维码以快速登录</p>
+            </div>
+            <!-- 左侧二维码 end -->
+            <!-- 右侧手动登录 start -->
+            <div class="general-login general-register">
+                <div class="hd">
+                    <div class="pic">
+                        <b class="left-triangle"></b>
+                        <img src="static_resource//images/login-tit.jpg" alt="coach"/>
+                        <b class="right-triangle"></b>
+                    </div>
+                    <p>注册</p>
+                </div>
+                <form action="login/register">
+                    <div class="field field-username">
+                        <label class="text-label" for="JPhoneNum"><i class="login-phone"></i><span class="hidden-span">手机</span></label>
+                        <input class="input-text" id="JPhoneNum" type="text" />
+                    </div>
+                    <div class="field field-username">
+                        <label class="text-label" for="jUsername"><i class="login-username"></i><span class="hidden-span">用户名</span></label>
+                        <input class="input-text" id="JUsername" type="text" />
+                    </div>
+                    <div class="field field-password">
+                        <label class="text-label" for="JPassWord"><i class="login-pass-word"></i><span class="hidden-span">密码</span></label>
+                        <input class="input-text" id="JPassWord" type="password" />
+                    </div>
+                    <div class="field field-password-repeat">
+                        <label class="text-label" for="JPassWordRepeat"><i class="login-pass-word"></i><span class="hidden-span">重复密码</span></label>
+                        <input class="input-text" id="JPassWordRepeat" type="password" />
+                    </div>
+                    <div class="field">
+                        <div class="remember">
+                            <input class="checkbox" type="checkbox" id="JRemember" checked/>
+                            <label for="JRemember">我已阅读并同意<a class="user-conditions" href="" target="_blank">用户条款</a></label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <button type="submit" class="login-primary-btn">注&nbsp;&nbsp;&nbsp;&nbsp;册</button>
+                    </div>
+                </form>
+                <div class="other"><a href="index.htm">已有账号？立即登录</a></div>
+            </div>
+            <!-- 右侧手动登录 end -->
+            <!-- 底部信息 start -->
+            <div class="login-ft">
+                <a href="call-center.htm" target="_blank">客服中心</a>
+                <a href="about-me.htm" target="_blank">关于我们</a>
+            </div>
+            <!-- 底部信息 end -->
+    </div>
+    <!-- 背景图片 start -->
+    <div class="login-bg-wrap">
+        <div class="bg-1"></div>
+        <div class="bg-2"></div>
+        <div class="bg-3"></div>
+        <div class="bg-4"></div>
+        <div class="bg-5"></div>
+        <div class="bg-6"></div>
+    </div>
+    <!-- 背景图片 end -->
+</body>
+</html>

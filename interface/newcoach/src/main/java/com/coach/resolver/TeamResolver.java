@@ -4,12 +4,15 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.coach.common.Constants.TEAM_TYPE;
 import com.coach.request.AddMemberRequest;
+import com.coach.request.ChangeMemberTeamRequest;
 import com.coach.request.ChangeTeamStatusRequest;
 import com.coach.request.CheckMemberRequest;
 import com.coach.request.CreateTeamRequest;
 import com.coach.request.GetMemberDetailRequest;
 import com.coach.request.GetTeamCheckHistoryRequest;
+import com.coach.request.MemberIdListRequest;
 import com.coach.request.MemberIdRequest;
 import com.coach.request.TeamCheckIdRequest;
 import com.coach.request.TeamIdRequest;
@@ -17,7 +20,6 @@ import com.coach.request.UpdateMemberRequest;
 import com.coach.request.UpdateTeamRequest;
 import com.coach.response.CheckResponse;
 import com.coach.response.GetTeamCheckResponse;
-import com.coach.response.MemberDetailResponse;
 import com.coach.response.MemberResponse;
 import com.coach.response.TeamCheckResponse;
 import com.coach.response.TeamResponse;
@@ -50,5 +52,10 @@ public interface TeamResolver {
 
 	List<List<TeamCheckResponse>> getMemberDetail(GetMemberDetailRequest request);
 
+	Long getDoneNumber(Long coachId, TEAM_TYPE normal);
+
+	void deleteMemberInBatch(MemberIdListRequest request);
+
+	void changeMemberTeamInBatch(ChangeMemberTeamRequest request);
 
 }

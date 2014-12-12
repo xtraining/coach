@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="lesson">
+<!-- 	<resultMap id="LessonDTOResult" type="com.zhiqin.coach.admin.dto.CoachDTO">
+		<id column="id" jdbcType="BIGINT" property="orgCoachId" />
+		<result column="coachName" jdbcType="VARCHAR" property="coachName" />
+		<result column="idType" jdbcType="INTEGER" property="idType" />
+		<result column="idNumber" jdbcType="VARCHAR" property="idNumber" />
+		<result column="phoneNumber" jdbcType="VARCHAR" property="phoneNumber" />
+		<result column="coachId" jdbcType="BIGINT" property="coachId" />
+		<result column="status" jdbcType="INTEGER" property="status" />
+		<result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="bindCoachId" jdbcType="BIGINT" property="bindCoachId" />
+	</resultMap> -->
+	
+  <select id="getLessonByCourseId" parameterType="Long" resultType="LessonDTO">
+    select s.id, s.name, s.hours, s.startTime, s.endTime 
+	from course c INNER JOIN lesson s on s.courseId = c.id and s.status = 0
+	where c.id = #{courseId} 
+  </select>
+  
+  <select id="getLessonFrom" parameterType="Map" resultType="LessonDTO">
+    select s.id, s.name, s.hours, s.startTime, s.endTime 
+	from coach_course cc INNER JOIN course c on cc.courseId = c.id and cc.status = 1 and c.status = 0
+	INNER JOIN lesson s on s.courseId = c.id and s.status = 0
+	where cc.coachId = #{coachId} and s.startTime >= #{startTime} 
+	union all
+	select s.id, s.name, s.hours, s.startTime, s.endTime 
+	from lesson s
+	where s.coachId = #{coachId} and s.courseId is null and s.startTime >= #{startTime} and s.status = 0
+  </select>
+
+  <insert id="insertLesson" useGeneratedKeys="true" keyProperty="id" parameterType="LessonDTO">
+	INSERT INTO lesson(courseId, startTime, endTime, createTime, type, name, address, description, organizationId, hours, alertSwitch, longitude, latitude, groundId, groundName) 
+	VALUE (#{courseId}, #{startTime}, #{endTime}, now(), #{type}, #{name}, #{address}, #{description}, #{organizationId}, #{hours}, #{alertSwitch}, #{longitude}, #{latitude}, #{groundId}, #{groundName})
+  </insert>
+  
+</mapper>

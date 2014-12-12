@@ -3,7 +3,11 @@
 <mapper namespace="com.coach.dao.TuserDao">
 
 	<select id="getListByCoachId" parameterType="Map" resultType="com.coach.model.Team">
-		select *, (select count(m.id) from team_member m where m.teamId = t.id and m.status != -1)memberNum from team t where t.coachId = #{coachId} and t.status = #{status}
+		select *, (select count(m.id) from team_member m where m.teamId = t.id and m.status != -1)memberNum from team t 
+		where t.coachId = #{coachId} and t.status != -1
+		<if test="status != 2">
+			and t.status = #{status}
+		</if>
 	</select>
   
   <insert id="insertTeam" useGeneratedKeys="true" keyProperty="id" parameterType="com.coach.model.Team">
@@ -17,4 +21,8 @@
   <update id="updateTeam" parameterType="com.coach.model.Team">
 	 update team set name = #{name} where id = #{id} and coachId = #{coachId}
   </update>
+  
+  <select id="getDoneNumber" parameterType="Map" resultType="Long">
+		select count(t.id) from team t where t.coachId = #{coachId} and t.status = #{status}
+	</select>
 </mapper>

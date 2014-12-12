@@ -164,6 +164,7 @@ public class TeamCheck extends AbstractBaseModel implements
 		}
 		t.setAddress(address);
 		t.setCreateTime(DateUtils.dateToyyyyMMddHHmiss(updateTime == null ? createTime : updateTime));
+		t.setStatus(status);
 		return t;
 	}
 
