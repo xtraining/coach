@@ -3,23 +3,19 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="keyword">
 	<select id="getKeywordTotalNum" parameterType="Map" resultType="Long">
-		select count(*) from 
-		(select name from search_keyword 
+		select count(*) from search_keyword 
 		<if test="name != null and name != ''">
 			where name like '%${name}%'
 		</if>
-		group by name) a
 		
 	</select>
 
 	<select id="getKeywordList" parameterType="Map" resultType="KeywordDTO" >
-		select * from 
-		(select name, count(*)countNum from search_keyword 
+		select * from search_keyword 
 		<if test="name != null and name != ''">
 			where name like '%${name}%'
 		</if>
-		group by name) a
-		order by a.countNum desc
+		order by countNum desc
 		limit ${(p.pageNum - 1) * p.numPerPage}, ${p.numPerPage}
 	</select>
 	
@@ -31,4 +27,35 @@
 		INSERT INTO search_keyword(name, createTime) 
 		VALUE (#{name}, now()) 
   	</insert>
+  	
+  	<sql id = "getStoryByKeywordCondition">
+		(select a.id, a.title name, '' description, ifnull(k.keywordOrder, 0) keywordOrder, 0 type from artifact a left outer join search_keyword_order k on a.id = k.objectId and k.type = 0
+		where (a.title like '%${name}%' or a.tags like '%${name}%') and a.status = 0
+		union all
+		
+		select t.id, t.name, '' description, ifnull(k.keywordOrder, 0)keywordOrder, 1 type from top_list t left outer join search_keyword_order k on t.id = k.objectId and k.type = 1
+		where (t.name like '%${name}%' or t.tags like '%${name}%') and t.status = 0 and t.startTime &lt;= now()
+		) s 
+  	</sql>
+  	
+  	<select id="getStoryTotalNumByKeyword" parameterType="Map" resultType="Long">
+  		select count(*) from
+		<include refid="getStoryByKeywordCondition" />
+	</select>
+	
+	<select id="getStoryListByKeyword" parameterType="Map" resultType="SearchResultDTO">
+  		select * from 
+  		<include refid="getStoryByKeywordCondition" />
+		order by s.keywordOrder desc 
+		limit ${(p.pageNum - 1) * p.numPerPage}, ${p.numPerPage}
+	</select>
+	
+	<delete id="deleteOrder" parameterType="Map">
+  		delete from search_keyword_order where objectId = #{objectId} and type = #{type} and keywordId = #{keywordId}
+	</delete>
+	
+	<insert id="insertOrder" parameterType="Map">
+  		insert into search_keyword_order (objectId, type, keywordId, keywordOrder) 
+  		value (#{objectId}, #{type}, #{keywordId}, #{keywordOrder})
+	</insert>
 </mapper>

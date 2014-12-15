@@ -71,7 +71,7 @@
 			     <% com.zhiqin.coach.admin.dto.KeywordDTO keywordDto = (com.zhiqin.coach.admin.dto.KeywordDTO)pageContext.getAttribute("item");
 			        String newName = java.net.URLEncoder.encode(keywordDto.getName(),"UTF-8");
 			     %>	
-				  <a href='${ctx}/story/keyword/storyList.htm?name=<%=newName %>' target="navTab" title="故事列表" rel="故事列表" style="color:#00F;">故事列表</a>
+				  <a href='${ctx}/story/keyword/storyList.htm?name=<%=newName %>&keywordId=${item.id}' target="navTab" title="故事列表" rel="故事列表" style="color:#00F;">故事列表</a>
 				</td>
 			</tr>
 			</c:forEach>

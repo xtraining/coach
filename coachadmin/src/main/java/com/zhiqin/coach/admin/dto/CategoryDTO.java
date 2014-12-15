@@ -17,6 +17,7 @@ public class CategoryDTO {
 
 	private Long id;
 	private String name;
+	private String description;
 	private Long parentCategoryId;
 	private Integer categoryOrder;
 	private Integer status;
@@ -56,6 +57,12 @@ public class CategoryDTO {
 	}
 	public void setCategoryOrder(Integer categoryOrder) {
 		this.categoryOrder = categoryOrder;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
 }

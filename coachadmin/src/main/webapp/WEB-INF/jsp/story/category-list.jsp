@@ -39,6 +39,7 @@
 				<th width="2%" align="left"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
 				<th width="10%" align="left">分类ID</th>
 				<th align="left">名称</th>
+				<th align="left">副标题</th>
 				<th align="10%">权重</th>
 				<th width="15%" align="left">创建时间</th>
 				<th width="15%" align="left">操作</th>
@@ -56,6 +57,7 @@
 				<td>
 					<a href="${ctx}/story/category/edit.htm?categoryId=${item.id}" target="dialog" mask="true" title="修改分类" rel="分类详情" style="color:#00F;">${item.name}</a>
 				</td>
+				<td>${item.description}</td>
 				<td>${item.categoryOrder}</td>
 				<td>
 					${item.createTime}

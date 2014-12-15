@@ -22,15 +22,11 @@ import com.zhiqin.coach.admin.dao.ArtifactCategoryDao;
 import com.zhiqin.coach.admin.dao.ArtifactDao;
 import com.zhiqin.coach.admin.dao.ArtifactHierarchyDao;
 import com.zhiqin.coach.admin.dao.ArtifactTagDao;
-import com.zhiqin.coach.admin.dao.ImageDao;
-import com.zhiqin.coach.admin.dao.TagImageDao;
 import com.zhiqin.coach.admin.dto.ArtifactDTO;
-import com.zhiqin.coach.admin.dto.CategoryArrayDTO;
 import com.zhiqin.coach.admin.dto.CategoryDTO;
 import com.zhiqin.coach.admin.dto.DownloadTaskDTO;
 import com.zhiqin.coach.admin.dto.PageInfoDTO;
 import com.zhiqin.coach.admin.dto.SearchArtifactDTO;
-import com.zhiqin.coach.admin.dto.TagArrayDTO;
 import com.zhiqin.coach.admin.dto.TagDTO;
 import com.zhiqin.coach.admin.service.ArtifactService;
 import com.zhiqin.coach.admin.util.Config;
@@ -59,6 +55,10 @@ public class ArtifactServiceImpl implements ArtifactService {
 		 for(ArtifactDTO dto : list){
 			dto.setFileUrl(Config.getProperty("QINIU_DOMAIN") + dto.getFileName());
 			dto.setImageUrl(Config.getProperty("QINIU_DOMAIN") + dto.getImageName());
+			List<CategoryDTO> tempList = artifactCategoryDao.getByArtifactId(dto.getId());
+			if(tempList.size() > 0){
+				dto.setCategoryName(tempList.get(0).getName());
+			}
 		 }
 		 return list;
 	}

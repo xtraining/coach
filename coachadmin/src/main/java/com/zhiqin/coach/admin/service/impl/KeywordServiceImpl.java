@@ -39,14 +39,18 @@ public class KeywordServiceImpl implements KeywordService {
 	}
 	@Override
 	public Long getStoryTotalNumByKeyword(String name) {
-		// TODO Auto-generated method stub
-		return null;
+		return keywordDao.getStoryTotalNumByKeyword(name);
 	}
 	@Override
 	public List<ArtifactDTO> getStoryListByKeyword(String name,
 			PageInfoDTO pageInfo) {
-		// TODO Auto-generated method stub
-		return null;
+		return keywordDao.getStoryListByKeyword(name, pageInfo);
+	}
+	@Override
+	@Transactional
+	public void saveOrder(int type, long objectId, long keywordId, int keywordOrder) {
+		keywordDao.deleteOrder(type, objectId, keywordId);
+		keywordDao.insertOrder(type, objectId, keywordId, keywordOrder);
 	}
 	
 

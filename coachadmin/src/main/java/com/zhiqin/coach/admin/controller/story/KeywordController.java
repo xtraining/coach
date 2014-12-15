@@ -1,9 +1,12 @@
 package com.zhiqin.coach.admin.controller.story;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,23 +50,26 @@ public class KeywordController extends BaseController{
 	}
 	
 	@RequestMapping("storyList")
-	public String storyList(String name, Model model, PageInfoDTO pageInfo) throws UnsupportedEncodingException {
-		name = java.net.URLDecoder.decode(name, "UTF-8");
-		name = new String(name.getBytes("ISO-8859-1"), "UTF-8");
-		Long totalNum = keywordSerivce.getStoryTotalNumByKeyword(name);
-		List<ArtifactDTO> list = keywordSerivce.getStoryListByKeyword(name, pageInfo);
+	public String storyList(long keywordId, Model model, PageInfoDTO pageInfo) throws UnsupportedEncodingException {
+		KeywordDTO dto = keywordSerivce.getById(keywordId);
+		Long totalNum = keywordSerivce.getStoryTotalNumByKeyword(dto.getName());
+		List<ArtifactDTO> list = keywordSerivce.getStoryListByKeyword(dto.getName(), pageInfo);
 		model.addAttribute("responseList", list); 
-		model.addAttribute("name", name); 
+		model.addAttribute("name", dto.getName()); 
 		model.addAttribute("totalCount", totalNum+"");
+		model.addAttribute("keywordId", keywordId);
 		model.addAttribute("currentNum", pageInfo.getPageNum() == null ? 1 : pageInfo.getPageNum());
 		return "/story/keyword-story-list";
 	}
-	/*@RequestMapping(value = "add")
-	public String add(Model model) {
-		return "/story/keyword-add";
+	@RequestMapping(value = "saveOrder")
+	public void saveOrder(int type, long id, long keywordId, int keywordOrder, Model model, HttpServletResponse response) throws IOException {
+		keywordSerivce.saveOrder(type, id, keywordId, keywordOrder);
+		PrintWriter out = response.getWriter();  
+		out.print("success");
+		
 	}
 	
-	@RequestMapping(value="create", method=RequestMethod.POST)  
+	/*@RequestMapping(value="create", method=RequestMethod.POST)  
 	public void create(KeywordDTO dto, HttpServletRequest request, HttpServletResponse response) throws IOException{
 		keywordSerivce.create(dto);
 		PrintWriter out = response.getWriter();  

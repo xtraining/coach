@@ -1,49 +1,35 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@include file="../taglib.jsp" %>
 <script type="text/javascript">
-function saveAccept(){
-	var categoryId = document.getElementById("categoryId");
-	if(categoryId.value == -1){
-	 	alertMsg.warn("请选择分类");
-		return;
-	}
+function saveOrder(keywordOrderSeq, itemId, itemType){
 	var idsStr = "";
-	var idElement = document.getElementsByName("downloadTaskIds");
-	var length = idElement.length;
-	for(var i = 0; i < length; i++){
-		if(idElement[i].checked && idElement[i].value != ""){
-			idsStr += idElement[i].value + ",";
-		}
-	}
-	if(idsStr == ""){
-		alertMsg.warn("请选择故事。");
-		return;
-	}
+	var keywordOrderArr = document.getElementsByName("keywordOrder");
+	var keywordOrder = keywordOrderArr[keywordOrderSeq].value;
 	idsStr = idsStr.substring(0, idsStr.length-1);
-	var urlStr = "${ctx}/story/task/saveAccept.htm?taskId=0&downloadTaskIds="+idsStr+"&categoryId="+categoryId.value;
+	var urlStr = "${ctx}/story/keyword/saveOrder.htm?id="+itemId+"&type="+itemType+"&keywordId=${keywordId}&keywordOrder="+keywordOrder;
 	$.ajax({
 			type:'POST',
 			url:urlStr,
 			data:"",//序列化表单里所有的内容
 			success: function(data){
-				dialogAjaxDone({"statusCode":"200", "message":"入库成功。", "navTabId":"任务详情", "forwardUrl":"", "callbackType":"", "rel":"任务详情"});	
+				dialogAjaxDone({"statusCode":"200", "message":"保存成功。", "navTabId":"", "forwardUrl":"", "callbackType":"", "rel":""});	
 							
 			}
 			});
 }
 </script>
-<form id="pagerForm" method="post" action="${ctx}/story/keyword/storyList.htm?name=${taskId}&sourceFrom=${sourceFrom}">
+<form id="pagerForm" method="post" action="${ctx}/story/keyword/storyList.htm?keywordId=${keywordId}">
 	<input type="hidden" name="pageNum" value="1" />
 	<input type="hidden" name="NumPerPage" value="20" />
 </form>
 
 <div class="pageHeader">
-	<form  name="objForm" id="objForm" rel="pagerForm" onsubmit="return navTabSearch(this);" action="${ctx}/story/task/detail.htm?taskId=${taskId}&sourceFrom=${sourceFrom}" method="post">
+	<form  name="objForm" id="objForm" rel="pagerForm" onsubmit="return navTabSearch(this);" action="${ctx}/story/keyword/storyList.htm?keywordId=${keywordId}" method="post">
 	<div class="searchBar">
 		<table class="searchContent">
 			<tr>
 				<td>
-					任务ID：${taskId}
+					关键字：${name}
 				</td>
 			</tr>
 		</table>		
@@ -58,89 +44,52 @@ function saveAccept(){
 <div class="pageContent">
 	<div class="panelBar">
 		<ul class="toolBar">
-			<li><select name="categoryId" id="categoryId" class="combox">
-						<option value="-1">请选择分类</option>	
-						<c:forEach var="item" items="${categories}">
-						<option value="${item.id}" >${item.name}</option>		
-						</c:forEach>
-					</select>
+				<li>
 				</li>
 				<li>
-					<a href="javascript:saveAccept();" ><span>批量入库</span></a></li>
-					</li>
+				</li>
 			<li class="line">line</li>
 		</ul>
 	</div>
-	<table class="table" width="2000" layoutH="136">
+	<table class="table" width="100%" layoutH="136">
 		<thead>
 			<tr>
 				<th width="2%" align="left"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
-				<th width="3%" align="left">下载ID</th>
-				<!-- <th width="3%" align="left">类型</th> -->
-				<th width="10%" align="left">标题</th>
-				<th width="10%"  align="left">副标题</th>
-				<th width="5%" align="left">时长(秒)</th>
-				<th width="5%" align="left">状态</th>
-				<th width="10%" align="left">创建时间</th>
-				<th align="left">图片地址</th>
-				<th align="left">音频地址</th>
+				<th width="3%" align="left">ID</th>
+				<th width="10%" align="left">名称</th>
+				<th width="10%"  align="left">描述</th>
+				<th width="5%" align="left">类型</th>
+				<th width="15%" align="left">权重</th>
 			</tr>
 		</thead>
 		<tbody>
-		    <c:forEach var="item" items="${responseList}">
+		    <c:forEach var="item" items="${responseList}" varStatus="varSta">
 			<tr target="sid_user" rel="${item.id}">
 				<td>
-					<input name="downloadTaskIds" value="${item.id}" type="checkbox">
+					<input name="id" value="${item.id}" type="checkbox">
 				</td>
 				<td>
 					${item.id}
 				</td>
-				<%-- <td>
+				<td>
+					${item.name}
+				</td>
+				<td>
+					${item.description}
+				</td>
+			    <td>
 					<c:choose> 
   						<c:when test="${item.type == 0}"> 
-  						              封面
+  						 	故事          
   						</c:when> 
   						<c:otherwise>
-  							内容
+  							<font color="blue">专辑</font>
   						</c:otherwise>
   					</c:choose>
-  				</td> --%>
+  				</td> 
 				<td>
-					${item.title}
-				</td>
-				<td>
-					${item.subtitle}
-				</td>
-				<td>
-					${item.duration}
-				</td>
-				<td>
-				 	 <c:choose> 
-  						<c:when test="${item.status == 0}"> 
-  						             等待中
-  						</c:when>  
-  						<c:when test="${item.status == 1}"> 
-  						             下载中&nbsp;&nbsp; <a href="${ctx}/story/task/redownload.htm?downloadTaskId=${item.id}" target="ajaxTodo" style="color:#00F;">重试</a>
-  						</c:when> 
-  						<c:when test="${item.status == 2}"> 
-  						             已入库
-  						</c:when> 
-  						<c:when test="${item.status == 3}"> 
-  						            下载完成
-  						</c:when> 
-  						<c:otherwise>
-  							下载失败&nbsp;&nbsp; <a href="${ctx}/story/task/redownload.htm?downloadTaskId=${item.id}" target="ajaxTodo" style="color:#00F;">重试</a>
-  						</c:otherwise>
-  					 </c:choose>
-				</td>
-				<td>
-					${item.createTime}
-				</td>
-				<td>
-					${item.imageUrl}
-				</td>
-				<td>
-					${item.fileUrl}
+					<input type="text" name="keywordOrder" size="5" class="digits required" maxlength="5" value="${item.keywordOrder}"/>
+					<a href="javascript:saveOrder(${varSta.index}, ${item.id}, ${item.type});" style="color:#00F;">保存权重</a>
 				</td>
 			</tr>
 			</c:forEach>

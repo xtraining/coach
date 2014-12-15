@@ -21,5 +21,7 @@ public interface KeywordService{
 
 	List<ArtifactDTO> getStoryListByKeyword(String name, PageInfoDTO pageInfo);
 
+	void saveOrder(int type, long id, long keywordId, int keywordOrder);
+
 
 }

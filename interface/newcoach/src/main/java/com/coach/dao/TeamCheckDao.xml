@@ -38,7 +38,7 @@
   <select id="getTeamMemberListByPhoneNumber" parameterType="Map" resultType="com.coach.model.TeamMember">
 		select t.* from member m inner join team_member t on m.id = t.memberId
 		where m.coachId = #{coachId} and m.phoneNumber = #{phoneNumber}
-		and m.status != -1 and t.status = 0
+		and m.status != -1
   </select>
 	
 

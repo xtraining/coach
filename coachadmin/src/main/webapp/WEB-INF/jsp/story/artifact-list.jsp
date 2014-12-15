@@ -44,14 +44,14 @@ function viewFile(url, title){
 				<td>
 					名称&nbsp;&nbsp;&nbsp;&nbsp;：<input type="text" name="title" value="${searchDto.title}"/>
 				</td>
-				<td>
+				<%-- <td>
 				    <label>类型：</label>
 					<select name="type" class="combox">
 						<option value="">全部</option>	
 						<option value="0" <c:if test="${searchDto.type == 0}">selected</c:if>>专辑</option>		
 						<option value="1" <c:if test="${searchDto.type == 1}">selected</c:if>>单集</option>	
 					</select>
-				</td>	
+				</td>	 --%>
 				<td>
 					分类ID：<input type="text" name="categoryId" class="digits" value="${searchDto.categoryId}"/>
 				</td>
@@ -84,17 +84,19 @@ function viewFile(url, title){
 			<li class="line">line</li>
 		</ul>
 	</div>
-	<table class="table" width="100%" layoutH="160">
+	<table class="table" width="100%" layoutH="138">
 		<thead>
 			<tr>
 				<th width="2%" align="left"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
-				<th width="10%" align="left">故事ID</th>
-				<th align="left">名称</th>
-				<th width="15%" align="left">时长(秒)</th>
-				<th width="15%" align="left">类型</th>
+				<th width="6%" align="left">故事ID</th>
+				<th width="20%" align="left">名称</th>
+				<th width="15%" align="left">分类</th>
+				<th width="10%" align="left">播放次数</th>
+				<th width="8%" align="left">时长(秒)</th>
+		<!-- 		<th width="8%" align="left">类型</th> -->
 				<th width="15%" align="left">文件名</th>
-				<th width="15%" align="left">状态</th>
-				<th width="15%" align="left">操作</th>
+				<th width="8%" align="left">状态</th>
+				<th width="10%" align="left">操作</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -110,14 +112,20 @@ function viewFile(url, title){
 					<a href="${ctx}/story/artifact/edit.htm?artifactId=${item.id}" target="navTab" title="故事详情" style="color:#00F;">${item.title}</a>
 				</td>
 				<td>
-					${item.duration}
+					${item.categoryName}
 				</td>
 				<td>
+					${item.hitNum}
+				</td>
+				<td>
+					${item.duration}
+				</td>
+				<%-- <td>
 					<c:choose>
 					<c:when test="${item.type == 0}"><div style='color:Peru'>专辑</div></c:when> 
 					<c:when test="${item.type == 1}">单集</c:when> 
 					</c:choose>
-				</td>
+				</td> --%>
 				<td>
 					${item.fileName}
 				</td>

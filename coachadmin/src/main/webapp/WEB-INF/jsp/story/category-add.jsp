@@ -33,6 +33,10 @@ function save(){
 				<dd><input type="text" name="name" size="60" class="required" maxlength="128"/></dd>
 			</dl>
 			<dl>
+				<dt>副标题: </dt>
+				<dd><input type="text" name="description" size="60" class="required" maxlength="128"/></dd>
+			</dl>
+			<dl>
 				<dt>权重: </dt>
 				<dd><input type="text" name="categoryOrder" size="60" class="digits required" maxlength="128" value="0"/></dd>
 			</dl>			

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.socket.WebSocketHandler;
 
@@ -107,7 +108,7 @@ public class LoginController extends BaseController{
     		session.setAttribute(Constants.SESSION_CONTAINER, obj);
     		return "main";
     	} else {
-    		return "redirect:/index.htm?error=1";
+    		return "index.jsp?error=1";
     	}
 	}
 	
@@ -120,7 +121,6 @@ public class LoginController extends BaseController{
     	String sign = RopUtils.sign(map, APP_SECRET); //第二个参数为SecretKey, 有O2O系统分配
     	map.put("sign", sign);
     	String response = HttpUtil.post(SERVER_URL, map);
-    	System.out.println("================================================" + response);
     	Integer realCoachId = (Integer) JsonBinder.buildNonDefaultBinder().getValue(response, "coachId");
     	if(realCoachId != null && realCoachId > 0){
     		String phoneNumber = (String) JsonBinder.buildNonDefaultBinder().getValue(response, "phoneNumber");
@@ -148,7 +148,7 @@ public class LoginController extends BaseController{
 	
 	@RequestMapping(value = "/register")
 	public String register(Model model) {
-		return "main";
+		return "register";
 	}
 	
 	@RequestMapping(value = "/index")
@@ -157,4 +157,53 @@ public class LoginController extends BaseController{
 		model.addAttribute("token", token);
 		return "index";
 	}
+	
+	@RequestMapping(value = "/getSignUpVcode")
+	@ResponseBody
+	public String getSignUpVcode(String phoneNumber, String targetTeamId, Model model, HttpServletRequest request) throws IOException,
+			WriterException {
+		Map<String, String> map = getParamMap();
+		map.put("method", "coach.getSignUpVcode"); 
+		map.put("phoneNumber", phoneNumber);
+		String sign = RopUtils.sign(map, APP_SECRET); //第二个参数为SecretKey, 有O2O系统分配
+		map.put("sign", sign);
+		String response = HttpUtil.post(SERVER_URL, map);
+		Integer flag = (Integer) JsonBinder.buildNonDefaultBinder().getValue(response, "flag");
+		if(flag != null && flag == 0){
+			return "success";
+		} else {
+			return "error";
+		}
+	}
+	
+	@RequestMapping(value = "/registerUser")
+	@ResponseBody
+	public String registerUser(String phoneNumber, String password, String vcode, Model model, HttpServletRequest request) throws IOException,
+			WriterException {
+		Map<String, String> map = getParamMap();
+		map.put("method", "coach.signUp"); 
+		map.put("phoneNumber", phoneNumber);
+		map.put("password", password);
+		map.put("vcode", vcode);
+		String sign = RopUtils.sign(map, APP_SECRET); //第二个参数为SecretKey, 有O2O系统分配
+		map.put("sign", sign);
+		String response = HttpUtil.post(SERVER_URL, map);
+		Integer flag = (Integer) JsonBinder.buildNonDefaultBinder().getValue(response, "flag");
+		if(flag != null){
+			if(flag == 0){
+				return "success";
+			} else if(flag == 1){
+				return "existing";
+			} else if(flag == 2){
+				return "overdue";
+			} else if(flag == 3){
+				return "incorrect";
+			} else {
+				return "error";
+			}
+		} else {
+			return "error";
+		}
+	}
+	
 }

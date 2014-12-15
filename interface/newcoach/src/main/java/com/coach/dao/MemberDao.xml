@@ -19,7 +19,7 @@
   
   <update id="deleteMember" parameterType="Map">
   	update member m inner join team_member t on t.memberId = m.id and t.teamId = #{teamId} and m.coachId = #{coachId}
-  	set m.status = -1, t.status = -1 where m.id = #{memberId}
+  	set t.status = -1 where m.id = #{memberId}
   </update>
   
    <update id="deleteMemberInBatch" parameterType="Map">

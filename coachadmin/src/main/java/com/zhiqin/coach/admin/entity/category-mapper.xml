@@ -26,8 +26,8 @@
 	</select>
 	
 	<insert id="insertCategory" useGeneratedKeys="true" keyProperty="id" parameterType="CategoryDTO">
-		INSERT INTO category(name, status, parentCategoryId, categoryOrder) 
-		VALUE (#{name}, #{status}, #{categoryOrder}, #{categoryOrder}) 
+		INSERT INTO category(name, status, parentCategoryId, categoryOrder, description) 
+		VALUE (#{name}, #{status}, #{categoryOrder}, #{categoryOrder}, #{description}) 
   	</insert>
   	
   	<update id="deleteByIds" parameterType="Map">
@@ -35,7 +35,7 @@
 	</update>
 	
 	<update id="update" parameterType="CategoryDTO">
-		update category set status = #{status}, name = #{name}, categoryOrder = #{categoryOrder} where id = #{id}
+		update category set status = #{status}, name = #{name}, categoryOrder = #{categoryOrder}, description = #{description} where id = #{id}
 	</update>
   	
 </mapper>

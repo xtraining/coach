@@ -34,6 +34,7 @@ public class ArtifactDTO {
 	private Long imageId;
 	private Long categoryId;
 	private Integer categoryOrder;
+	private String categoryName;
 	private String tags;
 	public Long getId() {
 		return id;
@@ -148,6 +149,12 @@ public class ArtifactDTO {
 	}
 	public void setCategoryOrder(Integer categoryOrder) {
 		this.categoryOrder = categoryOrder;
+	}
+	public String getCategoryName() {
+		return categoryName;
+	}
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
 	}
 	
 }
