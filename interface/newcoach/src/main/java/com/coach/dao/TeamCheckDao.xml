@@ -10,18 +10,26 @@
 	
 
   <select id="getMemberByCheckId" parameterType="Map" resultType="com.coach.model.Member">
+  		select m.id, m.name, m.phoneNumber, 
+  		(select ifnull(sum(cm.id), 0) from team_check_member cm where cm.teamCheckId = c.id and cm.memberId = t.memberId and cm.status=1)status 
+  		from team_member t inner join member m on t.memberId = m.id and t.status != -1
+  		inner join team_check c on c.teamId = t.teamId and c.status != -1
+  		where c.id = #{teamCheckId} and m.coachId = #{coachId}
+  </select>
+  
+    <select id="getAllMemberByCheckId" parameterType="Map" resultType="com.coach.model.Member">
 		select m.id, m.name, m.phoneNumber, t.status 
 		from team_check_member t inner join member m on t.memberId = m.id
 		inner join team_check c on c.id = t.teamCheckId
 		where c.id = #{teamCheckId} and m.coachId = #{coachId}
-		and c.status != 1 and t.status != -1 and m.status != -1
+		and c.status != 1 and t.status != -1
   </select>
   
   <select id="getMemberCheckHistory" parameterType="Map" resultType="com.coach.model.TeamCheck">
 		select c.teamId, t.name as teamName, c.createTime, c.province, c.city,c.district,
 		c.street, cm.status from team_check c 
-		inner join team_check_member cm on c.id = cm.teamCheckId and cm.status != -1 and c.status != -1
-		inner join member m on m.id = cm.memberId and m.status != -1
+		inner join team_check_member cm on c.id = cm.teamCheckId and c.status != -1
+		inner join member m on m.id = cm.memberId
 		inner join team t on c.teamId = t.id and t.status != -1
 		where m.id = #{memberId} and c.teamId = #{teamId}
 		order by c.createTime desc

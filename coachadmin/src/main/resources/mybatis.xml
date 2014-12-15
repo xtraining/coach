@@ -27,5 +27,6 @@
 		<typeAlias type="com.zhiqin.coach.admin.dto.CategoryDTO" alias="CategoryDTO"/>
 		<typeAlias type="com.zhiqin.coach.admin.dto.TagImageDTO" alias="TagImageDTO"/>
 		<typeAlias type="com.zhiqin.coach.admin.dto.SearchTagImageDTO" alias="SearchTagImageDTO"/>
+		<typeAlias type="com.zhiqin.coach.admin.dto.KeywordDTO" alias="KeywordDTO"/>
 	</typeAliases>
 </configuration>

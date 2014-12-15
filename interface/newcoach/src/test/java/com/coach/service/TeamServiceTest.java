@@ -12,10 +12,12 @@ import com.coach.utils.HttpUtil;
 import com.rop.utils.RopUtils;
 
 public class TeamServiceTest extends TestCase {
-//	public static final String SERVER_URL = "http://localhost:8080/coach/service";
-	public static final String SERVER_URL = "http://114.215.145.26/coach/service";
-	public static final String APP_KEY = "web_user";
-	public static final String APP_SECRET = "dUnogGHrvDYnowxANsk063EVmxepTJU2TbfzX9";
+	public static final String SERVER_URL = "http://localhost:8080/coach/service";
+//	public static final String SERVER_URL = "http://114.215.145.26/coach/service";
+	public static final String APP_KEY = "iphone_user";
+	public static final String APP_SECRET = "LlnZA8cql4liN4CvjGL5GfwhCh7fwWGE";
+//	public static final String APP_KEY = "web_user";
+//	public static final String APP_SECRET = "dUnogGHrvDYnowxANsk063EVmxepTJU2TbfzX9";
 	public static final String VERSION = "V0.5.0.0";
 	public static final String SESSION_ID = "100BBF85-5CC1-440A-B43A-7C06E2EC7653";
 	
@@ -117,9 +119,8 @@ public class TeamServiceTest extends TestCase {
     	map.put("coachId", "20");
     	map.put("teamId", "2");
     	map.put("attendMemberId", "2, 4");
-    	map.put("longitude", "39.983424");
-    	map.put("latitude", "116.322987");
-    	map.put("teamCheckId", "3");
+    	map.put("longitude", "116.322987");
+    	map.put("latitude", "39.983424");
     	String sign = RopUtils.sign(map, APP_SECRET); //第二个参数为SecretKey, 有O2O系统分配
     	map.put("sign", sign);
     	String response = HttpUtil.postServer(SERVER_URL, map);
@@ -204,7 +205,7 @@ public class TeamServiceTest extends TestCase {
         assertTrue(response.indexOf("code") <= 0);
 	}*/
 	
-/*	public void testGetTeamCheck(){
+	public void testGetTeamCheck(){
 		Map <String, String>map = new HashMap<String, String>();
     	map.put("appKey", APP_KEY); //第二个参数为AppKey
     	map.put("method", "team.getTeamCheck"); 
@@ -219,7 +220,7 @@ public class TeamServiceTest extends TestCase {
         System.out.println("response = " + response);
         assertNotNull(response);
         assertTrue(response.indexOf("code") <= 0);
-	}*/
+	}
 	
 	/*	public void testGetTeamCheckHistory(){
 		Map <String, String>map = new HashMap<String, String>();

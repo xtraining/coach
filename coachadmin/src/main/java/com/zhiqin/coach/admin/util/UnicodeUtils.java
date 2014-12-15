@@ -6,13 +6,13 @@ public class UnicodeUtils {
 
 	{
 
-		String str = "是";
+		String str = "哈哈哈";
 
 		str = toUnicode(str, false);
 
 		System.out.println(str);
 
-		str = "JAVA\u6559\u7a0b";
+		str = "JAVA ";
 
 		str = fromUnicode(str);
 

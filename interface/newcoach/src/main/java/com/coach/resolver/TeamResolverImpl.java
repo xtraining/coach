@@ -3,8 +3,10 @@ package com.coach.resolver;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javax.annotation.Resource;
 
@@ -46,6 +48,7 @@ import com.coach.response.GetTeamCheckResponse;
 import com.coach.response.MemberResponse;
 import com.coach.response.TeamCheckResponse;
 import com.coach.response.TeamResponse;
+import com.coach.utils.DateUtils;
 import com.coach.utils.HttpUtil;
 import com.coach.utils.JsonBinder;
 @Service
@@ -166,7 +169,7 @@ public class TeamResolverImpl implements TeamResolver{
 			teamCheckMemberDao.deleteByTeamCheckId(check.getId());
 		} else {
 			check.setLatitude(request.getLatitude());
-			check.setLongitude(request.getLatitude());
+			check.setLongitude(request.getLongitude());
 			check.setStatus(0);
 			check.setTeamId(request.getTeamId());
 			teamCheckDao.insert(check);
@@ -216,8 +219,9 @@ public class TeamResolverImpl implements TeamResolver{
         		if(latitude != null && longitude != null){
         			String url = "http://api.map.baidu.com/geocoder/v2/?ak={ak}&location={location}&output=json&pois=0";
         			url = StringUtils.replace(url, "{ak}", Config.getProperty("ak"));
-        			url = StringUtils.replace(url, "{location}", longitude + "," + latitude);
+        			url = StringUtils.replace(url, "{location}", latitude + "," + longitude);
         			String response = HttpUtil.getServer(url, "");
+        			log.info("url = " + url);
         			Map <String, Object>addressMap = (Map<String, Object>) JsonBinder.buildNormalBinder().getValue(response, "result");
         			Map <String, Object>addressComponent = (Map<String, Object>) addressMap.get("addressComponent");
         			String province = (String)addressComponent.get("province");
@@ -235,11 +239,8 @@ public class TeamResolverImpl implements TeamResolver{
 
 	@Override
 	public GetTeamCheckResponse getLatestCheck(Long coachId, Long teamId) {
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(Calendar.HOUR, 3);
-		calendar.set(Calendar.MINUTE, 0);
-		calendar.set(Calendar.SECOND, 0);
-		Timestamp startTime = new Timestamp(calendar.getTimeInMillis());
+		Date date = DateUtils.yyyyMMddToDate(DateUtils.dateToyyyyMMdd(new Date()));
+		Timestamp startTime = new Timestamp(date.getTime() + 3 * 3600 * 1000);
 		Long teamCheckId = teamCheckDao.getLatestCheck(teamId, startTime);
 		if(teamCheckId == null){
 			return null;
@@ -255,7 +256,7 @@ public class TeamResolverImpl implements TeamResolver{
 		response.setMemberResponse(rList);
 		return response;
 	}
-
+	
 	@Override
 	public List<CheckResponse> getTeamCheckHistory(GetTeamCheckHistoryRequest request) {
 		List<TeamCheck> list = teamCheckDao.getTeamCheckHistory(request.getTeamId(), request.getPageNumber(), request.getPageSize());
@@ -269,7 +270,7 @@ public class TeamResolverImpl implements TeamResolver{
 
 	@Override
 	public List<MemberResponse> getTeamCheckById(TeamCheckIdRequest request) {
-		List<Member> memberList = teamCheckDao.getMemberByCheckId(request.getCoachId(), request.getTeamCheckId());
+		List<Member> memberList = teamCheckDao.getAllMemberByCheckId(request.getCoachId(), request.getTeamCheckId());
 		List<MemberResponse> rList = new ArrayList<MemberResponse>();
 		for(Member m : memberList){
 			MemberResponse r = m.toResponse();
@@ -298,7 +299,9 @@ public class TeamResolverImpl implements TeamResolver{
 				for(TeamCheck teamCheck : tempList){
 					tempRlist.add(teamCheck.toTeamCheckResponse());
 				}
-				response.add(tempRlist);
+				if(tempRlist.size() > 0){
+					response.add(tempRlist);
+				}
 			}
 		}
 		

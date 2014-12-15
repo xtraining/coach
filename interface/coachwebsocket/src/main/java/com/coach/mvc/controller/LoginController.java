@@ -112,7 +112,7 @@ public class LoginController extends BaseController{
 	}
 	
 	@RequestMapping(value = "/qrcodeLogin")
-	public String qrcodeLogin(String coachId, String coachSessionId, Model model, HttpServletRequest request) {
+	public @ResponseBody String qrcodeLogin(String coachId, String coachSessionId, Model model, HttpServletRequest request) {
 		Map<String, String> map = getParamMap();
 		map.put("sessionId", coachSessionId);
 		map.put("coachId", coachId);
@@ -120,8 +120,9 @@ public class LoginController extends BaseController{
     	String sign = RopUtils.sign(map, APP_SECRET); //第二个参数为SecretKey, 有O2O系统分配
     	map.put("sign", sign);
     	String response = HttpUtil.post(SERVER_URL, map);
+    	System.out.println("================================================" + response);
     	Integer realCoachId = (Integer) JsonBinder.buildNonDefaultBinder().getValue(response, "coachId");
-    	if(realCoachId != null && realCoachId == 0){
+    	if(realCoachId != null && realCoachId > 0){
     		String phoneNumber = (String) JsonBinder.buildNonDefaultBinder().getValue(response, "phoneNumber");
     		HttpSession session = request.getSession(true);
     		SessionContainer obj = new SessionContainer();
@@ -129,9 +130,9 @@ public class LoginController extends BaseController{
     		obj.setCoachId(realCoachId);
     		obj.setSessionId(coachSessionId);
     		session.setAttribute(Constants.SESSION_CONTAINER, obj);
-    		return "main";
+    		return "success";
     	} else {
-    		return "redirect:/index.htm?error=1";
+    		return "error";
     	}
 	}
 	

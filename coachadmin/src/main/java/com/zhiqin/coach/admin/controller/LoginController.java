@@ -107,7 +107,7 @@ public class LoginController
 		int counter = new Random().nextInt(5);
 		ConfigurableCaptchaService cs = new ConfigurableCaptchaService();
 		cs.setColorFactory(new RandomColorFactory());
-		switch (counter) {
+		switch (2) {
 		case 0:
 			cs.setFilterFactory(new CurvesRippleFilterFactory(cs.getColorFactory()));
 			break;

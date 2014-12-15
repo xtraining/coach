@@ -32,5 +32,7 @@ public interface TeamCheckDao {
 
 	List<TeamMember> getTeamMemberListByPhoneNumber(Long coachId, String phoneNumber);
 
+	List<Member> getAllMemberByCheckId(Long coachId, Long teamCheckId);
+
 
 }

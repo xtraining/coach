@@ -3,6 +3,6 @@
 <web-app id="WebApp_ID">
 	<display-name>coachwebsocket</display-name>
 	<welcome-file-list>
-		<welcome-file>echo.html</welcome-file>
+		<welcome-file>login.jsp</welcome-file>
 	</welcome-file-list>
 </web-app>

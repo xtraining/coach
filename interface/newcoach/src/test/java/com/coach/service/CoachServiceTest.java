@@ -12,8 +12,8 @@ import com.coach.utils.HttpUtil;
 import com.rop.utils.RopUtils;
 
 public class CoachServiceTest extends TestCase {
-	public static final String SERVER_URL = "http://localhost:8080/coach/service";
-//	public static final String SERVER_URL = "http://114.215.145.26/coach/service";
+//	public static final String SERVER_URL = "http://localhost:8080/coach/service";
+	public static final String SERVER_URL = "http://114.215.145.26/coach/service";
 	public static final String APP_KEY = "iphone_user";
 	public static final String APP_SECRET = "LlnZA8cql4liN4CvjGL5GfwhCh7fwWGE";
 	public static final String VERSION = "V1.0.0";
@@ -173,7 +173,7 @@ public class CoachServiceTest extends TestCase {
         assertNotNull(response);
         assertTrue(response.indexOf("code") <= 0);
 	}*/
-	
+	/*
 	public void testScanSignIn() {
 		Map <String, String>map = new HashMap<String, String>();
     	map.put("appKey", APP_KEY); //第二个参数为AppKey
@@ -184,6 +184,24 @@ public class CoachServiceTest extends TestCase {
     	map.put("coachId", "20");
     	map.put("token", "BCD0D53F3A9E4FE9833050522DD080C1");
     	String sign = RopUtils.sign(map, APP_SECRET); //第二个参数为SecretKey, 有O2O系统分配
+    	map.put("sign", sign);
+    	String response = HttpUtil.postServer(SERVER_URL, map);
+        System.out.println("response = " + response);
+        assertNotNull(response);
+        assertTrue(response.indexOf("code") <= 0);
+	}
+	*/
+	
+
+	public void testQrcodeSignIn() {
+		Map <String, String>map = new HashMap<String, String>();
+    	map.put("appKey", "web_user"); //第二个参数为AppKey
+    	map.put("v", "1.0");
+    	map.put("format", "json");
+		map.put("method", "coach.qrcodeSignIn"); 
+    	map.put("sessionId", "29951461-2125-45E2-A9B0-C7A2772C63FC");
+    	map.put("coachId", "29");
+    	String sign = RopUtils.sign(map, "dUnogGHrvDYnowxANsk063EVmxepTJU2TbfzX9"); //第二个参数为SecretKey, 有O2O系统分配
     	map.put("sign", sign);
     	String response = HttpUtil.postServer(SERVER_URL, map);
         System.out.println("response = " + response);

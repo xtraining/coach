@@ -226,7 +226,7 @@ public class CoachService extends SimpleBaseService{
 		QrcodeSignInResponse s = new QrcodeSignInResponse();
 		SysSession session = sessionResolver.getValidSessionBySessionId(request.getRopRequestContext().getSessionId());
 		if(session == null || session.getReceiverType() == null || session.getReceiverId() == null || 
-				session.getReceiverType().intValue() != RECEIVER_TYPE.COACH.getValue() || session.getReceiverId().intValue() != request.getCoachId()){
+				session.getReceiverType().intValue() != RECEIVER_TYPE.WEB_COACH.getValue() || session.getReceiverId().intValue() != request.getCoachId()){
 			return s;
 		}
 		Coach c = coachResolver.getBasicById(request.getCoachId());

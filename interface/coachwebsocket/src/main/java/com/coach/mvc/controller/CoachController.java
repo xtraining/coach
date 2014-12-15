@@ -200,4 +200,9 @@ public class CoachController extends BaseController{
 		String response = HttpUtil.post(SERVER_URL, map);
 		return response;
 	}
+	
+	@RequestMapping(value = "/toMain")
+	public String toMain(Model model) {
+		return "main";
+	}
 }

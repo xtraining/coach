@@ -21,13 +21,15 @@
 	
 	<insert id="saveAttend" useGeneratedKeys="true" keyProperty="id" parameterType="Map">
 	 insert into team_check_member(teamCheckId,memberId,createTime,status) 
-	 select #{teamCheckId},  t.memberId ,now(), 1 from team_member t where t.teamId = #{teamId} and t.status = 0
+	 select #{teamCheckId},  t.memberId ,now(), 1 from team_member t inner join member m on t.memberId = m.id and m.status != -1
+	 where t.teamId = #{teamId} and t.status = 0
 	 and t.memberId in <foreach collection="attendMemberIdList" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
  	 </insert>
   
   	<insert id="saveAbcent" useGeneratedKeys="true" keyProperty="id" parameterType="Map">
 	 insert into team_check_member(teamCheckId,memberId,createTime,status) 
-	 select #{teamCheckId}, t.memberId  ,now(), 0 from team_member t where t.teamId = #{teamId} and t.status = 0
+	 select #{teamCheckId}, t.memberId  ,now(), 0 from team_member t inner join member m on t.memberId = m.id and m.status != -1
+	 where t.teamId = #{teamId} and t.status = 0
 	 and t.memberId not in <foreach collection="attendMemberIdList" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
  	 
  	 </insert>

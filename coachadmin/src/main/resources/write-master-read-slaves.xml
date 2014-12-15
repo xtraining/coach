@@ -264,4 +264,12 @@
 		<property name="targetObject" ref="imageDaoTarget"></property>
 		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
 	</bean>
+	
+	<bean id="keywordDaoTarget" class="com.zhiqin.coach.admin.dao.impl.KeywordDaoImpl"></bean>
+	<bean id="keywordDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.zhiqin.coach.admin.dao.KeywordDao"></property>
+		<property name="targetObject" ref="keywordDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean>
 </beans>

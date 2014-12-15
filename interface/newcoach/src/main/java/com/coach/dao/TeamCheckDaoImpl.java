@@ -132,4 +132,17 @@ public class TeamCheckDaoImpl extends SqlSessionDaoSupport implements TeamCheckD
 			throw e;
 		}
 	}
+
+	@Override
+	public List<Member> getAllMemberByCheckId(Long coachId, Long teamCheckId) {
+		try{
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("teamCheckId", teamCheckId);
+			map.put("coachId", coachId);
+			return this.getSqlSession().selectList("getAllMemberByCheckId", map);
+		} catch(RuntimeException e){
+			log.error("getAllMemberByCheckId", e);
+			throw e;
+		}
+	}
 }

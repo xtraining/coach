@@ -72,7 +72,11 @@ public class Member extends AbstractBaseModel implements
 		r.setMemberId(id);
 		r.setMemberName(name);
 		r.setPhoneNumber(phoneNumber);
-		r.setStatus(status);
+		if(status != null && status != 0){
+			r.setStatus(1);
+		} else {
+			r.setStatus(0);
+		}
 		return r;
 	}
 
