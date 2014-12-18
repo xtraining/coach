@@ -18,7 +18,9 @@ public class TaskDTO {
 
 	private Integer id;
 	private String url;
-	private String progress;
+	private Integer downloadedNum;
+	private Integer totalNum;
+	private Integer importedNum;
 	private Timestamp createTime;
 	private Integer status;
 	private Integer sourceFrom;
@@ -52,11 +54,23 @@ public class TaskDTO {
 	public void setSourceFrom(Integer sourceFrom) {
 		this.sourceFrom = sourceFrom;
 	}
-	public String getProgress() {
-		return progress;
+	public Integer getDownloadedNum() {
+		return downloadedNum;
 	}
-	public void setProgress(String progress) {
-		this.progress = progress;
+	public void setDownloadedNum(Integer downloadedNum) {
+		this.downloadedNum = downloadedNum;
+	}
+	public Integer getTotalNum() {
+		return totalNum;
+	}
+	public void setTotalNum(Integer totalNum) {
+		this.totalNum = totalNum;
+	}
+	public Integer getImportedNum() {
+		return importedNum;
+	}
+	public void setImportedNum(Integer importedNum) {
+		this.importedNum = importedNum;
 	}
 	
 }

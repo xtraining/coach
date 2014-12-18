@@ -28,7 +28,7 @@
 <div class="pageContent">
 	<div class="panelBar">
 		<ul class="toolBar">
-			<li><a class="add" href="${ctx}/story/category/add.htm" target="dialog" mask="true" title="新增分类" rel="分类详情"><span>新增分类</span></a></li>
+			<li><a class="add" href="${ctx}/story/category/add.htm" target="navTab" title="新增分类" rel="分类详情"><span>新增分类</span></a></li>
 			<li><a title="确实要删除这些标签吗?" target="selectedTodo" rel="ids" postType="string" href="${ctx}/story/category/delete.htm" class="delete"><span>批量删除</span></a></li>
 			<li class="line">line</li>
 		</ul>
@@ -55,7 +55,7 @@
 					${item.id}
 				</td>
 				<td>
-					<a href="${ctx}/story/category/edit.htm?categoryId=${item.id}" target="dialog" mask="true" title="修改分类" rel="分类详情" style="color:#00F;">${item.name}</a>
+					<a href="${ctx}/story/category/edit.htm?categoryId=${item.id}" target="navTab" title="修改分类" rel="分类详情" style="color:#00F;">${item.name}</a>
 				</td>
 				<td>${item.description}</td>
 				<td>${item.categoryOrder}</td>

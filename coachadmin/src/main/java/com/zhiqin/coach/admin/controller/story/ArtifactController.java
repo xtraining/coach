@@ -69,6 +69,8 @@ public class ArtifactController extends BaseController{
 		}
 		Long totalNum = artifactService.getArtifactTotalNum(searchDto);
 		List<ArtifactDTO> list = artifactService.getArtifactList(searchDto, pageInfo);
+		List<CategoryDTO> categories = categoryService.getCategoryList(null, pageInfo);
+		model.addAttribute("categories", categories); 
 		model.addAttribute("responseList", list); 
 		model.addAttribute("searchDto", searchDto); 
 		model.addAttribute("totalCount", totalNum+"");
@@ -174,5 +176,27 @@ public class ArtifactController extends BaseController{
 		JsonUtils.write(response, JsonBinder.buildNormalBinder().toJson(success));
 		return null;
 	}
+	
+	@RequestMapping("assignCategory")
+	public String assignCategory(String artifactIds, Model model) {
+		PageInfoDTO pageInfo = new PageInfoDTO();
+		pageInfo.setPageNum(1);
+		pageInfo.setNumPerPage(10000);
+		List<CategoryDTO> categories = categoryService.getCategoryList(null, pageInfo);
+		model.addAttribute("categories", categories); 
+		model.addAttribute("artifactIds", artifactIds); 
+		return "/story/artifact-assign-category";
+	}
+	
+	@RequestMapping("saveCategory")
+	@ResponseBody
+	public String saveCategory(String artifactIds, int categoryId, Model model, HttpServletResponse response) throws IOException {
+		if(categoryId <= 0){
+			return "input";
+		}
+		artifactService.saveCategory(artifactIds, categoryId);
+		return "success";
+	}
+	
 
 }

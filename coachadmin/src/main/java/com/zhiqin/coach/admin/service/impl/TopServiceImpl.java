@@ -3,6 +3,7 @@ package com.zhiqin.coach.admin.service.impl;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 
 import javax.annotation.Resource;
 
@@ -54,8 +55,10 @@ public class TopServiceImpl implements TopService {
 		topDao.updateListImageFileName(dto);
 		localFile.delete();
 		
-		for(ArtifactDTO a : artifacts.getArtifact()){
-			topDao.insertArtifact(dto.getId(), a.getId(), a.getArtifactOrder());
+		if(artifacts != null && artifacts.getArtifact() != null && artifacts.getArtifact().length > 0){
+			for(ArtifactDTO a : artifacts.getArtifact()){
+				topDao.insertArtifact(dto.getId(), a.getId(), a.getArtifactOrder());
+			}
 		}
 	}
 	
@@ -103,7 +106,9 @@ public class TopServiceImpl implements TopService {
 	public TopDTO getById(int topId) {
 		TopDTO dto = topDao.getById(topId);
 		dto.setStartTimeStr(DateUtils.dateToyyyyMMddHHmi(dto.getStartTime()));
-		dto.setListImageFileUrl(Config.getProperty("QINIU_DOMAIN") + dto.getListImageFileName());
+		Random r = new Random();
+		int t = r.nextInt(100);
+		dto.setListImageFileUrl(Config.getProperty("QINIU_DOMAIN") + dto.getListImageFileName() + "?t="+t);
 		return dto;
 	}
 	@Override

@@ -3,6 +3,7 @@ package com.zhiqin.coach.admin.service.impl;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 
 import javax.annotation.Resource;
 
@@ -52,9 +53,11 @@ public class ArtifactServiceImpl implements ArtifactService {
 	public List<ArtifactDTO> getArtifactList(SearchArtifactDTO searchDto,
 			PageInfoDTO pageInfo) {
 		 List<ArtifactDTO> list = artifactDao.getArtifactList(searchDto, pageInfo);
+	 	 Random r = new Random();
+		 int t = r.nextInt(100);
 		 for(ArtifactDTO dto : list){
-			dto.setFileUrl(Config.getProperty("QINIU_DOMAIN") + dto.getFileName());
-			dto.setImageUrl(Config.getProperty("QINIU_DOMAIN") + dto.getImageName());
+			dto.setFileUrl(Config.getProperty("QINIU_DOMAIN") + dto.getFileName()+"?t="+t);
+			dto.setImageUrl(Config.getProperty("QINIU_DOMAIN") + dto.getImageName()+"?t="+t);
 			List<CategoryDTO> tempList = artifactCategoryDao.getByArtifactId(dto.getId());
 			if(tempList.size() > 0){
 				dto.setCategoryName(tempList.get(0).getName());
@@ -193,6 +196,21 @@ public class ArtifactServiceImpl implements ArtifactService {
 		artifactCategoryDao.deleteByArtifactId(artifact.getId());
 		
 		artifactCategoryDao.save(artifact);
+	}
+
+	@Override
+	@Transactional
+	public void saveCategory(String artifactIds, int categoryId) {
+		artifactCategoryDao.delete(artifactIds);
+		String[] artifactIdArr = StringUtils.split(artifactIds, ",");
+		for(String artifactId : artifactIdArr){
+			ArtifactDTO a = new ArtifactDTO();
+			a.setCategoryOrder(0);
+			a.setCategoryId(Long.valueOf(categoryId));
+			a.setId(Long.valueOf(artifactId));
+			artifactCategoryDao.save(a);
+		}
+		
 	}
 	
 

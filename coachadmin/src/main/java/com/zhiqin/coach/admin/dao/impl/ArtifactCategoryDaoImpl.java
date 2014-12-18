@@ -34,7 +34,7 @@ public class ArtifactCategoryDaoImpl extends BaseDaoImpl implements ArtifactCate
 		try{
 			Map map = new HashMap();
 			map.put("artifactIds", artifactIds);
-			map.put("tagId", categoryId);
+			map.put("categoryId", categoryId);
 			this.getSqlSession().insert("artifactcategory.delete", map);
 		} catch(RuntimeException e){
 			log.error("delete", e);
@@ -64,5 +64,19 @@ public class ArtifactCategoryDaoImpl extends BaseDaoImpl implements ArtifactCate
 			log.error("deleteByArtifactId", e);
 			throw e;
 		}
+	}
+
+
+	@Override
+	public void delete(String artifactIds) {
+		try{
+			Map map = new HashMap();
+			map.put("artifactIds", artifactIds);
+			this.getSqlSession().insert("artifactcategory.deleteCategory", map);
+		} catch(RuntimeException e){
+			log.error("deleteCategory", e);
+			throw e;
+		}
+		
 	}
 }

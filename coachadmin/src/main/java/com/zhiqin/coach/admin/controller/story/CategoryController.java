@@ -8,13 +8,17 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.qiniu.api.auth.AuthException;
 import com.zhiqin.coach.admin.controller.BaseController;
 import com.zhiqin.coach.admin.dto.CategoryDTO;
 import com.zhiqin.coach.admin.dto.PageInfoDTO;
@@ -64,8 +68,8 @@ public class CategoryController extends BaseController{
 	}
 	
 	@RequestMapping(value = "update")
-	public void update(CategoryDTO dto, Model model, HttpServletResponse response) throws IOException {
-		categorySerivce.update(dto);
+	public void update(CategoryDTO dto, @RequestParam MultipartFile imageFile, Model model, HttpServletResponse response) throws IOException, AuthException, JSONException {
+		categorySerivce.update(dto, imageFile);
 		PrintWriter out = response.getWriter();  
 		out.print("success");
 	}
@@ -83,8 +87,8 @@ public class CategoryController extends BaseController{
 	
 	
 	@RequestMapping(value="create", method=RequestMethod.POST)  
-	public void create(CategoryDTO dto, HttpServletRequest request, HttpServletResponse response) throws IOException{
-		categorySerivce.create(dto);
+	public void create(CategoryDTO dto, @RequestParam MultipartFile imageFile, HttpServletRequest request, HttpServletResponse response) throws IOException, AuthException, JSONException{
+		categorySerivce.create(dto, imageFile);
 		PrintWriter out = response.getWriter();  
 		out.print("success");
 	}
@@ -94,5 +98,12 @@ public class CategoryController extends BaseController{
 	public String select(Model model, String name, PageInfoDTO pageInfo) {
 		list(model, name, pageInfo);
 		return "/story/category-select";
+	}
+	
+	@RequestMapping(value="saveOrder", method=RequestMethod.POST)  
+	public void saveOrder(long categoryId, long itemId, int categoryOrder, HttpServletRequest request, HttpServletResponse response) throws IOException, AuthException, JSONException{
+		categorySerivce.saveOrder(categoryId, itemId, categoryOrder);
+		PrintWriter out = response.getWriter();  
+		out.print("success");
 	}
 }

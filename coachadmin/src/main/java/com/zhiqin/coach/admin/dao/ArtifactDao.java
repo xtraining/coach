@@ -35,6 +35,6 @@ public interface ArtifactDao extends BaseDao{
 
 	void deleteByDownloadTaskId(Long id);
 
-	void updateStatus(List<Long> artifactIdList, int value);
+	void updateStatus(ArtifactDTO dto, int value);
 
 }

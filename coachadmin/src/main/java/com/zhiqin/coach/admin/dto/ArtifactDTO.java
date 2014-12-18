@@ -36,6 +36,7 @@ public class ArtifactDTO {
 	private Integer categoryOrder;
 	private String categoryName;
 	private String tags;
+	private Integer artifactCategoryOrder;
 	public Long getId() {
 		return id;
 	}
@@ -155,6 +156,12 @@ public class ArtifactDTO {
 	}
 	public void setCategoryName(String categoryName) {
 		this.categoryName = categoryName;
+	}
+	public Integer getArtifactCategoryOrder() {
+		return artifactCategoryOrder;
+	}
+	public void setArtifactCategoryOrder(Integer artifactCategoryOrder) {
+		this.artifactCategoryOrder = artifactCategoryOrder;
 	}
 	
 }

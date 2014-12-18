@@ -12,13 +12,18 @@
 		where categoryId = #{categoryId} and artifactId in (${artifactIds})
 	</delete>
 	
+	<delete id="deleteCategory" parameterType="Map">
+		delete from artifact_category
+		where artifactId in (${artifactIds})
+	</delete>
+	
 	<delete id="deleteByArtifactId" parameterType="Long">
 		delete from artifact_category
 		where artifactId = #{artifactId}
 	</delete>
 	
 	<select id="getByArtifactId" parameterType="Long" resultType="CategoryDTO">
-		select t.* from artifact_category a inner join category t on a.categoryId = t.id
+		select t.* from artifact_category a inner join category t on a.categoryId = t.id and t.status != 2
 		where a.artifactId = #{artifactId} 
 	</select>
 </mapper>

@@ -67,5 +67,11 @@ public class QiniuUtils {
 		String extFileName = originalFilename.substring(originalFilename.lastIndexOf("."));	
 		return FILE_NAME_PREFIX.TOP_LIST_IMAGE.getValue() + id + extFileName;
 	}
+	
+	public static String generateCategoryImageName(Long id,
+			String originalFilename) {
+		String extFileName = originalFilename.substring(originalFilename.lastIndexOf("."));	
+		return FILE_NAME_PREFIX.CATEGORY.getValue() + id + extFileName;
+	}
 
 }

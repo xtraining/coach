@@ -7,10 +7,12 @@ public class Survey {
 	private String a3;
 	private String a4;
 	private String a5;
-	private String a61;
-	private String a62;
-	private String a63;
+	private String a6;
 	private String a7;
+	private String a;
+	private String province;
+	private String city;
+	private String region;
 	public String getIpAddress() {
 		return ipAddress;
 	}
@@ -47,29 +49,41 @@ public class Survey {
 	public void setA5(String a5) {
 		this.a5 = a5;
 	}
-	public String getA61() {
-		return a61;
+	public String getA6() {
+		return a6;
 	}
-	public void setA61(String a61) {
-		this.a61 = a61;
-	}
-	public String getA62() {
-		return a62;
-	}
-	public void setA62(String a62) {
-		this.a62 = a62;
-	}
-	public String getA63() {
-		return a63;
-	}
-	public void setA63(String a63) {
-		this.a63 = a63;
+	public void setA6(String a6) {
+		this.a6 = a6;
 	}
 	public String getA7() {
 		return a7;
 	}
 	public void setA7(String a7) {
 		this.a7 = a7;
+	}
+	public String getA() {
+		return a;
+	}
+	public void setA(String a) {
+		this.a = a;
+	}
+	public String getProvince() {
+		return province;
+	}
+	public void setProvince(String province) {
+		this.province = province;
+	}
+	public String getCity() {
+		return city;
+	}
+	public void setCity(String city) {
+		this.city = city;
+	}
+	public String getRegion() {
+		return region;
+	}
+	public void setRegion(String region) {
+		this.region = region;
 	}
 	
 }

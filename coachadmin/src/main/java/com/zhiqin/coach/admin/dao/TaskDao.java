@@ -49,6 +49,8 @@ public interface TaskDao extends BaseDao{
 
 	List<ArtifactDTO> getArtifactByDownloadTaskId(List<Long> downloadTaskIdList);
 
+	void redownloadAll(int taskId);
+
 
 
 }

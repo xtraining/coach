@@ -83,7 +83,7 @@ function saveOrder(keywordOrderSeq, itemId, itemType){
   						 	故事          
   						</c:when> 
   						<c:otherwise>
-  							<font color="blue">专辑</font>
+  							<div style='color:Peru'>专辑</div>
   						</c:otherwise>
   					</c:choose>
   				</td> 

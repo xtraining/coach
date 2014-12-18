@@ -137,10 +137,10 @@ public class ArtifactDaoImpl extends BaseDaoImpl implements ArtifactDao
 	}
 
 	@Override
-	public void updateStatus(List<Long> artifactIdList, int status) {
+	public void updateStatus(ArtifactDTO dto, int status) {
 		try{
 			Map map = new HashMap();
-			map.put("artifactIdList", artifactIdList);
+			map.put("artifact", dto);
 			map.put("status", status);
 			this.getSqlSession().update("artifact.updateStatus", map);
 		} catch(RuntimeException e){

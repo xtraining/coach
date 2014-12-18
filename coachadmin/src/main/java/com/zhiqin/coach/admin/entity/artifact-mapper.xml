@@ -6,11 +6,11 @@
 		from artifact a 
 		<if test="searchDto.categoryId != null">
 			inner join artifact_category ac on a.id = ac.artifactId 
-			inner join category c on ac.categoryId = c.id and c.id = #{searchDto.categoryId}
+			inner join category c on ac.categoryId = c.id and c.id = #{searchDto.categoryId} and c.status != 2
 		</if>
 		<if test="searchDto.categoryName != null and searchDto.categoryName != ''">
 			inner join artifact_category acc on a.id = acc.artifactId 
-			inner join category cc on acc.categoryId = cc.id and cc.name like '%${searchDto.categoryName}%'
+			inner join category cc on acc.categoryId = cc.id and cc.name like '%${searchDto.categoryName}%' and cc.status != 2
 		</if>
 		<if test="searchDto.tagId != null">
 			inner join artifact_tag at on a.id = at.artifactId 
@@ -19,13 +19,19 @@
 		<if test="searchDto.tagName != null and searchDto.tagName != ''">
 			inner join artifact_tag att on a.id = att.artifactId 
 			inner join tag tt on att.tagId = tt.id and tt.name like '%${searchDto.tagName}%'
-		</if>
+		</if>		
 		where a.status in (0, 2)
 		<if test="searchDto.type != null">
 			and a.type = #{searchDto.type}
 		</if>
 		<if test="searchDto.title != null and searchDto.title != ''">
 			and a.title like '%${searchDto.title}%'
+		</if>
+		<if test="searchDto.hasCategory == 0">
+			and a.id not in (select artifactId from artifact_category ac1 inner join category c1 on c1.status != 2)
+		</if>
+		<if test="searchDto.hasCategory == 1">
+		    and a.id in (select artifactId from artifact_category ac1 inner join category c1 on c1.status != 2)
 		</if>
 	</sql>
 	
@@ -36,8 +42,15 @@
 
 	<select id="getArtifactList" parameterType="Map" resultType="ArtifactDTO" >
 		select a.*
+		<if test="searchDto.categoryName != null and searchDto.categoryName != ''">
+		, ac.artifactCategoryOrder
+		</if>
 		<include refid="getArtifactCondition" />
-		order by a.createTime desc
+		order by 
+		<if test="searchDto.categoryName != null and searchDto.categoryName != ''">
+		ac.artifactCategoryOrder desc, 
+		</if>
+		a.createTime desc
 		limit ${(p.pageNum - 1) * p.numPerPage}, ${p.numPerPage}
 	</select>
 	
@@ -80,7 +93,6 @@
   	</update>
   	
   	<update id="updateStatus" parameterType="Map">
-		update artifact set status = #{status} where id in 
-		<foreach collection="artifactIdList" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
+		update artifact set status = #{status}, tags = #{artifact.tags} where id = #{artifact.id} 
 	</update>
 </mapper>

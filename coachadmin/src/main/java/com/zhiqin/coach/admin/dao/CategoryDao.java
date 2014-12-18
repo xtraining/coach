@@ -22,5 +22,7 @@ public interface CategoryDao extends BaseDao{
 
 	void update(CategoryDTO dto);
 
+	void updateImageName(CategoryDTO dto);
+
 
 }

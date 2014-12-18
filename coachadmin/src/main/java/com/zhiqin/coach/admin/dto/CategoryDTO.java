@@ -22,6 +22,8 @@ public class CategoryDTO {
 	private Integer categoryOrder;
 	private Integer status;
 	private Timestamp createTime;
+	private String imageName;
+	private String imageUrl;
 	public Long getId() {
 		return id;
 	}
@@ -63,6 +65,18 @@ public class CategoryDTO {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	public String getImageName() {
+		return imageName;
+	}
+	public void setImageName(String imageName) {
+		this.imageName = imageName;
+	}
+	public String getImageUrl() {
+		return imageUrl;
+	}
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 	
 }

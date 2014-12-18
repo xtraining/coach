@@ -84,4 +84,16 @@ public class CategoryDaoImpl extends BaseDaoImpl implements CategoryDao
 		}
 		
 	}
+
+	@Override
+	public void updateImageName(CategoryDTO dto) {
+		try{
+			 this.getSqlSession().update("category.updateImageName", dto);
+		} catch(RuntimeException e){
+			log.error("updateImageName", e);
+			throw e;
+		}
+		
+		
+	}
 }

@@ -143,6 +143,8 @@ public class LoginController extends BaseController{
 			session.removeAttribute(Constants.SESSION_CONTAINER);
 			session.invalidate();
 		}
+		String token = StringUtils.replace(RopUtils.getUUID(), "-", "");
+		model.addAttribute("token", token);
 		return "index";
 	}
 	
@@ -160,7 +162,7 @@ public class LoginController extends BaseController{
 	
 	@RequestMapping(value = "/getSignUpVcode")
 	@ResponseBody
-	public String getSignUpVcode(String phoneNumber, String targetTeamId, Model model, HttpServletRequest request) throws IOException,
+	public String getSignUpVcode(String phoneNumber, Model model, HttpServletRequest request) throws IOException,
 			WriterException {
 		Map<String, String> map = getParamMap();
 		map.put("method", "coach.getSignUpVcode"); 

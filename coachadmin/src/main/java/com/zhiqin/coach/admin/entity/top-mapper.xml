@@ -12,7 +12,7 @@
 	</select>
 
 	<select id="getTopList" parameterType="Map" resultType="TopDTO" >
-		select *
+		select *, (select ifnull(count(c.id), 0) from customer_collection c where c.objectId = id and c.type = 0) realCollectionNum
 		<include refid="getTopCondition" />
 		order by topOrder desc, startTime asc
 		limit ${(p.pageNum - 1) * p.numPerPage}, ${p.numPerPage}
@@ -28,8 +28,8 @@
 	</select>
 	
 	<insert id="insertTop" useGeneratedKeys="true" keyProperty="id" parameterType="TopDTO">
-		INSERT INTO top_list(name,type,topOrder, startTime, tags, status) 
-		VALUE (#{name}, #{type}, #{topOrder},#{startTime}, #{tags}, #{status}) 
+		INSERT INTO top_list(name,type,topOrder, startTime, tags, status, collectionNum) 
+		VALUE (#{name}, #{type}, #{topOrder},#{startTime}, #{tags}, #{status}, #{collectionNum}) 
   	</insert>
   	
 	<update id="deleteByIds" parameterType="Map">
@@ -41,8 +41,8 @@
 	</update>
 	
 	<update id="update" parameterType="TopDTO">
-		update top_list set name = #{name}, topOrder = #{topOrder}, startTime=#{startTime}, tags = #{tags},
-		status = #{status} where id = #{id}
+		update top_list set name = #{name}, topOrder = #{topOrder}, startTime=#{startTime}, tags = #{tags}, 
+		collectionNum = #{collectionNum}, status = #{status} where id = #{id}
 	</update>
 	
 	<insert id="insertArtifact" useGeneratedKeys="true" keyProperty="id" parameterType="Map">

@@ -17,6 +17,7 @@ public class SearchArtifactDTO {
 	public Integer type;
 	public Long categoryId;
 	public Long tagId;
+	public Integer hasCategory;
 	public Integer getType() {
 		return type;
 	}
@@ -52,6 +53,12 @@ public class SearchArtifactDTO {
 	}
 	public void setTagName(String tagName) {
 		this.tagName = tagName;
+	}
+	public Integer getHasCategory() {
+		return hasCategory;
+	}
+	public void setHasCategory(Integer hasCategory) {
+		this.hasCategory = hasCategory;
 	}
 	
 }

@@ -15,14 +15,14 @@
 				<td>
 					名称&nbsp;&nbsp;&nbsp;&nbsp;：<input type="text" name="title" value="${searchDto.title}"/>
 				</td>
-				<td>
+				<%-- <td>
 				    <label>类型：</label>
 					<select name="type" class="combox">
 						<option value="">全部</option>	
 						<option value="0" <c:if test="${searchDto.type == 0}">selected</c:if>>专辑</option>		
 						<option value="1" <c:if test="${searchDto.type == 1}">selected</c:if>>单集</option>	
 					</select>
-				</td>	
+				</td>	 --%>
 				<td>
 					分类ID：<input type="text" name="categoryId" class="digits" value="${searchDto.categoryId}"/>
 				</td>
@@ -52,7 +52,7 @@
 			<tr>
 				<th width="10%" align="left">故事ID</th>
 				<th align="left">名称</th>
-				<th width="15%" align="left">类型</th>
+			<!-- 	<th width="15%" align="left">类型</th> -->
 				<th width="15%" align="left">状态</th>	
 				<th width="15%" align="left">选择带回</th>
 			</tr>
@@ -66,12 +66,12 @@
 				<td>
 					${item.title}
 				</td>
-				<td>
+			<%-- 	<td>
 					<c:choose>
 					<c:when test="${item.type == 1}">单集</c:when> 
 					<c:when test="${item.type == 0}">专辑</c:when> 
 					</c:choose>
-				</td>
+				</td> --%>
 				<td>
 					<c:choose>
 					<c:when test="${item.status == 0}">显示</c:when> 

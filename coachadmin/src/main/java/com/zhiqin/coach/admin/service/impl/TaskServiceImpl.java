@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.ansj.domain.Term;
+import org.ansj.splitWord.analysis.ToAnalysis;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -156,22 +158,34 @@ public class TaskServiceImpl implements TaskService {
 	private void saveAccept(int categoryId,
 			List<ArtifactDTO> artifactList) {
 		if(artifactList != null && artifactList.size() > 0){
-			List<Long> artifactIdList = new ArrayList<Long>();
 			List<Long> downloadIdList = new ArrayList<Long>();
 			for(ArtifactDTO dto : artifactList){
-				artifactIdList.add(dto.getId());
 				downloadIdList.add(dto.getDownloadTaskId());
+				List<Term> wordList = ToAnalysis.parse(dto.getTitle());
+				StringBuilder tags = new StringBuilder();
+				if(wordList != null && wordList.size() >0){
+					for(Term word : wordList){
+						tags.append(word.getName() + ",");
+					}
+				}
+				dto.setTags(tags.toString());
+				artifactDao.updateStatus(dto, Constants.ARTIFACT_STATUS.ACTIVE.getValue());
 			}
-			artifactDao.updateStatus(artifactIdList, Constants.ARTIFACT_STATUS.ACTIVE.getValue());
 			taskDao.updateStatus(downloadIdList, Constants.DOWNLOAD_TASK_STATUS.UPLOAD.getValue());
-			for(Long artifactId : artifactIdList){
+			for(ArtifactDTO dto : artifactList){
 				ArtifactDTO artifact = new ArtifactDTO();
-				artifact.setId(artifactId);
+				artifact.setId(dto.getId());
 				artifact.setCategoryId(Long.valueOf(categoryId));
 				artifact.setCategoryOrder(0);
 				artifactCategoryDao.save(artifact);
 			}
 		}
+	}
+
+	@Override
+	public void redownloadAll(int taskId) {
+		taskDao.redownloadAll(taskId);
+		
 	}
 	
 

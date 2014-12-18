@@ -31,6 +31,19 @@ function saveAccept(){
 			}
 			});
 }
+
+function redownload(){
+	var urlStr = "${ctx}/story/task/redownloadAll.htm?taskId=${taskId}&sourceFrom=${sourceFrom}";
+	$.ajax({
+			type:'POST',
+			url:urlStr,
+			data:"",//序列化表单里所有的内容
+			success: function(data){
+				dialogAjaxDone({"statusCode":"200", "message":"全部错误重新下载开始", "navTabId":"任务详情", "forwardUrl":"", "callbackType":"", "rel":"任务详情"});	
+							
+			}
+			});
+}
 </script>
 <form id="pagerForm" method="post" action="${ctx}/story/task/detail.htm?taskId=${taskId}&sourceFrom=${sourceFrom}">
 	<input type="hidden" name="pageNum" value="1" />
@@ -69,6 +82,9 @@ function saveAccept(){
 					<a href="javascript:saveAccept();" ><span>批量入库</span></a></li>
 					</li>
 			<li class="line">line</li>
+					<li>
+					<a href="javascript:redownload();" ><span>全部错误重新下载</span></a></li>
+					</li>
 		</ul>
 	</div>
 	<table class="table" width="2000" layoutH="136">

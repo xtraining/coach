@@ -18,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.qiniu.api.auth.AuthException;
@@ -96,7 +97,7 @@ public class TopController extends BaseController{
 		ResponseDTO success = new ResponseDTO();
 		success.setStatusCode("200");
 		success.setMessage("删除成功");
-		success.setNavTabId("推荐内容");
+		success.setNavTabId("首页推荐");
 		JsonUtils.write(response, JsonBinder.buildNormalBinder().toJson(success));
 		return null;
 	}

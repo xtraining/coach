@@ -35,7 +35,7 @@ function save(){
 				<dt>专辑网页地址：</dt>
 				<dd>
 				<textarea name="url" cols="70" rows="8" maxlength="2000" class="required"></textarea>
-				<span class="info">多个ID用英文分号&nbsp;;&nbsp;分割</span>
+				<span class="info">多个地址用英文分号&nbsp;;&nbsp;分割</span>
 				</dd>
 			</dl>
 		</div>

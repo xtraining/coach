@@ -45,5 +45,7 @@ public interface ArtifactService{
 	void update(ArtifactDTO dto, 
 			MultipartFile listImageFile, MultipartFile mediaFile) throws IOException, AuthException, JSONException;
 
+	void saveCategory(String artifactIds, int categoryId);
+
 
 }

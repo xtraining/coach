@@ -1,33 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@include file="../taglib.jsp" %>
 <script type="text/javascript">
-function save(){
-	var $form = $($("#taskForm"));
-
-	if (!$form.valid()) {
-		return false;
-	}
-	$.ajax({
-			type:'POST',
-			url:'${ctx}/story/category/create.htm',
-			data:$("#taskForm").formSerialize(),//序列化表单里所有的内容
-			success: function(data){	
-				switch(data){
-						case "success":	
-							dialogAjaxDone({"statusCode":"200", "message":"创建成功。", "navTabId":"分类管理", "forwardUrl":"", "callbackType":"closeCurrent", "rel":""});	
-							break;
-						default:
-							dialogAjaxDone({"statusCode":"300", "message":"创建失败，请重试。", "navTabId":"分类管理", "forwardUrl":"", "callbackType":"closeCurrent", "rel":""});							
-							break;	
-					}
-			}
-			});
+function checkupload(){
+	var iframe = $("#callbackframe");
+	var doc = iframe[0].contentDocument || iframe[0].content;
+	var response = $(doc).find("body").text();
+	if(response == "success"){
+		navTabAjaxDone({"statusCode":"200", "message":"创建成功。", "navTabId":"分类管理", "forwardUrl":"", "callbackType":"closeCurrent", "rel":""});	
+	}  else {
+		navTabAjaxDone({"statusCode":"300", "message":"创建失败，请重试。", "navTabId":"分类管理", "forwardUrl":"", "callbackType":"closeCurrent", "rel":""});							
+	} 
 }
 </script>
 <div class="pageContent">
-	<form name="taskForm" id="taskForm" method="post" action="" class="pageForm required-validate">
+	<form action="${ctx}/story/category/create.htm" method="post" enctype="multipart/form-data" class="pageForm required-validate"  onsubmit="return iframeCallback(this, checkupload)">
 	<h2 class="contentTitle">分类信息</h2>
-		<div class="pageFormContent" layoutH="96">	
+		<div class="pageFormContent nowrap" layoutH="96">	
 			<dl>
 				<dt>名称: </dt>
 				<dd><input type="text" name="name" size="60" class="required" maxlength="128"/></dd>
@@ -35,6 +23,10 @@ function save(){
 			<dl>
 				<dt>副标题: </dt>
 				<dd><input type="text" name="description" size="60" class="required" maxlength="128"/></dd>
+			</dl>
+			<dl>
+				<dt>分类图片：</dt>
+				<dd><input type="file" name="imageFile" size="20" class="required"/></dd>
 			</dl>
 			<dl>
 				<dt>权重: </dt>
@@ -49,7 +41,7 @@ function save(){
 		</div>
 		<div class="formBar">
 			<ul>
-				<li><div class="buttonActive"><div class="buttonContent"><button type="button" onclick="save();">创建</button></div></div></li>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">保存</button></div></div></li>
 				<li>
 					<div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div>
 				</li>

@@ -129,4 +129,13 @@ public class TaskController extends BaseController{
 		taskService.saveAccept(taskId, downloadTaskIds, categoryId);
 		out.print("success");
 	}
+	
+	@RequestMapping("redownloadAll")
+	public void redownloadAll(int taskId, int sourceFrom, Model model, HttpServletResponse response) throws IOException{
+		taskService.redownloadAll(taskId);
+		ResponseDTO success = new ResponseDTO();
+		success.setStatusCode("200");
+		success.setNavTabId("");
+		JsonUtils.write(response, JsonBinder.buildNormalBinder().toJson(success));
+	}
 }

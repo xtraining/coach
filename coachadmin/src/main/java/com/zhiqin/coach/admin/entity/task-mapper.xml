@@ -8,7 +8,9 @@
 		<result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
 		<result column="status" jdbcType="INTEGER" property="status" />
 		<result column="sourceFrom" jdbcType="INTEGER" property="sourceFrom" />
-		<result column="progress" jdbcType="VARCHAR" property="progress" />
+		<result column="downloadedNum" jdbcType="INTEGER" property="downloadedNum" />
+		<result column="totalNum" jdbcType="INTEGER" property="totalNum" />
+		<result column="importedNum" jdbcType="INTEGER" property="importedNum" />
 	</resultMap>
 	
 	<resultMap id="DownloadTaskDTOResult" type="com.zhiqin.coach.admin.dto.DownloadTaskDTO">
@@ -32,7 +34,10 @@
 
 	<select id="getTaskList" parameterType="Map" resultMap="TaskDTOResult" >
 		select *, 
-		concat((select count(1) from download_task d where d.taskId = t.id and d.status = 3) , ' / ' , (select count(1) from download_task d where d.taskId = t.id))progress from task t 
+		(select count(1) from download_task d where d.taskId = t.id and d.status = 3) downloadedNum, 
+		(select count(1) from download_task d where d.taskId = t.id)totalNum,
+		(select count(1) from download_task d where d.taskId = t.id and d.status = 2) importedNum 
+		from task t 
 		where t.status != 1
 		order by t.createTime desc
 		limit ${(p.pageNum - 1) * p.numPerPage}, ${p.numPerPage}
@@ -64,7 +69,7 @@
 	</select>
 	
 	<select id="getArtifactByDownloadTaskIdList" parameterType="Map" resultType="ArtifactDTO" >
-		select a.id, a.downloadTaskId from artifact a inner join download_task d on a.downloadTaskId = d.id and a.status = 3
+		select a.id, a.downloadTaskId, a.title from artifact a inner join download_task d on a.downloadTaskId = d.id and a.status = 3
 		where d.id in <foreach collection="downloadTaskIdList" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
 	</select>
 	
@@ -112,4 +117,7 @@
 		#{fileName}, #{type}, #{size}, #{duration}, now())
   	</insert>
   	
+  	<update id="redownloadAll" parameterType="Map">
+		update download_task set status = #{status} where taskId = #{taskId} and status = 4
+	</update>
 </mapper>

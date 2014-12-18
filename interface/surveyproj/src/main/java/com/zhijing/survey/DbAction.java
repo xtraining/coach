@@ -29,19 +29,21 @@ public class DbAction {
 		PreparedStatement stmt = null;
 		try {
 			initConnection();
-			String sql = "INSERT INTO survey(a1, a2, a3, a4, a5, a61, a62, a63, a7, ip, createTime) " +
-					" VALUE (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, now())";
+			String sql = "INSERT INTO survey(a1, a2, a3, a4, a5, a6, a7, ip, createTime, a, province, city, region) " +
+					" VALUE (?, ?, ?, ?, ?, ?, ?, ?, now(), ?, ?, ?, ?)";
 			stmt = con.prepareStatement(sql);
 			stmt.setString(1, survey.getA1());
 			stmt.setString(2, survey.getA2());
 			stmt.setString(3, survey.getA3());
 			stmt.setString(4, survey.getA4());
 			stmt.setString(5, survey.getA5());
-			stmt.setString(6, survey.getA61());
-			stmt.setString(7, survey.getA62());
-			stmt.setString(8, survey.getA63());
-			stmt.setString(9, survey.getA7());
-			stmt.setString(10, survey.getIpAddress());
+			stmt.setString(6, survey.getA6());
+			stmt.setString(7, survey.getA7());
+			stmt.setString(8, survey.getIpAddress());
+			stmt.setString(9, survey.getA());
+			stmt.setString(10, survey.getProvince());
+			stmt.setString(11, survey.getCity());
+			stmt.setString(12, survey.getRegion());
 			stmt.execute();
 		} catch (Throwable e) {
 			e.printStackTrace();

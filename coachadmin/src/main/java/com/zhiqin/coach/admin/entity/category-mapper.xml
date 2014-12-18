@@ -35,7 +35,11 @@
 	</update>
 	
 	<update id="update" parameterType="CategoryDTO">
-		update category set status = #{status}, name = #{name}, categoryOrder = #{categoryOrder}, description = #{description} where id = #{id}
+		update category set status = #{status}, name = #{name}, categoryOrder = #{categoryOrder}, imageName = #{imageName}, description = #{description} where id = #{id}
+	</update>
+	
+	<update id="updateImageName" parameterType="CategoryDTO">
+		update category set imageName = #{imageName} where id = #{id}
 	</update>
   	
 </mapper>

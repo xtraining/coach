@@ -39,7 +39,8 @@
 				<th width="2%" align="left"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
 				<th width="10%" align="left">合集ID</th>
 				<th align="left">名称</th>
-				<th align="10%">权重</th>
+				<th width="20%" align="left">收藏数(收藏基数 + 用户收藏数 = 总数)</th>
+				<th width="10%" align="left">权重</th>
 				<!-- <th width="15%" align="left">类型</th> -->
 				<th width="15%" align="left">开始时间</th>
 				<th width="15%" align="left">状态</th>
@@ -57,6 +58,7 @@
 				<td>
 					<a href="${ctx}/story/top/edit.htm?topId=${item.id}" target="navTab" title="推荐详情" rel="推荐详情" style="color:#00F;">${item.name}</a>
 				</td>
+				<td>${item.collectionNum} + ${item.realCollectionNum} = ${item.collectionNum + item.realCollectionNum}</td>
 				<td>${item.topOrder}</td>
 				<%-- <td>
 					<c:choose>

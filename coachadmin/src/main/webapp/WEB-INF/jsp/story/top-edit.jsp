@@ -42,6 +42,12 @@ function viewFile(url, title){
 				</dd>
 			</dl>
 			<dl>
+				<dt>收藏基数： </dt>
+				<dd>
+					<input type="text" name="collectionNum" maxlength="10" size="40" class="required digits" value="${editObj.collectionNum}"/>
+				</dd>
+			</dl>
+			<dl>
 				<dt>标签： </dt>
 				<dd>
 					<input type="text" name="tags" maxlength="200" size="40" class="" value="${editObj.tags}"/>

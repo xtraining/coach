@@ -18,7 +18,7 @@ function checkupload(){
 	<form action="${ctx}/story/top/create.htm" method="post" enctype="multipart/form-data" class="pageForm required-validate"  onsubmit="return iframeCallback(this, checkupload)">
 	<input type="hidden" name="type" value="0"/>
 	<h2 class="contentTitle">新增推荐</h2>
-		<div class="pageFormContent" layoutH="96">
+		<div class="pageFormContent nowrap" layoutH="96">
 			<dl>
 				<dt>名称： </dt>
 				<dd>
@@ -29,6 +29,12 @@ function checkupload(){
 				<dt>权重： </dt>
 				<dd>
 					<input type="text" name="topOrder" maxlength="10" size="40" class="required digits" value="0"/>
+				</dd>
+			</dl>
+			<dl>
+				<dt>收藏基数： </dt>
+				<dd>
+					<input type="text" name="collectionNum" maxlength="10" size="40" class="required digits" value="1"/>
 				</dd>
 			</dl>
 			<dl>
@@ -53,7 +59,7 @@ function checkupload(){
 			
 			<dl>
 				<dt>首页图片 ：</dt>
-				<dd><input type="file" name="imageFile" size="20"/>	</dd>
+				<dd><input type="file" name="imageFile" size="20" class="required"/>	</dd>
 			</dl>
 			<div class="divider"></div>
 			<div class="tabs">

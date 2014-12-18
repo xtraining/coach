@@ -228,6 +228,20 @@ public class TaskDaoImpl extends BaseDaoImpl implements TaskDao
 		}
 	}
 
+	@Override
+	public void redownloadAll(int taskId) {
+		try{
+			Map map = new HashMap();
+			map.put("taskId", taskId);
+			map.put("status", DOWNLOAD_TASK_STATUS.DRAFT.getValue());
+			this.getSqlSession().update("task.redownloadAll", map);
+		} catch(RuntimeException e){
+			log.error("redownloadAll", e);
+			throw e;
+		}
+		
+	}
+
 
 	
 	

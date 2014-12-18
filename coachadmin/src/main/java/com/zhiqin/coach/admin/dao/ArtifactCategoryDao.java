@@ -21,4 +21,6 @@ public interface ArtifactCategoryDao extends BaseDao{
 
 	void deleteByArtifactId(Long id);
 
+	void delete(String artifactIds);
+
 }
