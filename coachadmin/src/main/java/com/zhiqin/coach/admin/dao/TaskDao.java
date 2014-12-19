@@ -51,6 +51,8 @@ public interface TaskDao extends BaseDao{
 
 	void redownloadAll(int taskId);
 
+	List<ArtifactDTO> getArtifactByTaskIds(String taskIds);
+
 
 
 }

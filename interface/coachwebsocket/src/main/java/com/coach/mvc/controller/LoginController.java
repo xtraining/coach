@@ -89,7 +89,7 @@ public class LoginController extends BaseController{
 	
 	
 	@RequestMapping(value = "/login")
-	public String login(String jLoginName, String JPassWord, Model model, HttpServletRequest request) {
+	public @ResponseBody String login(String jLoginName, String JPassWord, Model model, HttpServletRequest request) {
 		Map<String, String> map = getParamMap();
 		map.put("method", "coach.signIn"); 
 		map.put("phoneNumber", jLoginName);
@@ -106,9 +106,9 @@ public class LoginController extends BaseController{
     		String sessionId = (String) JsonBinder.buildNonDefaultBinder().getValue(response, "sessionId");
     		obj.setSessionId(sessionId);
     		session.setAttribute(Constants.SESSION_CONTAINER, obj);
-    		return "main";
+    		return "success";
     	} else {
-    		return "index.jsp?error=1";
+    		return "error";
     	}
 	}
 	

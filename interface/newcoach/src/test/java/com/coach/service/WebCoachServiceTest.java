@@ -19,21 +19,21 @@ public class WebCoachServiceTest extends TestCase {
 	public static final String VERSION = "V1.0.0";
 	public static final String SESSION_ID = "100BBF85-5CC1-440A-B43A-7C06E2EC7653";
 	
-	/*public void testSignIn() {
+	public void testSignIn() {
 		Map <String, String>map = new HashMap<String, String>();
     	map.put("appKey", APP_KEY); //第二个参数为AppKey
     	map.put("method", METHOD.SIGN_IN.getValue()); 
     	map.put("v", "1.0");
     	map.put("format", "json");
     	map.put("phoneNumber", "13636426042");
-    	map.put("password", "123456");
+    	map.put("password", "E10ADC3949BA59ABBE56E057F20F883E");
     	String sign = RopUtils.sign(map, APP_SECRET); //第二个参数为SecretKey, 有O2O系统分配
     	map.put("sign", sign);
     	String response = HttpUtil.postServer(SERVER_URL, map);
         System.out.println("response = " + response);
         assertNotNull(response);
         assertTrue(response.indexOf("code") <= 0);
-	}*/
+	}
 	
 	/*public void testGetAllList() {
 		Map <String, String>map = new HashMap<String, String>();

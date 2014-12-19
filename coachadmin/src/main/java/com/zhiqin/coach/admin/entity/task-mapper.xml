@@ -58,13 +58,19 @@
 	</select>
 	
 	<select id="getArtifactByTaskId" parameterType="Long" resultType="ArtifactDTO" >
-		select a.id, a.downloadTaskId from artifact a inner join download_task d on a.downloadTaskId = d.id and a.status = 3
+		select a.id, a.downloadTaskId, a.title from artifact a inner join download_task d on a.downloadTaskId = d.id and a.status = 3
 		inner join task t on d.taskId = t.id and d.status = 3
 		where t.id = #{taskId}
 	</select>
 	
+	<select id="getArtifactByTaskIds" parameterType="String" resultType="ArtifactDTO" >
+		select a.id, a.downloadTaskId, a.title from artifact a inner join download_task d on a.downloadTaskId = d.id and a.status = 3
+		inner join task t on d.taskId = t.id and d.status = 3
+		where t.id in (#{taskIds})
+	</select>
+	
 	<select id="getArtifactByDownloadTaskId" parameterType="Long" resultType="ArtifactDTO" >
-		select a.id, a.downloadTaskId from artifact a inner join download_task d on a.downloadTaskId = d.id and a.status = 3
+		select a.id, a.downloadTaskId, a.titile from artifact a inner join download_task d on a.downloadTaskId = d.id and a.status = 3
 		where d.id = #{downloadTaskId}
 	</select>
 	

@@ -136,6 +136,15 @@ public class TaskServiceImpl implements TaskService {
 	public void deleteByIds(String ids) {
 		taskDao.deleteByIds(ids);
 	}
+	
+
+	@Override
+	public void saveAccept(String taskIds, int categoryId) {
+		List<ArtifactDTO> artifactList = taskDao.getArtifactByTaskIds(taskIds);
+		saveAccept(categoryId, artifactList);
+		
+	}
+	
 
 	@Override
 	@Transactional
@@ -187,6 +196,6 @@ public class TaskServiceImpl implements TaskService {
 		taskDao.redownloadAll(taskId);
 		
 	}
-	
+
 
 }

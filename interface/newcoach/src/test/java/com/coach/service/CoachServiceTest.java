@@ -12,12 +12,27 @@ import com.coach.utils.HttpUtil;
 import com.rop.utils.RopUtils;
 
 public class CoachServiceTest extends TestCase {
-//	public static final String SERVER_URL = "http://localhost:8080/coach/service";
-	public static final String SERVER_URL = "http://114.215.145.26/coach/service";
+	public static final String SERVER_URL = "http://localhost:8080/coach/service";
+//	public static final String SERVER_URL = "http://114.215.145.26/coach/service";
 	public static final String APP_KEY = "iphone_user";
 	public static final String APP_SECRET = "LlnZA8cql4liN4CvjGL5GfwhCh7fwWGE";
 	public static final String VERSION = "V1.0.0";
 	public static final String SESSION_ID = "100BBF85-5CC1-440A-B43A-7C06E2EC7653";
+	
+	public void testCheckVersionNum() {
+		Map <String, String>map = new HashMap<String, String>();
+    	map.put("appKey", APP_KEY); //第二个参数为AppKey
+    	map.put("method", "coach.checkVersion"); 
+    	map.put("v", "1.0");
+    	map.put("format", "json");
+    	map.put("versionNum", "v1.0.0.10");
+    	String sign = RopUtils.sign(map, APP_SECRET); //第二个参数为SecretKey, 有O2O系统分配
+    	map.put("sign", sign);
+    	String response = HttpUtil.postServer(SERVER_URL, map);
+        System.out.println("response = " + response);
+        assertNotNull(response);
+        assertTrue(response.indexOf("code") <= 0);
+	}
 	/*@Test
 	public void testUpdateLastAccessTime() {
 		Map <String, String>map = new HashMap<String, String>();
@@ -193,7 +208,7 @@ public class CoachServiceTest extends TestCase {
 	*/
 	
 
-	public void testQrcodeSignIn() {
+/*	public void testQrcodeSignIn() {
 		Map <String, String>map = new HashMap<String, String>();
     	map.put("appKey", "web_user"); //第二个参数为AppKey
     	map.put("v", "1.0");
@@ -207,6 +222,6 @@ public class CoachServiceTest extends TestCase {
         System.out.println("response = " + response);
         assertNotNull(response);
         assertTrue(response.indexOf("code") <= 0);
-	}
+	}*/
 	
 }

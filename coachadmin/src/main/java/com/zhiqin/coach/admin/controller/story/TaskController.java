@@ -138,4 +138,26 @@ public class TaskController extends BaseController{
 		success.setNavTabId("");
 		JsonUtils.write(response, JsonBinder.buildNormalBinder().toJson(success));
 	}
+	
+	@RequestMapping("acceptWithCategory")
+	public String acceptWithCategory(String taskIds, Model model) {
+		PageInfoDTO pageInfo = new PageInfoDTO();
+		pageInfo.setPageNum(1);
+		pageInfo.setNumPerPage(10000);
+		List<CategoryDTO> categories = categoryService.getCategoryList(null, pageInfo);
+		model.addAttribute("categories", categories); 
+		model.addAttribute("taskIds", taskIds); 
+		return "/story/task-assign-category";
+	}
+	
+	@RequestMapping("saveCategory")
+	@ResponseBody
+	public String saveCategory(String taskIds, int categoryId, Model model, HttpServletResponse response) throws IOException {
+		if(categoryId <= 0){
+			return "input";
+		}
+		taskService.saveAccept(taskIds, categoryId);
+		return "success";
+	}
+	
 }

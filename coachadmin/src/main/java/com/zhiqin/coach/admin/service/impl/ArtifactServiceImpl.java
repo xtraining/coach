@@ -33,6 +33,7 @@ import com.zhiqin.coach.admin.service.ArtifactService;
 import com.zhiqin.coach.admin.util.Config;
 import com.zhiqin.coach.admin.util.DownloadUtils;
 import com.zhiqin.coach.admin.util.QiniuUtils;
+import com.zhiqin.coach.admin.util.RopUtils;
 
 @Service
 public class ArtifactServiceImpl implements ArtifactService {
@@ -213,5 +214,9 @@ public class ArtifactServiceImpl implements ArtifactService {
 		
 	}
 	
+	
+	public static void main(String[] args) {
+		System.out.println(RopUtils.getMD5String("123456"));
+	}
 
 }

@@ -242,6 +242,16 @@ public class TaskDaoImpl extends BaseDaoImpl implements TaskDao
 		
 	}
 
+	@Override
+	public List<ArtifactDTO> getArtifactByTaskIds(String taskIds) {
+		try{
+			return this.getSqlSession().selectList("task.getArtifactByTaskIds", taskIds);
+		} catch(RuntimeException e){
+			log.error("getArtifactByTaskIds", e);
+			throw e;
+		}
+	}
+
 
 	
 	

@@ -37,4 +37,6 @@ public interface TaskService{
 
 	void redownloadAll(int taskId);
 
+	void saveAccept(String taskIds, int categoryId);
+
 }

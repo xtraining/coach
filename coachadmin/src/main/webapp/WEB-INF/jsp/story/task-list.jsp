@@ -1,5 +1,27 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@include file="../taglib.jsp" %>
+<script>
+
+function assginCategory(){
+	var url = "${ctx}/story/task/acceptWithCategory.htm";
+	var idsStr = "";
+	var idElement = document.getElementsByName("ids");
+	var length = idElement.length;
+	for(var i = 0; i < length; i++){
+		if(idElement[i].checked && idElement[i].value != ""){
+			idsStr += idElement[i].value + ",";
+		}
+	}
+	if(idsStr == ""){
+		alertMsg.warn("请选择下载任务。");
+		return;
+	}
+	idsStr = idsStr.substring(0, idsStr.length-1);
+	var options = "{height:300, width:580, minH:40, minW:50, total:20, max:false, mask:true, resizable:true, drawable:true, maxable:false,minable:false,fresh:false}";
+	$.pdialog.open(url+"?taskIds="+idsStr, "批量入库-设置分类", "批量入库-设置分类", options);
+}
+
+</script>
     
 <form id="pagerForm" method="post" action="${ctx}/story/task/list.htm">
 	<input type="hidden" name="pageNum" value="1" />
@@ -29,6 +51,7 @@
 		<ul class="toolBar">
 			<li><a class="add" href="${ctx}/story/task/add.htm?sourceFrom=0" target="dialog" mask="true" title="喜马拉雅"><span>喜马拉雅</span></a></li>
 			<li><a class="add" href="${ctx}/story/task/add.htm?sourceFrom=1" target="dialog" mask="true" width="800" title="蜻蜓FM"><span>蜻蜓FM</span></a></li>
+			<li><a class="edit" href="javascript:assginCategory();"><span>批量分类入库</span></a></li>
 			<li class="line">line</li>
 			<li><a title="确实要删除这些任务吗?" warn="请选择任务" target="selectedTodo" rel="ids" postType="string" href="${ctx}/story/task/delete.htm" class="delete"><span>批量删除</span></a></li>
 			<li class="line">line</li>

@@ -1,8 +1,5 @@
 package com.coach.service;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
@@ -10,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.coach.common.Config;
 import com.coach.common.Constants;
-import com.coach.common.Constants.METHOD;
 import com.coach.common.Constants.RECEIVER_TYPE;
 import com.coach.common.Constants.SMS_TYPE;
 import com.coach.model.Coach;
@@ -18,6 +14,7 @@ import com.coach.model.SmsHistory;
 import com.coach.model.SysSession;
 import com.coach.request.BindBaiduPushMessageRequest;
 import com.coach.request.ChangeSMSStatusRequest;
+import com.coach.request.CheckVersionRequest;
 import com.coach.request.CoachBaseRequest;
 import com.coach.request.GetVcodeRequest;
 import com.coach.request.ResetPasswordRequest;
@@ -31,18 +28,27 @@ import com.coach.resolver.SysSessionResolver;
 import com.coach.response.QrcodeSignInResponse;
 import com.coach.response.SignInResponse;
 import com.coach.response.SimpleResponse;
-import com.coach.utils.HttpUtil;
 import com.rop.annotation.HttpAction;
 import com.rop.annotation.NeedInSessionType;
 import com.rop.annotation.ServiceMethod;
 import com.rop.annotation.ServiceMethodBean;
-import com.rop.utils.RopUtils;
 
 @ServiceMethodBean
 public class CoachService extends SimpleBaseService{
 	@Resource private CoachResolver coachResolver;
 	@Autowired private SysSessionResolver sessionResolver;
 	@Autowired private SmsResolver smsResolver;
+	
+	@ServiceMethod(method = "coach.checkVersion",version = "1.0", needInSession = NeedInSessionType.NO)
+    public Object checkVersion(CheckVersionRequest request) {
+		SimpleResponse response =  new SimpleResponse();
+		if(!StringUtils.equalsIgnoreCase(request.getVersionNum(), Config.getProperty("version_num"))){
+			response.setFlag(1);
+			response.setMsg("http://www.pgyer.com/icoach");
+		}
+		return response;
+	}
+	
 	@ServiceMethod(method = "coach.updateLastAccessTime",version = "1.0",needInSession = NeedInSessionType.YES, httpAction = HttpAction.POST)
     public Object updateLastAccessTime(CoachBaseRequest request) {
 		int result = coachResolver.updateLastAccessTime(request.getCoachId());
