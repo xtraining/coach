@@ -272,4 +272,20 @@
 		<property name="targetObject" ref="keywordDaoTarget"></property>
 		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
 	</bean>
+	
+	<bean id="areaDaoTarget" class="com.zhiqin.coach.admin.dao.impl.AreaDaoImpl"></bean>
+	<bean id="areaDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.zhiqin.coach.admin.dao.AreaDao"></property>
+		<property name="targetObject" ref="areaDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean>
+	
+	<bean id="contactDaoTarget" class="com.zhiqin.coach.admin.dao.impl.ContactDaoImpl"></bean>
+	<bean id="contactDao"
+		class="com.google.code.routing4db.spring.RoutingSpringFactoryBean">
+		<property name="targetInterface" value="com.zhiqin.coach.admin.dao.ContactDao"></property>
+		<property name="targetObject" ref="contactDaoTarget"></property>
+		<property name="routingStrategy" ref="masterSlaveStrategy"></property>
+	</bean>
 </beans>
