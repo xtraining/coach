@@ -420,4 +420,15 @@ public class Constants {
 		return this.value;
 		}
 	}
+	//0:新增 1：修改 2：删除  3：结课
+	public enum OPERATTION_TYPE {
+		ADD(1), EDIT(2), DELETE(3), DONE(4), REDO(5) ;
+		private int value;
+		private OPERATTION_TYPE(int value) {
+			this.value = value;
+		}
+		public int getValue(){
+		return this.value;
+		}
+	}
 }

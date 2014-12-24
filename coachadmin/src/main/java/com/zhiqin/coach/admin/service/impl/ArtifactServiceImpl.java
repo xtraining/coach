@@ -95,10 +95,16 @@ public class ArtifactServiceImpl implements ArtifactService {
 			
 			String uptoken = QiniuUtils.getUptoken();
 			if(voiceFile != null){
-				QiniuUtils.upload(uptoken, story.getFileName(), voiceFile);
+				QiniuUtils.upload(uptoken, story.getFileName(), voiceFile); 
+				try{
+					voiceFile.delete();
+				}finally{}
 			}
 			if(imageFile != null){
 				QiniuUtils.upload(uptoken, story.getImageName(), imageFile);
+				try{
+					imageFile.delete();
+				} finally{}
 			}
 		} else{
 			// do nothing. 如果是封面，不需要做任何事情 

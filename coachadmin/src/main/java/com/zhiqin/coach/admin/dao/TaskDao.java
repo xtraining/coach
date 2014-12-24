@@ -53,6 +53,8 @@ public interface TaskDao extends BaseDao{
 
 	List<ArtifactDTO> getArtifactByTaskIds(String taskIds);
 
+	boolean checkExisting(String url);
+
 
 
 }

@@ -138,6 +138,7 @@ $(function(){
 									<li><a href="../story/tagimage/list.htm" target="navTab" rel="图库管理" title="图库管理">图库管理</a></li>
 									<li><a href="../story/task/list.htm" target="navTab" rel="任务管理" title="任务管理">任务管理</a></li>
 									<li><a href="../sms/contact/list.htm" target="navTab" rel="号码管理" title="号码管理">号码管理</a></li>
+									<li><a href="../sms/send/list.htm" target="navTab" rel="短信管理" title="短信管理">短信管理</a></li>
 								</ul>
 							</li>
 						</ul>

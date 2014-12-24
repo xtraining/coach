@@ -16,7 +16,7 @@ public interface TaskService{
 
 	List<TaskDTO> getTaskList(PageInfoDTO pageInfo);
 
-	void create(int soureFrom, String url);
+	boolean create(int soureFrom, String url);
 
 	Long getDownloadTaskTotalNum(int taskId);
 

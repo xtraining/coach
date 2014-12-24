@@ -16,7 +16,7 @@ import com.coach.util.RopUtils;
 import com.google.zxing.WriterException;
 
 @Controller
-@RequestMapping("/coach")
+@RequestMapping("/coachweb")
 public class CoachController extends BaseController{
 	
 	@RequestMapping(value = "/getAllList")

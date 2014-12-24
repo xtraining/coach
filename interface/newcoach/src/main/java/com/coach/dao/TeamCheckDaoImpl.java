@@ -145,4 +145,22 @@ public class TeamCheckDaoImpl extends SqlSessionDaoSupport implements TeamCheckD
 			throw e;
 		}
 	}
+
+	@Override
+	public boolean validTeamCheckId(Long teamId, Long teamCheckId) {
+		try{
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("teamCheckId", teamCheckId);
+			map.put("teamId", teamId);
+			Long id = this.getSqlSession().selectOne("validTeamCheckId", map);
+			if(id != null && id > 0){
+				return true;
+			} else {
+				return false;
+			}
+		} catch(RuntimeException e){
+			log.error("validTeamCheckId", e);
+			throw e;
+		}
+	}
 }

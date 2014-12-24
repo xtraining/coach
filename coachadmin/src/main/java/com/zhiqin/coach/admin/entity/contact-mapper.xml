@@ -10,5 +10,46 @@
   	<select id="getByPhoneNumber" parameterType="String" resultType="Long" >
 		select id from t_contact where phoneNumber = #{phone} and status != -1
 	</select>
+	
+	<select id="getExistingProvinceList" resultType="AreaDTO" >
+		select aa.id, aa.fullName name from area aa where aa.code in 
+		(select distinct CONCAT(substr(a.code, 1, 2), '0000') 
+		from t_contact c inner join area a on c.areaId = a.id where c.status != -1)
+	</select>
   	
+  	<select id="getSpNameList" resultType="String" >
+		select distinct c.spName from t_contact c where c.status != -1
+	</select>
+	
+	<sql id = "getContactCondition">
+		from t_contact c where c.status != -1
+		<if test="searchDto.areaId != null">
+			<if test="searchDto.areaId == -1">
+				and c.areaId is null
+			</if>
+			<if test="searchDto.areaId != -1">
+				and c.areaId = #{searchDto.areaId}
+			</if>
+		</if>
+		<if test="searchDto.spName != null and searchDto.spName != ''">
+			and c.spName = #{searchDto.spName}
+		</if>
+	</sql>
+	
+	<select id="getContactTotalNum" parameterType="Map" resultType="Long">
+		select count(c.id)
+		<include refid="getContactCondition" />
+	</select>
+
+	<select id="getContactList" parameterType="Map" resultType="ContactDTO" >
+		select c.id, c.phoneNumber, c.createTime, (select a.fullName from area a where a.id = c.areaId)areaName, c.spName
+		<include refid="getContactCondition" />
+		order by areaName, c.createTime desc
+		limit ${(p.pageNum - 1) * p.numPerPage}, ${p.numPerPage}
+	</select>
+	
+	<select id="getContactIdList" parameterType="Map" resultType="Long" >
+		select c.id
+		<include refid="getContactCondition" />
+	</select>
 </mapper>

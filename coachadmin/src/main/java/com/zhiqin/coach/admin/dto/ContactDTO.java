@@ -25,6 +25,7 @@ public class ContactDTO {
 	private Timestamp createTime;
 	private Integer status;
 	private Integer areaId;
+	private String areaName;
 	private String description;
 	public Long getId() {
 		return id;
@@ -67,6 +68,12 @@ public class ContactDTO {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	public String getAreaName() {
+		return areaName;
+	}
+	public void setAreaName(String areaName) {
+		this.areaName = areaName;
 	}
 	
 }

@@ -66,7 +66,10 @@ public class TaskController extends BaseController{
 	@ResponseBody
 	@RequestMapping("create")
 	public String create(int sourceFrom, String url, Model model){
-		taskService.create(sourceFrom, url);
+		boolean existing = taskService.create(sourceFrom, url);
+		if(existing){
+			return "input";
+		}
 		return "success";
 	}
 	

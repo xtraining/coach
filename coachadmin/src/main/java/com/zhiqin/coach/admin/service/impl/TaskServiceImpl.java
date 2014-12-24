@@ -51,13 +51,17 @@ public class TaskServiceImpl implements TaskService {
 
 	@Override
 	@Transactional
-	public void create(int sourceFrom, String url) {
+	public boolean create(int sourceFrom, String url) {
 		String[] urlArr = StringUtils.split(url, ";");
 		List<Integer> taskIdList = new ArrayList<Integer>();
 		if(urlArr != null && urlArr.length > 0){
 			for(String htmlUrl : urlArr){
 				MyHtmlParser parser = HtmlParserFactory.getParser(sourceFrom);
 				TaskDTO dto = parser.getTask(StringUtils.trim(htmlUrl));
+				boolean existing = taskDao.checkExisting(dto.getUrl());
+				if(existing){
+					return true;
+				}
 				taskDao.create(dto);
 				taskIdList.add(dto.getId());
 			}
@@ -67,6 +71,7 @@ public class TaskServiceImpl implements TaskService {
 			executor.setConcurrencyLimit(-1);
 		    executor.execute(new CreateDownloadTaskThread(taskIdList), 60000L);	
 		}
+		return false;
 	}
 
 	class CreateDownloadTaskThread implements Runnable {

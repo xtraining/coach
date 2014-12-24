@@ -2,8 +2,8 @@ package com.coach.model;
 
 import java.sql.Timestamp;
 
-import com.coach.response.MemberResponse;
-import com.coach.response.TeamResponse;
+import com.coach.response.v1.MemberResponse;
+import com.coach.response.v1.TeamResponse;
 
 /**
  * SmsHistory entity. @author MyEclipse Persistence Tools
@@ -25,6 +25,7 @@ public class Member extends AbstractBaseModel implements
 	private Timestamp createTime;
 	private Integer gender;
 	private Integer status;
+	private Integer appMemberId;
 	public Long getId() {
 		return id;
 	}
@@ -66,6 +67,13 @@ public class Member extends AbstractBaseModel implements
 	}
 	public void setStatus(Integer status) {
 		this.status = status;
+	}
+	
+	public Integer getAppMemberId() {
+		return appMemberId;
+	}
+	public void setAppMemberId(Integer appMemberId) {
+		this.appMemberId = appMemberId;
 	}
 	public MemberResponse toResponse() {
 		MemberResponse r = new MemberResponse();

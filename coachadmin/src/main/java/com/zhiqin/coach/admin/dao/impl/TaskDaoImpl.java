@@ -252,6 +252,21 @@ public class TaskDaoImpl extends BaseDaoImpl implements TaskDao
 		}
 	}
 
+	@Override
+	public boolean checkExisting(String url) {
+		try{
+			Long id = this.getSqlSession().selectOne("task.checkExisting", url);
+			if(id != null && id > 0){
+				return true;
+			} else {
+				return false;
+			}
+		} catch(RuntimeException e){
+			log.error("checkExisting", e);
+			throw e;
+		}
+	}
+
 
 	
 	

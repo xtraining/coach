@@ -13,8 +13,8 @@ import com.coach.common.Constants.SYS_SESSION_STATUS;
 import com.coach.dao.SysSessionDao;
 import com.coach.model.Coach;
 import com.coach.model.SysSession;
-import com.coach.request.ScanSignInRequest;
-import com.coach.response.SignInResponse;
+import com.coach.request.v1.ScanSignInRequest;
+import com.coach.response.v1.SignInResponse;
 import com.rop.RopRequest;
 import com.rop.utils.RopUtils;
 

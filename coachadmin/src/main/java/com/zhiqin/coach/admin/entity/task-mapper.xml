@@ -88,6 +88,10 @@
 		select * from task where id = #{taskId}
 	</select>
 	
+	<select id="checkExisting" parameterType="String" resultType="Long" >
+		select id from task where url = #{url} limit 1
+	</select>
+	
 	<update id="updateStatus" parameterType="Map">
 		update task set status = #{status} where id = #{taskId}
 	</update>

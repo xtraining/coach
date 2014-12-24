@@ -31,5 +31,9 @@
 		<typeAlias type="com.zhiqin.coach.admin.dto.SearchResultDTO" alias="SearchResultDTO"/>
 		
 		<typeAlias type="com.zhiqin.coach.admin.dto.ContactDTO" alias="ContactDTO"/>
+		<typeAlias type="com.zhiqin.coach.admin.dto.SearchContactDTO" alias="SearchContactDTO"/>
+		<typeAlias type="com.zhiqin.coach.admin.dto.AreaDTO" alias="AreaDTO"/>
+		<typeAlias type="com.zhiqin.coach.admin.dto.SendTaskDTO" alias="SendTaskDTO"/>
+		<typeAlias type="com.zhiqin.coach.admin.dto.SendSubtaskDTO" alias="SendSubtaskDTO"/>
 	</typeAliases>
 </configuration>

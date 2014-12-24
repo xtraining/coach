@@ -1,14 +1,19 @@
 package com.coach.service;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import junit.framework.TestCase;
 
-import org.junit.Test;
-
-import com.coach.common.Constants.METHOD;
-import com.coach.model.AppVersion;
+import com.coach.request.v2.CheckSyncData;
+import com.coach.request.v2.CheckSyncDataList;
+import com.coach.request.v2.MemberSyncData;
+import com.coach.request.v2.MemberSyncDataList;
+import com.coach.request.v2.TeamSyncData;
+import com.coach.request.v2.TeamSyncDataList;
 import com.coach.utils.HttpUtil;
+import com.coach.utils.JsonBinder;
 import com.rop.utils.RopUtils;
 
 public class CoachServiceTest extends TestCase {
@@ -19,7 +24,7 @@ public class CoachServiceTest extends TestCase {
 	public static final String VERSION = "V1.0.0";
 	public static final String SESSION_ID = "100BBF85-5CC1-440A-B43A-7C06E2EC7653";
 	
-	public void testCheckVersionNum() {
+	/*public void testCheckVersionNum() {
 		Map <String, String>map = new HashMap<String, String>();
     	map.put("appKey", APP_KEY); //第二个参数为AppKey
     	map.put("method", "coach.checkVersion"); 
@@ -32,7 +37,7 @@ public class CoachServiceTest extends TestCase {
         System.out.println("response = " + response);
         assertNotNull(response);
         assertTrue(response.indexOf("code") <= 0);
-	}
+	}*/
 	/*@Test
 	public void testUpdateLastAccessTime() {
 		Map <String, String>map = new HashMap<String, String>();
@@ -223,5 +228,62 @@ public class CoachServiceTest extends TestCase {
         assertNotNull(response);
         assertTrue(response.indexOf("code") <= 0);
 	}*/
+	
+	public void testSyncDataService() {
+		TeamSyncDataList t = new TeamSyncDataList();
+		TeamSyncData t1 = new TeamSyncData();
+		t1.setAppTeamId(1);
+		t1.setOperationTime("2014-08-08 11:30:40");
+		t1.setOperationType(1);
+		t1.setTeamId(54L);
+		t1.setTeamName("new Name");
+		List<TeamSyncData> list1 = new ArrayList<TeamSyncData>();
+		list1.add(t1);
+		t.setTeamDataList(list1);
+		
+		MemberSyncDataList m = new MemberSyncDataList();
+		MemberSyncData m1 = new MemberSyncData();
+		m1.setAppTeamId(3);
+		m1.setAppMemberId(3);
+		m1.setOperationTime("2014-08-08 11:30:40");
+		m1.setOperationType(0);
+		m1.setMemberId(60L);
+		m1.setMemberName("zzp");
+		m1.setPhoneNumber("1367777777");
+		m1.setTeamId(30L);
+		List<MemberSyncData> list2 = new ArrayList<MemberSyncData>();
+		list2.add(m1);
+		m.setMemberDataList(list2);
+		
+		CheckSyncDataList c = new CheckSyncDataList();
+		CheckSyncData s1 = new CheckSyncData();
+		s1.setAppCheckId(3);
+		s1.setTeamCheckId(40L);
+		s1.setOperationTime("2014-08-08 11:30:40");
+		s1.setOperationType(0);
+		s1.setAttendMemberId("3, 4, 5");
+		s1.setLongitude(36.323D);
+		s1.setLatitude(124.323D);
+		List<CheckSyncData> list3 = new ArrayList<CheckSyncData>();
+		list3.add(s1);
+		c.setCheckDataList(list3);
+		
+		Map <String, String>map = new HashMap<String, String>();
+    	map.put("appKey", APP_KEY); //第二个参数为AppKey
+    	map.put("method", "coach.syncData"); 
+    	map.put("v", "1.0");
+    	map.put("format", "json");
+    	map.put("coachId", "29");
+    	map.put("teams", JsonBinder.buildNormalBinder().toJson(t));
+    	map.put("members", JsonBinder.buildNormalBinder().toJson(m));
+    	map.put("checks", JsonBinder.buildNormalBinder().toJson(c));
+    	map.put("sessionId", SESSION_ID);
+    	String sign = RopUtils.sign(map, APP_SECRET); //第二个参数为SecretKey, 有O2O系统分配
+    	map.put("sign", sign);
+    	String response = HttpUtil.postServer(SERVER_URL, map);
+        System.out.println("response = " + response);
+        assertNotNull(response);
+        assertTrue(response.indexOf("code") <= 0);
+	}
 	
 }

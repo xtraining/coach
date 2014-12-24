@@ -3,11 +3,11 @@ package com.coach.resolver;
 import com.coach.common.Constants.SMS_TYPE;
 import com.coach.model.Coach;
 import com.coach.model.SmsHistory;
-import com.coach.request.BindBaiduPushMessageRequest;
-import com.coach.request.ChangeSMSStatusRequest;
-import com.coach.request.ScanSignInRequest;
-import com.coach.request.SignOutRequest;
-import com.coach.request.SignUpRequest;
+import com.coach.request.v1.BindBaiduPushMessageRequest;
+import com.coach.request.v1.ChangeSMSStatusRequest;
+import com.coach.request.v1.ScanSignInRequest;
+import com.coach.request.v1.SignOutRequest;
+import com.coach.request.v1.SignUpRequest;
 public interface CoachResolver {
 	public Coach getIdByCredentials(String phoneNumber, String password);
 

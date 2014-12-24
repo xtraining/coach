@@ -1,5 +1,6 @@
 package com.coach.dao;
 
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,10 +72,28 @@ public class TeamDaoImpl extends SqlSessionDaoSupport implements TeamDao{
 		try{
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("coachId", coachId);
-			map.put("type", type);
+			map.put("type", type.getValue());
 			return  this.getSqlSession().selectOne("getDoneNumber", map);
 		} catch(RuntimeException e){
 			log.error("getDoneNumber", e);
+			throw e;
+		}
+	}
+
+	@Override
+	public boolean checkOverDue(Long teamId, Timestamp updateTime) {
+		try{
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("teamId", teamId);
+			map.put("updateTime", updateTime);
+			Long id =  this.getSqlSession().selectOne("checkOverDue", map);
+			if(id != null && id > 0){
+				return true;
+			} else {
+				return false;
+			}
+		} catch(RuntimeException e){
+			log.error("checkOverDue", e);
 			throw e;
 		}
 	}

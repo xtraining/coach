@@ -34,5 +34,7 @@ public interface TeamCheckDao {
 
 	List<Member> getAllMemberByCheckId(Long coachId, Long teamCheckId);
 
+	boolean validTeamCheckId(Long teamId, Long id);
+
 
 }

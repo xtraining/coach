@@ -41,6 +41,9 @@
 		and m.status != -1
   </select>
 	
+ <select id="validTeamCheckId" parameterType="Map" resultType="Long">
+		select t.id from team_check t where t.id = #{teamCheckId} and t.teamId = #{teamId}
+  </select>
 
   <select id="getTeamCheckHistory" parameterType="Map" resultType="com.coach.model.TeamCheck">
 		select c.*, 

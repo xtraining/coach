@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.zhiqin.coach.admin.dao.ContactDao;
+import com.zhiqin.coach.admin.dto.AreaDTO;
 import com.zhiqin.coach.admin.dto.ContactDTO;
 import com.zhiqin.coach.admin.dto.PageInfoDTO;
 import com.zhiqin.coach.admin.dto.SearchContactDTO;
@@ -40,14 +41,59 @@ public class ContactDaoImpl extends BaseDaoImpl implements ContactDao
 	@Override
 	public List<ContactDTO> getContactList(SearchContactDTO searchDto,
 			PageInfoDTO pageInfo) {
-		// TODO Auto-generated method stub
-		return null;
+		try{
+			Map map = new HashMap();
+			map.put("searchDto", searchDto);
+			map.put("p", pageInfo);
+			return this.getSqlSession().selectList("contact.getContactList", map);
+		} catch(RuntimeException e){
+			log.error("getContactList", e);
+			throw e;
+		}
 	}
 
 	@Override
 	public Long getTotalNum(SearchContactDTO searchDto) {
-		// TODO Auto-generated method stub
-		return null;
+		try{
+			Map map = new HashMap();
+			map.put("searchDto", searchDto);
+			return this.getSqlSession().selectOne("contact.getContactTotalNum", map);
+		} catch(RuntimeException e){
+			log.error("getTotalNum", e);
+			throw e;
+		}
+	}
+
+	@Override
+	public List<AreaDTO> getExistingProvinceList() {
+		try{
+			return this.getSqlSession().selectList("contact.getExistingProvinceList");
+		} catch(RuntimeException e){
+			log.error("getExistingProvinceList", e);
+			throw e;
+		}
+	}
+
+	@Override
+	public List<String> getSpNameList() {
+		try{
+			return this.getSqlSession().selectList("contact.getSpNameList");
+		} catch(RuntimeException e){
+			log.error("getSpNameList", e);
+			throw e;
+		}
+	}
+
+	@Override
+	public List<Long> getContactIdList(SearchContactDTO dto) {
+		try{
+			Map map = new HashMap();
+			map.put("searchDto", dto);
+			return this.getSqlSession().selectList("contact.getContactIdList", map);
+		} catch(RuntimeException e){
+			log.error("getContactIdList", e);
+			throw e;
+		}
 	}
 
 

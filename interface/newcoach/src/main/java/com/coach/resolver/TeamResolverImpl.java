@@ -2,11 +2,11 @@ package com.coach.resolver;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.coach.common.Config;
+import com.coach.common.Constants;
 import com.coach.common.Constants.TEAM_TYPE;
 import com.coach.dao.CoachDao;
 import com.coach.dao.MemberDao;
@@ -30,24 +31,30 @@ import com.coach.model.Member;
 import com.coach.model.Team;
 import com.coach.model.TeamCheck;
 import com.coach.model.TeamMember;
-import com.coach.request.AddMemberRequest;
-import com.coach.request.ChangeMemberTeamRequest;
-import com.coach.request.ChangeTeamStatusRequest;
-import com.coach.request.CheckMemberRequest;
-import com.coach.request.CreateTeamRequest;
-import com.coach.request.GetMemberDetailRequest;
-import com.coach.request.GetTeamCheckHistoryRequest;
-import com.coach.request.MemberIdListRequest;
-import com.coach.request.MemberIdRequest;
-import com.coach.request.TeamCheckIdRequest;
-import com.coach.request.TeamIdRequest;
-import com.coach.request.UpdateMemberRequest;
-import com.coach.request.UpdateTeamRequest;
-import com.coach.response.CheckResponse;
-import com.coach.response.GetTeamCheckResponse;
-import com.coach.response.MemberResponse;
-import com.coach.response.TeamCheckResponse;
-import com.coach.response.TeamResponse;
+import com.coach.request.v1.AddMemberRequest;
+import com.coach.request.v1.ChangeMemberTeamRequest;
+import com.coach.request.v1.ChangeTeamStatusRequest;
+import com.coach.request.v1.CheckMemberRequest;
+import com.coach.request.v1.CreateTeamRequest;
+import com.coach.request.v1.GetMemberDetailRequest;
+import com.coach.request.v1.GetTeamCheckHistoryRequest;
+import com.coach.request.v1.MemberIdListRequest;
+import com.coach.request.v1.MemberIdRequest;
+import com.coach.request.v1.TeamCheckIdRequest;
+import com.coach.request.v1.TeamIdRequest;
+import com.coach.request.v1.UpdateMemberRequest;
+import com.coach.request.v1.UpdateTeamRequest;
+import com.coach.request.v2.CheckSyncData;
+import com.coach.request.v2.CheckSyncDataList;
+import com.coach.request.v2.MemberSyncData;
+import com.coach.request.v2.MemberSyncDataList;
+import com.coach.request.v2.TeamSyncData;
+import com.coach.request.v2.TeamSyncDataList;
+import com.coach.response.v1.CheckResponse;
+import com.coach.response.v1.GetTeamCheckResponse;
+import com.coach.response.v1.MemberResponse;
+import com.coach.response.v1.TeamCheckResponse;
+import com.coach.response.v1.TeamResponse;
 import com.coach.utils.DateUtils;
 import com.coach.utils.HttpUtil;
 import com.coach.utils.JsonBinder;
@@ -346,5 +353,135 @@ public class TeamResolverImpl implements TeamResolver{
 		}
 		
 	}
-	
+
+	@Override
+	@Transactional
+	public void syncData(Long coachId, TeamSyncDataList teams, MemberSyncDataList members, CheckSyncDataList checks) {
+		List<Team> teamList = new ArrayList<Team>();
+		if(teams != null){
+			List<TeamSyncData> teamDataList = teams.getTeamDataList();
+			if(teamDataList != null){
+				for(TeamSyncData teamData : teamDataList){
+					Integer operationType = teamData.getOperationType();
+					Team team = teamData.toTeam();
+					team.setCoachId(coachId);
+					if(operationType == Constants.OPERATTION_TYPE.ADD.getValue()){
+						teamDao.insert(team);
+					} else if(operationType == Constants.OPERATTION_TYPE.EDIT.getValue()){
+						boolean isOverDue = teamDao.checkOverDue(team.getId(), DateUtils.yyyyMMddHHmmssToTimestamp(teamData.getOperationTime()));
+						if(!isOverDue){
+							teamDao.updateTeam(team);
+						} else {
+							log.info("Team Name " + team.getName() + " is over due");
+						}
+					}  else if(operationType == Constants.OPERATTION_TYPE.DELETE.getValue()){
+						team.setStatus(-1);
+						teamDao.updateTeamStatus(team);
+					}  else if(operationType == Constants.OPERATTION_TYPE.DONE.getValue()){
+						team.setStatus(1);
+						teamDao.updateTeamStatus(team);
+					}  else if(operationType == Constants.OPERATTION_TYPE.REDO.getValue()){
+						team.setStatus(0);
+						teamDao.updateTeamStatus(team);
+					}
+					teamList.add(team);
+				}
+			}
+		}
+		List<Member> memberList = new ArrayList<Member>();
+		if(members != null){
+			List<MemberSyncData> memberDataList = members.getMemberDataList();
+			if(memberDataList != null){
+				for(MemberSyncData memberData : memberDataList){
+					Integer operationType = memberData.getOperationType();
+					Member member = memberData.toMember();
+					member.setCoachId(coachId);
+					if(operationType == Constants.OPERATTION_TYPE.ADD.getValue()){
+						memberDao.insert(member);
+						TeamMember teamMember = new TeamMember();
+						teamMember.setStatus(0);
+						if(memberData.getTeamId() != null && memberData.getTeamId() > 0){
+							teamMember.setTeamId(memberData.getTeamId());
+						} else {
+							for(Team team : teamList){
+								if(team.getAppTeamId().intValue() == memberData.getAppTeamId()){
+									teamMember.setTeamId(team.getId());
+								}
+							}
+						}
+						teamMember.setMemberId(member.getId());
+						if(teamMember.getTeamId() != null){
+							teamMemberDao.insert(teamMember);
+						} else {
+							log.error("team id error");
+						}
+					} else if(operationType == Constants.OPERATTION_TYPE.EDIT.getValue()){//对于修改和删除学员，学员和班级肯定是已经同步过的数据
+						memberDao.update(coachId, memberData.getTeamId(), member);
+					}  else if(operationType == Constants.OPERATTION_TYPE.DELETE.getValue()){
+						memberDao.delete(coachId, memberData.getTeamId(), member.getId());
+					} 
+					memberList.add(member);
+				}
+			}
+		}
+		List<TeamCheck> teamCheckList = new ArrayList<TeamCheck>();
+		if(checks != null){
+			List<CheckSyncData> checkDataList = checks.getCheckDataList();
+			if(checkDataList != null){
+				for(CheckSyncData checkData : checkDataList){
+					Integer operationType = checkData.getOperationType();
+					TeamCheck teamCheck = checkData.toTeamCheck();
+					String []attendMemberIds = StringUtils.split(checkData.getAttendAppMemberId(), ",");
+					Set<Long> attendMemberIdList = new HashSet<Long>();
+					if(attendMemberIds != null){
+						for(String attendMemberId : attendMemberIds){
+							attendMemberIdList.add(Long.valueOf(StringUtils.trim(attendMemberId)));
+						}
+					}
+					String []attendAppMemberIds = StringUtils.split(checkData.getAttendAppMemberId(), ",");
+					if(attendAppMemberIds != null){
+						for(String attendAppMemberId : attendAppMemberIds){
+							for(Member member : memberList){
+								if(!attendMemberIdList.contains(Long.valueOf(member.getAppMemberId())) && member.getAppMemberId() == Integer.valueOf(attendAppMemberId)){
+									attendMemberIdList.add(member.getId());
+									break;
+								}
+							}
+						}
+					}
+					
+					if(teamCheck.getTeamId() == null || teamCheck.getTeamId() == 0){
+						for(Team team : teamList){
+							if(team.getAppTeamId().intValue() == checkData.getAppTeamId()){
+								teamCheck.setTeamId(team.getId());
+							}
+						}
+					}
+					boolean valid = false;
+					if(operationType == Constants.OPERATTION_TYPE.ADD.getValue()){
+						valid = true;
+						teamCheckDao.insert(teamCheck);
+					} else if(operationType == Constants.OPERATTION_TYPE.EDIT.getValue()){
+						valid = teamCheckDao.validTeamCheckId(teamCheck.getTeamId(), teamCheck.getId());
+						if(valid){
+							teamCheckDao.updateTime(teamCheck.getId());
+							teamCheckMemberDao.deleteByTeamCheckId(teamCheck.getId());
+						}
+					} 
+					if(valid){
+						if(attendMemberIdList.size() > 0){
+							teamCheckMemberDao.saveAttend(teamCheck.getId(), teamCheck.getTeamId(), new ArrayList<Long>(attendMemberIdList));
+						}
+						teamCheckMemberDao.saveAbcent(teamCheck.getId(), teamCheck.getTeamId(), new ArrayList<Long>(attendMemberIdList));
+						teamCheckList.add(teamCheck);
+						
+						SimpleAsyncTaskExecutor executor1 = new SimpleAsyncTaskExecutor("location-"+teamCheck.getId());
+						executor1.setConcurrencyLimit(-1);
+					    executor1.execute(new UpdateLocationThread(teamCheck.getId(), teamCheck.getLongitude(), teamCheck.getLatitude()), 60000L);	
+					}
+				}
+			}
+		}
+	}
+
 }

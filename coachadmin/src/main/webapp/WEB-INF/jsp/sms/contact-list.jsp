@@ -5,6 +5,8 @@
 </script>
     
 <form id="pagerForm" method="post" action="${ctx}/sms/contact/list.htm">
+	<input type="hidden" name="spName" value="${searchDto.spName}" />
+	<input type="hidden" name="areaId" value="${searchDto.areaId}" />
 	<input type="hidden" name="pageNum" value="1" />
 	<input type="hidden" name="NumPerPage" value="20" />
 </form>
@@ -19,7 +21,7 @@
 					<select name="spName" class="combox">
 						<option value="">全部</option>	
 						<c:forEach var="item" items="${spNameList}">
-						<option value="${item.id}" <c:if test="${searchDto.spName == item.name}">selected</c:if>>${item.name}</option>		
+						<option value="${item}" <c:if test="${searchDto.spName == item}">selected</c:if>>${item}</option>		
 						</c:forEach>
 					</select>
 				</td>	
@@ -27,7 +29,8 @@
 				    <label>省：</label>
 					<select name="areaId" class="combox">
 						<option value="">全部</option>	
-						<c:forEach var="item" items="${provinceList}">
+						<option value="-1">其他</option>	
+						<c:forEach var="item" items="${areaList}">
 						<option value="${item.id}" <c:if test="${searchDto.areaId == item.id}">selected</c:if>>${item.name}</option>		
 						</c:forEach>
 					</select>
@@ -46,9 +49,9 @@
 	<div class="panelBar">
 		<ul class="toolBar">
 			<li><a class="add" href="${ctx}/sms/contact/add.htm?sourceFrom=0" target="dialog" mask="true" width="800" title="添加号码"><span>添加</span></a></li>
-			<li><a class="add" href="${ctx}/sms/contact/add.htm?sourceFrom=1" target="dialog" mask="true" width="800" title="Excel导入"><span>Excel导入</span></a></li>
+			<li><a class="add" href="${ctx}/sms/contact/add.htm?sourceFrom=1" target="navTab" title="Excel导入"><span>Excel导入</span></a></li>
 			<li class="line">line</li>
-			<li><a title="确实要删除这些任务吗?" warn="请选择任务" target="selectedTodo" rel="ids" postType="string" href="${ctx}/story/task/delete.htm" class="delete"><span>批量删除</span></a></li>
+			<li><a title="确实要删除这些手机号吗?" warn="请选择手机号" target="selectedTodo" rel="ids" postType="string" href="${ctx}/sms/contact/delete.htm" class="delete"><span>批量删除</span></a></li>
 			<li class="line">line</li>
 		</ul>
 	</div>
@@ -57,9 +60,9 @@
 			<tr>
 				<th width="3%" align="left"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
 				<th width="5%" align="left">ID</th>
-				<th width="10%" align="left">号码</th>
-				<th align="left">省市</th>
-				<th width="15%" align="left">运营商</th>
+				<th width="20%" align="left">号码</th>
+				<th width="20%" align="left">省市</th>
+				<th width="20%" align="left">运营商</th>
 				<th width="12%" align="left">添加时间</th>
 			</tr>
 		</thead>
@@ -70,10 +73,13 @@
 					<input name="ids" value="${item.id}" type="checkbox">
 				</td>
 				<td>
+					${item.id}
+				</td>
+				<td>
 					${item.phoneNumber}
 				</td>
 				<td>
-				 	${item.area}
+				 	${item.areaName}
 				</td>
 				<td>
 					${item.spName}

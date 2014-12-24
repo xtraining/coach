@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sendtask">
+ 	<insert id="save" useGeneratedKeys="true" keyProperty="id" parameterType="SendTaskDTO">
+	INSERT INTO t_send_task(type, status, message, createTime, areaId, spName, sendNum) 
+	VALUE (#{sendType}, #{status}, #{message}, now(), #{areaId}, #{spName}, #{sendNum}) 
+	</insert>
+	
+	<insert id="saveSendSubtask" useGeneratedKeys="true" keyProperty="id" parameterType="SendSubtaskDTO">
+	INSERT INTO t_send_subtask(taskId, sendTime, resultCode, status) 
+	VALUE (#{taskId},#{sendTime}, #{resultCode}, #{status}) 
+	</insert>
+	
+	<insert id="saveSendSubtaskContact" useGeneratedKeys="true" keyProperty="id" parameterType="Map">
+	INSERT INTO t_send_subtask_contact(contactId, subtaskId) values
+	<foreach collection="contactIdList" item="item" index="index" separator="," >  
+        (#{item},#{sendSubtaskId})  
+    </foreach>  
+	</insert>
+	
+	<sql id = "getSendTaskCondition">
+		from t_send_task t where t.status != -1
+	</sql>
+	
+	<select id="getTaskTotalNum" resultType="Long">
+		select count(*)
+		<include refid="getSendTaskCondition" />
+	</select>
+
+	<select id="getSendTaskList" parameterType="Map" resultType="SendTaskDTO" >
+		select t.id, t.type sendType, t.status, t.message, t.createTime,
+		(select a.fullName from area a where a.id = t.areaId)areaName, t.sendNum, t.spName
+		<include refid="getSendTaskCondition" />
+		order by t.createTime asc
+		limit ${(p.pageNum - 1) * p.numPerPage}, ${p.numPerPage}
+	</select>
+	
+	<select id="getSubtaskTotalNum" parameterType="Long"  resultType="Long">
+		select count(*) from t_send_subtask where taskId = #{sendTaskId} and status != -1
+	</select>
+
+	<select id="getSendSubtaskList" parameterType="Map" resultType="SendSubtaskDTO" >
+		select *, (select count(*) from t_send_subtask_contact c where c.subtaskId = t.id) sendNum
+		from t_send_subtask t where t.taskId = #{sendTaskId} and t.status != -1
+		order by t.sendTime asc
+		limit ${(p.pageNum - 1) * p.numPerPage}, ${p.numPerPage}
+	</select>
+
+</mapper>

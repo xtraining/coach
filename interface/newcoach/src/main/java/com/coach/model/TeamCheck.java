@@ -9,10 +9,10 @@ import javax.xml.bind.annotation.XmlElement;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.coach.response.CheckResponse;
-import com.coach.response.MemberResponse;
-import com.coach.response.TeamCheckResponse;
-import com.coach.response.TeamResponse;
+import com.coach.response.v1.CheckResponse;
+import com.coach.response.v1.MemberResponse;
+import com.coach.response.v1.TeamCheckResponse;
+import com.coach.response.v1.TeamResponse;
 import com.coach.utils.DateUtils;
 
 /**

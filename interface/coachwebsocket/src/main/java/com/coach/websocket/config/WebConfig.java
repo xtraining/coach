@@ -42,7 +42,7 @@ public class WebConfig extends WebMvcConfigurerAdapter implements WebSocketConfi
 	
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {   
-        registry.addInterceptor(new UserSecurityInterceptor()).addPathPatterns("/coach/**");   
+        registry.addInterceptor(new UserSecurityInterceptor()).addPathPatterns("/coachweb/**");   
     } 
 
 	@Override

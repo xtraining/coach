@@ -19,10 +19,14 @@
   </update>
   
   <update id="updateTeam" parameterType="com.coach.model.Team">
-	 update team set name = #{name} where id = #{id} and coachId = #{coachId}
+	 update team set name = #{name} where id = #{id} and coachId = #{coachId} and updateTime = now()
   </update>
   
   <select id="getDoneNumber" parameterType="Map" resultType="Long">
-		select count(t.id) from team t where t.coachId = #{coachId} and t.status = #{status}
+		select count(t.id) from team t where t.coachId = #{coachId} and t.status = #{type}
+	</select>
+	
+	<select id="checkOverDue" parameterType="Map" resultType="Long">
+		select t.id from team t where t.id = #{teamId} and t.updateTime > #{updateTime}
 	</select>
 </mapper>

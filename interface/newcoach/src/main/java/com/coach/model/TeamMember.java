@@ -2,7 +2,7 @@ package com.coach.model;
 
 import java.sql.Timestamp;
 
-import com.coach.response.TeamResponse;
+import com.coach.response.v1.TeamResponse;
 
 /**
  * SmsHistory entity. @author MyEclipse Persistence Tools
