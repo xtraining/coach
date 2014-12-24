@@ -89,7 +89,7 @@
 	</select>
 	
 	<select id="checkExisting" parameterType="String" resultType="Long" >
-		select id from task where url = #{url} limit 1
+		select id from task where url = #{url} and status = 0 limit 1
 	</select>
 	
 	<update id="updateStatus" parameterType="Map">

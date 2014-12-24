@@ -17,7 +17,7 @@ function save(){
 							dialogAjaxDone({"statusCode":"200", "message":"创建成功。", "navTabId":"任务管理", "forwardUrl":"", "callbackType":"closeCurrent", "rel":""});	
 							break;
 						case "\"input\"":	
-							dialogAjaxDone({"statusCode":"300", "message":"请选择来源网站。", "navTabId":"任务管理", "forwardUrl":"", "callbackType":"", "rel":""});							
+							dialogAjaxDone({"statusCode":"300", "message":"该网址已经添加过。", "navTabId":"任务管理", "forwardUrl":"", "callbackType":"", "rel":""});							
 							break;	
 						default:
 							dialogAjaxDone({"statusCode":"300", "message":"分派失败，请重试。", "navTabId":"任务管理", "forwardUrl":"", "callbackType":"closeCurrent", "rel":""});							
