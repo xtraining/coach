@@ -24,6 +24,7 @@ function assginCategory(){
 </script>
     
 <form id="pagerForm" method="post" action="${ctx}/story/task/list.htm">
+	<input type="hidden" name="keyword" value="${keyword}" />
 	<input type="hidden" name="pageNum" value="1" />
 	<input type="hidden" name="NumPerPage" value="20" />
 </form>
@@ -34,7 +35,7 @@ function assginCategory(){
 		<table class="searchContent">
 			<tr>
 				<td>
-					任务ID：<input type="text" name="coachId" class="digits" value=""/>
+					任务关键字：<input type="text" name="keyword" class="" value="${keyword}"/>
 				</td>
 			</tr>
 		</table>		

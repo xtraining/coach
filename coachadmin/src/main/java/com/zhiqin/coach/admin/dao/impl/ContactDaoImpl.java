@@ -96,5 +96,60 @@ public class ContactDaoImpl extends BaseDaoImpl implements ContactDao
 		}
 	}
 
+	@Override
+	public void updateRepeatTimes(Long contactId, String description) {
+		try{
+			Map map = new HashMap();
+			map.put("contactId", contactId);
+			map.put("description", "; "+description);
+			this.getSqlSession().update("contact.updateRepeatTimes", map);
+		} catch(RuntimeException e){
+			log.error("updateRepeatTimes", e);
+			throw e;
+		}
+		
+	}
+
+	@Override
+	public List<String> getBySendSubtaskId(Long subtaskId) {
+		try{
+			return this.getSqlSession().selectList("contact.getBySendSubtaskId", subtaskId);
+		} catch(RuntimeException e){
+			log.error("getBySendSubtaskId", e);
+			throw e;
+		}
+	}
+
+	@Override
+	public List<ContactDTO> getContactListWithoutAreaId(int maxNum) {
+		try{
+			return this.getSqlSession().selectList("contact.getContactListWithoutAreaId", maxNum);
+		} catch(RuntimeException e){
+			log.error("getContactListWithoutAreaId", e);
+			throw e;
+		}
+	}
+
+	@Override
+	public void updateArea(ContactDTO dto) {
+		try{
+			this.getSqlSession().update("contact.updateArea", dto);
+		} catch(RuntimeException e){
+			log.error("updateArea", e);
+			throw e;
+		}
+		
+	}
+
+	@Override
+	public List<String> getTagNameList() {
+		try{
+			return this.getSqlSession().selectList("contact.getTagNameList");
+		} catch(RuntimeException e){
+			log.error("getTagNameList", e);
+			throw e;
+		}
+	}
+
 
 }

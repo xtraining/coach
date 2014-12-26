@@ -2,13 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="contact">
-	<select id="save" parameterType="ContactDTO">
-	INSERT INTO t_contact(phoneNumber, spName, createTime, status, areaId, description) 
-	VALUE (#{phoneNumber}, #{spName}, now(), #{status}, #{areaId}, #{description}) 
-	</select>
+	<insert id="save" parameterType="ContactDTO">
+	INSERT INTO t_contact(phoneNumber, spName, createTime, status, areaId, description, tagName) 
+	VALUE (#{phoneNumber}, #{spName}, now(), #{status}, #{areaId}, #{description}, #{tagName}) 
+	</insert>
   	
   	<select id="getByPhoneNumber" parameterType="String" resultType="Long" >
 		select id from t_contact where phoneNumber = #{phone} and status != -1
+	</select>
+	
+	<select id="getBySendSubtaskId" parameterType="Long" resultType="String" >
+		select distinct c.phoneNumber from 
+		t_contact c inner join t_send_subtask_contact s on c.id = s.contactId
+		where s.subtaskId = #{subtaskId} and c.status != -1
 	</select>
 	
 	<select id="getExistingProvinceList" resultType="AreaDTO" >
@@ -21,6 +27,16 @@
 		select distinct c.spName from t_contact c where c.status != -1
 	</select>
 	
+	<select id="getTagNameList" resultType="String" >
+		select distinct c.tagName from t_contact c where c.status != -1
+	</select>
+	
+	<update id="updateRepeatTimes" parameterType="Map" >
+		update t_contact c 
+		set c.repeatTimes = c.repeatTimes + 1, c.description = concat(c.description, #{description}) 
+		where c.id = #{contactId}
+	</update>
+	
 	<sql id = "getContactCondition">
 		from t_contact c where c.status != -1
 		<if test="searchDto.areaId != null">
@@ -28,11 +44,16 @@
 				and c.areaId is null
 			</if>
 			<if test="searchDto.areaId != -1">
-				and c.areaId = #{searchDto.areaId}
+				and c.areaId in 
+				(select id from area where code like (select concat(trim(TRAILING '00' FROM code), '%') 
+				from area where id = #{searchDto.areaId}))
 			</if>
 		</if>
 		<if test="searchDto.spName != null and searchDto.spName != ''">
 			and c.spName = #{searchDto.spName}
+		</if>
+		<if test="searchDto.tagName != null and searchDto.tagName != ''">
+			and c.tagName = #{searchDto.tagName}
 		</if>
 	</sql>
 	
@@ -42,9 +63,10 @@
 	</select>
 
 	<select id="getContactList" parameterType="Map" resultType="ContactDTO" >
-		select c.id, c.phoneNumber, c.createTime, (select a.fullName from area a where a.id = c.areaId)areaName, c.spName
+		select c.id, c.phoneNumber, c.createTime, (select a.fullName from area a where a.id = c.areaId)areaName, c.spName,
+		c.repeatTimes, c.tagName
 		<include refid="getContactCondition" />
-		order by areaName, c.createTime desc
+		order by c.repeatTimes desc, c.areaId, c.createTime desc
 		limit ${(p.pageNum - 1) * p.numPerPage}, ${p.numPerPage}
 	</select>
 	
@@ -52,4 +74,17 @@
 		select c.id
 		<include refid="getContactCondition" />
 	</select>
+	
+	<select id="getContactListWithoutAreaId" parameterType="Integer" resultType="ContactDTO" >
+		select c.id, c.phoneNumber
+		from t_contact c where c.status != -1 and c.areaId is null
+		order by rand()
+		limit #{maxNum}
+	</select>
+	
+	<update id="updateArea" parameterType="ContactDTO" >
+		update t_contact c 
+		set c.areaId = #{areaId}, c.spName = #{spName}
+		where c.id = #{id}
+	</update>
 </mapper>

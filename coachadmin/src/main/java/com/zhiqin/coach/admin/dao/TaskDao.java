@@ -14,9 +14,9 @@ import com.zhiqin.coach.admin.dto.TaskDTO;
 
 public interface TaskDao extends BaseDao{
 
-	Long getTotalNum();
+	Long getTotalNum(String keyword);
 
-	List<TaskDTO> getTaskList(PageInfoDTO pageInfo);
+	List<TaskDTO> getTaskList(String keyword, PageInfoDTO pageInfo);
 
 	void create(TaskDTO dto);
 

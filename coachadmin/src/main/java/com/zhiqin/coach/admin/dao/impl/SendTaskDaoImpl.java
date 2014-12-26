@@ -99,6 +99,20 @@ public class SendTaskDaoImpl extends BaseDaoImpl implements SendTaskDao
 		}
 	}
 
+	@Override
+	public void updateStatus(Long subtaskId, int resultCode) {
+		try{
+			Map map = new HashMap();
+			map.put("resultCode", resultCode);
+			map.put("subtaskId", subtaskId);
+			this.getSqlSession().insert("sendtask.updateStatus", map);
+		} catch(RuntimeException e){
+			log.error("updateStatus", e);
+			throw e;
+		}
+		
+	}
+
 
 
 }

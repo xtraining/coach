@@ -21,9 +21,11 @@ public class TaskDaoImpl extends BaseDaoImpl implements TaskDao
 			.getLogger(TaskDaoImpl.class);
 
 	@Override
-	public Long getTotalNum() {
+	public Long getTotalNum(String keyword) {
 		try{
-			return  this.getSqlSession().selectOne("task.getTotalNum");
+			Map map = new HashMap();
+			map.put("keyword", keyword);
+			return  this.getSqlSession().selectOne("task.getTotalNum", map);
 		} catch(RuntimeException e){
 			log.error("getTotalNum", e);
 			throw e;
@@ -31,9 +33,10 @@ public class TaskDaoImpl extends BaseDaoImpl implements TaskDao
 	}
 
 	@Override
-	public List<TaskDTO> getTaskList(PageInfoDTO pageInfo) {
+	public List<TaskDTO> getTaskList(String keyword, PageInfoDTO pageInfo) {
 		try{
 			Map map = new HashMap();
+			map.put("keyword", keyword);
 			map.put("p", pageInfo);
 			return this.getSqlSession().selectList("task.getTaskList", map);
 		} catch(RuntimeException e){

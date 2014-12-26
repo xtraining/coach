@@ -42,11 +42,12 @@ public class TaskController extends BaseController{
 	@Resource
 	private CategoryService categoryService;
 	@RequestMapping("list")
-	public String list(Model model, PageInfoDTO pageInfo) {
-		Long totalNum = taskService.getTotalNum();
-		List<TaskDTO> list = taskService.getTaskList(pageInfo);
+	public String list(String keyword, Model model, PageInfoDTO pageInfo) {
+		Long totalNum = taskService.getTotalNum(keyword);
+		List<TaskDTO> list = taskService.getTaskList(keyword, pageInfo);
 		model.addAttribute("responseList", list); 
 		model.addAttribute("totalCount", totalNum+"");
+		model.addAttribute("keyword", keyword);
 		model.addAttribute("currentNum", pageInfo.getPageNum() == null ? 1 : pageInfo.getPageNum());
 		return "/story/task-list";
 	}
@@ -77,7 +78,10 @@ public class TaskController extends BaseController{
 	public String detail(int sourceFrom, int taskId, PageInfoDTO pageInfo, Model model) {
 		Long totalNum = taskService.getDownloadTaskTotalNum(taskId);
 		List<DownloadTaskDTO> list = taskService.getDownloadTaskList(taskId, pageInfo);
-		List<CategoryDTO> categories = categoryService.getCategoryList(null, pageInfo);
+		PageInfoDTO p = new PageInfoDTO();
+		p.setNumPerPage(1000);
+		p.setPageNum(1);
+		List<CategoryDTO> categories = categoryService.getCategoryList(null, p);
 		model.addAttribute("categories", categories); 
 		model.addAttribute("taskId", taskId); 
 		model.addAttribute("sourceFrom", sourceFrom); 

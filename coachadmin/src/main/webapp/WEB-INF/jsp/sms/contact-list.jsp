@@ -26,12 +26,21 @@
 					</select>
 				</td>	
 				<td>
-				    <label>省：</label>
-					<select name="areaId" class="combox">
+				    <label>地区：</label>
+					<select class="combox" name="provinceId" ref="w_combox_city" refUrl="${ctx}/sms/area/list.htm?provinceId={value}">
 						<option value="">全部</option>	
 						<option value="-1">其他</option>	
-						<c:forEach var="item" items="${areaList}">
-						<option value="${item.id}" <c:if test="${searchDto.areaId == item.id}">selected</c:if>>${item.name}</option>		
+						<c:forEach var="item" items="${provinceList}">
+						<option value="${item.id}" <c:if test="${searchDto.provinceId == item.id}">selected</c:if>>${item.name}</option>		
+						</c:forEach>
+					</select>
+				</td>
+				<td>
+				    <label>分组名：</label>
+					<select name="tagName" class="combox">
+						<option value="">全部</option>	
+						<c:forEach var="item" items="${tagNameList}">
+						<option value="${item}" <c:if test="${searchDto.tagName == item}">selected</c:if>>${item}</option>		
 						</c:forEach>
 					</select>
 				</td>	
@@ -61,8 +70,10 @@
 				<th width="3%" align="left"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
 				<th width="5%" align="left">ID</th>
 				<th width="20%" align="left">号码</th>
-				<th width="20%" align="left">省市</th>
-				<th width="20%" align="left">运营商</th>
+				<th width="15%" align="left">省市</th>
+				<th width="15%" align="left">运营商</th>
+				<th width="20%" align="left">分组名</th>
+				<th width="10%" align="left">重复次数</th>
 				<th width="12%" align="left">添加时间</th>
 			</tr>
 		</thead>
@@ -83,6 +94,12 @@
 				</td>
 				<td>
 					${item.spName}
+				</td>
+				<td>
+					${item.tagName}
+				</td>
+				<td>
+					${item.repeatTimes}
 				</td>
 				<td>${item.createTime}</td>
 			</tr>

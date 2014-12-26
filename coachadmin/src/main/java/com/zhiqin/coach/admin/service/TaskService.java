@@ -12,9 +12,9 @@ import com.zhiqin.coach.admin.dto.TaskDTO;
 
 public interface TaskService{
 
-	Long getTotalNum();
+	Long getTotalNum(String keyword);
 
-	List<TaskDTO> getTaskList(PageInfoDTO pageInfo);
+	List<TaskDTO> getTaskList(String keyword, PageInfoDTO pageInfo);
 
 	boolean create(int soureFrom, String url);
 

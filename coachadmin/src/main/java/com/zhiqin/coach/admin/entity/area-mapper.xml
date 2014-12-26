@@ -5,5 +5,14 @@
 	<select id="getByAreaCode" parameterType="Map" resultType="Integer">
 		select id from area where areaCode = #{areaCode} limit 1
 	</select>
+	
+	<select id="getSubareaById" parameterType="Integer" resultType="AreaDTO">
+		select id, fullName name from area where code like 
+		(select concat(substr(code, 1, 2), '%00') from area where id = #{areaId})
+		and code in 
+		(select distinct a.code
+		from t_contact c inner join area a on c.areaId = a.id where c.status != -1)
+		order by code 
+	</select>
   	
 </mapper>

@@ -5,10 +5,6 @@
  */
 package com.zhiqin.coach.admin.dto;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * @author Lenovo
@@ -17,7 +13,10 @@ import java.util.List;
 public class SearchContactDTO {
 
 	private Integer areaId;
+	private Integer provinceId;
+	private Integer cityId;
 	private String spName;
+	private String tagName;
 	public Integer getAreaId() {
 		return areaId;
 	}
@@ -29,6 +28,24 @@ public class SearchContactDTO {
 	}
 	public void setSpName(String spName) {
 		this.spName = spName;
+	}
+	public Integer getProvinceId() {
+		return provinceId;
+	}
+	public void setProvinceId(Integer provinceId) {
+		this.provinceId = provinceId;
+	}
+	public Integer getCityId() {
+		return cityId;
+	}
+	public void setCityId(Integer cityId) {
+		this.cityId = cityId;
+	}
+	public String getTagName() {
+		return tagName;
+	}
+	public void setTagName(String tagName) {
+		this.tagName = tagName;
 	}
 	
 }

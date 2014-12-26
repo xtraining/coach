@@ -1,9 +1,11 @@
 package com.zhiqin.coach.admin.controller.sms;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +19,7 @@ import com.zhiqin.coach.admin.dto.SendSubtaskDTO;
 import com.zhiqin.coach.admin.dto.SendTaskDTO;
 import com.zhiqin.coach.admin.service.ContactService;
 import com.zhiqin.coach.admin.service.SendService;
+import com.zhiqin.coach.admin.util.Config;
 
 /**
  * 
@@ -46,8 +49,17 @@ public class SendController extends BaseController{
 	public String add(Model model) {
 		List<AreaDTO> areaList = contactService.getProvinceList();
 		List<String> spNameList = contactService.getSpNameList();
+		List<String> tagNameList = contactService.getTagNameList();
 		SearchContactDTO searchDto = new SearchContactDTO();
 		Long totalNum = contactService.getTotalNum(searchDto);
+		String productNames = Config.getProperty("sms_product_name");
+		String[] productNameArr = StringUtils.split(productNames, ",");
+		List<String> productNameList = new ArrayList<String>();
+		for(String productName : productNameArr){
+			productNameList.add(StringUtils.trimToEmpty(productName));
+		}
+		model.addAttribute("tagNameList", tagNameList);
+		model.addAttribute("productNameList", productNameList);
 		model.addAttribute("totalCount", totalNum+"");
 		model.addAttribute("areaList", areaList);
 		model.addAttribute("spNameList", spNameList);
@@ -57,6 +69,9 @@ public class SendController extends BaseController{
 	@ResponseBody
 	@RequestMapping("create")
 	public String create(SendTaskDTO sendTask, Model model){
+		if(StringUtils.isBlank(sendTask.getProductName())){
+			return "input";
+		}
 		sendService.create(sendTask);
 		return "success";
 	}

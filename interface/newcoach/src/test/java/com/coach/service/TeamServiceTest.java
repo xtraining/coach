@@ -270,11 +270,11 @@ public class TeamServiceTest extends TestCase {
 	public void testSyncDataService() {
 		TeamSyncDataList t = new TeamSyncDataList();
 		TeamSyncData t1 = new TeamSyncData();
-		t1.setAppTeamId(1);
-		t1.setOperationTime("2014-08-08 11:30:40");
+		t1.setAppTeamId(4);
+		t1.setOperationTime("2014-12-25 17:00:22");
 		t1.setOperationType(1);
-		t1.setTeamId(5L);
-		t1.setTeamName("new Name3");
+		t1.setTeamId(0L);
+		t1.setTeamName("广告");
 		List<TeamSyncData> list1 = new ArrayList<TeamSyncData>();
 		list1.add(t1);
 		t.setTeamDataList(list1);
@@ -314,10 +314,10 @@ public class TeamServiceTest extends TestCase {
 		map.put("v", "2.0");
 		map.put("format", "json");
 		map.put("teams", JsonBinder.buildNormalBinder().toJson(t));
-    	map.put("members", JsonBinder.buildNormalBinder().toJson(m));
-    	map.put("checks", JsonBinder.buildNormalBinder().toJson(c));
-    	map.put("sessionId", SESSION_ID);
-		map.put("coachId", "20");
+//    	map.put("members", JsonBinder.buildNormalBinder().toJson(m));
+//    	map.put("checks", JsonBinder.buildNormalBinder().toJson(c));
+    	map.put("sessionId", "FC325135-37CD-4AE7-B369-23DDEA909B48");
+		map.put("coachId", "34");
 		map.put("status", "0");
 		String sign = RopUtils.sign(map, APP_SECRET); //第二个参数为SecretKey, 有O2O系统分配
 		map.put("sign", sign);

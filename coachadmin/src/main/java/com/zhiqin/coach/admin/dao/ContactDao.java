@@ -28,5 +28,15 @@ public interface ContactDao extends BaseDao{
 
 	List<Long> getContactIdList(SearchContactDTO dto);
 
+	void updateRepeatTimes(Long contactId, String description);
+
+	List<String> getBySendSubtaskId(Long id);
+
+	List<ContactDTO> getContactListWithoutAreaId(int maxNum);
+
+	void updateArea(ContactDTO dto);
+
+	List<String> getTagNameList();
+
 
 }

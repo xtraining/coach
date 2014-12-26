@@ -16,7 +16,7 @@ import com.zhiqin.coach.admin.dto.SearchContactDTO;
 
 public interface ContactService{
 
-	void create(String phoneNumbers);
+	void create(String tagName, String phoneNumbers);
 
 	Long getTotalNum(SearchContactDTO searchDto);
 
@@ -26,7 +26,13 @@ public interface ContactService{
 
 	List<String> getSpNameList();
 
-	void importContact(MultipartFile excelFile) throws BiffException, IOException;
+	void importContact(String tagName, MultipartFile excelFile) throws BiffException, IOException;
+
+	List<ContactDTO> getContactListWithoutAreaId(int maxNum);
+
+	void updateArea(ContactDTO dto);
+
+	List<String> getTagNameList();
 
 
 }

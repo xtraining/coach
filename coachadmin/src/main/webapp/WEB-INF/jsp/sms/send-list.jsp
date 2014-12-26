@@ -37,7 +37,7 @@
 		</table>		
 		<div class="subBar">
 			<ul>
-				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div></li>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">刷新</button></div></div></li>
 			</ul>
 		</div>
 	</div>
@@ -52,7 +52,7 @@
 			<li class="line">line</li>
 		</ul>
 	</div>
-	<table class="table" width="100%" layoutH="138">
+	<table class="table" width="100%" layoutH="112">
 		<thead>
 			<tr>
 				<th width="3%" align="left"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
@@ -60,9 +60,10 @@
 				<th width="25%" align="left">内容</th>
 				<th width="10%" align="left">省市</th>
 				<th width="10%" align="left">运营商</th>
+				<th width="10%" align="left">分组名</th>
 				<th width="10%" align="left">发送号码数</th>
 				<th width="10%" align="left">类型</th>
-				<th width="10%" align="left">状态</th>
+				<th width="5%" align="left">状态</th>
 				<th width="12%" align="left">创建时间</th>
 			</tr>
 		</thead>
@@ -83,6 +84,9 @@
 				</td>
 				<td>
 					${item.spName}
+				</td>
+				<td>
+					${item.tagName}
 				</td>
 				<td>
 					<a href="${ctx}/sms/send/subtaskList.htm?sendTaskId=${item.id}" target="navTab" title="发送分组" rel="发送分组" style="color:#00F;">${item.sendNum}</a>

@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.zhiqin.coach.admin.dao.AreaDao;
+import com.zhiqin.coach.admin.dto.AreaDTO;
 import com.zhiqin.coach.admin.dto.TagDTO;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -23,6 +24,16 @@ public class AreaDaoImpl extends BaseDaoImpl implements AreaDao
 			return this.getSqlSession().selectOne("area.getByAreaCode", map);
 		} catch(RuntimeException e){
 			log.error("getByAreaCode", e);
+			throw e;
+		}
+	}
+
+	@Override
+	public List<AreaDTO> getSubareaById(int areaId) {
+		try{
+			return this.getSqlSession().selectList("area.getSubareaById", areaId);
+		} catch(RuntimeException e){
+			log.error("getSubareaById", e);
 			throw e;
 		}
 	}

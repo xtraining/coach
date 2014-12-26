@@ -29,9 +29,13 @@ function save(){
 	<h2 class="contentTitle">添加</h2>
 		<div class="pageFormContent" layoutH="96">	
 			<dl>
+				<dt>分组名： </dt>
+				<dd><input type="text" name="tagName" size="50" class="required" maxlength="128"/></dd>
+			</dl>	
+			<dl>
 				<dt>号码：</dt>
 				<dd>
-				<textarea name="phoneNumbers" cols="70" rows="8" maxlength="2000" class="required"></textarea>
+				<textarea name="phoneNumbers" cols="70" rows="6" maxlength="2000" class="required"></textarea>
 				<span class="info">多个号码用英文逗号“,”分割</span>
 				</dd>
 			</dl>

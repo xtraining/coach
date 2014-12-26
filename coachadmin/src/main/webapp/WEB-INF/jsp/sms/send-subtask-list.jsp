@@ -37,7 +37,7 @@
 		</table>		
 		<div class="subBar">
 			<ul>
-				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div></li>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">刷新</button></div></div></li>
 			</ul>
 		</div>
 	</div>
@@ -49,7 +49,7 @@
 			<li class="line">line</li>
 		</ul>
 	</div>
-	<table class="table" width="100%" layoutH="138">
+	<table class="table" width="100%" layoutH="112">
 		<thead>
 			<tr>
 				<th width="3%" align="left"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
@@ -81,7 +81,12 @@
 					</c:choose>
 				</td>
 				<td>
-				 	${item.resultCode}
+					<c:choose>
+					<c:when test="${item.resultCode > 0}">发送成功</c:when> 
+					<c:otherwise>
+						<div style='color:Peru'>取消</div>
+					</c:otherwise>
+					</c:choose>
 				</td>
 				<td>
 				 	${item.sendNum}

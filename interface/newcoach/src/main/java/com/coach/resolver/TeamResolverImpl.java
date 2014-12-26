@@ -376,13 +376,28 @@ public class TeamResolverImpl implements TeamResolver{
 						}
 					}  else if(operationType == Constants.OPERATTION_TYPE.DELETE.getValue()){
 						team.setStatus(-1);
-						teamDao.updateTeamStatus(team);
+						if(team.getId() != null && team.getId() > 0){
+							teamDao.updateTeamStatus(team);
+						} else {
+							teamDao.insert(team);
+						}
 					}  else if(operationType == Constants.OPERATTION_TYPE.DONE.getValue()){
 						team.setStatus(1);
-						teamDao.updateTeamStatus(team);
+						if(team.getId() != null && team.getId() > 0){
+							teamDao.updateTeamStatus(team);
+						} else {
+							teamDao.insert(team);
+						}
 					}  else if(operationType == Constants.OPERATTION_TYPE.REDO.getValue()){
 						team.setStatus(0);
-						teamDao.updateTeamStatus(team);
+						if(team.getId() != null && team.getId() > 0){
+							teamDao.updateTeamStatus(team);
+						} else {
+							teamDao.insert(team);
+						}
+					}
+					if(teamData.getTeamId() == null || teamData.getTeamId() == 0){
+						teamData.setTeamId(team.getId());
 					}
 					teamList.add(team);
 				}
@@ -415,11 +430,40 @@ public class TeamResolverImpl implements TeamResolver{
 						} else {
 							log.error("team id error");
 						}
-					} else if(operationType == Constants.OPERATTION_TYPE.EDIT.getValue()){//对于修改和删除学员，学员和班级肯定是已经同步过的数据
+					} else if(operationType == Constants.OPERATTION_TYPE.EDIT.getValue()){//对于修改学员，学员和班级肯定是已经同步过的数据
 						memberDao.update(coachId, memberData.getTeamId(), member);
 					}  else if(operationType == Constants.OPERATTION_TYPE.DELETE.getValue()){
-						memberDao.delete(coachId, memberData.getTeamId(), member.getId());
+						if(memberData.getTeamId() != null && memberData.getTeamId() > 0){
+							if(member.getId() != null && member.getId() > 0){
+								memberDao.delete(coachId, memberData.getTeamId(), member.getId());
+							} else {
+								memberDao.insert(member);
+								TeamMember teamMember = new TeamMember();
+								teamMember.setStatus(-1);
+								teamMember.setTeamId(memberData.getTeamId());
+								teamMember.setMemberId(member.getId());
+								teamMemberDao.insert(teamMember);
+							}
+						} else {
+							memberDao.insert(member);
+							TeamMember teamMember = new TeamMember();
+							teamMember.setStatus(-1);
+							for(Team team : teamList){
+								if(team.getAppTeamId().intValue() == memberData.getAppTeamId()){
+									teamMember.setTeamId(team.getId());
+								}
+							}
+							teamMember.setMemberId(member.getId());
+							if(teamMember.getTeamId() != null){
+								teamMemberDao.insert(teamMember);
+							} else {
+								log.error("team id error");
+							}
+						}
 					} 
+					if(memberData.getMemberId() == null || memberData.getMemberId() == 0){
+						memberData.setMemberId(member.getId());
+					}
 					memberList.add(member);
 				}
 			}
@@ -468,6 +512,12 @@ public class TeamResolverImpl implements TeamResolver{
 							teamCheckMemberDao.deleteByTeamCheckId(teamCheck.getId());
 						}
 					} 
+					if(checkData.getTeamId() == null || checkData.getTeamId() <= 0){
+						checkData.setTeamId(teamCheck.getTeamId());
+					}
+					if(checkData.getTeamCheckId() == null || checkData.getTeamCheckId() <= 0){
+						checkData.setTeamCheckId(teamCheck.getId());
+					}
 					if(valid){
 						if(attendMemberIdList.size() > 0){
 							teamCheckMemberDao.saveAttend(teamCheck.getId(), teamCheck.getTeamId(), new ArrayList<Long>(attendMemberIdList));

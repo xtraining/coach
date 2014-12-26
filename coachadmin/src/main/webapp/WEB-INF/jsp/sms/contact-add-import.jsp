@@ -19,6 +19,10 @@ function checkupload(){
 	<h2 class="contentTitle">导入手机号</h2>
 		<div class="pageFormContent nowrap" layoutH="96">
 			<dl>
+				<dt>分组名： </dt>
+				<dd><input type="text" name="tagName" size="50" class="required" maxlength="128"/></dd>
+			</dl>	
+			<dl>
 				<dt>Excel文件 ：</dt>
 				<dd><input type="file" name="excelFile" size="20" class="required"/>	</dd>
 			</dl>

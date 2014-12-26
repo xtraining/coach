@@ -27,6 +27,8 @@ public class ContactDTO {
 	private Integer areaId;
 	private String areaName;
 	private String description;
+	private String tagName;
+	private Integer repeatTimes;
 	public Long getId() {
 		return id;
 	}
@@ -74,6 +76,18 @@ public class ContactDTO {
 	}
 	public void setAreaName(String areaName) {
 		this.areaName = areaName;
+	}
+	public Integer getRepeatTimes() {
+		return repeatTimes;
+	}
+	public void setRepeatTimes(Integer repeatTimes) {
+		this.repeatTimes = repeatTimes;
+	}
+	public String getTagName() {
+		return tagName;
+	}
+	public void setTagName(String tagName) {
+		this.tagName = tagName;
 	}
 	
 }

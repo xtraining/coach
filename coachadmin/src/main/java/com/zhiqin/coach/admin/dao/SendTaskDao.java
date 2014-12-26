@@ -27,6 +27,8 @@ public interface SendTaskDao extends BaseDao{
 
 	List<SendSubtaskDTO> getSendSubtaskList(int sendTaskId, PageInfoDTO pageInfo);
 
+	void updateStatus(Long id, int resultCode);
+
 
 
 }

@@ -40,13 +40,13 @@ public class TaskServiceImpl implements TaskService {
 	@Resource private ArtifactDao artifactDao;
 	@Resource private ArtifactCategoryDao artifactCategoryDao;
 	@Override
-	public Long getTotalNum() {
-		return taskDao.getTotalNum();
+	public Long getTotalNum(String keyword) {
+		return taskDao.getTotalNum(keyword);
 	}
 
 	@Override
-	public List<TaskDTO> getTaskList(PageInfoDTO pageInfo) {
-		return taskDao.getTaskList(pageInfo);
+	public List<TaskDTO> getTaskList(String keyword, PageInfoDTO pageInfo) {
+		return taskDao.getTaskList(keyword, pageInfo);
 	}
 
 	@Override

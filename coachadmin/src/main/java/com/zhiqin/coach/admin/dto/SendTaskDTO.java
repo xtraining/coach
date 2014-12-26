@@ -21,6 +21,8 @@ public class SendTaskDTO {
 	private String spName;
 	private String areaName;
 	private String message;
+	private String productName;
+	private String tagName;
 	private Integer sendType;
 	private Integer status;
 	private Long sendNum;
@@ -78,6 +80,18 @@ public class SendTaskDTO {
 	}
 	public void setCreateTime(Timestamp createTime) {
 		this.createTime = createTime;
+	}
+	public String getProductName() {
+		return productName;
+	}
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+	public String getTagName() {
+		return tagName;
+	}
+	public void setTagName(String tagName) {
+		this.tagName = tagName;
 	}
 	
 }

@@ -42,13 +42,20 @@ public class ContactController extends BaseController{
 	private ContactService contactService;
 	@RequestMapping("list")
 	public String list(SearchContactDTO searchDto, Model model, PageInfoDTO pageInfo) {
-		List<AreaDTO> areaList = contactService.getProvinceList();
+		List<AreaDTO> provinceList = contactService.getProvinceList();
 		List<String> spNameList = contactService.getSpNameList();
+		List<String> tagNameList = contactService.getTagNameList();
+		if(searchDto.getCityId() != null && searchDto.getCityId() > 0){
+			searchDto.setAreaId(searchDto.getCityId());
+		} else if(searchDto.getProvinceId() != null){
+			searchDto.setAreaId(searchDto.getProvinceId());
+		}
 		Long totalNum = contactService.getTotalNum(searchDto);
 		List<ContactDTO> list = contactService.getContactList(searchDto, pageInfo);
 		model.addAttribute("responseList", list); 
 		model.addAttribute("searchDto", searchDto); 
-		model.addAttribute("areaList", areaList);
+		model.addAttribute("tagNameList", tagNameList);
+		model.addAttribute("provinceList", provinceList);
 		model.addAttribute("spNameList", spNameList);
 		model.addAttribute("totalCount", totalNum+"");
 		model.addAttribute("currentNum", pageInfo.getPageNum() == null ? 1 : pageInfo.getPageNum());
@@ -69,23 +76,22 @@ public class ContactController extends BaseController{
 	
 	@ResponseBody
 	@RequestMapping("create")
-	public String create(String phoneNumbers, Model model){
-		contactService.create(phoneNumbers);
+	public String create(String tagName, String phoneNumbers, Model model){
+		contactService.create(tagName, phoneNumbers);
 		return "success";
 	}
 	
 	@RequestMapping(value="import", method=RequestMethod.POST)  
-	public void importContact(@RequestParam MultipartFile excelFile, HttpServletRequest request, HttpServletResponse response) throws IOException, AuthException, JSONException, BiffException{
+	public void importContact(String tagName, @RequestParam MultipartFile excelFile, HttpServletRequest request, HttpServletResponse response) throws IOException, AuthException, JSONException, BiffException{
 		PrintWriter out = response.getWriter();  
-		contactService.importContact(excelFile);
+		contactService.importContact(tagName, excelFile);
 		out.print("success");
 	}
 	
 	@ResponseBody
 	@RequestMapping(value="getContactCount")  
-	public void getContactCount(SearchContactDTO searchDto, HttpServletRequest request, HttpServletResponse response) throws IOException, AuthException, JSONException, BiffException{
-		PrintWriter out = response.getWriter();  
+	public String getContactCount(SearchContactDTO searchDto, HttpServletRequest request, HttpServletResponse response) throws IOException, AuthException, JSONException, BiffException{
 		Long totalNum = contactService.getTotalNum(searchDto);
-		out.print(totalNum+"");
+		return totalNum+"";
 	}
 }

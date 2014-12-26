@@ -33,20 +33,19 @@ import com.zhiqin.coach.admin.util.JsonBinder;
 @Service
 public class ContactServiceImpl implements ContactService {
 	private static Log log = LogFactory.getLog(ContactServiceImpl.class);
-	private static final String URL = "http://v.showji.com/locating/showji.com1118.aspx?m={phoneNumber}&output=json";
-	@Resource private AreaDao areaDao;
+
 	@Resource private ContactDao contactDao;
 
 	@Override
-	public void create(String phoneNumbers) {
+	public void create(String tagName, String phoneNumbers) {
 		String[] phoneNumberArr = StringUtils.split(phoneNumbers, ",");
 		for(String phoneNumber : phoneNumberArr){
-			savePhoneNumber(phoneNumber, null);
+			savePhoneNumber(tagName, phoneNumber, null);
 		}
 		
 	}
 
-	private void savePhoneNumber(String phoneNumber, String description) {
+	private void savePhoneNumber(String tagName, String phoneNumber, String description) {
 		String phone = StringUtils.trimToEmpty(phoneNumber);
 		if(StringUtils.isNotBlank(phone) && checkMobileNumber(phone)){
 			Long contactId = contactDao.getByPhoneNumber(phone);
@@ -55,22 +54,11 @@ public class ContactServiceImpl implements ContactService {
 				contact.setPhoneNumber(phone);
 				contact.setDescription(description);
 				contact.setStatus(0);
-				try{
-					String response = HttpUtil.getServer(StringUtils.replace(URL, "{phoneNumber}", phone), "");
-					String areaCode = (String)JsonBinder.buildNormalBinder().getValue(response, "AreaCode");
-					if(StringUtils.isNotBlank(areaCode)){
-						Integer areaId = areaDao.getByAreaCode(areaCode);
-						String spName = (String)JsonBinder.buildNormalBinder().getValue(response, "Corp");
-						contact.setAreaId(areaId);
-						contact.setSpName(spName);
-					}
-				}catch(Throwable e){
-					log.error(e);
-				}
-				if(StringUtils.isBlank(contact.getSpName())){
-					contact.setSpName("未知");
-				}
+				contact.setSpName("未知");
+				contact.setTagName(StringUtils.trimToEmpty(tagName));
 				contactDao.save(contact);
+			} else {
+				contactDao.updateRepeatTimes(contactId, description);
 			}
 		}
 	}
@@ -106,7 +94,7 @@ public class ContactServiceImpl implements ContactService {
 	}
 
 	@Override
-	public void importContact(MultipartFile excelFile) throws BiffException, IOException {
+	public void importContact(String tagName, MultipartFile excelFile) throws BiffException, IOException {
 		Workbook book = Workbook.getWorkbook(excelFile.getInputStream());
 		Sheet[] allSheet = book.getSheets();
 		Sheet memberSheet = allSheet[0];
@@ -116,7 +104,7 @@ public class ContactServiceImpl implements ContactService {
             Cell[] row = memberSheet.getRow(i);
             String phoneNumber = getString(row, 0);
             String description = getString(row, 1);
-            savePhoneNumber(phoneNumber, description);
+            savePhoneNumber(tagName, phoneNumber, description);
         }	
 	}
 
@@ -139,6 +127,22 @@ public class ContactServiceImpl implements ContactService {
 		} else {
 			return "";
 		}
+	}
+
+	@Override
+	public List<ContactDTO> getContactListWithoutAreaId(int maxNum) {
+		return contactDao.getContactListWithoutAreaId(maxNum);
+	}
+
+	@Override
+	public void updateArea(ContactDTO dto) {
+		contactDao.updateArea(dto);
+		
+	}
+
+	@Override
+	public List<String> getTagNameList() {
+		return contactDao.getTagNameList();
 	}
 
 

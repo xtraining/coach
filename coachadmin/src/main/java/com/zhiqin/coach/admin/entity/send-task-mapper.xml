@@ -3,8 +3,8 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="sendtask">
  	<insert id="save" useGeneratedKeys="true" keyProperty="id" parameterType="SendTaskDTO">
-	INSERT INTO t_send_task(type, status, message, createTime, areaId, spName, sendNum) 
-	VALUE (#{sendType}, #{status}, #{message}, now(), #{areaId}, #{spName}, #{sendNum}) 
+	INSERT INTO t_send_task(type, status, message, createTime, areaId, spName, sendNum, tagName) 
+	VALUE (#{sendType}, #{status}, #{message}, now(), #{areaId}, #{spName}, #{sendNum}, #{tagName}) 
 	</insert>
 	
 	<insert id="saveSendSubtask" useGeneratedKeys="true" keyProperty="id" parameterType="SendSubtaskDTO">
@@ -30,9 +30,9 @@
 
 	<select id="getSendTaskList" parameterType="Map" resultType="SendTaskDTO" >
 		select t.id, t.type sendType, t.status, t.message, t.createTime,
-		(select a.fullName from area a where a.id = t.areaId)areaName, t.sendNum, t.spName
+		(select a.fullName from area a where a.id = t.areaId)areaName, t.sendNum, t.spName, t.tagName
 		<include refid="getSendTaskCondition" />
-		order by t.createTime asc
+		order by t.createTime desc
 		limit ${(p.pageNum - 1) * p.numPerPage}, ${p.numPerPage}
 	</select>
 	
@@ -46,5 +46,9 @@
 		order by t.sendTime asc
 		limit ${(p.pageNum - 1) * p.numPerPage}, ${p.numPerPage}
 	</select>
+	
+	<update id="updateStatus" parameterType="Map">
+		update t_send_subtask set resultCode = #{resultCode}, status = 2 where id = #{subtaskId} 
+	</update>
 
 </mapper>

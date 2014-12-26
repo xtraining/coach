@@ -79,18 +79,18 @@ alert(1);
 					</select>
 				</li>
 				<li>
-					<a href="javascript:saveAccept();" ><span>批量入库</span></a></li>
+					<a class="add" href="javascript:saveAccept();" ><span>批量入库</span></a></li>
 					</li>
 			<li class="line">line</li>
 			<li>
-					<a href="javascript:redownload();" ><span>全部错误重新下载</span></a></li>
+					<a class="edit" href="javascript:redownload();" ><span>全部错误重新下载</span></a></li>
 					</li>
 		</ul>
 	</div>
 	<table class="table" width="2000" layoutH="136">
 		<thead>
 			<tr>
-				<th width="2%" align="left"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+				<th width="2%" align="left"><input type="checkbox" group="downloadTaskIds" class="checkboxCtrl"></th>
 				<th width="3%" align="left">下载ID</th>
 				<!-- <th width="3%" align="left">类型</th> -->
 				<th width="10%" align="left">标题</th>
