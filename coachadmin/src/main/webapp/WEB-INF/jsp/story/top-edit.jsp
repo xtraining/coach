@@ -12,8 +12,13 @@ function checkupload(){
 	} 
 }
 function deleteImg(){
-	$("#imageUrl").val("");
+	$("#listImageFileName").val("");
 	$("#uploadImageDD").html('<input type="file" name="listImageFile" size="20" class="required"/>');
+}
+
+function deleteDetailImg(){
+	$("#detailImageFileName").val("");
+	$("#uploadDetailImageDD").html('<input type="file" name="detailImageFile" size="20" class="required"/>');
 }
 
 function viewFile(url, title){
@@ -25,8 +30,10 @@ function viewFile(url, title){
 	<form action="${ctx}/story/top/update.htm" method="post" enctype="multipart/form-data" class="pageForm required-validate"  onsubmit="return iframeCallback(this, checkupload)">
 	<input type="hidden" name="id" value="${editObj.id}"/>
 	<input type="hidden" name="type" value="0"/>
-	<input type="hidden" name="listImageFileName" id="imageUrl" value="${editObj.listImageFileName}"/>
+	<input type="hidden" name="listImageFileName" id="listImageFileName" value="${editObj.listImageFileName}"/>
 	<input type="hidden" name="listImageFileUrl" value="${editObj.listImageFileUrl}"/>
+	<input type="hidden" name="detailImageFileName" id="detailImageFileName" value="${editObj.detailImageFileName}"/>
+	<input type="hidden" name="detailImageFileUrl" value="${editObj.detailImageFileUrl}"/>
 	<h2 class="contentTitle">推荐详情</h2>
 		<div class="pageFormContent nowrap" layoutH="96">
 			<dl>
@@ -75,6 +82,17 @@ function viewFile(url, title){
 				    <c:if test="${editObj.listImageFileUrl != null}">
 				    	<a href="javascript:deleteImg();" title="删除" style="color:#00F;">删除</a>&nbsp;&nbsp;
 				   	 	<a href="javascript:viewFile('${editObj.listImageFileUrl}', '缩略图');" title="查看图片" style="color:#00F;">查看图片</a>
+				    </c:if>
+				</dd>
+			</dl>
+			
+			<dl>
+				<dt>详情图片 ：</dt>
+				<dd id="uploadDetailImageDD">
+				    <input type="file" name="detailImageFile" size="20"/>
+				    <c:if test="${editObj.detailImageFileUrl != null}">
+				    	<a href="javascript:deleteDetailImg();" title="删除" style="color:#00F;">删除</a>&nbsp;&nbsp;
+				   	 	<a href="javascript:viewFile('${editObj.detailImageFileUrl}', '缩略图');" title="查看图片" style="color:#00F;">查看图片</a>
 				    </c:if>
 				</dd>
 			</dl>

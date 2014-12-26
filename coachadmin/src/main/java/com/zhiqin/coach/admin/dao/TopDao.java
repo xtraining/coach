@@ -33,6 +33,8 @@ public interface TopDao extends BaseDao{
 
 	void deleteArtifactById(Long id);
 
+	void updateDetailImageFileName(TopDTO dto);
+
 
 
 }

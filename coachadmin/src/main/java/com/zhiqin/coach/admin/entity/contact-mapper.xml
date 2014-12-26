@@ -17,10 +17,14 @@
 		where s.subtaskId = #{subtaskId} and c.status != -1
 	</select>
 	
-	<select id="getExistingProvinceList" resultType="AreaDTO" >
+	<select id="getExistingProvinceList" parameterType="Map" resultType="AreaDTO" >
 		select aa.id, aa.fullName name from area aa where aa.code in 
-		(select distinct CONCAT(substr(a.code, 1, 2), '0000') 
-		from t_contact c inner join area a on c.areaId = a.id where c.status != -1)
+		<foreach collection="areaCodeList" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
+	</select>
+	
+	<select id="getExistingProvinceCode" resultType="String" >
+		select distinct CONCAT(substr(a.code, 1, 2), '0000') 
+		from t_contact c inner join area a on c.areaId = a.id where c.status != -1
 	</select>
   	
   	<select id="getSpNameList" resultType="String" >

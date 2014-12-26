@@ -40,6 +40,10 @@
 		update top_list set listImageFileName = #{dto.listImageFileName} where id = #{dto.id}
 	</update>
 	
+	<update id="updateDetailImageFileName" parameterType="Map">
+		update top_list set detailImageFileName = #{dto.detailImageFileName} where id = #{dto.id}
+	</update>
+	
 	<update id="update" parameterType="TopDTO">
 		update top_list set name = #{name}, topOrder = #{topOrder}, startTime=#{startTime}, tags = #{tags}, 
 		collectionNum = #{collectionNum}, status = #{status} where id = #{id}

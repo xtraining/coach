@@ -67,7 +67,10 @@ public class ContactDaoImpl extends BaseDaoImpl implements ContactDao
 	@Override
 	public List<AreaDTO> getExistingProvinceList() {
 		try{
-			return this.getSqlSession().selectList("contact.getExistingProvinceList");
+			List<String>areaCodeList = this.getSqlSession().selectList("contact.getExistingProvinceCode");
+			Map map = new HashMap();
+			map.put("areaCodeList", areaCodeList);
+			return this.getSqlSession().selectList("contact.getExistingProvinceList", map);
 		} catch(RuntimeException e){
 			log.error("getExistingProvinceList", e);
 			throw e;

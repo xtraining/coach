@@ -150,6 +150,20 @@ public class TopDaoImpl extends BaseDaoImpl implements TopDao
 		
 	}
 
+	@Override
+	public void updateDetailImageFileName(TopDTO dto) {
+		try{
+			Map map = new HashMap();
+			map.put("dto", dto);
+			this.getSqlSession().update("top.updateDetailImageFileName", map);
+		} catch(RuntimeException e){
+			log.error("updateDetailImageFileName", e);
+			throw e;
+		}
+		
+		
+	}
+
 	
 	
 }

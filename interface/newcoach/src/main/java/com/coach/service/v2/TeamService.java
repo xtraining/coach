@@ -25,10 +25,10 @@ public class TeamService extends SimpleBaseService{
 		} catch(Throwable e){
 			e.printStackTrace();
 			r.setFlag(1);
-			r.setChecks(request.getChecks());
-			r.setTeams(request.getTeams());
-			r.setMembers(request.getMembers());
 		}
+		r.setChecks(request.getChecks());
+		r.setTeams(request.getTeams());
+		r.setMembers(request.getMembers());
 		List<TeamResponse> list = teamResolver.getListByCoachId(request.getCoachId(), request.getStatus());
 		r.setTeamList(list);
 		return r;

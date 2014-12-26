@@ -61,6 +61,10 @@ function checkupload(){
 				<dt>首页图片 ：</dt>
 				<dd><input type="file" name="imageFile" size="20" class="required"/>	</dd>
 			</dl>
+			<dl>
+				<dt>详情图片 ：</dt>
+				<dd><input type="file" name="detailImageFile" size="20" class="required"/>	</dd>
+			</dl>
 			<div class="divider"></div>
 			<div class="tabs">
 			<div class="tabsHeader">

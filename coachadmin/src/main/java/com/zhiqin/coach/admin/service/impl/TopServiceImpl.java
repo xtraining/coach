@@ -35,7 +35,7 @@ public class TopServiceImpl implements TopService {
 	@Resource private TopDao topDao;
 	@Override
 	@Transactional
-	public void create(TopDTO dto, ArtifactArrayDTO artifacts, MultipartFile imageFile) throws IOException, AuthException, JSONException{
+	public void create(TopDTO dto, ArtifactArrayDTO artifacts, MultipartFile imageFile, MultipartFile detailImageFile) throws IOException, AuthException, JSONException{
 		List<Term> wordList = ToAnalysis.parse(dto.getName());
 		StringBuilder tags = new StringBuilder();
 		if(wordList != null && wordList.size() >0){
@@ -55,6 +55,13 @@ public class TopServiceImpl implements TopService {
 		topDao.updateListImageFileName(dto);
 		localFile.delete();
 		
+		String detailFileName = QiniuUtils.generateTopListDetailImageName(dto.getId(), detailImageFile.getOriginalFilename());
+		dto.setDetailImageFileName(detailFileName);
+		localFile = DownloadUtils.getFile(detailImageFile.getInputStream(), detailFileName);
+		QiniuUtils.upload(uptoken, detailFileName, localFile);
+		topDao.updateDetailImageFileName(dto);
+		localFile.delete();
+		
 		if(artifacts != null && artifacts.getArtifact() != null && artifacts.getArtifact().length > 0){
 			for(ArtifactDTO a : artifacts.getArtifact()){
 				topDao.insertArtifact(dto.getId(), a.getId(), a.getArtifactOrder());
@@ -65,9 +72,10 @@ public class TopServiceImpl implements TopService {
 	@Override
 	@Transactional
 	public void update(TopDTO dto, ArtifactArrayDTO artifacts,
-			MultipartFile listImageFile) throws AuthException, JSONException, IOException {
+			MultipartFile listImageFile, MultipartFile detailImageFile) throws AuthException, JSONException, IOException {
+		String uptoken = null;
 		if(StringUtils.isBlank(dto.getListImageFileUrl()) || (listImageFile != null && listImageFile.getSize() > 0)){ //做了修改
-			String uptoken = QiniuUtils.getUptoken();
+			uptoken = QiniuUtils.getUptoken();
 			QiniuUtils.deleteFile(dto.getListImageFileName());
 			
 			String fileName = QiniuUtils.generateTopListImageName(dto.getId(), listImageFile.getOriginalFilename());
@@ -77,6 +85,21 @@ public class TopServiceImpl implements TopService {
 			topDao.updateListImageFileName(dto);
 			localFile.delete();
 		}
+		
+		if(StringUtils.isBlank(dto.getDetailImageFileUrl()) || (detailImageFile != null && detailImageFile.getSize() > 0)){ //做了修改
+			if(uptoken == null){
+				uptoken = QiniuUtils.getUptoken();
+			}
+			QiniuUtils.deleteFile(dto.getDetailImageFileName());
+			
+			String fileName = QiniuUtils.generateTopListDetailImageName(dto.getId(), detailImageFile.getOriginalFilename());
+			dto.setDetailImageFileName(fileName);
+			File localFile = DownloadUtils.getFile(detailImageFile.getInputStream(), fileName);
+			QiniuUtils.upload(uptoken, fileName, localFile);
+			topDao.updateDetailImageFileName(dto);
+			localFile.delete();
+		}
+		
 		dto.setStartTime(DateUtils.yyyyMMddHHmmToTimestamp(dto.getStartTimeStr()));
 		topDao.update(dto);
 		
@@ -109,6 +132,7 @@ public class TopServiceImpl implements TopService {
 		Random r = new Random();
 		int t = r.nextInt(100);
 		dto.setListImageFileUrl(Config.getProperty("QINIU_DOMAIN") + dto.getListImageFileName() + "?t="+t);
+		dto.setDetailImageFileUrl(Config.getProperty("QINIU_DOMAIN") + dto.getDetailImageFileName() + "?t="+t);
 		return dto;
 	}
 	@Override

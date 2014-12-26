@@ -24,6 +24,8 @@ public class TopDTO {
 	private Timestamp startTime;
 	private String listImageFileName;
 	private String listImageFileUrl;
+	private String detailImageFileName;
+	private String DetailImageFileUrl;
 	private Integer collectionNum;
 	private Long realCollectionNum;
 	private String tags;
@@ -98,6 +100,18 @@ public class TopDTO {
 	}
 	public void setRealCollectionNum(Long realCollectionNum) {
 		this.realCollectionNum = realCollectionNum;
+	}
+	public String getDetailImageFileName() {
+		return detailImageFileName;
+	}
+	public void setDetailImageFileName(String detailImageFileName) {
+		this.detailImageFileName = detailImageFileName;
+	}
+	public String getDetailImageFileUrl() {
+		return DetailImageFileUrl;
+	}
+	public void setDetailImageFileUrl(String detailImageFileUrl) {
+		DetailImageFileUrl = detailImageFileUrl;
 	}
 	
 }

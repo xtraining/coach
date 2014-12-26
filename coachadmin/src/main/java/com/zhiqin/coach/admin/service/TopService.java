@@ -16,7 +16,7 @@ import com.zhiqin.coach.admin.dto.TopDTO;
 
 public interface TopService{
 
-	void create(TopDTO dto, ArtifactArrayDTO artifacts, MultipartFile imageFile) throws IOException, AuthException, JSONException;
+	void create(TopDTO dto, ArtifactArrayDTO artifacts, MultipartFile imageFile, MultipartFile detailImageFile) throws IOException, AuthException, JSONException;
 
 	Long getTopTotalNum(String name);
 
@@ -29,6 +29,6 @@ public interface TopService{
 	List<ArtifactDTO> getArtifactByTopId(int topId);
 
 	void update(TopDTO dto, ArtifactArrayDTO artifacts,
-			MultipartFile listImageFile) throws AuthException, JSONException, IOException;
+			MultipartFile listImageFile, MultipartFile detailImageFile) throws AuthException, JSONException, IOException;
 
 }

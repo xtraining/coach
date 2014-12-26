@@ -78,15 +78,15 @@ public class TopController extends BaseController{
 	}
 	
 	@RequestMapping(value="create", method=RequestMethod.POST)  
-	public void create(TopDTO dto, ArtifactArrayDTO artifacts, @RequestParam MultipartFile imageFile, HttpServletRequest request, HttpServletResponse response) throws IOException, AuthException, JSONException{
-		topService.create(dto, artifacts, imageFile);
+	public void create(TopDTO dto, ArtifactArrayDTO artifacts, @RequestParam MultipartFile imageFile, @RequestParam MultipartFile detailImageFile, HttpServletRequest request, HttpServletResponse response) throws IOException, AuthException, JSONException{
+		topService.create(dto, artifacts, imageFile, detailImageFile);
 		PrintWriter out = response.getWriter();  
 		out.print("success");
 	}
 	
 	@RequestMapping(value="update", method=RequestMethod.POST)  
-	public void update(TopDTO dto, ArtifactArrayDTO artifacts, @RequestParam MultipartFile listImageFile, HttpServletRequest request, HttpServletResponse response) throws IOException, AuthException, JSONException{
-		topService.update(dto, artifacts, listImageFile);
+	public void update(TopDTO dto, ArtifactArrayDTO artifacts, @RequestParam MultipartFile listImageFile, @RequestParam MultipartFile detailImageFile, HttpServletRequest request, HttpServletResponse response) throws IOException, AuthException, JSONException{
+		topService.update(dto, artifacts, listImageFile, detailImageFile);
 		PrintWriter out = response.getWriter();  
 		out.print("success");
 	}
