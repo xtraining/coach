@@ -113,6 +113,16 @@ public class SendTaskDaoImpl extends BaseDaoImpl implements SendTaskDao
 		
 	}
 
-
+	@Override
+	public void deleteByIds(String ids) {
+		try{
+			Map map = new HashMap();
+			map.put("ids", ids);
+			this.getSqlSession().update("sendtask.deleteByIds", map);
+		} catch(RuntimeException e){
+			log.error("deleteByIds", e);
+			throw e;
+		}
+	}
 
 }

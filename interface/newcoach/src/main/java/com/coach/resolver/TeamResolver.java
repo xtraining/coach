@@ -45,7 +45,7 @@ public interface TeamResolver {
 
 	void deleteMember(MemberIdRequest request);
 
-	void checkMember(CheckMemberRequest request);
+	Long checkMember(CheckMemberRequest request);
 
 	GetTeamCheckResponse getLatestCheck(Long coachId, Long teamId);
 

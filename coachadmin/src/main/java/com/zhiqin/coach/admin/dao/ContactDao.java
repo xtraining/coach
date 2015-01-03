@@ -38,5 +38,7 @@ public interface ContactDao extends BaseDao{
 
 	List<String> getTagNameList();
 
+	void deleteByIds(String ids);
+
 
 }

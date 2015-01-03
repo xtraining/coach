@@ -103,8 +103,10 @@ function viewFile(url, title){
 			<%-- <li><a class="add" href="${ctx}/story/artifact/addAlbum.htm" target="navTab" title="新增专辑" rel="故事详情"><span>新增专辑</span></a></li> --%>
 			<!-- <li><a class="edit" href="javascript:assginTag();"><span>批量设置标签</span></a></li>  -->
 			<li><a class="edit" href="javascript:assginCategory();"><span>批量设置分类</span></a></li> 
-			<li><a title="确实要删除这些内容吗?" warn="请选择故事" target="selectedTodo" rel="ids" postType="string" href="${ctx}/story/artifact/delete.htm" class="delete"><span>批量删除</span></a></li>
+			<li><a title="确实要隐藏这些内容吗?" warn="请选择故事" target="selectedTodo" rel="ids" postType="string" href="${ctx}/story/artifact/hide.htm" class="edit"><span>批量隐藏</span></a></li>
 			<li class="line">line</li>
+			<li><a title="确实要删除这些内容吗?" warn="请选择故事" target="selectedTodo" rel="ids" postType="string" href="${ctx}/story/artifact/delete.htm" class="delete"><span>批量删除</span></a></li>
+			
 		</ul>
 	</div>
 	<table class="table" width="100%" layoutH="138">

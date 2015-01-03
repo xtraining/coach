@@ -18,8 +18,8 @@
 	</select>
 	
 	<select id="getExistingProvinceList" parameterType="Map" resultType="AreaDTO" >
-		select aa.id, aa.fullName name from area aa where aa.code in 
-		<foreach collection="areaCodeList" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
+		select aa.id, aa.fullName name from area aa where aa.code like '%0000' and aa.id != 1
+		order by code
 	</select>
 	
 	<select id="getExistingProvinceCode" resultType="String" >
@@ -91,4 +91,8 @@
 		set c.areaId = #{areaId}, c.spName = #{spName}
 		where c.id = #{id}
 	</update>
+	
+	<update id="deleteByIds" parameterType="Map">
+		update t_contact set status = -1 where id in (${ids})
+  	</update>
 </mapper>

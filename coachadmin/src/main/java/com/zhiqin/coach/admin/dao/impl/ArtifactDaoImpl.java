@@ -149,4 +149,17 @@ public class ArtifactDaoImpl extends BaseDaoImpl implements ArtifactDao
 		}
 		
 	}
+
+	@Override
+	public void hideByIds(String ids) {
+		try{
+			Map map = new HashMap();
+			map.put("ids", ids);
+			this.getSqlSession().update("artifact.hideByIds", map);
+		} catch(RuntimeException e){
+			log.error("hideByIds", e);
+			throw e;
+		}
+		
+	}
 }

@@ -47,5 +47,7 @@ public interface ArtifactService{
 
 	void saveCategory(String artifactIds, int categoryId);
 
+	void hideByIds(String ids);
+
 
 }

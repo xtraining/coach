@@ -67,10 +67,10 @@ public class ContactDaoImpl extends BaseDaoImpl implements ContactDao
 	@Override
 	public List<AreaDTO> getExistingProvinceList() {
 		try{
-			List<String>areaCodeList = this.getSqlSession().selectList("contact.getExistingProvinceCode");
-			Map map = new HashMap();
-			map.put("areaCodeList", areaCodeList);
-			return this.getSqlSession().selectList("contact.getExistingProvinceList", map);
+//			List<String>areaCodeList = this.getSqlSession().selectList("contact.getExistingProvinceCode");
+//			Map map = new HashMap();
+//			map.put("areaCodeList", areaCodeList);
+			return this.getSqlSession().selectList("contact.getExistingProvinceList");
 		} catch(RuntimeException e){
 			log.error("getExistingProvinceList", e);
 			throw e;
@@ -150,6 +150,18 @@ public class ContactDaoImpl extends BaseDaoImpl implements ContactDao
 			return this.getSqlSession().selectList("contact.getTagNameList");
 		} catch(RuntimeException e){
 			log.error("getTagNameList", e);
+			throw e;
+		}
+	}
+
+	@Override
+	public void deleteByIds(String ids) {
+		try{
+			Map map = new HashMap();
+			map.put("ids", ids);
+			this.getSqlSession().update("contact.deleteByIds", map);
+		} catch(RuntimeException e){
+			log.error("deleteByIds", e);
 			throw e;
 		}
 	}

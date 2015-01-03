@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -14,12 +15,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.zhiqin.coach.admin.controller.BaseController;
 import com.zhiqin.coach.admin.dto.AreaDTO;
 import com.zhiqin.coach.admin.dto.PageInfoDTO;
+import com.zhiqin.coach.admin.dto.ResponseDTO;
 import com.zhiqin.coach.admin.dto.SearchContactDTO;
 import com.zhiqin.coach.admin.dto.SendSubtaskDTO;
 import com.zhiqin.coach.admin.dto.SendTaskDTO;
 import com.zhiqin.coach.admin.service.ContactService;
 import com.zhiqin.coach.admin.service.SendService;
 import com.zhiqin.coach.admin.util.Config;
+import com.zhiqin.coach.admin.util.JsonBinder;
+import com.zhiqin.coach.admin.util.JsonUtils;
 
 /**
  * 
@@ -85,5 +89,16 @@ public class SendController extends BaseController{
 		model.addAttribute("totalCount", totalNum+"");
 		model.addAttribute("currentNum", pageInfo.getPageNum() == null ? 1 : pageInfo.getPageNum());
 		return "/sms/send-subtask-list";
+	}
+	
+	@RequestMapping("delete")
+	public String delete(String ids, HttpServletResponse response){
+		sendService.deleteByIds(ids);
+		ResponseDTO success = new ResponseDTO();
+		success.setStatusCode("200");
+		success.setMessage("删除成功");
+		success.setNavTabId("短信管理");
+		JsonUtils.write(response, JsonBinder.buildNormalBinder().toJson(success));
+		return null;
 	}
 }

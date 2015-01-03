@@ -24,8 +24,10 @@ import com.zhiqin.coach.admin.controller.BaseController;
 import com.zhiqin.coach.admin.dto.AreaDTO;
 import com.zhiqin.coach.admin.dto.ContactDTO;
 import com.zhiqin.coach.admin.dto.PageInfoDTO;
+import com.zhiqin.coach.admin.dto.ResponseDTO;
 import com.zhiqin.coach.admin.dto.SearchContactDTO;
 import com.zhiqin.coach.admin.service.ContactService;
+import com.zhiqin.coach.admin.util.JsonBinder;
 import com.zhiqin.coach.admin.util.JsonUtils;
 
 /**
@@ -93,5 +95,16 @@ public class ContactController extends BaseController{
 	public String getContactCount(SearchContactDTO searchDto, HttpServletRequest request, HttpServletResponse response) throws IOException, AuthException, JSONException, BiffException{
 		Long totalNum = contactService.getTotalNum(searchDto);
 		return totalNum+"";
+	}
+	
+	@RequestMapping("delete")
+	public String delete(String ids, HttpServletResponse response){
+		contactService.deleteByIds(ids);
+		ResponseDTO success = new ResponseDTO();
+		success.setStatusCode("200");
+		success.setMessage("删除成功");
+		success.setNavTabId("号码管理");
+		JsonUtils.write(response, JsonBinder.buildNormalBinder().toJson(success));
+		return null;
 	}
 }

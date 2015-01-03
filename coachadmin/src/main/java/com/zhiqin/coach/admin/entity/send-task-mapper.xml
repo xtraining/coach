@@ -51,4 +51,7 @@
 		update t_send_subtask set resultCode = #{resultCode}, status = 2 where id = #{subtaskId} 
 	</update>
 
+	<update id="deleteByIds" parameterType="Map">
+		update t_send_task set status = -1 where id in (${ids})
+  	</update>
 </mapper>

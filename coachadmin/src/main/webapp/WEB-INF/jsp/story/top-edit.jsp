@@ -39,7 +39,7 @@ function viewFile(url, title){
 			<dl>
 				<dt>名称： </dt>
 				<dd>
-					<input type="text" name="name" maxlength="10" size="40" class="required" value="${editObj.name}"/>
+					<input type="text" name="name" maxlength="40" size="40" class="required" value="${editObj.name}"/>
 				</dd>
 			</dl>
 			<dl>

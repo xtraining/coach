@@ -37,4 +37,6 @@ public interface ArtifactDao extends BaseDao{
 
 	void updateStatus(ArtifactDTO dto, int value);
 
+	void hideByIds(String ids);
+
 }

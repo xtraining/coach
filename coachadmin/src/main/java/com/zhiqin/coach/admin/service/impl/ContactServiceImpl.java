@@ -145,5 +145,11 @@ public class ContactServiceImpl implements ContactService {
 		return contactDao.getTagNameList();
 	}
 
+	@Override
+	public void deleteByIds(String ids) {
+		contactDao.deleteByIds(ids);
+		
+	}
+
 
 }

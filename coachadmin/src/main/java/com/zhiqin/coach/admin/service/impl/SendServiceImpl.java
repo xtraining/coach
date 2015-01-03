@@ -119,5 +119,10 @@ public class SendServiceImpl implements SendService {
 			PageInfoDTO pageInfo) {
 		return sendTaskDao.getSendSubtaskList(sendTaskId, pageInfo);
 	}
+	@Override
+	public void deleteByIds(String ids) {
+		sendTaskDao.deleteByIds(ids);
+		
+	}
 
 }

@@ -34,5 +34,7 @@ public interface ContactService{
 
 	List<String> getTagNameList();
 
+	void deleteByIds(String ids);
+
 
 }

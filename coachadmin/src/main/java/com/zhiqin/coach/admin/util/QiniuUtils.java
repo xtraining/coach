@@ -53,7 +53,8 @@ public class QiniuUtils {
 	public static String generateArtifactImageName(Long id,
 			String originalFilename) {
 		String extFileName = originalFilename.substring(originalFilename.lastIndexOf("."));	
-		return FILE_NAME_PREFIX.STORY_IMAGE.getValue() + id + extFileName;
+		String dateStr = DateUtils.dateToyyyyMMddHHmissWithSeparator(new Timestamp(new Date().getTime()));
+		return FILE_NAME_PREFIX.STORY_IMAGE.getValue() + id + "_" + dateStr  + extFileName;
 	}
 
 	public static String generateArtifactMediaName(Long id,
@@ -65,19 +66,22 @@ public class QiniuUtils {
 	public static String generateTopListImageName(Long id,
 			String originalFilename) {
 		String extFileName = originalFilename.substring(originalFilename.lastIndexOf("."));	
-		return FILE_NAME_PREFIX.TOP_LIST_IMAGE.getValue() + id + extFileName;
+		String dateStr = DateUtils.dateToyyyyMMddHHmissWithSeparator(new Timestamp(new Date().getTime()));
+		return FILE_NAME_PREFIX.TOP_LIST_IMAGE.getValue() + id + "_" + dateStr + extFileName;
 	}
 	
 	public static String generateCategoryImageName(Long id,
 			String originalFilename) {
 		String extFileName = originalFilename.substring(originalFilename.lastIndexOf("."));	
-		return FILE_NAME_PREFIX.CATEGORY.getValue() + id + extFileName;
+		String dateStr = DateUtils.dateToyyyyMMddHHmissWithSeparator(new Timestamp(new Date().getTime()));
+		return FILE_NAME_PREFIX.CATEGORY.getValue() + id + "_" + dateStr + extFileName;
 	}
 
 	public static String generateTopListDetailImageName(Long id,
 			String originalFilename) {
 		String extFileName = originalFilename.substring(originalFilename.lastIndexOf("."));	
-		return FILE_NAME_PREFIX.TOP_DETAIL_IMAGE.getValue() + id + extFileName;
+		String dateStr = DateUtils.dateToyyyyMMddHHmissWithSeparator(new Timestamp(new Date().getTime()));
+		return FILE_NAME_PREFIX.TOP_DETAIL_IMAGE.getValue() + id + "_" + dateStr  + extFileName;
 	}
 
 }

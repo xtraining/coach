@@ -48,7 +48,7 @@
 		<ul class="toolBar">
 			<li><a class="add" href="${ctx}/sms/send/add.htm" target="navTab" title="新建"><span>新增</span></a></li>
 			<li class="line">line</li>
-			<li><a title="确实要删除这些任务吗?" warn="请选择任务" target="selectedTodo" rel="ids" postType="string" href="${ctx}/story/task/delete.htm" class="delete"><span>批量删除</span></a></li>
+			<li><a title="确实要删除这些任务吗?" warn="请选择任务" target="selectedTodo" rel="ids" postType="string" href="${ctx}/sms/send/delete.htm" class="delete"><span>批量删除</span></a></li>
 			<li class="line">line</li>
 		</ul>
 	</div>

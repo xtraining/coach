@@ -177,6 +177,17 @@ public class ArtifactController extends BaseController{
 		return null;
 	}
 	
+	@RequestMapping("hide")
+	public String hide(String ids, HttpServletResponse response){
+		artifactService.hideByIds(ids);
+		ResponseDTO success = new ResponseDTO();
+		success.setStatusCode("200");
+		success.setMessage("隐藏成功");
+		success.setNavTabId("故事管理");
+		JsonUtils.write(response, JsonBinder.buildNormalBinder().toJson(success));
+		return null;
+	}
+	
 	@RequestMapping("assignCategory")
 	public String assignCategory(String artifactIds, Model model) {
 		PageInfoDTO pageInfo = new PageInfoDTO();

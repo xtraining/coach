@@ -96,6 +96,8 @@ public class HttpUtil {
     public static String getServer(String url, String queryString, boolean useProxy) { 
             String response = null; 
             HttpClient client = new HttpClient(); 
+            client.getHttpConnectionManager().getParams().setConnectionTimeout(3000);   
+            client.getHttpConnectionManager().getParams().setSoTimeout(3000);   
             if(useProxy){
     	        //设置HTTP代理IP和端口
     	        client.getHostConfiguration().setProxy("192.168.19.9", 80);

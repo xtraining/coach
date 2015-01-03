@@ -154,7 +154,7 @@ public class TeamResolverImpl implements TeamResolver{
 	}
 
 	@Override
-	public void checkMember(CheckMemberRequest request) {
+	public Long checkMember(CheckMemberRequest request) {
 		Coach c = coachDao.getBasicById(request.getCoachId());
 		boolean smsSwitch = c.getSmsSwitch() != null && c.getSmsSwitch() > 0 ? true : false;
 		List<Member> smsMemberList = null;
@@ -209,6 +209,7 @@ public class TeamResolverImpl implements TeamResolver{
 	    if(smsSwitch){
 	    	smsResolver.sendAttendSms(smsMemberList, c.getPhoneNumber());
 	    }
+	    return check.getId();
 	}
 	
 	class UpdateLocationThread implements Runnable {
@@ -475,20 +476,24 @@ public class TeamResolverImpl implements TeamResolver{
 				for(CheckSyncData checkData : checkDataList){
 					Integer operationType = checkData.getOperationType();
 					TeamCheck teamCheck = checkData.toTeamCheck();
-					String []attendMemberIds = StringUtils.split(checkData.getAttendAppMemberId(), ",");
 					Set<Long> attendMemberIdList = new HashSet<Long>();
-					if(attendMemberIds != null){
-						for(String attendMemberId : attendMemberIds){
-							attendMemberIdList.add(Long.valueOf(StringUtils.trim(attendMemberId)));
+					if(StringUtils.isNotBlank(StringUtils.trimToNull(checkData.getAttendMemberId()))){
+						String []attendMemberIds = StringUtils.split(checkData.getAttendMemberId(), ",");
+						if(attendMemberIds != null){
+							for(String attendMemberId : attendMemberIds){
+								attendMemberIdList.add(Long.valueOf(StringUtils.trim(attendMemberId)));
+							}
 						}
 					}
-					String []attendAppMemberIds = StringUtils.split(checkData.getAttendAppMemberId(), ",");
-					if(attendAppMemberIds != null){
-						for(String attendAppMemberId : attendAppMemberIds){
-							for(Member member : memberList){
-								if(!attendMemberIdList.contains(Long.valueOf(member.getAppMemberId())) && member.getAppMemberId() == Integer.valueOf(attendAppMemberId)){
-									attendMemberIdList.add(member.getId());
-									break;
+					if(StringUtils.isNotBlank(StringUtils.trimToNull(checkData.getAttendAppMemberId()))){
+						String []attendAppMemberIds = StringUtils.split(checkData.getAttendAppMemberId(), ",");
+						if(attendAppMemberIds != null){
+							for(String attendAppMemberId : attendAppMemberIds){
+								for(Member member : memberList){
+									if(!attendMemberIdList.contains(Long.valueOf(member.getAppMemberId())) && member.getAppMemberId() == Integer.valueOf(attendAppMemberId)){
+										attendMemberIdList.add(member.getId());
+										break;
+									}
 								}
 							}
 						}

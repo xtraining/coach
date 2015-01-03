@@ -22,7 +22,7 @@ function checkupload(){
 			<dl>
 				<dt>名称： </dt>
 				<dd>
-					<input type="text" name="name" maxlength="10" size="40" class="required"/>
+					<input type="text" name="name" maxlength="40" size="40" class="required"/>
 				</dd>
 			</dl>
 			<dl>

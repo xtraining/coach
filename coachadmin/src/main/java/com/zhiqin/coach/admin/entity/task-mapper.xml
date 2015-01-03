@@ -34,7 +34,7 @@
 
 	<select id="getTaskList" parameterType="Map" resultMap="TaskDTOResult" >
 		select *, 
-		(select count(1) from download_task d where d.taskId = t.id and d.status = 3) downloadedNum, 
+		(select count(1) from download_task d where d.taskId = t.id and d.status in (2,3)) downloadedNum, 
 		(select count(1) from download_task d where d.taskId = t.id)totalNum,
 		(select count(1) from download_task d where d.taskId = t.id and d.status = 2) importedNum 
 		from task t 

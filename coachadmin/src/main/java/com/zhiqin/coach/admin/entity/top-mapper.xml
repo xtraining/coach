@@ -14,7 +14,7 @@
 	<select id="getTopList" parameterType="Map" resultType="TopDTO" >
 		select *, (select ifnull(count(c.id), 0) from customer_collection c where c.objectId = id and c.type = 0) realCollectionNum
 		<include refid="getTopCondition" />
-		order by topOrder desc, startTime asc
+		order by topOrder desc, id desc
 		limit ${(p.pageNum - 1) * p.numPerPage}, ${p.numPerPage}
 	</select>
 	

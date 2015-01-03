@@ -29,6 +29,6 @@ public interface SendTaskDao extends BaseDao{
 
 	void updateStatus(Long id, int resultCode);
 
-
+	void deleteByIds(String ids);
 
 }

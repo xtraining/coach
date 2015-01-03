@@ -79,6 +79,10 @@
 		update artifact set status = 1 where id in (${ids})
   	</update>
   	
+  	<update id="hideByIds" parameterType="Map">
+		update artifact set status = 2 where id in (${ids})
+  	</update>
+  	
   	<update id="updateFileName" parameterType="ArtifactDTO">
 		update artifact set fileName = #{fileName}, imageName = #{imageName} where id = #{id}
   	</update>

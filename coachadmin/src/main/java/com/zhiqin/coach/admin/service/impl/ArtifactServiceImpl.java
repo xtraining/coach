@@ -89,9 +89,6 @@ public class ArtifactServiceImpl implements ArtifactService {
 			story.setDownloadTaskId(downloadTask.getId());
 			artifactDao.insertFromDownload(story);
 			
-			story.setImageName(QiniuUtils.generateArtifactImageName(story.getId(), imageFileName));
-			story.setFileName(QiniuUtils.generateArtifactMediaName(story.getId(), voiceFileName));
-			artifactDao.updateFileName(story);
 			
 			String uptoken = QiniuUtils.getUptoken();
 			if(voiceFile != null){
@@ -106,6 +103,9 @@ public class ArtifactServiceImpl implements ArtifactService {
 					imageFile.delete();
 				} finally{}
 			}
+			story.setImageName(QiniuUtils.generateArtifactImageName(story.getId(), imageFileName));
+			story.setFileName(QiniuUtils.generateArtifactMediaName(story.getId(), voiceFileName));
+			artifactDao.updateFileName(story);
 		} else{
 			// do nothing. 如果是封面，不需要做任何事情 
 		}
@@ -220,9 +220,10 @@ public class ArtifactServiceImpl implements ArtifactService {
 		
 	}
 	
-	
-	public static void main(String[] args) {
-		System.out.println(RopUtils.getMD5String("123456"));
+	@Override
+	public void hideByIds(String ids) {
+		artifactDao.hideByIds(ids);
+		
 	}
 
 }

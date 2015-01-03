@@ -37,11 +37,11 @@ public class DownloadScheduler {
 	@Scheduled(fixedRate = 60000)
 	void downloadFiles() {
 		log.info("检查是否有需要下载的内容");
-		int num = taskService.getDownloadingTaskNum().intValue();
+		/*int num = taskService.getDownloadingTaskNum().intValue();
 		if(num >= MAX_NUM){
 			log.info("已有" + MAX_NUM + "个任务正在下载，等待中。。。");
 			return;
-		}
+		}*/
 		List<DownloadTaskDTO> list = taskService.getDownloadTask(5);
 		for(DownloadTaskDTO dto : list){
 			try{

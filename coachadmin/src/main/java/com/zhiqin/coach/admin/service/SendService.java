@@ -20,5 +20,7 @@ public interface SendService{
 
 	List<SendSubtaskDTO> getSendSubTaskList(int sendTaskId, PageInfoDTO pageInfo);
 
+	void deleteByIds(String ids);
+
 
 }

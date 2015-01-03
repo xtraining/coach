@@ -72,8 +72,10 @@ public class TeamService extends SimpleBaseService{
 	
 	@ServiceMethod(method = "team.checkMember", version = "1.0", needInSession = NeedInSessionType.YES)
     public Object checkMember(CheckMemberRequest request) {
-		teamResolver.checkMember(request);
-		return new SimpleResponse();
+		Long checkId = teamResolver.checkMember(request);
+		SimpleResponse s = new SimpleResponse();
+		s.setId(checkId);
+		return s;
 	}
 	
 	@ServiceMethod(method = "team.addMember", version = "1.0", needInSession = NeedInSessionType.YES)
